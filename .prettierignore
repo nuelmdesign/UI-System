@@ -3,3 +3,4 @@ registry.json
 pnpm-lock.yaml
 .next
 preview-dist
+components/docs/example-sources.json

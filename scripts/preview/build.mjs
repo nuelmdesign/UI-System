@@ -1,14 +1,22 @@
-// Builds the showcase as a plain React bundle (no Next runtime) into
-// preview-dist/: index.html + app.js + app.css. Used to publish live previews
+// Builds the site as a plain React bundle (no Next runtime) into
+// preview-dist/: index.html + app.js + app.css + r/*.json. Pages are
+// hash-routed (#docs, #docs.<slug>) by components/docs/hash-app.tsx. Used to publish live previews
 // to hosts that serve from a sub-path, where Next's own runtime won't boot.
 import { execFileSync } from "node:child_process"
-import { copyFileSync, mkdirSync } from "node:fs"
+import { copyFileSync, cpSync, mkdirSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { build } from "esbuild"
 
 const root = fileURLToPath(new URL("../..", import.meta.url))
 const out = `${root}preview-dist`
 mkdirSync(out, { recursive: true })
+
+// The docs fetch component source from the registry, so ship it alongside.
+execFileSync("node", ["scripts/build-docs.mjs"], {
+  cwd: root,
+  stdio: "inherit",
+})
+cpSync(`${root}public/r`, `${out}/r`, { recursive: true })
 
 await build({
   entryPoints: [`${root}scripts/preview/entry.tsx`],

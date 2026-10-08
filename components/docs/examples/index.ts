@@ -1,0 +1,120 @@
+import type { ComponentType } from "react"
+
+import VoiceOrbExample from "./voice-orb"
+import MessageBubbleExample from "./message-bubble"
+import MessageExample from "./message"
+import MessageScrollerExample from "./message-scroller"
+import PromptInputExample from "./prompt-input"
+import StreamingResponseExample from "./streaming-response"
+import CitationsExample from "./citations"
+import AgentActivityExample from "./agent-activity"
+import LoadingStatesExample from "./loading-states"
+import TodoListExample from "./todo-list"
+import ToolResultExample from "./tool-result"
+import CodeBlockExample from "./code-block"
+import FileDiffExample from "./file-diff"
+import ApprovalCardExample from "./approval-card"
+import ToolApprovalExample from "./tool-approval"
+import ImageGenerationExample from "./image-generation"
+import AiSidebarExample from "./ai-sidebar"
+import ChatAppExample from "./chat-app"
+import AccordionExample from "./accordion"
+import AnimatedSidebarExample from "./animated-sidebar"
+import AvatarExample from "./avatar"
+import BadgeExample from "./badge"
+import ButtonExample from "./button"
+import CardExample from "./card"
+import CheckboxExample from "./checkbox"
+import CommandPaletteExample from "./command-palette"
+import TableExample from "./table"
+import DateRangePickerExample from "./date-range-picker"
+import DialogExample from "./dialog"
+import DrawerExample from "./drawer"
+import DropdownMenuExample from "./dropdown-menu"
+import InputExample from "./input"
+import KbdExample from "./kbd"
+import LabelExample from "./label"
+import PopoverExample from "./popover"
+import RadioGroupExample from "./radio-group"
+import SelectExample from "./select"
+import SeparatorExample from "./separator"
+import SkeletonExample from "./skeleton"
+import SwitchExample from "./switch"
+import TabsExample from "./tabs"
+import TextareaExample from "./textarea"
+import SonnerExample from "./sonner"
+import TooltipExample from "./tooltip"
+import ActionSwapExample from "./action-swap"
+import AnimatedNumberExample from "./animated-number"
+import BlurTextExample from "./blur-text"
+import CopyButtonExample from "./copy-button"
+import LoaderExample from "./loader"
+import MagneticExample from "./magnetic"
+import MarqueeExample from "./marquee"
+import PixelFieldExample from "./pixel-field"
+import PreviewRailExample from "./preview-rail"
+import RevealExample from "./reveal"
+import ShimmerTextExample from "./shimmer-text"
+import SpotlightCardExample from "./spotlight-card"
+import TextScrambleExample from "./text-scramble"
+
+/** Live example for each component page, keyed by slug. */
+export const EXAMPLES: Record<string, ComponentType> = {
+  "voice-orb": VoiceOrbExample,
+  "message-bubble": MessageBubbleExample,
+  message: MessageExample,
+  "message-scroller": MessageScrollerExample,
+  "prompt-input": PromptInputExample,
+  "streaming-response": StreamingResponseExample,
+  citations: CitationsExample,
+  "agent-activity": AgentActivityExample,
+  "loading-states": LoadingStatesExample,
+  "todo-list": TodoListExample,
+  "tool-result": ToolResultExample,
+  "code-block": CodeBlockExample,
+  "file-diff": FileDiffExample,
+  "approval-card": ApprovalCardExample,
+  "tool-approval": ToolApprovalExample,
+  "image-generation": ImageGenerationExample,
+  "ai-sidebar": AiSidebarExample,
+  "chat-app": ChatAppExample,
+  accordion: AccordionExample,
+  "animated-sidebar": AnimatedSidebarExample,
+  avatar: AvatarExample,
+  badge: BadgeExample,
+  button: ButtonExample,
+  card: CardExample,
+  checkbox: CheckboxExample,
+  "command-palette": CommandPaletteExample,
+  table: TableExample,
+  "date-range-picker": DateRangePickerExample,
+  dialog: DialogExample,
+  drawer: DrawerExample,
+  "dropdown-menu": DropdownMenuExample,
+  input: InputExample,
+  kbd: KbdExample,
+  label: LabelExample,
+  popover: PopoverExample,
+  "radio-group": RadioGroupExample,
+  select: SelectExample,
+  separator: SeparatorExample,
+  skeleton: SkeletonExample,
+  switch: SwitchExample,
+  tabs: TabsExample,
+  textarea: TextareaExample,
+  sonner: SonnerExample,
+  tooltip: TooltipExample,
+  "action-swap": ActionSwapExample,
+  "animated-number": AnimatedNumberExample,
+  "blur-text": BlurTextExample,
+  "copy-button": CopyButtonExample,
+  loader: LoaderExample,
+  magnetic: MagneticExample,
+  marquee: MarqueeExample,
+  "pixel-field": PixelFieldExample,
+  "preview-rail": PreviewRailExample,
+  reveal: RevealExample,
+  "shimmer-text": ShimmerTextExample,
+  "spotlight-card": SpotlightCardExample,
+  "text-scramble": TextScrambleExample,
+}

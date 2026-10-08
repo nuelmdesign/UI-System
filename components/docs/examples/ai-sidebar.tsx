@@ -5,12 +5,12 @@ import {
   Clock3,
   GitPullRequest,
   LayoutGrid,
-  MessageSquare,
   PanelLeft,
   Plug,
   SquarePen,
 } from "lucide-react"
 
+import { AISidebar, type SidebarResource } from "@/components/agents/ai-sidebar"
 import {
   AnimatedSidebar,
   AnimatedSidebarContent,
@@ -25,12 +25,7 @@ import {
   AnimatedSidebarRail,
   AnimatedSidebarTrigger,
 } from "@/components/motion/animated-sidebar"
-import { AISidebar, type SidebarResource } from "@/components/agents/ai-sidebar"
-import { ChatApp } from "@/components/agents/chat-app"
 import { Badge } from "@/components/ui/badge"
-import { ChatDemo } from "@/components/site/chat-demos"
-
-/* -------------------------------- AI Sidebar ------------------------------- */
 
 const RESOURCES: SidebarResource[] = [
   { id: "design-system", label: "Design system", kind: "project" },
@@ -83,7 +78,7 @@ function findLabel(items: SidebarResource[], id: string): string | undefined {
   }
 }
 
-export function AISidebarDemo() {
+export default function AISidebarDemo() {
   const [active, setActive] = React.useState("review")
   const [items, setItems] = React.useState(RESOURCES)
 
@@ -177,94 +172,5 @@ export function AISidebarDemo() {
         </div>
       </AnimatedSidebarInset>
     </AnimatedSidebarProvider>
-  )
-}
-
-/* --------------------------------- Chat App -------------------------------- */
-
-const CONVERSATIONS = [
-  { id: "release", title: "First release scope", when: "Now" },
-  { id: "tokens", title: "Blue scale for charts", when: "2h" },
-  { id: "motion", title: "Spring tuning notes", when: "Yesterday" },
-  { id: "registry", title: "Registry deploy plan", when: "Mon" },
-]
-
-export function ChatAppDemo() {
-  const [active, setActive] = React.useState(CONVERSATIONS[0].id)
-  const current = CONVERSATIONS.find((c) => c.id === active) ?? CONVERSATIONS[0]
-
-  return (
-    <ChatApp sidebarWidth="16rem" className="h-[680px] rounded-none">
-      <AnimatedSidebar
-        ariaLabel="Conversations"
-        collapsible="offcanvas"
-        className="min-h-0 w-full"
-        panelClassName="h-full bg-surface"
-      >
-        <AnimatedSidebarContent className="gap-4 overflow-hidden px-2 py-4">
-          <AnimatedSidebarGroup className="shrink-0 px-1 py-0">
-            <AnimatedSidebarGroupContent>
-              <AnimatedSidebarMenu>
-                <AnimatedSidebarMenuItem>
-                  <AnimatedSidebarMenuButton
-                    icon={<SquarePen className="size-4" />}
-                    onSelect={() => setActive(CONVERSATIONS[0].id)}
-                    className="font-normal text-foreground"
-                  >
-                    New chat
-                  </AnimatedSidebarMenuButton>
-                </AnimatedSidebarMenuItem>
-              </AnimatedSidebarMenu>
-            </AnimatedSidebarGroupContent>
-          </AnimatedSidebarGroup>
-          <AnimatedSidebarGroup className="min-h-0 flex-1 px-1 py-0">
-            <AnimatedSidebarGroupLabel className="mb-1 h-8 px-2 eyebrow">
-              Recent
-            </AnimatedSidebarGroupLabel>
-            <AnimatedSidebarGroupContent>
-              <AnimatedSidebarMenu className="gap-0.5">
-                {CONVERSATIONS.map((c) => (
-                  <AnimatedSidebarMenuItem key={c.id}>
-                    <AnimatedSidebarMenuButton
-                      icon={<MessageSquare className="size-4" />}
-                      isActive={c.id === active}
-                      badge={
-                        <span className="font-mono text-[10px] text-muted-foreground">
-                          {c.when}
-                        </span>
-                      }
-                      onSelect={() => setActive(c.id)}
-                      className="font-normal"
-                    >
-                      {c.title}
-                    </AnimatedSidebarMenuButton>
-                  </AnimatedSidebarMenuItem>
-                ))}
-              </AnimatedSidebarMenu>
-            </AnimatedSidebarGroupContent>
-          </AnimatedSidebarGroup>
-        </AnimatedSidebarContent>
-        <AnimatedSidebarRail />
-      </AnimatedSidebar>
-
-      <AnimatedSidebarInset className="min-h-0 bg-background">
-        <header className="flex h-14 shrink-0 items-center gap-3 border-b px-4">
-          <AnimatedSidebarTrigger className="size-8 rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
-            <PanelLeft aria-hidden className="size-4" />
-          </AnimatedSidebarTrigger>
-          <p className="min-w-0 truncate font-display text-lg font-light tracking-[-0.01em]">
-            {current.title}
-          </p>
-          <Badge variant="brand" className="ml-auto">
-            Agent 5.6
-          </Badge>
-        </header>
-        {/* Keyed so switching conversations starts a fresh transcript. */}
-        <ChatDemo
-          key={current.id}
-          className="h-auto min-h-0 flex-1 rounded-none"
-        />
-      </AnimatedSidebarInset>
-    </ChatApp>
   )
 }

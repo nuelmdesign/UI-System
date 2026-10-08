@@ -1,38 +1,22 @@
 "use client"
 
 import * as React from "react"
-import { useReducedMotion } from "motion/react"
-import { AnimatePresence } from "motion/react"
-import {
-  Brain,
-  FileText,
-  ImagePlus,
-  Puzzle,
-  RotateCcw,
-  Sparkles,
-  Zap,
-} from "lucide-react"
+import { AnimatePresence, useReducedMotion } from "motion/react"
+import { Brain, FileText, ImagePlus, Puzzle, Sparkles, Zap } from "lucide-react"
 import { toast } from "sonner"
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   Message,
   MessageAvatar,
   MessageBubble,
-  MessageBubbleCollapsible,
   MessageBubbleContent,
   MessageContent,
-  MessageFooter,
-  MessageGroup,
-  MessageHeader,
   MessageMarker,
   MessageScroller,
   MessageTyping,
 } from "@/components/agents/message"
 import { PromptInput } from "@/components/agents/prompt-input"
 import { StreamingResponse } from "@/components/agents/streaming-response"
-import type { CitationItem } from "@/components/agents/citations"
 
 const MODELS = [
   { value: "fast", label: "Fast", icon: <Zap /> },
@@ -120,7 +104,7 @@ function useStream(text: string | null, cps = 90) {
   }
 }
 
-export function ChatDemo({ className }: { className?: string }) {
+export default function MessageScrollerDemo() {
   const [messages, setMessages] = React.useState(SEED)
   const [pending, setPending] = React.useState<string | null>(null)
   const [thinking, setThinking] = React.useState(false)
@@ -171,12 +155,7 @@ export function ChatDemo({ className }: { className?: string }) {
   const busy = thinking || !!pending
 
   return (
-    <div
-      className={cn(
-        "flex h-[560px] w-full flex-col overflow-hidden rounded-lg",
-        className
-      )}
-    >
+    <div className="flex h-[560px] w-full flex-col overflow-hidden border bg-background">
       <MessageScroller
         navigation="rail"
         busy={busy}
@@ -253,140 +232,5 @@ function ChatRow({ message }: { message: ChatMessage }) {
         </MessageBubble>
       </MessageContent>
     </Message>
-  )
-}
-
-/* -------------------------------------------------------------------------- */
-
-const VARIANTS = ["solid", "soft", "tint", "outline", "danger"] as const
-
-export function BubbleGallery() {
-  return (
-    <MessageGroup spacing="default" className="w-full">
-      <Message from="user">
-        <MessageAvatar className="bg-brand/15 text-brand">NM</MessageAvatar>
-        <MessageContent>
-          <MessageHeader>You · 9:41</MessageHeader>
-          <MessageBubble variant="solid">
-            <MessageBubbleContent>
-              Can you summarise the launch plan?
-            </MessageBubbleContent>
-          </MessageBubble>
-          <MessageFooter>Read</MessageFooter>
-        </MessageContent>
-      </Message>
-
-      <Message from="assistant">
-        <MessageAvatar>
-          <Sparkles />
-        </MessageAvatar>
-        <MessageContent>
-          <MessageBubble variant="soft">
-            <MessageBubbleContent>
-              <MessageBubbleCollapsible collapsedLines={2}>
-                <p>
-                  Launch in three phases. First, an internal beta with the core
-                  chat flow and streaming. Second, a private preview with tool
-                  results, approvals and citations. Third, general availability
-                  with the full sidebar, voice input and usage analytics.
-                </p>
-                <p>
-                  Each phase ends with a short review of reliability and latency
-                  before the next one starts.
-                </p>
-              </MessageBubbleCollapsible>
-            </MessageBubbleContent>
-          </MessageBubble>
-        </MessageContent>
-      </Message>
-
-      <div className="flex flex-wrap gap-2 pt-2">
-        {VARIANTS.map((variant) => (
-          <MessageBubble key={variant} variant={variant} className="w-auto">
-            <MessageBubbleContent className="max-w-none">
-              {variant}
-            </MessageBubbleContent>
-          </MessageBubble>
-        ))}
-        <MessageBubble variant="soft" className="w-auto">
-          <MessageBubbleContent className="max-w-none text-muted-foreground">
-            <MessageTyping />
-          </MessageBubbleContent>
-        </MessageBubble>
-      </div>
-    </MessageGroup>
-  )
-}
-
-/* -------------------------------------------------------------------------- */
-
-const SOURCES: CitationItem[] = [
-  {
-    id: "motion",
-    title: "Motion for React",
-    domain: "motion.dev",
-    url: "https://motion.dev/docs/react",
-  },
-  {
-    id: "aria",
-    title: "ARIA live regions",
-    domain: "developer.mozilla.org",
-    url: "https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions",
-  },
-  {
-    id: "radix",
-    title: "Radix Primitives",
-    domain: "radix-ui.com",
-    url: "https://www.radix-ui.com/primitives",
-  },
-]
-
-const ANSWER =
-  "Streaming answers keep structure as they arrive. Links stay clickable, lists keep their spacing, and the actions only appear once the response is complete, so nothing jumps under the reader's cursor."
-
-function StreamingRun({ onReplay }: { onReplay: () => void }) {
-  const stream = useStream(ANSWER, 110)
-  const [complete, setComplete] = React.useState(false)
-
-  React.useEffect(() => {
-    if (!stream.done) return
-    const t = window.setTimeout(() => setComplete(true), 350)
-    return () => window.clearTimeout(t)
-  }, [stream.done])
-
-  return (
-    <StreamingResponse
-      status={complete ? "complete" : "streaming"}
-      copyText={ANSWER}
-      onRetry={onReplay}
-      sources={SOURCES}
-    >
-      <p>{stream.visible}</p>
-      {stream.done ? (
-        <ul>
-          <li>Actions: copy, retry, thumbs up / down</li>
-          <li>Sources: a collapsible list with favicons</li>
-        </ul>
-      ) : null}
-    </StreamingResponse>
-  )
-}
-
-export function StreamingDemo() {
-  const [run, setRun] = React.useState(0)
-  return (
-    <div className="flex min-h-72 w-full flex-col gap-4">
-      <div className="flex-1">
-        <StreamingRun key={run} onReplay={() => setRun((r) => r + 1)} />
-      </div>
-      <Button
-        variant="ghost"
-        size="xs"
-        className="self-start text-muted-foreground"
-        onClick={() => setRun((r) => r + 1)}
-      >
-        <RotateCcw /> Replay
-      </Button>
-    </div>
   )
 }
