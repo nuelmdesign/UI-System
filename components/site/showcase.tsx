@@ -105,7 +105,7 @@ function Header() {
         <a href="#" className="flex items-center gap-2.5">
           <LogoMark />
           <span className="font-sans text-lg tracking-[-0.01em]">
-            openDraft
+            opendraft
           </span>
         </a>
         <nav className="hidden items-center gap-6 text-[13px] text-muted-foreground md:flex">

@@ -81,7 +81,7 @@ export function DocsShell({
           >
             <LogoMark />
             <span className="font-sans text-lg tracking-[-0.01em]">
-              openDraft
+              opendraft
             </span>
           </nav.Link>
           <nav className="hidden items-center gap-5 text-[13px] text-muted-foreground md:flex">
