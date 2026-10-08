@@ -33,7 +33,10 @@ const ORB_PALETTES = {
   ember: ["#e8754d", "#ffe0ac", "#346b52"],
 } as const satisfies Record<string, OrbColors>
 
-type VoiceOrbProps = Omit<React.ComponentProps<"div">, "children" | "onError"> & {
+type VoiceOrbProps = Omit<
+  React.ComponentProps<"div">,
+  "children" | "onError"
+> & {
   /** Normalized activity, 0 to 1. Pass a MotionValue to avoid re-rendering every frame. */
   activity?: number | MotionValue<number>
   /** Optional caller-owned audio analyser. The orb never requests a microphone itself. */
@@ -64,14 +67,17 @@ function VoiceOrb({
   const palette = typeof colors === "string" ? ORB_PALETTES[colors] : colors
   const reducedMotion = useReducedMotion()
   const canvas = React.useRef<HTMLCanvasElement>(null)
-  const renderer = React.useRef<ReturnType<typeof createOrbRenderer> | null>(null)
+  const renderer = React.useRef<ReturnType<typeof createOrbRenderer> | null>(
+    null
+  )
   const [error, setError] = React.useState<Error | null>(null)
 
   const target = useMotionValue(0)
   const smooth = useSpring(target, spring.glide)
   const transform = useTransform(
     smooth,
-    (v) => `translate3d(0, ${-v * 2}px, 0) scale(${1 + v * 0.04}, ${1 - v * 0.018})`
+    (v) =>
+      `translate3d(0, ${-v * 2}px, 0) scale(${1 + v * 0.04}, ${1 - v * 0.018})`
   )
 
   // The render loop reads the latest props through a ref, so it never restarts.
@@ -85,13 +91,23 @@ function VoiceOrb({
     onError,
   })
   React.useLayoutEffect(() => {
-    latest.current = { activity, analyser, palette, active, speed, reducedMotion, onError }
+    latest.current = {
+      activity,
+      analyser,
+      palette,
+      active,
+      speed,
+      reducedMotion,
+      onError,
+    }
     if (reducedMotion) {
       smooth.jump(0)
       target.set(0)
     } else {
       target.set(
-        active ? clampLevel(isMotionValue(activity) ? activity.get() : activity) : 0
+        active
+          ? clampLevel(isMotionValue(activity) ? activity.get() : activity)
+          : 0
       )
     }
     renderer.current?.requestDraw()
@@ -130,7 +146,10 @@ function VoiceOrb({
           const live = current.active && !current.reducedMotion
 
           if (current.analyser && live) {
-            if (source !== current.analyser || sample?.length !== current.analyser.fftSize) {
+            if (
+              source !== current.analyser ||
+              sample?.length !== current.analyser.fftSize
+            ) {
               source = current.analyser
               sample = new Uint8Array(new ArrayBuffer(current.analyser.fftSize))
             }
@@ -143,7 +162,9 @@ function VoiceOrb({
           return {
             activity: live ? clampLevel(smooth.get()) : 0,
             colors: current.palette,
-            speed: Number.isFinite(current.speed) ? Math.max(0, current.speed) : 1,
+            speed: Number.isFinite(current.speed)
+              ? Math.max(0, current.speed)
+              : 1,
             animated: live && (current.speed > 0 || !!current.analyser),
           }
         },

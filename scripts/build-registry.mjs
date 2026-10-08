@@ -110,6 +110,21 @@ const agent = (name, { deps = [], reg = [], extra = [], description } = {}) => (
   })),
 })
 
+const hook = (name, { reg = [] } = {}) => ({
+  name,
+  type: "registry:hook",
+  title: name,
+  registryDependencies: reg,
+  files: [{ path: `lib/hooks/${name}.ts`, type: "registry:hook", target: `lib/hooks/${name}.ts` }],
+})
+
+const lib = (name) => ({
+  name,
+  type: "registry:lib",
+  title: name,
+  files: [{ path: `lib/${name}.ts`, type: "registry:lib" }],
+})
+
 const items = [
   {
     name: "theme",
@@ -139,6 +154,13 @@ const items = [
     files: [{ path: "lib/motion.ts", type: "registry:lib" }],
   },
 
+  hook("use-dismiss"),
+  hook("use-tap-gesture"),
+  hook("use-hover-gesture", { reg: ["@nuelm/touch"] }),
+  hook("use-favicon", { reg: ["@nuelm/favicon"] }),
+  lib("touch"),
+  lib("favicon"),
+
   ui("button", { deps: ["radix-ui", "class-variance-authority"] }),
   ui("badge", { deps: ["radix-ui", "class-variance-authority"] }),
   ui("input"),
@@ -167,6 +189,12 @@ const items = [
   motionComponent("marquee"),
   motionComponent("reveal"),
   motionComponent("magnetic"),
+  {
+    ...motionComponent("preview-rail", {
+      reg: ["@nuelm/use-dismiss", "@nuelm/use-hover-gesture", "@nuelm/use-tap-gesture"],
+    }),
+    description: "Tick rail with hover previews for jumping between sections.",
+  },
   motionComponent("copy-button", { deps: ["lucide-react"], reg: ["@nuelm/button"] }),
 
   agent("voice-orb", {
@@ -174,6 +202,42 @@ const items = [
     reg: ["@nuelm/motion"],
     extra: ["voice-orb/renderer.ts"],
     description: "Breathing WebGL liquid orb that reacts to a voice level or an AnalyserNode.",
+  }),
+  agent("agent-disclosure", {
+    deps: ["motion"],
+    reg: ["@nuelm/motion"],
+    description: "Shared clip-path reveal for collapsible agent content.",
+  }),
+  agent("citations", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/agent-disclosure", "@nuelm/use-favicon"],
+    description: "Inline citation markers, favicon stacks and a collapsible source list.",
+  }),
+  agent("message-bubble", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion"],
+    extra: ["message-context.tsx"],
+    description: "Chat bubble surfaces with variants, pop-in entrance and a collapsible body.",
+  }),
+  agent("message-scroller", {
+    deps: ["motion"],
+    reg: ["@nuelm/preview-rail"],
+    description: "Transcript viewport that follows streamed output and offers a turn-by-turn rail.",
+  }),
+  agent("message", {
+    deps: ["motion"],
+    reg: ["@nuelm/motion", "@nuelm/message-bubble", "@nuelm/message-scroller"],
+    description: "Message rows with avatar, header, footer, markers and a typing indicator.",
+  }),
+  agent("prompt-input", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/button", "@nuelm/popover", "@nuelm/select"],
+    description: "Auto-growing prompt box with model picker, action menu and send/stop.",
+  }),
+  agent("streaming-response", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/citations", "@nuelm/agent-disclosure"],
+    description: "Streamed answer with copy, retry, feedback and a sources footer.",
   }),
 ]
 

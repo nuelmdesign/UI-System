@@ -1,7 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { useAnimationFrame, useMotionValue, useReducedMotion } from "motion/react"
+import {
+  useAnimationFrame,
+  useMotionValue,
+  useReducedMotion,
+} from "motion/react"
 import { Mic, MicOff, Pause, Play } from "lucide-react"
 import { toast } from "sonner"
 
@@ -11,6 +15,12 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ShimmerText } from "@/components/motion/shimmer-text"
 import { Reveal } from "@/components/motion/reveal"
 import { VoiceOrb, ORB_PALETTES } from "@/components/agents/voice-orb"
+import {
+  BubbleGallery,
+  ChatDemo,
+  StreamingDemo,
+} from "@/components/site/chat-demos"
+import { cn } from "@/lib/utils"
 
 type Palette = keyof typeof ORB_PALETTES
 
@@ -20,7 +30,9 @@ export function VoiceOrbDemo() {
   const [palette, setPalette] = React.useState<Palette>("brand")
   const [active, setActive] = React.useState(true)
   const [analyser, setAnalyser] = React.useState<AnalyserNode | null>(null)
-  const audio = React.useRef<{ ctx: AudioContext; stream: MediaStream } | null>(null)
+  const audio = React.useRef<{ ctx: AudioContext; stream: MediaStream } | null>(
+    null
+  )
 
   // Simulated syllables and pauses while the mic is off.
   useAnimationFrame((time) => {
@@ -53,7 +65,8 @@ export function VoiceOrbDemo() {
       setAnalyser(node)
     } catch {
       toast.error("Microphone unavailable", {
-        description: "Allow microphone access to drive the orb with your voice.",
+        description:
+          "Allow microphone access to drive the orb with your voice.",
       })
     }
   }
@@ -117,27 +130,80 @@ export function VoiceOrbDemo() {
   )
 }
 
-export function AgentsSection({
-  heading,
+function AgentSpecimen({
+  title,
+  meta,
+  isNew,
+  className,
+  bodyClassName,
+  children,
 }: {
-  heading: React.ReactNode
+  title: string
+  meta?: string
+  isNew?: boolean
+  className?: string
+  bodyClassName?: string
+  children: React.ReactNode
 }) {
+  return (
+    <Reveal
+      className={cn(
+        "min-w-0 overflow-hidden rounded-xl border bg-card [box-shadow:var(--highlight),var(--shadow-xs)]",
+        className
+      )}
+    >
+      <div className="flex h-10 items-center gap-2 border-b px-4 text-xs font-medium text-muted-foreground">
+        {title}
+        {isNew ? (
+          <Badge variant="brand" className="h-4 px-1.5 text-[10px]">
+            New
+          </Badge>
+        ) : null}
+        {meta ? (
+          <span className="ml-auto hidden truncate font-mono sm:inline">
+            {meta}
+          </span>
+        ) : null}
+      </div>
+      <div className={cn("p-6", bodyClassName)}>{children}</div>
+    </Reveal>
+  )
+}
+
+export function AgentsSection({ heading }: { heading: React.ReactNode }) {
   return (
     <>
       {heading}
-      <div className="grid gap-4">
-        <Reveal className="overflow-hidden rounded-xl border bg-card [box-shadow:var(--highlight),var(--shadow-xs)]">
-          <div className="flex h-10 items-center gap-2 border-b px-4 text-xs font-medium text-muted-foreground">
-            Voice Orb
-            <Badge variant="brand" className="h-4 px-1.5 text-[10px]">
-              New
-            </Badge>
-            <span className="ml-auto hidden font-mono sm:inline">WebGL · voice-reactive</span>
-          </div>
-          <div className="p-6 sm:p-10">
-            <VoiceOrbDemo />
-          </div>
-        </Reveal>
+      <div className="grid gap-4 md:grid-cols-2">
+        <AgentSpecimen
+          title="Voice Orb"
+          meta="WebGL · voice-reactive"
+          isNew
+          className="md:col-span-2"
+          bodyClassName="sm:p-10"
+        >
+          <VoiceOrbDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="Chat"
+          meta="MessageScroller · Message · PromptInput · StreamingResponse"
+          className="md:col-span-2"
+          bodyClassName="p-3 sm:p-4"
+        >
+          <ChatDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="Message Bubble"
+          meta="variants · collapsible · typing"
+        >
+          <BubbleGallery />
+        </AgentSpecimen>
+
+        <AgentSpecimen title="Streaming Response" meta="actions · sources">
+          <StreamingDemo />
+        </AgentSpecimen>
       </div>
     </>
   )

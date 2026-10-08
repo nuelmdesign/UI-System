@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-tap-gesture",
+  "title": "use-tap-gesture",
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/hooks/use-tap-gesture.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useMemo, useRef } from \"react\"\n\n/** What a pointerdown recorded, read back by the click that ends its gesture. */\nexport interface TapRecord<S> {\n  /** Which input started the gesture. */\n  pointerType: string\n  /** What the surface was showing when it started. */\n  state: S\n}\n\nexport interface TapGesture<S> {\n  /** Record the gesture a pointerdown starts, with the state it starts in. */\n  start: (event: { pointerType: string }, state: S) => void\n  /** Read the record and clear it. `null` when no pointer is behind this click. */\n  take: () => TapRecord<S> | null\n  /** Drop the record: this gesture will never spend it on a click. */\n  drop: () => void\n}\n\n/**\n * The pointer gesture behind a click, recorded where the click cannot report\n * it. A `click` carries no `pointerType` in the engines that matter, so the\n * `pointerdown` before it is the only thing that says which input activated\n * the control — and whether one did at all, since keyboard activation\n * synthesizes a click with no pointer behind it.\n *\n * State goes in with the record because a click reports that no better: a\n * browser that focuses a control on contact can open the very panel the tap\n * was meant to open, and reading \"is it open\" at click time then undoes it.\n * What the gesture started against is what it acts on.\n *\n * The record is spent by one click and dropped by everything else, because a\n * record that outlives its gesture is worse than none:\n *\n * - A scroll or an OS gesture takes the touch away — `pointercancel`, no click\n *   ever — and the finger would sit in the record until some later click.\n * - That later click is often `Enter` on a keyboard, which arrives with no\n *   pointerdown of its own and would inherit the abandoned finger. A keydown\n *   is the start of a keyboard activation and never part of a tap, so it drops\n *   the record too.\n *\n * Both ends have to be wired by the surface: `drop` on `onPointerCancel` and\n * on `onKeyDown`.\n */\nexport function useTapGesture<S>(): TapGesture<S> {\n  const record = useRef<TapRecord<S> | null>(null)\n\n  return useMemo(\n    () => ({\n      start: (event, state) => {\n        record.current = { pointerType: event.pointerType, state }\n      },\n      take: () => {\n        const spent = record.current\n        record.current = null\n        return spent\n      },\n      drop: () => {\n        record.current = null\n      },\n    }),\n    []\n  )\n}\n",
+      "type": "registry:hook",
+      "target": "lib/hooks/use-tap-gesture.ts"
+    }
+  ],
+  "type": "registry:hook"
+}

@@ -181,6 +181,84 @@
       ]
     },
     {
+      "name": "use-dismiss",
+      "type": "registry:hook",
+      "title": "use-dismiss",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-dismiss.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-dismiss.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-tap-gesture",
+      "type": "registry:hook",
+      "title": "use-tap-gesture",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-tap-gesture.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-tap-gesture.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-hover-gesture",
+      "type": "registry:hook",
+      "title": "use-hover-gesture",
+      "registryDependencies": [
+        "@nuelm/touch"
+      ],
+      "files": [
+        {
+          "path": "lib/hooks/use-hover-gesture.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-hover-gesture.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-favicon",
+      "type": "registry:hook",
+      "title": "use-favicon",
+      "registryDependencies": [
+        "@nuelm/favicon"
+      ],
+      "files": [
+        {
+          "path": "lib/hooks/use-favicon.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-favicon.ts"
+        }
+      ]
+    },
+    {
+      "name": "touch",
+      "type": "registry:lib",
+      "title": "touch",
+      "files": [
+        {
+          "path": "lib/touch.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "favicon",
+      "type": "registry:lib",
+      "title": "favicon",
+      "files": [
+        {
+          "path": "lib/favicon.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
@@ -654,6 +732,29 @@
       ]
     },
     {
+      "name": "preview-rail",
+      "type": "registry:component",
+      "title": "Preview Rail",
+      "description": "Tick rail with hover previews for jumping between sections.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/use-dismiss",
+        "@nuelm/use-hover-gesture",
+        "@nuelm/use-tap-gesture"
+      ],
+      "files": [
+        {
+          "path": "components/motion/preview-rail.tsx",
+          "type": "registry:component",
+          "target": "components/motion/preview-rail.tsx"
+        }
+      ]
+    },
+    {
       "name": "copy-button",
       "type": "registry:component",
       "title": "Copy Button",
@@ -700,6 +801,164 @@
       ]
     },
     {
+      "name": "agent-disclosure",
+      "type": "registry:component",
+      "title": "Agent Disclosure",
+      "description": "Shared clip-path reveal for collapsible agent content.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-disclosure.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-disclosure.tsx"
+        }
+      ]
+    },
+    {
+      "name": "citations",
+      "type": "registry:component",
+      "title": "Citations",
+      "description": "Inline citation markers, favicon stacks and a collapsible source list.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/use-favicon"
+      ],
+      "files": [
+        {
+          "path": "components/agents/citations.tsx",
+          "type": "registry:component",
+          "target": "components/agents/citations.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-bubble",
+      "type": "registry:component",
+      "title": "Message Bubble",
+      "description": "Chat bubble surfaces with variants, pop-in entrance and a collapsible body.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/message-bubble.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message-bubble.tsx"
+        },
+        {
+          "path": "components/agents/message-context.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message-context.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-scroller",
+      "type": "registry:component",
+      "title": "Message Scroller",
+      "description": "Transcript viewport that follows streamed output and offers a turn-by-turn rail.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/preview-rail"
+      ],
+      "files": [
+        {
+          "path": "components/agents/message-scroller.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message-scroller.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message",
+      "type": "registry:component",
+      "title": "Message",
+      "description": "Message rows with avatar, header, footer, markers and a typing indicator.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/message-bubble",
+        "@nuelm/message-scroller"
+      ],
+      "files": [
+        {
+          "path": "components/agents/message.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message.tsx"
+        }
+      ]
+    },
+    {
+      "name": "prompt-input",
+      "type": "registry:component",
+      "title": "Prompt Input",
+      "description": "Auto-growing prompt box with model picker, action menu and send/stop.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/button",
+        "@nuelm/popover",
+        "@nuelm/select"
+      ],
+      "files": [
+        {
+          "path": "components/agents/prompt-input.tsx",
+          "type": "registry:component",
+          "target": "components/agents/prompt-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "streaming-response",
+      "type": "registry:component",
+      "title": "Streaming Response",
+      "description": "Streamed answer with copy, retry, feedback and a sources footer.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/citations",
+        "@nuelm/agent-disclosure"
+      ],
+      "files": [
+        {
+          "path": "components/agents/streaming-response.tsx",
+          "type": "registry:component",
+          "target": "components/agents/streaming-response.tsx"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -708,6 +967,12 @@
         "@nuelm/theme",
         "@nuelm/utils",
         "@nuelm/motion",
+        "@nuelm/use-dismiss",
+        "@nuelm/use-tap-gesture",
+        "@nuelm/use-hover-gesture",
+        "@nuelm/use-favicon",
+        "@nuelm/touch",
+        "@nuelm/favicon",
         "@nuelm/button",
         "@nuelm/badge",
         "@nuelm/input",
@@ -735,8 +1000,16 @@
         "@nuelm/marquee",
         "@nuelm/reveal",
         "@nuelm/magnetic",
+        "@nuelm/preview-rail",
         "@nuelm/copy-button",
-        "@nuelm/voice-orb"
+        "@nuelm/voice-orb",
+        "@nuelm/agent-disclosure",
+        "@nuelm/citations",
+        "@nuelm/message-bubble",
+        "@nuelm/message-scroller",
+        "@nuelm/message",
+        "@nuelm/prompt-input",
+        "@nuelm/streaming-response"
       ]
     }
   ]

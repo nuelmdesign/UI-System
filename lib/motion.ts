@@ -26,6 +26,8 @@ export const spring = {
   snappy: { type: "spring", stiffness: 520, damping: 36, mass: 0.8 },
   /** Panels, dialogs, layout shifts. */
   smooth: { type: "spring", stiffness: 300, damping: 30 },
+  /** Things that arrive: sent messages, new bubbles. One small overshoot. */
+  pop: { type: "spring", stiffness: 500, damping: 30, mass: 0.58 },
   /** Large surfaces and page-level movement. */
   gentle: { type: "spring", stiffness: 150, damping: 22 },
   /** Values that track live input (audio level, slider drag). Critically damped. */

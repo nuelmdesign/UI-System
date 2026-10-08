@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "favicon",
+  "title": "favicon",
+  "files": [
+    {
+      "path": "lib/favicon.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n/** Resolve a website URL to its conventional root favicon location. */\nexport function getFaviconUrl(value: string) {\n  try {\n    return new URL(\"/favicon.ico\", value).toString()\n  } catch {\n    return null\n  }\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:lib"
+}

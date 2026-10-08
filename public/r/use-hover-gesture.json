@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-hover-gesture",
+  "title": "use-hover-gesture",
+  "registryDependencies": [
+    "@nuelm/touch"
+  ],
+  "files": [
+    {
+      "path": "lib/hooks/use-hover-gesture.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useMemo, useRef } from \"react\"\nimport { isHoveringPointer } from \"@/lib/touch\"\n\ninterface BoundaryEvent {\n  pointerId: number\n  pointerType: string\n  buttons: number\n}\n\nexport interface HoverGesture {\n  /** True when this enter starts a hover: the pointer arrived resting, not pressing. */\n  enter: (event: BoundaryEvent) => boolean\n  /** True when this leave ends a hover that entered as one. */\n  leave: (event: BoundaryEvent) => boolean\n}\n\n/**\n * Pairs a surface's enter with its leave, per pointer.\n *\n * `isHoveringPointer` answers the question the *enter* asks — is this pointer\n * resting on the surface or pressing it — and both boundary cases go wrong if\n * the leave is asked the same question again:\n *\n * - A pen with no hover never rests. It arrives in contact, taps, and the spec\n *   then requires its boundary events after `pointerup`, so the leave carries\n *   `buttons: 0` and reads as a mouse gliding off. Hover teardown then undid\n *   the tap — the panel the pen had just opened closed under it.\n * - A mouse pressed on the surface and dragged off leaves with `buttons: 1`.\n *   Skipping teardown there strands the surface open: the release happens\n *   outside, and no second leave ever comes.\n *\n * So the state a hover holds is released by the pointer that took it, whatever\n * the buttons say at the boundary, and a pointer that arrived in contact never\n * took it in the first place. Contact is the exception tracked here, not\n * hover: a leave from a pointer this surface never saw enter — mounted under\n * the cursor, say — still counts, since the alternative is state with no way\n * out.\n */\nexport function useHoverGesture(): HoverGesture {\n  const contact = useRef(new Set<number>())\n\n  return useMemo(\n    () => ({\n      enter: (event) => {\n        if (isHoveringPointer(event)) {\n          contact.current.delete(event.pointerId)\n          return true\n        }\n        contact.current.add(event.pointerId)\n        return false\n      },\n      leave: (event) => {\n        const arrivedInContact = contact.current.delete(event.pointerId)\n        return !arrivedInContact && event.pointerType !== \"touch\"\n      },\n    }),\n    []\n  )\n}\n",
+      "type": "registry:hook",
+      "target": "lib/hooks/use-hover-gesture.ts"
+    }
+  ],
+  "type": "registry:hook"
+}

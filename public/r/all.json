@@ -7,6 +7,12 @@
     "@nuelm/theme",
     "@nuelm/utils",
     "@nuelm/motion",
+    "@nuelm/use-dismiss",
+    "@nuelm/use-tap-gesture",
+    "@nuelm/use-hover-gesture",
+    "@nuelm/use-favicon",
+    "@nuelm/touch",
+    "@nuelm/favicon",
     "@nuelm/button",
     "@nuelm/badge",
     "@nuelm/input",
@@ -34,8 +40,16 @@
     "@nuelm/marquee",
     "@nuelm/reveal",
     "@nuelm/magnetic",
+    "@nuelm/preview-rail",
     "@nuelm/copy-button",
-    "@nuelm/voice-orb"
+    "@nuelm/voice-orb",
+    "@nuelm/agent-disclosure",
+    "@nuelm/citations",
+    "@nuelm/message-bubble",
+    "@nuelm/message-scroller",
+    "@nuelm/message",
+    "@nuelm/prompt-input",
+    "@nuelm/streaming-response"
   ],
   "type": "registry:item"
 }

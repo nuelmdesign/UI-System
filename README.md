@@ -42,7 +42,9 @@ Wrap your app once so Motion respects the OS "reduce motion" setting:
 | Tokens | `app/globals.css`: color, radius, elevation, easing, keyframes (light + dark) |
 | Motion tokens | `lib/motion.ts`: `spring`, `ease`, `duration`, `variants`, `stagger` |
 | Core components | `components/ui/`: button, badge, input, textarea, label, card, separator, kbd, skeleton, avatar, switch, checkbox, tabs, accordion, dialog, dropdown-menu, select, popover, tooltip, sonner |
-| Motion components | `components/motion/`: animated-number, blur-text, shimmer-text, spotlight-card, marquee, reveal, magnetic, copy-button |
+| Motion components | `components/motion/`: animated-number, blur-text, shimmer-text, spotlight-card, marquee, reveal, magnetic, copy-button, preview-rail |
+| AI agent components | `components/agents/`: voice-orb, message, message-bubble, message-scroller, prompt-input, streaming-response, citations, agent-disclosure |
+| Hooks | `lib/hooks/`: use-dismiss, use-tap-gesture, use-hover-gesture, use-favicon |
 | Showcase | `app/page.tsx` → `components/site/showcase.tsx` |
 
 ## Bringing in components from shadcn or beUI
@@ -62,4 +64,7 @@ pnpm dev              # showcase at http://localhost:3000
 pnpm registry:build   # regenerate registry.json + public/r/*.json
 pnpm build            # registry + production build
 pnpm lint
+pnpm format           # prettier (with Tailwind class sorting)
 ```
+
+Components adapted from [beUI](https://beui.dev) (MIT) are credited in `THIRD_PARTY_NOTICES.md` and at the top of each file.
