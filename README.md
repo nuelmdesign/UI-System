@@ -4,7 +4,7 @@ A personal design system for everything I build. **shadcn structure, Motion feel
 
 - **Structure & accessibility:** [Radix](https://www.radix-ui.com/) primitives, shadcn-style APIs
 - **Motion:** [Motion](https://motion.dev/) springs and easings from one shared file, in the spirit of [beUI](https://beui.dev)
-- **Look:** tokens inspired by Linear, Vercel, Stripe, Raycast, Arc, Family and Mercury
+- **Look:** editorial-technical. Square corners, hairline borders, a blue primary scale (periwinkle to royal), Newsreader display serif with Geist and Geist Mono, and pixel textures (`PixelField`)
 - **Distribution:** a public shadcn registry: components install as source you own
 
 ## Using it in a project

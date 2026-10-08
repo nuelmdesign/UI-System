@@ -26,9 +26,9 @@ function Switch({
         onCheckedChange?.(value)
       }}
       className={cn(
-        "peer group inline-flex h-5 w-9 shrink-0 items-center rounded-full border border-transparent p-0.5 shadow-xs outline-none",
+        "peer group inline-flex h-5 w-9 shrink-0 items-center rounded-sm border border-transparent p-0.5 outline-none",
         "transition-colors duration-200 ease-out",
-        "data-[state=checked]:bg-brand data-[state=unchecked]:bg-input",
+        "data-[state=checked]:bg-primary data-[state=unchecked]:bg-input",
         "focus-visible:ring-[3px] focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
         isOn ? "justify-end" : "justify-start",
         className
@@ -40,7 +40,7 @@ function Switch({
           data-slot="switch-thumb"
           layout
           transition={spring.snappy}
-          className="pointer-events-none block size-4 rounded-full bg-white shadow-sm ring-0 group-active:w-5"
+          className="pointer-events-none block size-4 rounded-[1px] bg-white shadow-sm ring-0 group-active:w-5"
         />
       </SwitchPrimitive.Thumb>
     </SwitchPrimitive.Root>

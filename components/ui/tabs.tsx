@@ -101,7 +101,8 @@ function TabsTrigger({
             "absolute",
             variant === "pill" &&
               "inset-0 rounded-md bg-background shadow-sm dark:bg-input/40",
-            variant === "underline" && "inset-x-0 -bottom-px h-0.5 bg-foreground"
+            variant === "underline" &&
+              "inset-x-0 -bottom-px h-0.5 bg-foreground"
           )}
         />
       )}
@@ -120,7 +121,7 @@ function TabsContent({
     <TabsPrimitive.Content
       data-slot="tabs-content"
       className={cn(
-        "flex-1 outline-none data-[state=active]:animate-pop-in [--pop-y:4px]",
+        "flex-1 outline-none [--pop-y:4px] data-[state=active]:animate-pop-in",
         className
       )}
       {...props}

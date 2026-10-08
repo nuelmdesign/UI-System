@@ -213,6 +213,12 @@ const items = [
       target: `components/motion/${file}`,
     })),
   },
+  {
+    ...motionComponent("pixel-field"),
+    dependencies: [],
+    registryDependencies: ["@nuelm/utils", "@nuelm/theme"],
+    description: "Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer.",
+  },
   motionComponent("copy-button", { deps: ["lucide-react"], reg: ["@nuelm/button"] }),
 
   agent("voice-orb", {

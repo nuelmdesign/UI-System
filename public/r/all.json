@@ -45,6 +45,7 @@
     "@nuelm/loader",
     "@nuelm/text-scramble",
     "@nuelm/action-swap",
+    "@nuelm/pixel-field",
     "@nuelm/copy-button",
     "@nuelm/voice-orb",
     "@nuelm/agent-disclosure",

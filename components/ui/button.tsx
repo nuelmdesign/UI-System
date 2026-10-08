@@ -7,41 +7,47 @@ import { cn } from "@/lib/utils"
 const buttonVariants = cva(
   [
     "relative inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap select-none",
-    "transition-[background-color,color,box-shadow,transform,opacity] duration-150 ease-out",
-    "active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
+    "transition-[background-color,color,border-color,box-shadow,transform,opacity] duration-150 ease-out",
+    "active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
     "outline-none focus-visible:ring-[3px] focus-visible:ring-ring",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   ],
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow-sm hover:bg-primary/88",
-        brand:
-          "bg-brand text-brand-foreground shadow-sm shadow-brand/20 [box-shadow:var(--highlight),var(--shadow-sm)] hover:bg-brand/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        /** Alias of default, kept for older call sites. */
+        brand: "bg-primary text-primary-foreground hover:bg-primary/90",
+        ink: "bg-ink text-ink-foreground hover:bg-ink/85",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/70",
         outline:
-          "border bg-background shadow-xs [box-shadow:var(--highlight),var(--shadow-xs)] hover:bg-accent dark:bg-input/20 dark:hover:bg-input/40",
+          "border bg-card text-foreground hover:border-foreground/25 hover:bg-accent",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         link: "text-brand underline-offset-4 hover:underline active:scale-100",
       },
       size: {
-        xs: "h-7 rounded-sm px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3.5",
+        xs: "h-7 px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3.5",
         sm: "h-8 px-3",
         default: "h-9 px-4",
         lg: "h-10 px-5",
-        xl: "h-12 rounded-lg px-6 text-base",
+        xl: "h-12 px-6 text-base",
         icon: "size-9",
         "icon-sm": "size-8",
-        "icon-xs": "size-7 rounded-sm",
+        "icon-xs": "size-7",
+      },
+      /** Small uppercase label, as on editorial CTAs ("START FOR FREE"). */
+      caps: {
+        true: "font-mono text-[11px] tracking-[0.08em] uppercase",
+        false: "",
       },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      caps: false,
     },
   }
 )
@@ -56,6 +62,7 @@ function Button({
   className,
   variant,
   size,
+  caps,
   asChild = false,
   loading = false,
   disabled,
@@ -68,7 +75,7 @@ function Button({
     <Comp
       data-slot="button"
       data-loading={loading || undefined}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, caps, className }))}
       disabled={disabled || loading}
       {...props}
     >

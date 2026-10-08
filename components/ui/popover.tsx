@@ -29,7 +29,7 @@ function PopoverContent({
         sideOffset={sideOffset}
         className={cn(
           "z-50 w-72 rounded-xl border bg-popover p-4 text-popover-foreground shadow-lg outline-none",
-          "origin-(--radix-popover-content-transform-origin) data-[state=open]:animate-pop-in data-[state=closed]:animate-pop-out",
+          "origin-(--radix-popover-content-transform-origin) data-[state=closed]:animate-pop-out data-[state=open]:animate-pop-in",
           className
         )}
         {...props}

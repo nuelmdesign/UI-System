@@ -40,7 +40,9 @@ function DialogTrigger(
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 }
 
-function DialogClose(props: React.ComponentProps<typeof DialogPrimitive.Close>) {
+function DialogClose(
+  props: React.ComponentProps<typeof DialogPrimitive.Close>
+) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
 }
 
@@ -77,7 +79,13 @@ function DialogContent({
                   className
                 )}
                 initial={{ opacity: 0, scale: 0.96, y: 8, filter: "blur(4px)" }}
-                animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)", transition: spring.smooth }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  y: 0,
+                  filter: "blur(0px)",
+                  transition: spring.smooth,
+                }}
                 exit={{
                   opacity: 0,
                   scale: 0.97,
@@ -135,7 +143,10 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-lg leading-none font-semibold tracking-tight", className)}
+      className={cn(
+        "text-lg leading-none font-semibold tracking-tight",
+        className
+      )}
       {...props}
     />
   )

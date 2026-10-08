@@ -23,8 +23,8 @@ type OrbColors = readonly [base: string, highlight: string, shadow: string]
  * WebGL needs hex, so these are hand-matched to the theme tokens.
  */
 const ORB_PALETTES = {
-  /** Matches --brand. */
-  brand: ["#5b5fe0", "#dfe1ff", "#1e1b4b"],
+  /** Matches the blue scale (--blue-600 / 200 / 950). */
+  brand: ["#3d4fe6", "#c8d2ff", "#151a45"],
   /** Neutral graphite, Linear / Vercel style. */
   graphite: ["#8a8f98", "#f4f5f7", "#1c1d21"],
   /** Matches --success. */

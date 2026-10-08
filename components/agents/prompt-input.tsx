@@ -168,7 +168,7 @@ export function PromptInput({
     <form
       onSubmit={submit}
       className={cn(
-        "relative w-full rounded-2xl border border-border/80 bg-background p-2 shadow-xs transition-colors focus-within:border-brand/50 focus-within:ring-[3px] focus-within:ring-ring",
+        "relative w-full rounded-lg border border-border bg-card p-2 shadow-xs transition-colors focus-within:border-brand/50 focus-within:ring-[3px] focus-within:ring-ring",
         disabled && "opacity-60",
         className
       )}
@@ -203,7 +203,6 @@ export function PromptInput({
                 size="icon-sm"
                 disabled={disabled || loading}
                 aria-label="Add to prompt"
-                className="rounded-full"
               >
                 <motion.span
                   aria-hidden="true"
@@ -305,7 +304,7 @@ export function PromptInput({
           disabled={loading ? !onStop : !canSubmit}
           aria-label={loading ? "Stop generating" : "Send prompt"}
           onClick={loading ? onStop : undefined}
-          className="ml-auto rounded-full"
+          className="ml-auto"
         >
           <AnimatePresence initial={false} mode="popLayout">
             <motion.span

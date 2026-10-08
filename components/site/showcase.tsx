@@ -14,8 +14,10 @@ import {
   Search,
   Settings,
   Sparkles,
+  SquareStack,
   Trash2,
   User,
+  Zap,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -99,6 +101,9 @@ import { Magnetic } from "@/components/motion/magnetic"
 import { CopyButton } from "@/components/motion/copy-button"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { AgentsSection } from "@/components/site/agents-section"
+import { CELLS } from "@/components/site/cells"
+import { PixelField } from "@/components/motion/pixel-field"
+import { PromptInput } from "@/components/agents/prompt-input"
 
 const NAV = [
   { href: "#foundations", label: "Foundations" },
@@ -111,26 +116,39 @@ const NAV = [
 export function Showcase() {
   return (
     <div className="relative flex-1">
+      <AnnouncementBar />
       <Header />
-      <main className="mx-auto w-full max-w-6xl px-4 pb-32 sm:px-6">
+      <main className="mx-auto w-full max-w-6xl border-x">
         <Hero />
-        <Foundations />
-        <Components />
-        <MotionSection />
-        <AgentsSection
-          heading={
-            <SectionHeading
-              id="agents"
-              eyebrow="04 — AI Agents"
-              title="Built for agent interfaces"
-              description="Pieces for voice, chat and tool-using agents, adapted from beUI and tuned to the same tokens."
-            />
-          }
-        />
-        <Compose />
+        <Section>
+          <Foundations />
+        </Section>
+        <Section>
+          <Components />
+        </Section>
+        <Band />
+        <Section>
+          <MotionSection />
+        </Section>
+        <Section>
+          <AgentsSection
+            heading={
+              <SectionHeading
+                id="agents"
+                eyebrow="AI agents"
+                title="Built for agent interfaces"
+                description="Voice, chat and tool-use pieces adapted from beUI, restyled to the same tokens and motion."
+              />
+            }
+          />
+        </Section>
+        <Section>
+          <Compose />
+        </Section>
       </main>
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">
-        nuelm/ui — built on shadcn, Radix and Motion.
+      <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-x border-t px-4 py-6 text-muted-foreground sm:px-8">
+        <span className="eyebrow">nuelm/ui · 0.2</span>
+        <span className="text-sm">Built on shadcn, Radix and Motion.</span>
       </footer>
     </div>
   )
@@ -138,100 +156,229 @@ export function Showcase() {
 
 /* -------------------------------------------------------------------------- */
 
+function AnnouncementBar() {
+  return (
+    <a
+      href="#agents"
+      className="flex h-9 items-center justify-center gap-2 border-b bg-ink px-4 text-xs text-ink-foreground/80 transition-colors hover:text-ink-foreground dark:bg-surface dark:text-muted-foreground dark:hover:text-foreground"
+    >
+      <span className="truncate">
+        <span className="text-ink-foreground dark:text-foreground">
+          nuelm/ui 0.2
+        </span>{" "}
+        · A new editorial direction, plus 18 agent components
+      </span>
+      <ArrowRight className="size-3.5 shrink-0" />
+    </a>
+  )
+}
+
 function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/75 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4 sm:px-6">
-        <a
-          href="#"
-          className="flex items-center gap-2 font-semibold tracking-tight"
-        >
+    <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-8 border-x px-4 sm:px-8">
+        <a href="#" className="flex items-center gap-2.5">
           <Logo />
-          nuelm<span className="text-muted-foreground">/ui</span>
+          <span className="font-display text-xl tracking-[-0.01em]">
+            nuelm<span className="text-muted-foreground">/ui</span>
+          </span>
         </a>
-        <nav className="hidden items-center gap-1 text-sm md:flex">
+        <nav className="hidden items-center gap-6 text-[13px] text-muted-foreground md:flex">
           {NAV.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="rounded-md px-2.5 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              className="transition-colors hover:text-foreground"
             >
               {item.label}
             </a>
           ))}
         </nav>
-        <div className="ml-auto flex items-center gap-1">
+        <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
+          <Button variant="ink" size="sm" caps asChild>
+            <a href="#components">Get started</a>
+          </Button>
         </div>
       </div>
     </header>
   )
 }
 
+/** 3×3 pixel mark: the blue scale stepping down a diagonal. */
 function Logo() {
+  const cells = [
+    "bg-blue-700",
+    "bg-blue-500",
+    "bg-blue-300",
+    "bg-blue-500",
+    "bg-blue-300",
+    "bg-blue-100",
+    "bg-blue-300",
+    "bg-blue-100",
+    "bg-transparent",
+  ]
   return (
-    <span className="grid size-6 place-items-center rounded-md bg-brand text-brand-foreground [box-shadow:var(--highlight),var(--shadow-sm)]">
-      <svg viewBox="0 0 16 16" className="size-3.5" fill="none" aria-hidden>
-        <path
-          d="M3.5 12.5V3.5l9 9V3.5"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+    <span aria-hidden className="grid size-5 grid-cols-3 gap-px">
+      {cells.map((c, i) => (
+        <span key={i} className={c} />
+      ))}
     </span>
   )
 }
 
+const HERO_MODELS = [
+  { value: "fast", label: "Agent 5.6 · Fast", icon: <Zap /> },
+  { value: "deep", label: "Agent 5.6 · Deep", icon: <Sparkles /> },
+]
+
+const STATS = [
+  { value: "60+", label: "Components, hooks and tokens", icon: <Command /> },
+  { value: "18", label: "Agent interface pieces", icon: <Sparkles /> },
+  { value: "1", label: "Token file for both themes", icon: <SquareStack /> },
+]
+
 function Hero() {
-  const install = "npx shadcn add @nuelm/button"
   return (
-    <section className="relative py-20 sm:py-28">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-20 -z-10 mx-auto h-80 max-w-3xl rounded-full bg-brand/15 blur-3xl"
-      />
-      <Badge variant="brand" dot className="mb-6">
-        v0.1 — foundations
-      </Badge>
-      <BlurText
-        as="h1"
-        text="One system for everything you build."
-        className="max-w-3xl text-4xl font-semibold tracking-tighter sm:text-6xl"
-      />
-      <motion.p
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...spring.gentle, delay: 0.35 }}
-        className="mt-5 max-w-xl text-lg text-pretty text-muted-foreground"
-      >
-        shadcn structure, Motion feel, one set of tokens. Every component is
-        source you own, installed straight into your project.
-      </motion.p>
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...spring.gentle, delay: 0.45 }}
-        className="mt-8 flex flex-wrap items-center gap-3"
-      >
-        <Magnetic>
-          <Button variant="brand" size="lg" asChild>
-            <a href="#components">
-              Browse components <ArrowRight />
+    <section className="border-b">
+      <div className="bg-dots px-4 pt-16 pb-12 sm:px-8 sm:pt-24">
+        <Badge variant="outline" className="mb-8 gap-2 bg-card py-1 pr-2 pl-1">
+          <span className="grid size-4 place-items-center bg-primary font-mono text-[9px] text-primary-foreground">
+            N
+          </span>
+          Built on shadcn, Radix and Motion
+        </Badge>
+        <h1 className="max-w-4xl font-display text-5xl leading-[1.02] font-light tracking-[-0.03em] sm:text-7xl">
+          <span className="text-muted-foreground">Design once.</span> Build
+          everything with it.
+        </h1>
+        <p className="mt-6 max-w-xl text-pretty text-muted-foreground">
+          A personal design system for apps and agent interfaces. Every
+          component is source you own, installed straight into your project from
+          one registry.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <Button variant="outline" size="lg" caps asChild>
+            <a href="#components">Browse components</a>
+          </Button>
+          <Button size="lg" caps asChild>
+            <a href="#agents">
+              <ArrowRight /> See agent pieces
             </a>
           </Button>
-        </Magnetic>
-        <div className="flex h-10 items-center gap-2 rounded-md border bg-surface pr-1 pl-3 font-mono text-sm text-muted-foreground">
-          <span className="text-brand">$</span> {install}
-          <CopyButton value={install} />
         </div>
-      </motion.div>
+      </div>
+
+      <div className="px-4 pb-4 sm:px-8 sm:pb-8">
+        <PixelField
+          variant="mosaic"
+          className="grid min-h-[380px] place-items-center border p-4 sm:min-h-[460px]"
+        >
+          <div className="mx-auto w-[min(560px,100%)] border bg-card p-2 shadow-xl">
+            <p className="px-2 pt-1.5 pb-2.5 eyebrow text-muted-foreground">
+              Automate tasks
+            </p>
+            <PromptInput
+              models={HERO_MODELS}
+              placeholder="How can I help you today?"
+              onSubmit={(prompt) => {
+                toast("Prompt sent", { description: prompt })
+              }}
+            />
+          </div>
+        </PixelField>
+      </div>
+
+      <div className={cn(CELLS, "border-t-0 border-l-0 sm:grid-cols-3")}>
+        {STATS.map((stat) => (
+          <div
+            key={stat.label}
+            className="flex items-center gap-4 px-4 py-6 last:border-r-0 sm:px-8"
+          >
+            <span className="grid size-10 shrink-0 place-items-center border text-foreground [&_svg]:size-4">
+              {stat.icon}
+            </span>
+            <div>
+              <p className="font-display text-3xl font-light tracking-[-0.02em]">
+                {stat.value}
+              </p>
+              <p className="text-xs text-muted-foreground">{stat.label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t py-6">
+        <Marquee duration={40} gap="3.5rem">
+          {STACK.map((name) => (
+            <span
+              key={name}
+              className="font-display text-2xl tracking-[-0.01em] text-muted-foreground/70"
+            >
+              {name}
+            </span>
+          ))}
+        </Marquee>
+      </div>
+    </section>
+  )
+}
+
+const STACK = [
+  "shadcn/ui",
+  "Radix",
+  "Motion",
+  "Tailwind CSS",
+  "beUI",
+  "Shiki",
+  "Next.js",
+  "Geist",
+]
+
+/** Full-width black band (dark tokens in both themes) over an equalizer field. */
+function Band() {
+  return (
+    <section className="dark border-b bg-background text-foreground">
+      <PixelField variant="equalizer" className="px-4 py-20 sm:px-8 sm:py-28">
+        <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+          <p className="flex items-center gap-2 eyebrow text-muted-foreground">
+            <span className="size-2 bg-primary" /> Motion
+          </p>
+          <h2 className="mt-5 font-display text-4xl leading-[1.08] font-light tracking-[-0.02em] sm:text-5xl">
+            One set of springs.{" "}
+            <span className="text-muted-foreground">
+              Every component moves the same way.
+            </span>
+          </h2>
+          <p className="mt-5 max-w-lg text-sm text-muted-foreground">
+            Easings, durations and springs live in lib/motion.ts. Anything
+            brought in from beUI is retuned to them, so nothing feels borrowed.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button variant="ink" caps asChild>
+              <a href="#foundations">
+                See the springs <ArrowRight />
+              </a>
+            </Button>
+            <Button variant="outline" caps asChild className="bg-transparent">
+              <a href="#motion">Motion pieces</a>
+            </Button>
+          </div>
+        </div>
+      </PixelField>
     </section>
   )
 }
 
 /* -------------------------------------------------------------------------- */
+
+function Section({ children }: { children: React.ReactNode }) {
+  return (
+    <section className="border-b px-4 py-16 sm:px-8 sm:py-20">
+      {children}
+    </section>
+  )
+}
 
 function SectionHeading({
   id,
@@ -245,12 +392,22 @@ function SectionHeading({
   description: string
 }) {
   return (
-    <Reveal className="mb-10 scroll-mt-24 pt-16" id={id}>
-      <p className="mb-2 font-mono text-xs tracking-wider text-brand uppercase">
-        {eyebrow}
+    <Reveal
+      id={id}
+      className="mb-10 grid scroll-mt-28 gap-6 md:grid-cols-2 md:items-end"
+    >
+      <div>
+        <p className="flex items-center gap-2 eyebrow text-muted-foreground">
+          <span className="size-2 bg-primary" />
+          {eyebrow}
+        </p>
+        <h2 className="mt-4 font-display text-4xl leading-[1.05] font-light tracking-[-0.02em] sm:text-5xl">
+          {title}
+        </h2>
+      </div>
+      <p className="max-w-md text-pretty text-muted-foreground md:justify-self-end">
+        {description}
       </p>
-      <h2 className="text-3xl font-semibold tracking-tight">{title}</h2>
-      <p className="mt-2 max-w-2xl text-muted-foreground">{description}</p>
     </Reveal>
   )
 }
@@ -265,16 +422,9 @@ function Specimen({
   children: React.ReactNode
 }) {
   return (
-    <Reveal
-      className={cn(
-        "flex flex-col overflow-hidden rounded-xl border bg-card [box-shadow:var(--highlight),var(--shadow-xs)]",
-        className
-      )}
-    >
-      <div className="flex h-10 items-center border-b px-4 text-xs font-medium text-muted-foreground">
-        {title}
-      </div>
-      <div className="flex flex-1 flex-wrap items-center gap-3 p-6">
+    <Reveal className={cn("flex flex-col bg-card", className)}>
+      <div className="px-5 pt-5 eyebrow text-muted-foreground">{title}</div>
+      <div className="flex flex-1 flex-wrap content-start items-center gap-3 p-5 sm:p-6">
         {children}
       </div>
     </Reveal>
@@ -283,28 +433,30 @@ function Specimen({
 
 /* -------------------------------------------------------------------------- */
 
-const COLORS = [
+const BLUE_SCALE = [
+  "50",
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "600",
+  "700",
+  "800",
+  "900",
+  "950",
+] as const
+
+const NEUTRALS = [
   ["background", "bg-background"],
   ["surface", "bg-surface"],
   ["card", "bg-card"],
-  ["muted", "bg-muted"],
   ["border", "bg-border"],
-  ["muted-foreground", "bg-muted-foreground"],
-  ["foreground", "bg-foreground"],
-  ["primary", "bg-primary"],
-  ["brand", "bg-brand"],
+  ["muted-fg", "bg-muted-foreground"],
+  ["ink", "bg-ink"],
   ["success", "bg-success"],
   ["warning", "bg-warning"],
   ["destructive", "bg-destructive"],
-] as const
-
-const TYPE = [
-  ["Display", "text-5xl font-semibold tracking-tighter", "48 / semibold"],
-  ["Heading 1", "text-3xl font-semibold tracking-tight", "30 / semibold"],
-  ["Heading 2", "text-xl font-semibold tracking-tight", "20 / semibold"],
-  ["Body", "text-base", "16 / regular"],
-  ["Small", "text-sm text-muted-foreground", "14 / regular"],
-  ["Mono", "font-mono text-sm", "14 / Geist Mono"],
 ] as const
 
 function Foundations() {
@@ -312,85 +464,92 @@ function Foundations() {
     <>
       <SectionHeading
         id="foundations"
-        eyebrow="01 — Foundations"
+        eyebrow="Foundations"
         title="Tokens decide the look"
-        description="Every component reads from these. Change a token and the whole library follows — including anything you install from shadcn or beUI, since the names match."
+        description="Every component reads from one token file. Change a token and the library follows, including anything installed from shadcn or beUI, since the names match."
       />
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Specimen title="Color" className="lg:col-span-2">
-          <div className="grid w-full grid-cols-3 gap-3 sm:grid-cols-6">
-            {COLORS.map(([name, cls]) => (
-              <div key={name} className="space-y-2">
+      <div className={cn(CELLS, "lg:grid-cols-2")}>
+        <Specimen title="Blue · primary scale" className="lg:col-span-2">
+          <div className="grid w-full grid-cols-6 gap-px sm:grid-cols-11">
+            {BLUE_SCALE.map((step) => (
+              <div key={step} className="grid gap-2">
                 <div
-                  className={cn(
-                    "h-14 rounded-lg ring-1 ring-border ring-inset",
-                    cls
-                  )}
+                  className="h-16 ring-1 ring-border ring-inset"
+                  style={{ background: `var(--blue-${step})` }}
                 />
-                <p className="truncate font-mono text-[11px] text-muted-foreground">
-                  {name}
+                <p className="font-mono text-[10px] text-muted-foreground">
+                  {step}
+                  {step === "600" ? " · primary" : ""}
                 </p>
               </div>
             ))}
           </div>
         </Specimen>
 
-        <Specimen title="Typography — Inter">
-          <div className="w-full space-y-3">
-            {TYPE.map(([name, cls, meta]) => (
-              <div
-                key={name}
-                className="flex items-baseline justify-between gap-4"
-              >
-                <span className={cn("truncate", cls)}>{name}</span>
-                <span className="shrink-0 font-mono text-[11px] text-muted-foreground">
-                  {meta}
+        <Specimen title="Neutrals & status">
+          <div className="grid w-full grid-cols-3 gap-3">
+            {NEUTRALS.map(([name, cls]) => (
+              <div key={name} className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    "size-6 shrink-0 ring-1 ring-border ring-inset",
+                    cls
+                  )}
+                />
+                <span className="truncate font-mono text-[11px] text-muted-foreground">
+                  {name}
                 </span>
               </div>
             ))}
           </div>
         </Specimen>
 
-        <div className="grid gap-4">
-          <Specimen title="Radius">
+        <Specimen title="Type · Newsreader / Geist / Geist Mono">
+          <div className="grid w-full gap-4">
+            <p className="font-display text-4xl leading-none font-light tracking-[-0.02em]">
+              Conversations that build momentum
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Geist carries interface text: labels, inputs, body copy and data
+              at 13 to 16px.
+            </p>
+            <p className="flex items-center gap-2 eyebrow text-muted-foreground">
+              <span className="size-2 bg-primary" /> 01 / Eyebrow label
+            </p>
+          </div>
+        </Specimen>
+
+        <Specimen title="Shape · square corners, hairlines">
+          <div className="flex w-full flex-wrap items-end gap-4">
             {[
-              "rounded-sm",
-              "rounded-md",
-              "rounded-lg",
-              "rounded-xl",
-              "rounded-2xl",
-              "rounded-full",
-            ].map((r) => (
-              <div key={r} className="flex flex-col items-center gap-2">
+              ["xs", "rounded-xs"],
+              ["sm", "rounded-sm"],
+              ["md", "rounded-md"],
+              ["lg", "rounded-lg"],
+              ["xl", "rounded-xl"],
+              ["2xl", "rounded-2xl"],
+            ].map(([name, r]) => (
+              <div key={name} className="flex flex-col items-center gap-2">
                 <div
                   className={cn(
-                    "size-12 border-2 border-brand/60 bg-brand/10",
+                    "size-12 border border-primary/50 bg-primary/8",
                     r
                   )}
                 />
-                <span className="font-mono text-[11px] text-muted-foreground">
-                  {r.replace("rounded-", "")}
+                <span className="font-mono text-[10px] text-muted-foreground">
+                  {name}
                 </span>
               </div>
             ))}
-          </Specimen>
-          <Specimen title="Elevation">
-            {[
-              "shadow-xs",
-              "shadow-sm",
-              "shadow-md",
-              "shadow-lg",
-              "shadow-xl",
-            ].map((s) => (
-              <div key={s} className="flex flex-col items-center gap-2">
-                <div className={cn("size-12 rounded-lg border bg-card", s)} />
-                <span className="font-mono text-[11px] text-muted-foreground">
-                  {s.replace("shadow-", "")}
-                </span>
-              </div>
-            ))}
-          </Specimen>
-        </div>
+          </div>
+        </Specimen>
+
+        <Specimen title="Texture · PixelField">
+          <div className="grid w-full grid-cols-2 gap-3">
+            <PixelField variant="matrix" className="h-28 border" />
+            <PixelField variant="mosaic" cell={14} className="h-28 border" />
+          </div>
+        </Specimen>
 
         <MotionTokens />
       </div>
@@ -406,24 +565,29 @@ function MotionTokens() {
   ][]
 
   return (
-    <Specimen title="Motion — lib/motion.ts" className="lg:col-span-2">
-      <div className="w-full space-y-3">
+    <Specimen title="Motion · lib/motion.ts" className="lg:col-span-2">
+      <div className="w-full space-y-2.5">
         {springs.map(([name, config]) => (
           <div key={name} className="flex items-center gap-4">
-            <span className="w-16 shrink-0 font-mono text-xs text-muted-foreground">
+            <span className="w-14 shrink-0 font-mono text-xs text-muted-foreground">
               {name}
             </span>
-            <div className="relative h-8 flex-1 rounded-md bg-muted">
+            <div className="relative h-7 flex-1 border bg-surface">
               <motion.div
-                className="absolute top-1 size-6 rounded-[5px] bg-brand [box-shadow:var(--highlight),var(--shadow-sm)]"
-                animate={{ left: on ? "calc(100% - 1.75rem)" : "0.25rem" }}
+                className="absolute top-[3px] size-5 bg-primary"
+                animate={{ left: on ? "calc(100% - 1.5rem)" : "0.1875rem" }}
                 transition={config}
               />
             </div>
           </div>
         ))}
         <div className="flex justify-end pt-1">
-          <Button variant="outline" size="sm" onClick={() => setOn((v) => !v)}>
+          <Button
+            variant="outline"
+            size="sm"
+            caps
+            onClick={() => setOn((v) => !v)}
+          >
             Play springs
           </Button>
         </div>
@@ -441,11 +605,11 @@ function Components() {
     <>
       <SectionHeading
         id="components"
-        eyebrow="02 — Components"
+        eyebrow="Components"
         title="The core set"
         description="Radix handles accessibility and keyboard behavior; tokens handle the look; Motion handles state changes."
       />
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className={cn(CELLS, "md:grid-cols-2")}>
         <Specimen title="Button" className="md:col-span-2">
           <Button>Default</Button>
           <Button variant="brand">
@@ -698,7 +862,7 @@ function Components() {
           </Accordion>
         </Specimen>
 
-        <Specimen title="Avatar, Kbd & Skeleton">
+        <Specimen title="Avatar, Kbd & Skeleton" className="md:col-span-2">
           <div className="grid w-full gap-6">
             <div className="flex items-center gap-4">
               <AvatarGroup>
@@ -786,11 +950,11 @@ function MotionSection() {
     <>
       <SectionHeading
         id="motion"
-        eyebrow="03 — Motion"
+        eyebrow="Motion"
         title="The feel layer"
         description="Animated pieces in the spirit of beUI, all tuned to the same spring and easing tokens so they feel like one product."
       />
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className={cn(CELLS, "md:grid-cols-2")}>
         <Specimen title="AnimatedNumber">
           <div className="flex w-full items-end justify-between gap-4">
             <AnimatedNumber
@@ -823,11 +987,9 @@ function MotionSection() {
           </div>
         </Specimen>
 
-        <SpotlightCard>
-          <p className="mb-1 text-xs font-medium text-muted-foreground">
-            SpotlightCard
-          </p>
-          <h3 className="text-lg font-semibold tracking-tight">
+        <SpotlightCard className="rounded-none border-0 bg-card">
+          <p className="mb-4 eyebrow text-muted-foreground">SpotlightCard</p>
+          <h3 className="font-display text-2xl font-light tracking-[-0.01em]">
             Move your cursor over me
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -894,7 +1056,7 @@ function Compose() {
     <>
       <SectionHeading
         id="compose"
-        eyebrow="05 — Compose"
+        eyebrow="Compose"
         title="Put together"
         description="A sample banking view assembled only from library parts — the kind of screen this system is for."
       />

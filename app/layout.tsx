@@ -1,12 +1,19 @@
 import type { Metadata } from "next"
-import { Inter, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Newsreader } from "next/font/google"
 
 import { Providers } from "@/components/site/providers"
 import "./globals.css"
 
-const inter = Inter({
-  variable: "--font-inter",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
+})
+
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
 })
 
 const geistMono = Geist_Mono({
@@ -28,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${geistMono.variable} h-full`}
+      className={`${geist.variable} ${geistMono.variable} ${newsreader.variable} h-full`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

@@ -28,6 +28,7 @@ import {
   TodoDemo,
   ToolResultDemo,
 } from "@/components/site/agent-work-demos"
+import { CELLS } from "@/components/site/cells"
 import { cn } from "@/lib/utils"
 
 type Palette = keyof typeof ORB_PALETTES
@@ -154,26 +155,24 @@ function AgentSpecimen({
   children: React.ReactNode
 }) {
   return (
-    <Reveal
-      className={cn(
-        "min-w-0 overflow-hidden rounded-xl border bg-card [box-shadow:var(--highlight),var(--shadow-xs)]",
-        className
-      )}
-    >
-      <div className="flex h-10 items-center gap-2 border-b px-4 text-xs font-medium text-muted-foreground">
-        {title}
+    <Reveal className={cn("bg-card", className)}>
+      <div className="flex items-center gap-2 px-5 pt-5 text-muted-foreground">
+        <span className="eyebrow">{title}</span>
         {isNew ? (
-          <Badge variant="brand" className="h-4 px-1.5 text-[10px]">
+          <Badge
+            variant="brand"
+            className="h-4 px-1 font-mono text-[9px] uppercase"
+          >
             New
           </Badge>
         ) : null}
         {meta ? (
-          <span className="ml-auto hidden truncate font-mono sm:inline">
+          <span className="ml-auto hidden truncate font-mono text-[11px] sm:inline">
             {meta}
           </span>
         ) : null}
       </div>
-      <div className={cn("p-6", bodyClassName)}>{children}</div>
+      <div className={cn("p-5 sm:p-6", bodyClassName)}>{children}</div>
     </Reveal>
   )
 }
@@ -182,7 +181,7 @@ export function AgentsSection({ heading }: { heading: React.ReactNode }) {
   return (
     <>
       {heading}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className={cn(CELLS, "md:grid-cols-2")}>
         <AgentSpecimen
           title="Voice Orb"
           meta="WebGL · voice-reactive"

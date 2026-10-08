@@ -43,7 +43,7 @@ function TooltipContent({
         sideOffset={sideOffset}
         className={cn(
           "z-50 flex w-fit items-center gap-2 rounded-md bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground shadow-md",
-          "origin-(--radix-tooltip-content-transform-origin) animate-pop-in data-[state=closed]:animate-pop-out [--pop-y:2px]",
+          "origin-(--radix-tooltip-content-transform-origin) animate-pop-in [--pop-y:2px] data-[state=closed]:animate-pop-out",
           "[&_kbd]:border-primary-foreground/20 [&_kbd]:bg-primary-foreground/10 [&_kbd]:text-primary-foreground/80",
           className
         )}
