@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "title": "Checkbox",
+  "dependencies": [
+    "radix-ui",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/ui/checkbox.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Checkbox as CheckboxPrimitive } from \"radix-ui\"\nimport { motion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { duration, ease } from \"@/lib/motion\"\n\nfunction Checkbox({\n  className,\n  ...props\n}: React.ComponentProps<typeof CheckboxPrimitive.Root>) {\n  return (\n    <CheckboxPrimitive.Root\n      data-slot=\"checkbox\"\n      className={cn(\n        \"peer size-4 shrink-0 rounded-[5px] border border-input bg-background shadow-xs outline-none dark:bg-input/20\",\n        \"transition-[background-color,border-color,box-shadow,transform] duration-150 ease-out active:scale-90\",\n        \"data-[state=checked]:border-brand data-[state=checked]:bg-brand data-[state=checked]:text-brand-foreground\",\n        \"data-[state=indeterminate]:border-brand data-[state=indeterminate]:bg-brand data-[state=indeterminate]:text-brand-foreground\",\n        \"focus-visible:ring-[3px] focus-visible:ring-ring\",\n        \"aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50\",\n        className\n      )}\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator\n        data-slot=\"checkbox-indicator\"\n        className=\"flex items-center justify-center text-current\"\n      >\n        <svg viewBox=\"0 0 16 16\" fill=\"none\" className=\"size-3.5\" aria-hidden>\n          {props.checked === \"indeterminate\" ? (\n            <motion.path\n              d=\"M4 8h8\"\n              stroke=\"currentColor\"\n              strokeWidth=\"2\"\n              strokeLinecap=\"round\"\n              initial={{ pathLength: 0 }}\n              animate={{ pathLength: 1 }}\n              transition={{ duration: duration.fast, ease: ease.out }}\n            />\n          ) : (\n            <motion.path\n              d=\"M3.5 8.5l3 3 6-7\"\n              stroke=\"currentColor\"\n              strokeWidth=\"2\"\n              strokeLinecap=\"round\"\n              strokeLinejoin=\"round\"\n              initial={{ pathLength: 0 }}\n              animate={{ pathLength: 1 }}\n              transition={{ duration: duration.base, ease: ease.out }}\n            />\n          )}\n        </svg>\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  )\n}\n\nexport { Checkbox }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

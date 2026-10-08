@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "shimmer-text",
+  "title": "Shimmer Text",
+  "dependencies": [],
+  "registryDependencies": [
+    "@nuelm/utils"
+  ],
+  "files": [
+    {
+      "path": "components/motion/shimmer-text.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\n/** A light sweep across text. Great for \"Thinking…\" and loading labels. */\nfunction ShimmerText({\n  className,\n  duration = 2.2,\n  style,\n  ...props\n}: React.ComponentProps<\"span\"> & { duration?: number }) {\n  return (\n    <span\n      data-slot=\"shimmer-text\"\n      className={cn(\n        \"inline-block animate-shimmer bg-clip-text text-transparent\",\n        \"bg-[linear-gradient(90deg,var(--muted-foreground)_0%,var(--muted-foreground)_40%,var(--foreground)_50%,var(--muted-foreground)_60%,var(--muted-foreground)_100%)] bg-[length:200%_100%]\",\n        className\n      )}\n      style={{ animationDuration: `${duration}s`, ...style }}\n      {...props}\n    />\n  )\n}\n\nexport { ShimmerText }\n",
+      "type": "registry:component",
+      "target": "components/motion/shimmer-text.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

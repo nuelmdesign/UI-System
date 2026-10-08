@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reveal",
+  "title": "Reveal",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/motion/reveal.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion, type HTMLMotionProps } from \"motion/react\"\n\nimport { ease, variants as presets } from \"@/lib/motion\"\n\ntype RevealProps = HTMLMotionProps<\"div\"> & {\n  variant?: keyof typeof presets\n  delay?: number\n  /** Only animate the first time it scrolls into view. */\n  once?: boolean\n}\n\n/** Fades content in as it scrolls into view. Wrap any block. */\nfunction Reveal({\n  variant = \"fadeUp\",\n  delay = 0,\n  once = true,\n  transition,\n  ...props\n}: RevealProps) {\n  return (\n    <motion.div\n      data-slot=\"reveal\"\n      initial=\"hidden\"\n      whileInView=\"visible\"\n      viewport={{ once, margin: \"-60px\" }}\n      variants={presets[variant]}\n      transition={{ duration: 0.5, ease: ease.out, delay, ...transition }}\n      {...props}\n    />\n  )\n}\n\nexport { Reveal }\n",
+      "type": "registry:component",
+      "target": "components/motion/reveal.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,65 @@
+# nuelm/ui
+
+A personal design system for everything I build. **shadcn structure, Motion feel, one set of tokens.**
+
+- **Structure & accessibility:** [Radix](https://www.radix-ui.com/) primitives, shadcn-style APIs
+- **Motion:** [Motion](https://motion.dev/) springs and easings from one shared file, in the spirit of [beUI](https://beui.dev)
+- **Look:** tokens inspired by Linear, Vercel, Stripe, Raycast, Arc, Family and Mercury
+- **Distribution:** a public shadcn registry: components install as source you own
+
+## Using it in a project
+
+Add the registry to your project's `components.json`:
+
+```json
+{
+  "registries": {
+    "@nuelm": "https://nuelm-ui.vercel.app/r/{name}.json"
+  }
+}
+```
+
+Then:
+
+```bash
+npx shadcn add @nuelm/theme      # tokens (do this first)
+npx shadcn add @nuelm/button     # any single component
+npx shadcn add @nuelm/all        # everything
+```
+
+> The registry URL assumes this repo is deployed to Vercel as `nuelm-ui`. If you deploy elsewhere, update the URL in `components.json`.
+
+Wrap your app once so Motion respects the OS "reduce motion" setting:
+
+```tsx
+<MotionConfig reducedMotion="user">{children}</MotionConfig>
+```
+
+## What's inside
+
+| Layer | Files |
+|---|---|
+| Tokens | `app/globals.css`: color, radius, elevation, easing, keyframes (light + dark) |
+| Motion tokens | `lib/motion.ts`: `spring`, `ease`, `duration`, `variants`, `stagger` |
+| Core components | `components/ui/`: button, badge, input, textarea, label, card, separator, kbd, skeleton, avatar, switch, checkbox, tabs, accordion, dialog, dropdown-menu, select, popover, tooltip, sonner |
+| Motion components | `components/motion/`: animated-number, blur-text, shimmer-text, spotlight-card, marquee, reveal, magnetic, copy-button |
+| Showcase | `app/page.tsx` → `components/site/showcase.tsx` |
+
+## Bringing in components from shadcn or beUI
+
+Token names match shadcn's (`background`, `primary`, `muted`, `border`, …), so stock shadcn and beUI components pick up this theme automatically. To make one *part of the library*:
+
+1. Install it into this repo: `npx shadcn add @beui/<name>` (or a shadcn component).
+2. Replace hard-coded colors with tokens (`bg-brand`, `text-muted-foreground`, …).
+3. Replace hard-coded timings with `lib/motion.ts` (`spring.snappy`, `ease.out`, …).
+4. Add it to the list in `scripts/build-registry.mjs` and to the showcase.
+
+## Development
+
+```bash
+pnpm install
+pnpm dev              # showcase at http://localhost:3000
+pnpm registry:build   # regenerate registry.json + public/r/*.json
+pnpm build            # registry + production build
+pnpm lint
+```

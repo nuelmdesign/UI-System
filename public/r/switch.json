@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "Switch",
+  "dependencies": [
+    "radix-ui",
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/ui/switch.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Switch as SwitchPrimitive } from \"radix-ui\"\nimport { motion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { spring } from \"@/lib/motion\"\n\nfunction Switch({\n  className,\n  checked,\n  defaultChecked,\n  onCheckedChange,\n  ...props\n}: React.ComponentProps<typeof SwitchPrimitive.Root>) {\n  const [internal, setInternal] = React.useState(defaultChecked ?? false)\n  const isOn = checked ?? internal\n\n  return (\n    <SwitchPrimitive.Root\n      data-slot=\"switch\"\n      checked={isOn}\n      onCheckedChange={(value) => {\n        setInternal(value)\n        onCheckedChange?.(value)\n      }}\n      className={cn(\n        \"peer group inline-flex h-5 w-9 shrink-0 items-center rounded-full border border-transparent p-0.5 shadow-xs outline-none\",\n        \"transition-colors duration-200 ease-out\",\n        \"data-[state=checked]:bg-brand data-[state=unchecked]:bg-input\",\n        \"focus-visible:ring-[3px] focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50\",\n        isOn ? \"justify-end\" : \"justify-start\",\n        className\n      )}\n      {...props}\n    >\n      <SwitchPrimitive.Thumb asChild>\n        <motion.span\n          data-slot=\"switch-thumb\"\n          layout\n          transition={spring.snappy}\n          className=\"pointer-events-none block size-4 rounded-full bg-white shadow-sm ring-0 group-active:w-5\"\n        />\n      </SwitchPrimitive.Thumb>\n    </SwitchPrimitive.Root>\n  )\n}\n\nexport { Switch }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

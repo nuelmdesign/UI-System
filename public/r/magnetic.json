@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "magnetic",
+  "title": "Magnetic",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/motion/magnetic.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion, useMotionValue, useSpring } from \"motion/react\"\n\nimport { spring } from \"@/lib/motion\"\n\n/** Pulls its child gently toward the cursor. Use on a single CTA, not a list. */\nfunction Magnetic({\n  children,\n  strength = 0.3,\n  className,\n}: {\n  children: React.ReactNode\n  strength?: number\n  className?: string\n}) {\n  const x = useSpring(useMotionValue(0), spring.smooth)\n  const y = useSpring(useMotionValue(0), spring.smooth)\n\n  return (\n    <motion.div\n      data-slot=\"magnetic\"\n      className={className}\n      style={{ x, y, display: \"inline-block\" }}\n      onPointerMove={(e) => {\n        const rect = e.currentTarget.getBoundingClientRect()\n        x.set((e.clientX - rect.left - rect.width / 2) * strength)\n        y.set((e.clientY - rect.top - rect.height / 2) * strength)\n      }}\n      onPointerLeave={() => {\n        x.set(0)\n        y.set(0)\n      }}\n    >\n      {children}\n    </motion.div>\n  )\n}\n\nexport { Magnetic }\n",
+      "type": "registry:component",
+      "target": "components/motion/magnetic.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

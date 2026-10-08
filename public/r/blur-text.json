@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "blur-text",
+  "title": "Blur Text",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/motion/blur-text.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { ease, stagger as staggerTokens } from \"@/lib/motion\"\n\ntype BlurTextProps = {\n  text: string\n  /** Animate per word (default) or per character. */\n  by?: \"word\" | \"char\"\n  as?: \"h1\" | \"h2\" | \"h3\" | \"p\" | \"span\"\n  stagger?: number\n  delay?: number\n  /** Wait until the text scrolls into view. */\n  inView?: boolean\n  className?: string\n}\n\nfunction BlurText({\n  text,\n  by = \"word\",\n  as = \"p\",\n  stagger = by === \"word\" ? staggerTokens.base : staggerTokens.tight,\n  delay = 0,\n  inView = false,\n  className,\n}: BlurTextProps) {\n  const Comp = motion[as]\n  const parts = by === \"word\" ? text.split(\" \") : Array.from(text)\n\n  const trigger = inView\n    ? { whileInView: \"visible\", viewport: { once: true, margin: \"-40px\" } }\n    : { animate: \"visible\" }\n\n  return (\n    <Comp\n      data-slot=\"blur-text\"\n      aria-label={text}\n      initial=\"hidden\"\n      {...trigger}\n      transition={{ staggerChildren: stagger, delayChildren: delay }}\n      className={cn(className)}\n    >\n      {parts.map((part, i) => (\n        <motion.span\n          key={i}\n          aria-hidden\n          className=\"inline-block whitespace-pre\"\n          variants={{\n            hidden: { opacity: 0, filter: \"blur(10px)\", y: 8 },\n            visible: {\n              opacity: 1,\n              filter: \"blur(0px)\",\n              y: 0,\n              transition: { duration: 0.5, ease: ease.out },\n            },\n          }}\n        >\n          {part}\n          {by === \"word\" && i < parts.length - 1 ? \" \" : \"\"}\n        </motion.span>\n      ))}\n    </Comp>\n  )\n}\n\nexport { BlurText }\n",
+      "type": "registry:component",
+      "target": "components/motion/blur-text.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

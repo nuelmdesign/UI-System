@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "copy-button",
+  "title": "Copy Button",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion",
+    "@nuelm/button"
+  ],
+  "files": [
+    {
+      "path": "components/motion/copy-button.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion } from \"motion/react\"\nimport { Check, Copy } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { spring } from \"@/lib/motion\"\nimport { Button } from \"@/components/ui/button\"\n\n/** Copies `value` and morphs its icon into a check. */\nfunction CopyButton({\n  value,\n  className,\n  ...props\n}: Omit<React.ComponentProps<typeof Button>, \"onClick\" | \"children\"> & {\n  value: string\n}) {\n  const [copied, setCopied] = React.useState(false)\n\n  React.useEffect(() => {\n    if (!copied) return\n    const t = setTimeout(() => setCopied(false), 1600)\n    return () => clearTimeout(t)\n  }, [copied])\n\n  return (\n    <Button\n      variant=\"ghost\"\n      size=\"icon-sm\"\n      aria-label={copied ? \"Copied\" : \"Copy\"}\n      className={cn(\"overflow-hidden\", className)}\n      onClick={async () => {\n        await navigator.clipboard.writeText(value)\n        setCopied(true)\n      }}\n      {...props}\n    >\n      <AnimatePresence mode=\"popLayout\" initial={false}>\n        <motion.span\n          key={copied ? \"check\" : \"copy\"}\n          initial={{ opacity: 0, scale: 0.5, filter: \"blur(4px)\" }}\n          animate={{ opacity: 1, scale: 1, filter: \"blur(0px)\" }}\n          exit={{ opacity: 0, scale: 0.5, filter: \"blur(4px)\" }}\n          transition={spring.snappy}\n          className=\"flex\"\n        >\n          {copied ? <Check className=\"text-success\" /> : <Copy />}\n        </motion.span>\n      </AnimatePresence>\n    </Button>\n  )\n}\n\nexport { CopyButton }\n",
+      "type": "registry:component",
+      "target": "components/motion/copy-button.tsx"
+    }
+  ],
+  "type": "registry:component"
+}
