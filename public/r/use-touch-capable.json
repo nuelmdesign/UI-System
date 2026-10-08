@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-touch-capable",
+  "title": "use-touch-capable",
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/hooks/use-touch-capable.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useSyncExternalStore } from \"react\"\n\nconst QUERY = \"(any-pointer: coarse)\"\n\nfunction subscribe(onChange: () => void) {\n  const mq = window.matchMedia(QUERY)\n  mq.addEventListener(\"change\", onChange)\n  return () => mq.removeEventListener(\"change\", onChange)\n}\n\n/**\n * True on devices that can be touched, whatever else they claim. Not the\n * inverse of useHoverCapable: iPadOS reports a fine hovering pointer while a\n * finger is the only input, so gate the touch path of an interaction on this\n * and leave hover-only polish on useHoverCapable. iPadOS disguises its pointer\n * media queries but reports maxTouchPoints honestly.\n */\nexport function useTouchCapable() {\n  return useSyncExternalStore(\n    subscribe,\n    () => window.matchMedia(QUERY).matches || navigator.maxTouchPoints > 0,\n    () => false\n  )\n}\n",
+      "type": "registry:hook",
+      "target": "lib/hooks/use-touch-capable.ts"
+    }
+  ],
+  "type": "registry:hook"
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spotlight-card",
+  "title": "Spotlight Card",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/motion/spotlight-card.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { motion, useMotionTemplate, useMotionValue } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\n\n/** A card whose border and surface light up under the cursor. */\nfunction SpotlightCard({\n  className,\n  children,\n  size = 320,\n  ...props\n}: React.ComponentProps<\"div\"> & { size?: number }) {\n  const x = useMotionValue(-size)\n  const y = useMotionValue(-size)\n\n  const glow = useMotionTemplate`radial-gradient(${size}px circle at ${x}px ${y}px, color-mix(in oklch, var(--brand) 14%, transparent), transparent 70%)`\n  const border = useMotionTemplate`radial-gradient(${size * 0.6}px circle at ${x}px ${y}px, color-mix(in oklch, var(--brand) 70%, transparent), transparent 70%)`\n\n  return (\n    <div\n      data-slot=\"spotlight-card\"\n      onPointerMove={(e) => {\n        const rect = e.currentTarget.getBoundingClientRect()\n        x.set(e.clientX - rect.left)\n        y.set(e.clientY - rect.top)\n      }}\n      onPointerLeave={() => {\n        x.set(-size)\n        y.set(-size)\n      }}\n      className={cn(\n        \"group relative overflow-hidden rounded-xl border bg-card p-6 text-card-foreground [box-shadow:var(--highlight),var(--shadow-sm)]\",\n        className\n      )}\n      {...props}\n    >\n      {/* Border glow: a 1px ring masked to the card's edge. */}\n      <motion.div\n        aria-hidden\n        className=\"pointer-events-none absolute inset-0 rounded-[inherit] p-px opacity-0 transition-opacity duration-300 [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)] group-hover:opacity-100\"\n        style={{ background: border }}\n      />\n      <motion.div\n        aria-hidden\n        className=\"pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100\"\n        style={{ background: glow }}\n      />\n      <div className=\"relative\">{children}</div>\n    </div>\n  )\n}\n\nexport { SpotlightCard }\n",
+      "type": "registry:component",
+      "target": "components/motion/spotlight-card.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,5 @@
+public/r
+registry.json
+pnpm-lock.yaml
+.next
+preview-dist

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-hover-capable",
+  "title": "use-hover-capable",
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/hooks/use-hover-capable.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useSyncExternalStore } from \"react\"\n\nconst QUERY = \"(hover: hover) and (pointer: fine)\"\n\nfunction subscribe(onChange: () => void) {\n  const mq = window.matchMedia(QUERY)\n  mq.addEventListener(\"change\", onChange)\n  return () => mq.removeEventListener(\"change\", onChange)\n}\n\n/**\n * True only on devices with a real hover (mouse / trackpad). Touch devices\n * fire a sticky `:hover` on tap, so gate hover-only effects behind this.\n */\nexport function useHoverCapable() {\n  return useSyncExternalStore(\n    subscribe,\n    () => window.matchMedia(QUERY).matches,\n    () => false\n  )\n}\n",
+      "type": "registry:hook",
+      "target": "lib/hooks/use-hover-capable.ts"
+    }
+  ],
+  "type": "registry:hook"
+}

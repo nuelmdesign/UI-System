@@ -1,0 +1,1757 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "nuelm",
+  "homepage": "https://github.com/nuelmdesign/UI-System",
+  "items": [
+    {
+      "name": "theme",
+      "type": "registry:theme",
+      "title": "Theme",
+      "description": "nuelm/ui color, radius, elevation and motion tokens (light + dark).",
+      "cssVars": {
+        "theme": {
+          "font-display": "var(--font-newsreader), ui-serif, Georgia, serif",
+          "color-blue-50": "var(--blue-50)",
+          "color-blue-100": "var(--blue-100)",
+          "color-blue-200": "var(--blue-200)",
+          "color-blue-300": "var(--blue-300)",
+          "color-blue-400": "var(--blue-400)",
+          "color-blue-500": "var(--blue-500)",
+          "color-blue-600": "var(--blue-600)",
+          "color-blue-700": "var(--blue-700)",
+          "color-blue-800": "var(--blue-800)",
+          "color-blue-900": "var(--blue-900)",
+          "color-blue-950": "var(--blue-950)",
+          "color-background": "var(--background)",
+          "color-foreground": "var(--foreground)",
+          "color-card": "var(--card)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-popover": "var(--popover)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-surface": "var(--surface)",
+          "color-primary": "var(--primary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-brand": "var(--brand)",
+          "color-brand-foreground": "var(--brand-foreground)",
+          "color-ink": "var(--ink)",
+          "color-ink-foreground": "var(--ink-foreground)",
+          "color-muted": "var(--muted)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-accent": "var(--accent)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-destructive": "var(--destructive)",
+          "color-destructive-foreground": "var(--destructive-foreground)",
+          "color-success": "var(--success)",
+          "color-warning": "var(--warning)",
+          "color-border": "var(--border)",
+          "color-input": "var(--input)",
+          "color-ring": "var(--ring)",
+          "radius-xs": "0px",
+          "radius-sm": "1px",
+          "radius-md": "var(--radius)",
+          "radius-lg": "calc(var(--radius) + 1px)",
+          "radius-xl": "calc(var(--radius) + 2px)",
+          "radius-2xl": "calc(var(--radius) + 4px)",
+          "radius-3xl": "calc(var(--radius) + 6px)",
+          "shadow-xs": "var(--shadow-xs)",
+          "shadow-sm": "var(--shadow-sm)",
+          "shadow-md": "var(--shadow-md)",
+          "shadow-lg": "var(--shadow-lg)",
+          "shadow-xl": "var(--shadow-xl)",
+          "ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+          "ease-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
+          "ease-in": "cubic-bezier(0.55, 0, 1, 0.45)",
+          "ease-spring": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+          "animate-pop-in": "pop-in 160ms var(--ease-out)",
+          "animate-pop-out": "pop-out 120ms var(--ease-in) forwards",
+          "animate-shimmer": "shimmer 2.2s linear infinite",
+          "animate-marquee": "marquee var(--marquee-duration, 30s) linear infinite"
+        },
+        "light": {
+          "blue-50": "#f0f3ff",
+          "blue-100": "#e2e8ff",
+          "blue-200": "#c8d2ff",
+          "blue-300": "#a3b3ff",
+          "blue-400": "#7b8cfa",
+          "blue-500": "#5468f4",
+          "blue-600": "#3d4fe6",
+          "blue-700": "#3140c2",
+          "blue-800": "#29359a",
+          "blue-900": "#232d74",
+          "blue-950": "#151a45",
+          "radius": "2px",
+          "background": "#fafafa",
+          "foreground": "#0e0e10",
+          "card": "#ffffff",
+          "card-foreground": "var(--foreground)",
+          "popover": "#ffffff",
+          "popover-foreground": "var(--foreground)",
+          "surface": "#f4f4f5",
+          "primary": "var(--blue-600)",
+          "primary-foreground": "#ffffff",
+          "secondary": "#f1f1f3",
+          "secondary-foreground": "var(--foreground)",
+          "brand": "var(--blue-600)",
+          "brand-foreground": "#ffffff",
+          "ink": "#0e0e10",
+          "ink-foreground": "#ffffff",
+          "muted": "#f2f2f3",
+          "muted-foreground": "#6b6b72",
+          "accent": "#efeff1",
+          "accent-foreground": "var(--foreground)",
+          "destructive": "oklch(0.577 0.215 27)",
+          "destructive-foreground": "#ffffff",
+          "success": "oklch(0.6 0.14 155)",
+          "warning": "oklch(0.75 0.15 70)",
+          "border": "#e4e4e7",
+          "input": "#d9d9de",
+          "ring": "color-mix(in oklch, var(--blue-500) 45%, transparent)",
+          "shadow-xs": "0 1px 0 rgb(14 14 16 / 0.02)",
+          "shadow-sm": "0 1px 2px rgb(14 14 16 / 0.04)",
+          "shadow-md": "0 4px 16px rgb(14 14 16 / 0.06)",
+          "shadow-lg": "0 8px 24px rgb(14 14 16 / 0.08)",
+          "shadow-xl": "0 24px 56px rgb(14 14 16 / 0.14)",
+          "highlight": "0 0 #0000"
+        },
+        "dark": {
+          "background": "#0a0a0b",
+          "foreground": "#f2f2f3",
+          "card": "#111113",
+          "card-foreground": "var(--foreground)",
+          "popover": "#151517",
+          "popover-foreground": "var(--foreground)",
+          "surface": "#0f0f11",
+          "primary": "var(--blue-500)",
+          "primary-foreground": "#ffffff",
+          "secondary": "#1b1b1e",
+          "secondary-foreground": "var(--foreground)",
+          "brand": "var(--blue-400)",
+          "brand-foreground": "#ffffff",
+          "ink": "#f2f2f3",
+          "ink-foreground": "#0e0e10",
+          "muted": "#1a1a1d",
+          "muted-foreground": "#8e8e96",
+          "accent": "rgb(255 255 255 / 0.06)",
+          "accent-foreground": "var(--foreground)",
+          "destructive": "oklch(0.65 0.2 25)",
+          "destructive-foreground": "#ffffff",
+          "success": "oklch(0.72 0.15 155)",
+          "warning": "oklch(0.8 0.15 75)",
+          "border": "rgb(255 255 255 / 0.09)",
+          "input": "rgb(255 255 255 / 0.13)",
+          "ring": "color-mix(in oklch, var(--blue-400) 50%, transparent)",
+          "shadow-xs": "0 1px 0 rgb(0 0 0 / 0.3)",
+          "shadow-sm": "0 1px 2px rgb(0 0 0 / 0.4)",
+          "shadow-md": "0 4px 16px rgb(0 0 0 / 0.45)",
+          "shadow-lg": "0 8px 24px rgb(0 0 0 / 0.5)",
+          "shadow-xl": "0 24px 56px rgb(0 0 0 / 0.6)",
+          "highlight": "0 0 #0000"
+        }
+      },
+      "css": {
+        "@keyframes pop-in": {
+          "from": {
+            "opacity": "0",
+            "transform": "scale(0.96) translateY(var(--pop-y, -2px))",
+            "filter": "blur(2px)"
+          }
+        },
+        "@keyframes pop-out": {
+          "to": {
+            "opacity": "0",
+            "transform": "scale(0.97)"
+          }
+        },
+        "@keyframes shimmer": {
+          "from": {
+            "background-position": "200% 0"
+          },
+          "to": {
+            "background-position": "-200% 0"
+          }
+        },
+        "@keyframes marquee": {
+          "to": {
+            "transform": "translateX(calc(-50% - var(--marquee-gap, 1rem) / 2))"
+          }
+        }
+      }
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utils",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "motion",
+      "type": "registry:lib",
+      "title": "Motion tokens",
+      "description": "Springs, easings, durations and variants shared by every animated component.",
+      "dependencies": [
+        "motion"
+      ],
+      "files": [
+        {
+          "path": "lib/motion.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "use-dismiss",
+      "type": "registry:hook",
+      "title": "use-dismiss",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-dismiss.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-dismiss.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-tap-gesture",
+      "type": "registry:hook",
+      "title": "use-tap-gesture",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-tap-gesture.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-tap-gesture.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-hover-gesture",
+      "type": "registry:hook",
+      "title": "use-hover-gesture",
+      "registryDependencies": [
+        "@nuelm/touch"
+      ],
+      "files": [
+        {
+          "path": "lib/hooks/use-hover-gesture.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-hover-gesture.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-favicon",
+      "type": "registry:hook",
+      "title": "use-favicon",
+      "registryDependencies": [
+        "@nuelm/favicon"
+      ],
+      "files": [
+        {
+          "path": "lib/hooks/use-favicon.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-favicon.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-hover-capable",
+      "type": "registry:hook",
+      "title": "use-hover-capable",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-hover-capable.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-hover-capable.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-touch-capable",
+      "type": "registry:hook",
+      "title": "use-touch-capable",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-touch-capable.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-touch-capable.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-on-open",
+      "type": "registry:hook",
+      "title": "use-on-open",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-on-open.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-on-open.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-row-cursor",
+      "type": "registry:hook",
+      "title": "use-row-cursor",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-row-cursor.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-row-cursor.ts"
+        }
+      ]
+    },
+    {
+      "name": "touch",
+      "type": "registry:lib",
+      "title": "touch",
+      "files": [
+        {
+          "path": "lib/touch.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "favicon",
+      "type": "registry:lib",
+      "title": "favicon",
+      "files": [
+        {
+          "path": "lib/favicon.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "text-shimmer",
+      "type": "registry:lib",
+      "title": "text-shimmer",
+      "files": [
+        {
+          "path": "lib/text-shimmer.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "command-search",
+      "type": "registry:lib",
+      "title": "command-search",
+      "files": [
+        {
+          "path": "lib/command-search.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "presence-gate",
+      "type": "registry:lib",
+      "title": "presence-gate",
+      "files": [
+        {
+          "path": "lib/presence-gate.tsx",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/textarea.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/label.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/separator.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/kbd.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/skeleton.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/avatar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "dependencies": [
+        "radix-ui",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "dependencies": [
+        "radix-ui",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "dependencies": [
+        "radix-ui",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/tabs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "dependencies": [
+        "radix-ui",
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/accordion.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "dependencies": [
+        "radix-ui",
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown Menu",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio Group",
+      "dependencies": [
+        "radix-ui",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/radio-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sonner",
+      "type": "registry:ui",
+      "title": "Sonner",
+      "dependencies": [
+        "sonner"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/sonner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "animated-number",
+      "type": "registry:component",
+      "title": "Animated Number",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/animated-number.tsx",
+          "type": "registry:component",
+          "target": "components/motion/animated-number.tsx"
+        }
+      ]
+    },
+    {
+      "name": "blur-text",
+      "type": "registry:component",
+      "title": "Blur Text",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/blur-text.tsx",
+          "type": "registry:component",
+          "target": "components/motion/blur-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "shimmer-text",
+      "type": "registry:component",
+      "title": "Shimmer Text",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/motion/shimmer-text.tsx",
+          "type": "registry:component",
+          "target": "components/motion/shimmer-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spotlight-card",
+      "type": "registry:component",
+      "title": "Spotlight Card",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/spotlight-card.tsx",
+          "type": "registry:component",
+          "target": "components/motion/spotlight-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "marquee",
+      "type": "registry:component",
+      "title": "Marquee",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/motion/marquee.tsx",
+          "type": "registry:component",
+          "target": "components/motion/marquee.tsx"
+        }
+      ]
+    },
+    {
+      "name": "reveal",
+      "type": "registry:component",
+      "title": "Reveal",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/reveal.tsx",
+          "type": "registry:component",
+          "target": "components/motion/reveal.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic",
+      "type": "registry:component",
+      "title": "Magnetic",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/magnetic.tsx",
+          "type": "registry:component",
+          "target": "components/motion/magnetic.tsx"
+        }
+      ]
+    },
+    {
+      "name": "preview-rail",
+      "type": "registry:component",
+      "title": "Preview Rail",
+      "description": "Tick rail with hover previews for jumping between sections.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/use-dismiss",
+        "@nuelm/use-hover-gesture",
+        "@nuelm/use-tap-gesture"
+      ],
+      "files": [
+        {
+          "path": "components/motion/preview-rail.tsx",
+          "type": "registry:component",
+          "target": "components/motion/preview-rail.tsx"
+        }
+      ]
+    },
+    {
+      "name": "loader",
+      "type": "registry:component",
+      "title": "Loader",
+      "description": "Fifteen loading animations: spinner, dots, matrix, ASCII, metaballs and more.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/loader.tsx",
+          "type": "registry:component",
+          "target": "components/motion/loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-scramble",
+      "type": "registry:component",
+      "title": "Text Scramble",
+      "description": "Character scramble that resolves to its text.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/text-scramble.tsx",
+          "type": "registry:component",
+          "target": "components/motion/text-scramble.tsx"
+        }
+      ]
+    },
+    {
+      "name": "action-swap",
+      "type": "registry:component",
+      "title": "Action Swap",
+      "description": "Animated label and icon swaps (roll, blur, cascade) for buttons and counters.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/action-swap.tsx",
+          "type": "registry:component",
+          "target": "components/motion/action-swap.tsx"
+        },
+        {
+          "path": "components/motion/action-swap-roll.tsx",
+          "type": "registry:component",
+          "target": "components/motion/action-swap-roll.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pixel-field",
+      "type": "registry:component",
+      "title": "Pixel Field",
+      "description": "Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/theme"
+      ],
+      "files": [
+        {
+          "path": "components/motion/pixel-field.tsx",
+          "type": "registry:component",
+          "target": "components/motion/pixel-field.tsx"
+        }
+      ]
+    },
+    {
+      "name": "animated-sidebar",
+      "type": "registry:component",
+      "title": "Animated Sidebar",
+      "description": "Full sidebar system: docked, icon rail or off-canvas, mobile sheet, menus and sub-menus.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/animated-sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/motion/animated-sidebar.tsx"
+        },
+        {
+          "path": "components/motion/shared-layout-bg.tsx",
+          "type": "registry:component",
+          "target": "components/motion/shared-layout-bg.tsx"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:component",
+      "title": "Drawer",
+      "description": "Side sheet with backdrop, focus handling and Esc / outside-click close.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/presence-gate"
+      ],
+      "files": [
+        {
+          "path": "components/motion/drawer.tsx",
+          "type": "registry:component",
+          "target": "components/motion/drawer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:component",
+      "title": "Command Palette",
+      "description": "⌘K command palette with fuzzy search, groups, hints and keyboard navigation.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/presence-gate",
+        "@nuelm/command-search",
+        "@nuelm/use-on-open",
+        "@nuelm/use-row-cursor",
+        "@nuelm/use-touch-capable"
+      ],
+      "files": [
+        {
+          "path": "components/motion/command-palette.tsx",
+          "type": "registry:component",
+          "target": "components/motion/command-palette.tsx"
+        }
+      ]
+    },
+    {
+      "name": "date-range-picker",
+      "type": "registry:component",
+      "title": "Date Range Picker",
+      "description": "Range calendar in a popover or inline, with month/year choosers and min/max.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/popover",
+        "@nuelm/use-hover-capable"
+      ],
+      "files": [
+        {
+          "path": "components/motion/date-range-picker.tsx",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker.tsx"
+        },
+        {
+          "path": "components/motion/date-range-picker/context.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/context.ts"
+        },
+        {
+          "path": "components/motion/date-range-picker/date-utils.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/date-utils.ts"
+        },
+        {
+          "path": "components/motion/date-range-picker/types.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/types.ts"
+        },
+        {
+          "path": "components/motion/date-range-picker/use-date-range-picker.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/use-date-range-picker.ts"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "Virtualized data table: sort, resize, reorder columns, select rows, edit cells.",
+      "dependencies": [
+        "motion",
+        "lucide-react",
+        "@tanstack/react-virtual"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/checkbox",
+        "@nuelm/touch"
+      ],
+      "files": [
+        {
+          "path": "components/motion/table/index.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/index.tsx"
+        },
+        {
+          "path": "components/motion/table/editable-cell.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/editable-cell.tsx"
+        },
+        {
+          "path": "components/motion/table/row-handle.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/row-handle.tsx"
+        },
+        {
+          "path": "components/motion/table/skeleton-rows.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/skeleton-rows.tsx"
+        },
+        {
+          "path": "components/motion/table/table-header.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/table-header.tsx"
+        },
+        {
+          "path": "components/motion/table/table-menu.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/table-menu.tsx"
+        },
+        {
+          "path": "components/motion/table/types.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/types.ts"
+        },
+        {
+          "path": "components/motion/table/use-column-reorder.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-column-reorder.ts"
+        },
+        {
+          "path": "components/motion/table/use-column-resize.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-column-resize.ts"
+        },
+        {
+          "path": "components/motion/table/use-column-sort.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-column-sort.ts"
+        },
+        {
+          "path": "components/motion/table/use-row-selection.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-row-selection.ts"
+        },
+        {
+          "path": "components/motion/table/utils.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "copy-button",
+      "type": "registry:component",
+      "title": "Copy Button",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/button"
+      ],
+      "files": [
+        {
+          "path": "components/motion/copy-button.tsx",
+          "type": "registry:component",
+          "target": "components/motion/copy-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "voice-orb",
+      "type": "registry:component",
+      "title": "Voice Orb",
+      "description": "Breathing WebGL liquid orb that reacts to a voice level or an AnalyserNode.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/voice-orb.tsx",
+          "type": "registry:component",
+          "target": "components/agents/voice-orb.tsx"
+        },
+        {
+          "path": "components/agents/voice-orb/renderer.ts",
+          "type": "registry:component",
+          "target": "components/agents/voice-orb/renderer.ts"
+        }
+      ]
+    },
+    {
+      "name": "agent-disclosure",
+      "type": "registry:component",
+      "title": "Agent Disclosure",
+      "description": "Shared clip-path reveal for collapsible agent content.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-disclosure.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-disclosure.tsx"
+        }
+      ]
+    },
+    {
+      "name": "citations",
+      "type": "registry:component",
+      "title": "Citations",
+      "description": "Inline citation markers, favicon stacks and a collapsible source list.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/use-favicon"
+      ],
+      "files": [
+        {
+          "path": "components/agents/citations.tsx",
+          "type": "registry:component",
+          "target": "components/agents/citations.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-bubble",
+      "type": "registry:component",
+      "title": "Message Bubble",
+      "description": "Chat bubble surfaces with variants, pop-in entrance and a collapsible body.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/message-bubble.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message-bubble.tsx"
+        },
+        {
+          "path": "components/agents/message-context.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message-context.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-scroller",
+      "type": "registry:component",
+      "title": "Message Scroller",
+      "description": "Transcript viewport that follows streamed output and offers a turn-by-turn rail.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/preview-rail"
+      ],
+      "files": [
+        {
+          "path": "components/agents/message-scroller.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message-scroller.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message",
+      "type": "registry:component",
+      "title": "Message",
+      "description": "Message rows with avatar, header, footer, markers and a typing indicator.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/message-bubble",
+        "@nuelm/message-scroller"
+      ],
+      "files": [
+        {
+          "path": "components/agents/message.tsx",
+          "type": "registry:component",
+          "target": "components/agents/message.tsx"
+        }
+      ]
+    },
+    {
+      "name": "prompt-input",
+      "type": "registry:component",
+      "title": "Prompt Input",
+      "description": "Auto-growing prompt box with model picker, action menu and send/stop.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/button",
+        "@nuelm/popover",
+        "@nuelm/select"
+      ],
+      "files": [
+        {
+          "path": "components/agents/prompt-input.tsx",
+          "type": "registry:component",
+          "target": "components/agents/prompt-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-code",
+      "type": "registry:component",
+      "title": "Agent Code",
+      "description": "Shared Shiki tokenizer and code renderer used by agent components.",
+      "dependencies": [
+        "shiki"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-code.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-code.tsx"
+        }
+      ]
+    },
+    {
+      "name": "todo-list",
+      "type": "registry:component",
+      "title": "Todo List",
+      "description": "Live task plan with per-item progress and a rolling completed count.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/action-swap"
+      ],
+      "files": [
+        {
+          "path": "components/agents/todo-list.tsx",
+          "type": "registry:component",
+          "target": "components/agents/todo-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tool-result",
+      "type": "registry:component",
+      "title": "Tool Result",
+      "description": "Tool call card for terminal, request and file output with status, copy and retry.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/action-swap",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/tool-result.tsx",
+          "type": "registry:component",
+          "target": "components/agents/tool-result.tsx"
+        }
+      ]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:component",
+      "title": "Code Block",
+      "description": "Streaming code block with Shiki highlighting, line highlights and copy.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/code-block.tsx",
+          "type": "registry:component",
+          "target": "components/agents/code-block.tsx"
+        }
+      ]
+    },
+    {
+      "name": "file-diff",
+      "type": "registry:component",
+      "title": "File Diff",
+      "description": "Streaming unified diff with added/removed counts.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/file-diff.tsx",
+          "type": "registry:component",
+          "target": "components/agents/file-diff.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-activity",
+      "type": "registry:component",
+      "title": "Agent Activity",
+      "description": "Collapsible run log of steps, searches and tool calls.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/loading-states"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-activity/index.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-activity/index.tsx"
+        },
+        {
+          "path": "components/agents/agent-activity/activity-row.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-activity/activity-row.tsx"
+        },
+        {
+          "path": "components/agents/agent-activity/types.ts",
+          "type": "registry:component",
+          "target": "components/agents/agent-activity/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "loading-states",
+      "type": "registry:component",
+      "title": "Loading States",
+      "description": "Thinking shimmer, elapsed-time progress and rotating reasoning text.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/shimmer-text",
+        "@nuelm/text-scramble",
+        "@nuelm/loader",
+        "@nuelm/text-shimmer"
+      ],
+      "files": [
+        {
+          "path": "components/agents/loading-states/index.ts",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/index.ts"
+        },
+        {
+          "path": "components/agents/loading-states/agent-progress.tsx",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/agent-progress.tsx"
+        },
+        {
+          "path": "components/agents/loading-states/reasoning-text.tsx",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/reasoning-text.tsx"
+        },
+        {
+          "path": "components/agents/loading-states/thinking-shimmer.tsx",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/thinking-shimmer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "approval-card",
+      "type": "registry:component",
+      "title": "Approval Card",
+      "description": "Human-in-the-loop card: stepped questions or approve / request changes / reject.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/action-swap",
+        "@nuelm/button",
+        "@nuelm/checkbox",
+        "@nuelm/radio-group",
+        "@nuelm/input"
+      ],
+      "files": [
+        {
+          "path": "components/agents/approval-card/index.tsx",
+          "type": "registry:component",
+          "target": "components/agents/approval-card/index.tsx"
+        },
+        {
+          "path": "components/agents/approval-card/types.ts",
+          "type": "registry:component",
+          "target": "components/agents/approval-card/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "tool-approval",
+      "type": "registry:component",
+      "title": "Tool Approval",
+      "description": "Permission prompt for a tool call with parameters, allow once / always and deny.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/tool-approval.tsx",
+          "type": "registry:component",
+          "target": "components/agents/tool-approval.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-generation",
+      "type": "registry:component",
+      "title": "Image Generation",
+      "description": "Image generation frame with queued, generating, refining and complete states.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/use-hover-capable"
+      ],
+      "files": [
+        {
+          "path": "components/agents/image-generation.tsx",
+          "type": "registry:component",
+          "target": "components/agents/image-generation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ai-sidebar",
+      "type": "registry:component",
+      "title": "Ai Sidebar",
+      "description": "Resource tree for agent workspaces: select, expand, drag to move and rename.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/popover",
+        "@nuelm/use-touch-capable"
+      ],
+      "files": [
+        {
+          "path": "components/agents/ai-sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/agents/ai-sidebar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chat-app",
+      "type": "registry:component",
+      "title": "Chat App",
+      "description": "Chat application shell that folds its sidebar away when the shell gets narrow.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/animated-sidebar"
+      ],
+      "files": [
+        {
+          "path": "components/agents/chat-app.tsx",
+          "type": "registry:component",
+          "target": "components/agents/chat-app.tsx"
+        }
+      ]
+    },
+    {
+      "name": "streaming-response",
+      "type": "registry:component",
+      "title": "Streaming Response",
+      "description": "Streamed answer with copy, retry, feedback and a sources footer.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/citations",
+        "@nuelm/agent-disclosure"
+      ],
+      "files": [
+        {
+          "path": "components/agents/streaming-response.tsx",
+          "type": "registry:component",
+          "target": "components/agents/streaming-response.tsx"
+        }
+      ]
+    },
+    {
+      "name": "all",
+      "type": "registry:item",
+      "title": "Everything",
+      "description": "The theme plus every nuelm/ui component.",
+      "registryDependencies": [
+        "@nuelm/theme",
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/use-dismiss",
+        "@nuelm/use-tap-gesture",
+        "@nuelm/use-hover-gesture",
+        "@nuelm/use-favicon",
+        "@nuelm/use-hover-capable",
+        "@nuelm/use-touch-capable",
+        "@nuelm/use-on-open",
+        "@nuelm/use-row-cursor",
+        "@nuelm/touch",
+        "@nuelm/favicon",
+        "@nuelm/text-shimmer",
+        "@nuelm/command-search",
+        "@nuelm/presence-gate",
+        "@nuelm/button",
+        "@nuelm/badge",
+        "@nuelm/input",
+        "@nuelm/textarea",
+        "@nuelm/label",
+        "@nuelm/card",
+        "@nuelm/separator",
+        "@nuelm/kbd",
+        "@nuelm/skeleton",
+        "@nuelm/avatar",
+        "@nuelm/switch",
+        "@nuelm/checkbox",
+        "@nuelm/tabs",
+        "@nuelm/accordion",
+        "@nuelm/dialog",
+        "@nuelm/dropdown-menu",
+        "@nuelm/select",
+        "@nuelm/popover",
+        "@nuelm/radio-group",
+        "@nuelm/tooltip",
+        "@nuelm/sonner",
+        "@nuelm/animated-number",
+        "@nuelm/blur-text",
+        "@nuelm/shimmer-text",
+        "@nuelm/spotlight-card",
+        "@nuelm/marquee",
+        "@nuelm/reveal",
+        "@nuelm/magnetic",
+        "@nuelm/preview-rail",
+        "@nuelm/loader",
+        "@nuelm/text-scramble",
+        "@nuelm/action-swap",
+        "@nuelm/pixel-field",
+        "@nuelm/animated-sidebar",
+        "@nuelm/drawer",
+        "@nuelm/command-palette",
+        "@nuelm/date-range-picker",
+        "@nuelm/table",
+        "@nuelm/copy-button",
+        "@nuelm/voice-orb",
+        "@nuelm/agent-disclosure",
+        "@nuelm/citations",
+        "@nuelm/message-bubble",
+        "@nuelm/message-scroller",
+        "@nuelm/message",
+        "@nuelm/prompt-input",
+        "@nuelm/agent-code",
+        "@nuelm/todo-list",
+        "@nuelm/tool-result",
+        "@nuelm/code-block",
+        "@nuelm/file-diff",
+        "@nuelm/agent-activity",
+        "@nuelm/loading-states",
+        "@nuelm/approval-card",
+        "@nuelm/tool-approval",
+        "@nuelm/image-generation",
+        "@nuelm/ai-sidebar",
+        "@nuelm/chat-app",
+        "@nuelm/streaming-response"
+      ]
+    }
+  ]
+}

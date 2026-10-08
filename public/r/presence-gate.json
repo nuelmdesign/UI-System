@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "presence-gate",
+  "title": "presence-gate",
+  "files": [
+    {
+      "path": "lib/presence-gate.tsx",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useIsPresent } from \"motion/react\"\nimport type { ReactNode } from \"react\"\n\nexport interface PresenceGateRenderProps {\n  /**\n   * False from the render that starts the exit animation onward. An overlay\n   * kept in the tree by `AnimatePresence` is still the topmost thing on the\n   * page, so anything it decides from `open` alone stays true for the whole\n   * exit — this is the boolean that already knows the overlay is leaving.\n   */\n  isPresent: boolean\n  /**\n   * Spread onto every layer that takes pointer events while the overlay is\n   * open. Interaction releases in the same commit that starts the exit while\n   * the visual exit keeps playing: pointer events stop landing, and `inert`\n   * drops the subtree from focus order, from tab order and from the\n   * accessibility tree — an exiting dialog is not a dialog you can still type\n   * into. A layer that never takes pointer events (a wrapper that only centres\n   * the panel) takes `inert={!isPresent}` alone, so its own\n   * `pointer-events-none` is not overwritten.\n   */\n  gate: {\n    inert: boolean\n    style: { pointerEvents: \"auto\" | \"none\" }\n  }\n}\n\nexport interface PresenceGateProps {\n  children: (props: PresenceGateRenderProps) => ReactNode\n}\n\n/**\n * Reads the presence of the subtree it renders and hands it down.\n *\n * `useIsPresent` only answers inside the `AnimatePresence` subtree, and the\n * components that own an overlay render the `AnimatePresence` themselves, so\n * the boolean has to be read one component further down: this is that\n * component, and the render prop is how it reaches the layers.\n */\nexport function PresenceGate({ children }: PresenceGateProps) {\n  const isPresent = useIsPresent()\n\n  return children({\n    isPresent,\n    gate: {\n      inert: !isPresent,\n      style: { pointerEvents: isPresent ? \"auto\" : \"none\" },\n    },\n  })\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:lib"
+}

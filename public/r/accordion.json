@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion",
+  "title": "Accordion",
+  "dependencies": [
+    "radix-ui",
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/ui/accordion.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Accordion as AccordionPrimitive } from \"radix-ui\"\nimport { motion } from \"motion/react\"\nimport { ChevronDown } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { spring, duration, ease } from \"@/lib/motion\"\n\nfunction Accordion(\n  props: React.ComponentProps<typeof AccordionPrimitive.Root>\n) {\n  return <AccordionPrimitive.Root data-slot=\"accordion\" {...props} />\n}\n\nconst ItemOpenContext = React.createContext(false)\n\nfunction AccordionItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Item>) {\n  const ref = React.useRef<HTMLDivElement>(null)\n  const [open, setOpen] = React.useState(false)\n\n  // Radix owns open state; mirror it so motion can animate height.\n  React.useEffect(() => {\n    const el = ref.current\n    if (!el) return\n    const sync = () => setOpen(el.dataset.state === \"open\")\n    sync()\n    const observer = new MutationObserver(sync)\n    observer.observe(el, { attributes: true, attributeFilter: [\"data-state\"] })\n    return () => observer.disconnect()\n  }, [])\n\n  return (\n    <ItemOpenContext.Provider value={open}>\n      <AccordionPrimitive.Item\n        ref={ref}\n        data-slot=\"accordion-item\"\n        className={cn(\"border-b last:border-b-0\", className)}\n        {...props}\n      />\n    </ItemOpenContext.Provider>\n  )\n}\n\nfunction AccordionTrigger({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {\n  return (\n    <AccordionPrimitive.Header className=\"flex\">\n      <AccordionPrimitive.Trigger\n        data-slot=\"accordion-trigger\"\n        className={cn(\n          \"group flex flex-1 items-center justify-between gap-4 rounded-md py-4 text-left text-sm font-medium outline-none\",\n          \"transition-colors hover:text-foreground/80 focus-visible:ring-[3px] focus-visible:ring-ring\",\n          \"disabled:pointer-events-none disabled:opacity-50\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <ChevronDown className=\"size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-spring)] group-data-[state=open]:rotate-180\" />\n      </AccordionPrimitive.Trigger>\n    </AccordionPrimitive.Header>\n  )\n}\n\nfunction AccordionContent({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Content>) {\n  const open = React.useContext(ItemOpenContext)\n\n  return (\n    <AccordionPrimitive.Content forceMount asChild {...props}>\n      <motion.div\n        data-slot=\"accordion-content\"\n        initial={false}\n        inert={!open}\n        animate={\n          open\n            ? {\n                height: \"auto\",\n                opacity: 1,\n                transition: {\n                  height: spring.smooth,\n                  opacity: { duration: duration.base, ease: ease.out },\n                },\n              }\n            : {\n                height: 0,\n                opacity: 0,\n                transition: {\n                  height: { duration: duration.base, ease: ease.inOut },\n                  opacity: { duration: duration.fast },\n                },\n              }\n        }\n        className=\"overflow-hidden text-sm text-muted-foreground\"\n      >\n        <div className={cn(\"pb-4\", className)}>{children}</div>\n      </motion.div>\n    </AccordionPrimitive.Content>\n  )\n}\n\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

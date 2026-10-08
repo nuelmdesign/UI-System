@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-favicon",
+  "title": "use-favicon",
+  "registryDependencies": [
+    "@nuelm/favicon"
+  ],
+  "files": [
+    {
+      "path": "lib/hooks/use-favicon.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useCallback, useState } from \"react\"\nimport { getFaviconUrl } from \"@/lib/favicon\"\n\n/**\n * Resolves a site favicon and drops it once it is known to be unusable, so\n * callers can draw their own glyph instead of a broken image. Plenty of sites\n * answer `/favicon.ico` with a 403 or 404, and `onError` is not enough to catch\n * it: an image the browser starts loading from server-rendered HTML usually\n * fails before React attaches a handler, and that event is never replayed.\n * `decode()` settles on the image's final state instead of relying on an event\n * firing at the right moment.\n */\nexport function useFavicon(url?: string) {\n  const resolved = url ? getFaviconUrl(url) : null\n  const [failedSrc, setFailedSrc] = useState<string | null>(null)\n  const src = resolved && resolved !== failedSrc ? resolved : null\n\n  const attach = useCallback(\n    (img: HTMLImageElement | null) => {\n      if (!img || !src) return\n\n      let released = false\n      img.decode().catch(() => {\n        if (!released) setFailedSrc(src)\n      })\n\n      // The node is going away or the source changed; a late rejection then\n      // describes an image we are no longer showing.\n      return () => {\n        released = true\n      }\n    },\n    [src]\n  )\n\n  return { src, attach }\n}\n",
+      "type": "registry:hook",
+      "target": "lib/hooks/use-favicon.ts"
+    }
+  ],
+  "type": "registry:hook"
+}

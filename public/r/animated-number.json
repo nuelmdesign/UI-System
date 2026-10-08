@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "animated-number",
+  "title": "Animated Number",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/motion/animated-number.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport {\n  motion,\n  useInView,\n  useSpring,\n  useTransform,\n  type SpringOptions,\n} from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\n\ntype AnimatedNumberProps = {\n  value: number\n  /** Intl.NumberFormat options, e.g. { style: \"currency\", currency: \"USD\" }. */\n  format?: Intl.NumberFormatOptions\n  locale?: string\n  spring?: SpringOptions\n  /** Start counting from 0 the first time the number scrolls into view. */\n  countOnView?: boolean\n  className?: string\n}\n\nfunction AnimatedNumber({\n  value,\n  format,\n  locale = \"en-US\",\n  spring = { stiffness: 120, damping: 24, mass: 0.8 },\n  countOnView = false,\n  className,\n}: AnimatedNumberProps) {\n  const ref = React.useRef<HTMLSpanElement>(null)\n  const inView = useInView(ref, { once: true, margin: \"-40px\" })\n  const motionValue = useSpring(countOnView ? 0 : value, spring)\n  const formatter = React.useMemo(\n    () => new Intl.NumberFormat(locale, format),\n    [locale, format]\n  )\n  const display = useTransform(motionValue, (v) => formatter.format(v))\n\n  React.useEffect(() => {\n    if (!countOnView || inView) motionValue.set(value)\n  }, [value, inView, countOnView, motionValue])\n\n  return (\n    <motion.span\n      ref={ref}\n      data-slot=\"animated-number\"\n      className={cn(\"tabular-nums\", className)}\n    >\n      {display}\n    </motion.span>\n  )\n}\n\nexport { AnimatedNumber }\n",
+      "type": "registry:component",
+      "target": "components/motion/animated-number.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

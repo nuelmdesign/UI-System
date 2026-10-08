@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-scramble",
+  "title": "Text Scramble",
+  "description": "Character scramble that resolves to its text.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@nuelm/utils",
+    "@nuelm/motion"
+  ],
+  "files": [
+    {
+      "path": "components/motion/text-scramble.tsx",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useReducedMotion } from \"motion/react\"\nimport { useEffect, useRef, useState, type CSSProperties } from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nconst DEFAULT_GLYPHS = \"ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#%&@$?/\"\n\nexport interface TextScrambleProps {\n  /** Final text revealed by the scramble animation. */\n  text: string\n  /** Maximum animation duration in milliseconds. */\n  duration?: number\n  /** Characters sampled while unresolved positions are scrambling. */\n  glyphs?: string\n  className?: string\n  style?: CSSProperties\n}\n\n/** Character scramble that resolves to `text` and respects reduced motion. */\nexport function TextScramble({\n  text,\n  duration,\n  glyphs = DEFAULT_GLYPHS,\n  className,\n  style,\n}: TextScrambleProps) {\n  const reduce = useReducedMotion() ?? false\n  // The frame in flight, tagged with the text it resolves to. Anything stale\n  // (or none at all) shows the final text, so no effect has to reset it.\n  const [frameState, setFrameState] = useState<{\n    text: string\n    value: string\n  } | null>(null)\n  const mounted = useRef(false)\n  const display = frameState?.text === text ? frameState.value : text\n\n  useEffect(() => {\n    // The first render shows the text as-is; only later changes scramble.\n    if (!mounted.current) {\n      mounted.current = true\n      return\n    }\n    if (reduce || !glyphs) return\n\n    const characters = text.split(\"\")\n    const startedAt = performance.now()\n    const animationDuration =\n      duration ?? Math.min(760, Math.max(420, characters.length * 32))\n    let frame = 0\n    let lastUpdate = 0\n\n    const animate = (now: number) => {\n      if (now - lastUpdate >= 40) {\n        lastUpdate = now\n        const progress = Math.min((now - startedAt) / animationDuration, 1)\n        const settled = Math.floor(progress * characters.length)\n        setFrameState({\n          text,\n          value: characters\n            .map((character, index) => {\n              if (index < settled || character === \" \") return character\n              return glyphs[Math.floor(Math.random() * glyphs.length)]\n            })\n            .join(\"\"),\n        })\n      }\n\n      if (now - startedAt < animationDuration) {\n        frame = requestAnimationFrame(animate)\n      } else {\n        setFrameState(null)\n      }\n    }\n\n    frame = requestAnimationFrame(animate)\n    return () => cancelAnimationFrame(frame)\n  }, [duration, glyphs, reduce, text])\n\n  return (\n    <span\n      className={cn(\"inline-block whitespace-pre\", className)}\n      style={style}\n    >\n      <span className=\"sr-only\">{text}</span>\n      <span aria-hidden=\"true\">{reduce ? text : display}</span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/motion/text-scramble.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

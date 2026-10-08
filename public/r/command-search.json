@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "command-search",
+  "title": "command-search",
+  "files": [
+    {
+      "path": "lib/command-search.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\nexport type SearchableCommand = {\n  label: string\n  group?: string\n  keywords?: string[]\n}\n\nfunction normalize(value: string) {\n  return value\n    .replace(/([a-z])([A-Z])/g, \"$1 $2\")\n    .normalize(\"NFKD\")\n    .replace(/\\p{M}/gu, \"\")\n    .toLowerCase()\n    .replace(/[^\\p{L}\\p{N}]+/gu, \" \")\n    .trim()\n}\n\nfunction tokenScore(token: string, field: string) {\n  const words = field.split(\" \")\n  if (words.includes(token)) return 100\n  if (words.some((word) => word.startsWith(token))) return 80\n  if (field.includes(token)) return 60\n  // Keep short queries precise; fuzzy abbreviations may skip at most two\n  // letters within a word, rather than matching across a whole description.\n  if (token.length < 3) return 0\n  for (const word of words) {\n    if (word.length - token.length > 2) continue\n    let matched = 0\n    for (const char of word) {\n      if (char === token[matched]) matched++\n    }\n    if (matched === token.length) return 20\n  }\n  return 0\n}\n\n/** Match every query word across fields and put direct name matches first. */\nexport function searchCommands<T extends SearchableCommand>(\n  items: T[],\n  query: string\n): T[] {\n  const normalized = normalize(query)\n  if (!normalized) return items\n  const tokens = normalized.split(/\\s+/)\n  return items\n    .map((item) => {\n      const label = normalize(item.label)\n      const fields = [\n        label,\n        normalize(item.group ?? \"\"),\n        ...(item.keywords ?? []).map(normalize),\n      ]\n      let score =\n        label === normalized ? 10000 : label.startsWith(normalized) ? 2000 : 0\n      for (const token of tokens) {\n        const best = Math.max(\n          ...fields.map((field, index) => {\n            const match = tokenScore(token, field)\n            return match ? match + (index === 0 ? 40 : 0) : 0\n          })\n        )\n        if (!best) return { item, score: 0 }\n        score += best\n      }\n      return { item, score }\n    })\n    .filter(({ score }) => score > 0)\n    .sort((a, b) => b.score - a.score)\n    .map(({ item }) => item)\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:lib"
+}
