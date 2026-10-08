@@ -102,6 +102,12 @@ import { CopyButton } from "@/components/motion/copy-button"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { AgentsSection } from "@/components/site/agents-section"
 import { CELLS } from "@/components/site/cells"
+import {
+  CommandPaletteDemo,
+  DataTableDemo,
+  DateRangeDemo,
+  DrawerDemo,
+} from "@/components/site/app-demos"
 import { PixelField } from "@/components/motion/pixel-field"
 import { PromptInput } from "@/components/agents/prompt-input"
 
@@ -862,7 +868,26 @@ function Components() {
           </Accordion>
         </Specimen>
 
-        <Specimen title="Avatar, Kbd & Skeleton" className="md:col-span-2">
+        <Specimen title="Drawer · sheet">
+          <DrawerDemo />
+        </Specimen>
+
+        <Specimen title="Command palette · ⌘K">
+          <CommandPaletteDemo />
+        </Specimen>
+
+        <Specimen title="Date range picker">
+          <DateRangeDemo />
+        </Specimen>
+
+        <Specimen
+          title="Data table · sort · resize · reorder · select"
+          className="md:col-span-2"
+        >
+          <DataTableDemo />
+        </Specimen>
+
+        <Specimen title="Avatar, Kbd & Skeleton">
           <div className="grid w-full gap-6">
             <div className="flex items-center gap-4">
               <AvatarGroup>

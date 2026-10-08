@@ -292,6 +292,32 @@
       ]
     },
     {
+      "name": "use-on-open",
+      "type": "registry:hook",
+      "title": "use-on-open",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-on-open.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-on-open.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-row-cursor",
+      "type": "registry:hook",
+      "title": "use-row-cursor",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-row-cursor.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-row-cursor.ts"
+        }
+      ]
+    },
+    {
       "name": "touch",
       "type": "registry:lib",
       "title": "touch",
@@ -320,6 +346,28 @@
       "files": [
         {
           "path": "lib/text-shimmer.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "command-search",
+      "type": "registry:lib",
+      "title": "command-search",
+      "files": [
+        {
+          "path": "lib/command-search.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "presence-gate",
+      "type": "registry:lib",
+      "title": "presence-gate",
+      "files": [
+        {
+          "path": "lib/presence-gate.tsx",
           "type": "registry:lib"
         }
       ]
@@ -949,6 +997,175 @@
       ]
     },
     {
+      "name": "drawer",
+      "type": "registry:component",
+      "title": "Drawer",
+      "description": "Side sheet with backdrop, focus handling and Esc / outside-click close.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/presence-gate"
+      ],
+      "files": [
+        {
+          "path": "components/motion/drawer.tsx",
+          "type": "registry:component",
+          "target": "components/motion/drawer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:component",
+      "title": "Command Palette",
+      "description": "⌘K command palette with fuzzy search, groups, hints and keyboard navigation.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/presence-gate",
+        "@nuelm/command-search",
+        "@nuelm/use-on-open",
+        "@nuelm/use-row-cursor",
+        "@nuelm/use-touch-capable"
+      ],
+      "files": [
+        {
+          "path": "components/motion/command-palette.tsx",
+          "type": "registry:component",
+          "target": "components/motion/command-palette.tsx"
+        }
+      ]
+    },
+    {
+      "name": "date-range-picker",
+      "type": "registry:component",
+      "title": "Date Range Picker",
+      "description": "Range calendar in a popover or inline, with month/year choosers and min/max.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/popover",
+        "@nuelm/use-hover-capable"
+      ],
+      "files": [
+        {
+          "path": "components/motion/date-range-picker.tsx",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker.tsx"
+        },
+        {
+          "path": "components/motion/date-range-picker/context.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/context.ts"
+        },
+        {
+          "path": "components/motion/date-range-picker/date-utils.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/date-utils.ts"
+        },
+        {
+          "path": "components/motion/date-range-picker/types.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/types.ts"
+        },
+        {
+          "path": "components/motion/date-range-picker/use-date-range-picker.ts",
+          "type": "registry:component",
+          "target": "components/motion/date-range-picker/use-date-range-picker.ts"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "Virtualized data table: sort, resize, reorder columns, select rows, edit cells.",
+      "dependencies": [
+        "motion",
+        "lucide-react",
+        "@tanstack/react-virtual"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/checkbox",
+        "@nuelm/touch"
+      ],
+      "files": [
+        {
+          "path": "components/motion/table/index.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/index.tsx"
+        },
+        {
+          "path": "components/motion/table/editable-cell.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/editable-cell.tsx"
+        },
+        {
+          "path": "components/motion/table/row-handle.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/row-handle.tsx"
+        },
+        {
+          "path": "components/motion/table/skeleton-rows.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/skeleton-rows.tsx"
+        },
+        {
+          "path": "components/motion/table/table-header.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/table-header.tsx"
+        },
+        {
+          "path": "components/motion/table/table-menu.tsx",
+          "type": "registry:component",
+          "target": "components/motion/table/table-menu.tsx"
+        },
+        {
+          "path": "components/motion/table/types.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/types.ts"
+        },
+        {
+          "path": "components/motion/table/use-column-reorder.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-column-reorder.ts"
+        },
+        {
+          "path": "components/motion/table/use-column-resize.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-column-resize.ts"
+        },
+        {
+          "path": "components/motion/table/use-column-sort.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-column-sort.ts"
+        },
+        {
+          "path": "components/motion/table/use-row-selection.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/use-row-selection.ts"
+        },
+        {
+          "path": "components/motion/table/utils.ts",
+          "type": "registry:component",
+          "target": "components/motion/table/utils.ts"
+        }
+      ]
+    },
+    {
       "name": "copy-button",
       "type": "registry:component",
       "title": "Copy Button",
@@ -1468,9 +1685,13 @@
         "@nuelm/use-favicon",
         "@nuelm/use-hover-capable",
         "@nuelm/use-touch-capable",
+        "@nuelm/use-on-open",
+        "@nuelm/use-row-cursor",
         "@nuelm/touch",
         "@nuelm/favicon",
         "@nuelm/text-shimmer",
+        "@nuelm/command-search",
+        "@nuelm/presence-gate",
         "@nuelm/button",
         "@nuelm/badge",
         "@nuelm/input",
@@ -1505,6 +1726,10 @@
         "@nuelm/action-swap",
         "@nuelm/pixel-field",
         "@nuelm/animated-sidebar",
+        "@nuelm/drawer",
+        "@nuelm/command-palette",
+        "@nuelm/date-range-picker",
+        "@nuelm/table",
         "@nuelm/copy-button",
         "@nuelm/voice-orb",
         "@nuelm/agent-disclosure",

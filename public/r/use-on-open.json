@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-on-open",
+  "title": "use-on-open",
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "lib/hooks/use-on-open.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\n\"use client\"\n\nimport { useState } from \"react\"\n\n/**\n * Runs `start` during the render in which `open` becomes true.\n *\n * Opening a list starts a fresh session — an empty query, the highlight back at\n * the top — and that is a resolution, not a side effect: a passive effect runs\n * after the commit, so the new session would carry the last one's state for a\n * window in which a key press can land.\n *\n * `start` may only set state belonging to the calling component. Anything that\n * reaches outside it — a consumer's callback, a DOM write, moving focus — is a\n * side effect, and React rejects a callback that sets another component's state\n * during this one's render. Put those in an effect keyed to `open`.\n */\nexport function useOnOpen(open: boolean, start: () => void) {\n  const [wasOpen, setWasOpen] = useState(open)\n  if (open !== wasOpen) {\n    setWasOpen(open)\n    if (open) start()\n  }\n}\n",
+      "type": "registry:hook",
+      "target": "lib/hooks/use-on-open.ts"
+    }
+  ],
+  "type": "registry:hook"
+}
