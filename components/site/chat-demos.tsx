@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Message,
@@ -119,7 +120,7 @@ function useStream(text: string | null, cps = 90) {
   }
 }
 
-export function ChatDemo() {
+export function ChatDemo({ className }: { className?: string }) {
   const [messages, setMessages] = React.useState(SEED)
   const [pending, setPending] = React.useState<string | null>(null)
   const [thinking, setThinking] = React.useState(false)
@@ -170,7 +171,12 @@ export function ChatDemo() {
   const busy = thinking || !!pending
 
   return (
-    <div className="flex h-[560px] w-full flex-col overflow-hidden rounded-lg">
+    <div
+      className={cn(
+        "flex h-[560px] w-full flex-col overflow-hidden rounded-lg",
+        className
+      )}
+    >
       <MessageScroller
         navigation="rail"
         busy={busy}

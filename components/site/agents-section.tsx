@@ -35,6 +35,7 @@ import {
   ToolApprovalDemo,
 } from "@/components/site/approval-demos"
 import { CELLS } from "@/components/site/cells"
+import { AISidebarDemo, ChatAppDemo } from "@/components/site/workspace-demos"
 import { cn } from "@/lib/utils"
 
 type Palette = keyof typeof ORB_PALETTES
@@ -265,6 +266,24 @@ export function AgentsSection({ heading }: { heading: React.ReactNode }) {
           meta="queued · generating · refining"
         >
           <ImageGenerationDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="Chat App"
+          meta="ChatApp · AnimatedSidebar · full composition"
+          className="md:col-span-2"
+          bodyClassName="p-3 sm:p-4"
+        >
+          <ChatAppDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="AI Sidebar"
+          meta="tree · drag to move · rename"
+          className="md:col-span-2"
+          bodyClassName="p-3 sm:p-4"
+        >
+          <AISidebarDemo />
         </AgentSpecimen>
 
         <AgentSpecimen

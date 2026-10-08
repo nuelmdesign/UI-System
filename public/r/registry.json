@@ -279,6 +279,19 @@
       ]
     },
     {
+      "name": "use-touch-capable",
+      "type": "registry:hook",
+      "title": "use-touch-capable",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-touch-capable.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-touch-capable.ts"
+        }
+      ]
+    },
+    {
       "name": "touch",
       "type": "registry:lib",
       "title": "touch",
@@ -910,6 +923,32 @@
       ]
     },
     {
+      "name": "animated-sidebar",
+      "type": "registry:component",
+      "title": "Animated Sidebar",
+      "description": "Full sidebar system: docked, icon rail or off-canvas, mobile sheet, menus and sub-menus.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/animated-sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/motion/animated-sidebar.tsx"
+        },
+        {
+          "path": "components/motion/shared-layout-bg.tsx",
+          "type": "registry:component",
+          "target": "components/motion/shared-layout-bg.tsx"
+        }
+      ]
+    },
+    {
       "name": "copy-button",
       "type": "registry:component",
       "title": "Copy Button",
@@ -1351,6 +1390,47 @@
       ]
     },
     {
+      "name": "ai-sidebar",
+      "type": "registry:component",
+      "title": "Ai Sidebar",
+      "description": "Resource tree for agent workspaces: select, expand, drag to move and rename.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/popover",
+        "@nuelm/use-touch-capable"
+      ],
+      "files": [
+        {
+          "path": "components/agents/ai-sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/agents/ai-sidebar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chat-app",
+      "type": "registry:component",
+      "title": "Chat App",
+      "description": "Chat application shell that folds its sidebar away when the shell gets narrow.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/animated-sidebar"
+      ],
+      "files": [
+        {
+          "path": "components/agents/chat-app.tsx",
+          "type": "registry:component",
+          "target": "components/agents/chat-app.tsx"
+        }
+      ]
+    },
+    {
       "name": "streaming-response",
       "type": "registry:component",
       "title": "Streaming Response",
@@ -1387,6 +1467,7 @@
         "@nuelm/use-hover-gesture",
         "@nuelm/use-favicon",
         "@nuelm/use-hover-capable",
+        "@nuelm/use-touch-capable",
         "@nuelm/touch",
         "@nuelm/favicon",
         "@nuelm/text-shimmer",
@@ -1423,6 +1504,7 @@
         "@nuelm/text-scramble",
         "@nuelm/action-swap",
         "@nuelm/pixel-field",
+        "@nuelm/animated-sidebar",
         "@nuelm/copy-button",
         "@nuelm/voice-orb",
         "@nuelm/agent-disclosure",
@@ -1441,6 +1523,8 @@
         "@nuelm/approval-card",
         "@nuelm/tool-approval",
         "@nuelm/image-generation",
+        "@nuelm/ai-sidebar",
+        "@nuelm/chat-app",
         "@nuelm/streaming-response"
       ]
     }

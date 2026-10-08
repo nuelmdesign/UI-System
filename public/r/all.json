@@ -12,6 +12,7 @@
     "@nuelm/use-hover-gesture",
     "@nuelm/use-favicon",
     "@nuelm/use-hover-capable",
+    "@nuelm/use-touch-capable",
     "@nuelm/touch",
     "@nuelm/favicon",
     "@nuelm/text-shimmer",
@@ -48,6 +49,7 @@
     "@nuelm/text-scramble",
     "@nuelm/action-swap",
     "@nuelm/pixel-field",
+    "@nuelm/animated-sidebar",
     "@nuelm/copy-button",
     "@nuelm/voice-orb",
     "@nuelm/agent-disclosure",
@@ -66,6 +68,8 @@
     "@nuelm/approval-card",
     "@nuelm/tool-approval",
     "@nuelm/image-generation",
+    "@nuelm/ai-sidebar",
+    "@nuelm/chat-app",
     "@nuelm/streaming-response"
   ],
   "type": "registry:item"

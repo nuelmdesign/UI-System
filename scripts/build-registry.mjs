@@ -159,6 +159,7 @@ const items = [
   hook("use-hover-gesture", { reg: ["@nuelm/touch"] }),
   hook("use-favicon", { reg: ["@nuelm/favicon"] }),
   hook("use-hover-capable"),
+  hook("use-touch-capable"),
   lib("touch"),
   lib("favicon"),
   lib("text-shimmer"),
@@ -220,6 +221,15 @@ const items = [
     dependencies: [],
     registryDependencies: ["@nuelm/utils", "@nuelm/theme"],
     description: "Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer.",
+  },
+  {
+    ...motionComponent("animated-sidebar", { deps: ["lucide-react"] }),
+    description: "Full sidebar system: docked, icon rail or off-canvas, mobile sheet, menus and sub-menus.",
+    files: ["animated-sidebar.tsx", "shared-layout-bg.tsx"].map((file) => ({
+      path: `components/motion/${file}`,
+      type: "registry:component",
+      target: `components/motion/${file}`,
+    })),
   },
   motionComponent("copy-button", { deps: ["lucide-react"], reg: ["@nuelm/button"] }),
 
@@ -329,6 +339,15 @@ const items = [
     deps: ["motion", "lucide-react"],
     reg: ["@nuelm/motion", "@nuelm/use-hover-capable"],
     description: "Image generation frame with queued, generating, refining and complete states.",
+  }),
+  agent("ai-sidebar", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/popover", "@nuelm/use-touch-capable"],
+    description: "Resource tree for agent workspaces: select, expand, drag to move and rename.",
+  }),
+  agent("chat-app", {
+    reg: ["@nuelm/animated-sidebar"],
+    description: "Chat application shell that folds its sidebar away when the shell gets narrow.",
   }),
   agent("streaming-response", {
     deps: ["motion", "lucide-react"],

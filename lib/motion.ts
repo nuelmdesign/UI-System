@@ -11,6 +11,8 @@ export const ease = {
   out: [0.22, 1, 0.36, 1],
   inOut: [0.65, 0, 0.35, 1],
   in: [0.55, 0, 1, 0.45],
+  /** Sheets and sidebars sliding in from an edge (iOS-style). */
+  drawer: [0.32, 0.72, 0, 1],
 } as const satisfies Record<string, [number, number, number, number]>
 
 export const duration = {
