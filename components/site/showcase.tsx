@@ -40,6 +40,7 @@ import {
   entriesIn,
 } from "@/components/docs/entries"
 import { CELLS } from "@/components/site/cells"
+import { LogoMark } from "@/components/site/logo-mark"
 import { PixelField } from "@/components/motion/pixel-field"
 import { PromptInput } from "@/components/agents/prompt-input"
 
@@ -102,9 +103,9 @@ function Header() {
     <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-8 border-x px-4 sm:px-8">
         <a href="#" className="flex items-center gap-2.5">
-          <Logo />
+          <LogoMark />
           <span className="font-display text-xl tracking-[-0.01em]">
-            eLEment
+            openDraft
           </span>
         </a>
         <nav className="hidden items-center gap-6 text-[13px] text-muted-foreground md:flex">
@@ -130,26 +131,6 @@ function Header() {
 }
 
 /** 3×3 pixel mark: the blue scale stepping down a diagonal. */
-function Logo() {
-  const cells = [
-    "bg-blue-700",
-    "bg-blue-500",
-    "bg-blue-300",
-    "bg-blue-500",
-    "bg-blue-300",
-    "bg-blue-100",
-    "bg-blue-300",
-    "bg-blue-100",
-    "bg-transparent",
-  ]
-  return (
-    <span aria-hidden className="grid size-5 grid-cols-3 gap-px">
-      {cells.map((c, i) => (
-        <span key={i} className={c} />
-      ))}
-    </span>
-  )
-}
 
 const HERO_MODELS = [
   { value: "fast", label: "Agent 5.6 · Fast", icon: <Zap /> },

@@ -20,6 +20,7 @@ import { Drawer } from "@/components/motion/drawer"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/site/theme-toggle"
+import { LogoMark } from "@/components/site/logo-mark"
 
 /** Docs chrome: top bar, grouped sidebar, search palette and a content slot. */
 export function DocsShell({
@@ -80,7 +81,7 @@ export function DocsShell({
           >
             <LogoMark />
             <span className="font-display text-xl tracking-[-0.01em]">
-              eLEment
+              openDraft
             </span>
           </nav.Link>
           <nav className="hidden items-center gap-5 text-[13px] text-muted-foreground md:flex">
@@ -235,27 +236,5 @@ function Group({
       </p>
       {children}
     </div>
-  )
-}
-
-/** 3×3 pixel mark: the blue scale stepping down a diagonal. */
-export function LogoMark() {
-  const cells = [
-    "bg-blue-700",
-    "bg-blue-500",
-    "bg-blue-300",
-    "bg-blue-500",
-    "bg-blue-300",
-    "bg-blue-100",
-    "bg-blue-300",
-    "bg-blue-100",
-    "bg-transparent",
-  ]
-  return (
-    <span aria-hidden className="grid size-5 grid-cols-3 gap-px">
-      {cells.map((c, i) => (
-        <span key={i} className={c} />
-      ))}
-    </span>
   )
 }
