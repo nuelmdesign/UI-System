@@ -39,7 +39,7 @@ function SpotlightCard({
       {/* Border glow: a 1px ring masked to the card's edge. */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[inherit] p-px opacity-0 transition-opacity duration-300 group-hover:opacity-100 [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)]"
+        className="pointer-events-none absolute inset-0 rounded-[inherit] p-px opacity-0 transition-opacity duration-300 [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)] group-hover:opacity-100"
         style={{ background: border }}
       />
       <motion.div

@@ -160,6 +160,7 @@ const items = [
   hook("use-favicon", { reg: ["@nuelm/favicon"] }),
   lib("touch"),
   lib("favicon"),
+  lib("text-shimmer"),
 
   ui("button", { deps: ["radix-ui", "class-variance-authority"] }),
   ui("badge", { deps: ["radix-ui", "class-variance-authority"] }),
@@ -194,6 +195,23 @@ const items = [
       reg: ["@nuelm/use-dismiss", "@nuelm/use-hover-gesture", "@nuelm/use-tap-gesture"],
     }),
     description: "Tick rail with hover previews for jumping between sections.",
+  },
+  {
+    ...motionComponent("loader"),
+    description: "Fifteen loading animations: spinner, dots, matrix, ASCII, metaballs and more.",
+  },
+  {
+    ...motionComponent("text-scramble"),
+    description: "Character scramble that resolves to its text.",
+  },
+  {
+    ...motionComponent("action-swap"),
+    description: "Animated label and icon swaps (roll, blur, cascade) for buttons and counters.",
+    files: ["action-swap.tsx", "action-swap-roll.tsx"].map((file) => ({
+      path: `components/motion/${file}`,
+      type: "registry:component",
+      target: `components/motion/${file}`,
+    })),
   },
   motionComponent("copy-button", { deps: ["lucide-react"], reg: ["@nuelm/button"] }),
 
@@ -234,6 +252,54 @@ const items = [
     reg: ["@nuelm/motion", "@nuelm/button", "@nuelm/popover", "@nuelm/select"],
     description: "Auto-growing prompt box with model picker, action menu and send/stop.",
   }),
+  agent("agent-code", {
+    deps: ["shiki"],
+    description: "Shared Shiki tokenizer and code renderer used by agent components.",
+  }),
+  agent("todo-list", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/agent-disclosure", "@nuelm/action-swap"],
+    description: "Live task plan with per-item progress and a rolling completed count.",
+  }),
+  agent("tool-result", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/agent-disclosure", "@nuelm/action-swap", "@nuelm/agent-code"],
+    description: "Tool call card for terminal, request and file output with status, copy and retry.",
+  }),
+  agent("code-block", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/agent-code"],
+    description: "Streaming code block with Shiki highlighting, line highlights and copy.",
+  }),
+  agent("file-diff", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/agent-disclosure", "@nuelm/agent-code"],
+    description: "Streaming unified diff with added/removed counts.",
+  }),
+  {
+    ...agent("agent-activity", {
+      deps: ["motion", "lucide-react"],
+      reg: ["@nuelm/motion", "@nuelm/agent-disclosure", "@nuelm/loading-states"],
+      description: "Collapsible run log of steps, searches and tool calls.",
+    }),
+    files: ["index.tsx", "activity-row.tsx", "types.ts"].map((file) => ({
+      path: `components/agents/agent-activity/${file}`,
+      type: "registry:component",
+      target: `components/agents/agent-activity/${file}`,
+    })),
+  },
+  {
+    ...agent("loading-states", {
+      deps: ["motion"],
+      reg: ["@nuelm/motion", "@nuelm/shimmer-text", "@nuelm/text-scramble", "@nuelm/loader", "@nuelm/text-shimmer"],
+      description: "Thinking shimmer, elapsed-time progress and rotating reasoning text.",
+    }),
+    files: ["index.ts", "agent-progress.tsx", "reasoning-text.tsx", "thinking-shimmer.tsx"].map((file) => ({
+      path: `components/agents/loading-states/${file}`,
+      type: "registry:component",
+      target: `components/agents/loading-states/${file}`,
+    })),
+  },
   agent("streaming-response", {
     deps: ["motion", "lucide-react"],
     reg: ["@nuelm/motion", "@nuelm/citations", "@nuelm/agent-disclosure"],

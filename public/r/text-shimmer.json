@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-shimmer",
+  "title": "text-shimmer",
+  "files": [
+    {
+      "path": "lib/text-shimmer.ts",
+      "content": "// Adapted from beUI (https://beui.dev), MIT © 2026 Saurabh Chauhan.\nimport type { CSSProperties } from \"react\"\n\n// The reduced-motion rule travels with the component. app/globals.css calms CSS\n// animation globally, but the registry bundles imports only, so an installed\n// copy never receives that reset.\n//\n// `!important` because the sweep is an inline style, which outranks a plain rule\n// in a media query. It selects a marker class carried by TEXT_SHIMMER_CLASS_NAME\n// so it also reaches consumers that build their own span out of these exports.\nexport const TEXT_SHIMMER_KEYFRAMES =\n  \"@keyframes beui-text-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}\" +\n  \"@media (prefers-reduced-motion: reduce){.beui-text-shimmer{animation:none !important}}\"\n\nexport const TEXT_SHIMMER_CLASS_NAME =\n  \"beui-text-shimmer bg-[length:200%_100%] bg-clip-text text-transparent bg-[linear-gradient(110deg,var(--muted-foreground)_30%,var(--foreground)_50%,var(--muted-foreground)_70%)]\"\n\nexport function textShimmerStyle(duration: number): CSSProperties {\n  return {\n    animation: `beui-text-shimmer ${duration}s linear infinite`,\n  }\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:lib"
+}

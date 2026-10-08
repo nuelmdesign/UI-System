@@ -39,11 +39,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarGroup,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Accordion,
@@ -146,7 +142,10 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/75 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4 sm:px-6">
-        <a href="#" className="flex items-center gap-2 font-semibold tracking-tight">
+        <a
+          href="#"
+          className="flex items-center gap-2 font-semibold tracking-tight"
+        >
           <Logo />
           nuelm<span className="text-muted-foreground">/ui</span>
         </a>
@@ -339,7 +338,10 @@ function Foundations() {
         <Specimen title="Typography — Inter">
           <div className="w-full space-y-3">
             {TYPE.map(([name, cls, meta]) => (
-              <div key={name} className="flex items-baseline justify-between gap-4">
+              <div
+                key={name}
+                className="flex items-baseline justify-between gap-4"
+              >
                 <span className={cn("truncate", cls)}>{name}</span>
                 <span className="shrink-0 font-mono text-[11px] text-muted-foreground">
                   {meta}
@@ -351,19 +353,35 @@ function Foundations() {
 
         <div className="grid gap-4">
           <Specimen title="Radius">
-            {["rounded-sm", "rounded-md", "rounded-lg", "rounded-xl", "rounded-2xl", "rounded-full"].map(
-              (r) => (
-                <div key={r} className="flex flex-col items-center gap-2">
-                  <div className={cn("size-12 border-2 border-brand/60 bg-brand/10", r)} />
-                  <span className="font-mono text-[11px] text-muted-foreground">
-                    {r.replace("rounded-", "")}
-                  </span>
-                </div>
-              )
-            )}
+            {[
+              "rounded-sm",
+              "rounded-md",
+              "rounded-lg",
+              "rounded-xl",
+              "rounded-2xl",
+              "rounded-full",
+            ].map((r) => (
+              <div key={r} className="flex flex-col items-center gap-2">
+                <div
+                  className={cn(
+                    "size-12 border-2 border-brand/60 bg-brand/10",
+                    r
+                  )}
+                />
+                <span className="font-mono text-[11px] text-muted-foreground">
+                  {r.replace("rounded-", "")}
+                </span>
+              </div>
+            ))}
           </Specimen>
           <Specimen title="Elevation">
-            {["shadow-xs", "shadow-sm", "shadow-md", "shadow-lg", "shadow-xl"].map((s) => (
+            {[
+              "shadow-xs",
+              "shadow-sm",
+              "shadow-md",
+              "shadow-lg",
+              "shadow-xl",
+            ].map((s) => (
               <div key={s} className="flex flex-col items-center gap-2">
                 <div className={cn("size-12 rounded-lg border bg-card", s)} />
                 <span className="font-mono text-[11px] text-muted-foreground">
@@ -382,7 +400,10 @@ function Foundations() {
 
 function MotionTokens() {
   const [on, setOn] = React.useState(false)
-  const springs = Object.entries(spring) as [keyof typeof spring, (typeof spring)[keyof typeof spring]][]
+  const springs = Object.entries(spring) as [
+    keyof typeof spring,
+    (typeof spring)[keyof typeof spring],
+  ][]
 
   return (
     <Specimen title="Motion — lib/motion.ts" className="lg:col-span-2">
@@ -438,7 +459,9 @@ function Components() {
           </Button>
           <Button variant="link">Link</Button>
           <Separator orientation="vertical" className="!h-6" />
-          <Button size="sm" variant="outline">Small</Button>
+          <Button size="sm" variant="outline">
+            Small
+          </Button>
           <Button size="icon" variant="outline" aria-label="Add">
             <Plus />
           </Button>
@@ -458,10 +481,18 @@ function Components() {
           <Badge>Default</Badge>
           <Badge variant="secondary">Secondary</Badge>
           <Badge variant="outline">Outline</Badge>
-          <Badge variant="brand" dot>Brand</Badge>
-          <Badge variant="success" dot>Paid</Badge>
-          <Badge variant="warning" dot>Pending</Badge>
-          <Badge variant="destructive" dot>Failed</Badge>
+          <Badge variant="brand" dot>
+            Brand
+          </Badge>
+          <Badge variant="success" dot>
+            Paid
+          </Badge>
+          <Badge variant="warning" dot>
+            Pending
+          </Badge>
+          <Badge variant="destructive" dot>
+            Failed
+          </Badge>
         </Specimen>
 
         <Specimen title="Switch & Checkbox">
@@ -524,13 +555,22 @@ function Components() {
                 <TabsTrigger value="activity">Activity</TabsTrigger>
                 <TabsTrigger value="settings">Settings</TabsTrigger>
               </TabsList>
-              <TabsContent value="overview" className="text-sm text-muted-foreground">
+              <TabsContent
+                value="overview"
+                className="text-sm text-muted-foreground"
+              >
                 The pill slides with a spring from lib/motion.
               </TabsContent>
-              <TabsContent value="activity" className="text-sm text-muted-foreground">
+              <TabsContent
+                value="activity"
+                className="text-sm text-muted-foreground"
+              >
                 12 events in the last 24 hours.
               </TabsContent>
-              <TabsContent value="settings" className="text-sm text-muted-foreground">
+              <TabsContent
+                value="settings"
+                className="text-sm text-muted-foreground"
+              >
                 Workspace settings live here.
               </TabsContent>
             </Tabs>
@@ -558,7 +598,10 @@ function Components() {
               </DialogHeader>
               <div className="grid gap-2">
                 <Label htmlFor="invite">Email addresses</Label>
-                <Input id="invite" placeholder="ada@example.com, alan@example.com" />
+                <Input
+                  id="invite"
+                  placeholder="ada@example.com, alan@example.com"
+                />
               </div>
               <DialogFooter>
                 <DialogClose asChild>
@@ -600,7 +643,11 @@ function Components() {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              Search <KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>
+              Search{" "}
+              <KbdGroup>
+                <Kbd>⌘</Kbd>
+                <Kbd>K</Kbd>
+              </KbdGroup>
             </TooltipContent>
           </Tooltip>
 
@@ -618,16 +665,25 @@ function Components() {
         </Specimen>
 
         <Specimen title="Accordion">
-          <Accordion type="single" collapsible defaultValue="a" className="w-full">
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="a"
+            className="w-full"
+          >
             <AccordionItem value="a">
-              <AccordionTrigger>Can I use this in any project?</AccordionTrigger>
+              <AccordionTrigger>
+                Can I use this in any project?
+              </AccordionTrigger>
               <AccordionContent>
                 Yes. Components install as source, so they work in any React
                 project with Tailwind.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="b">
-              <AccordionTrigger>Does it work with shadcn components?</AccordionTrigger>
+              <AccordionTrigger>
+                Does it work with shadcn components?
+              </AccordionTrigger>
               <AccordionContent>
                 The token names match shadcn&apos;s, so stock shadcn and beUI
                 components pick up this theme automatically.
@@ -653,7 +709,9 @@ function Components() {
                 ))}
               </AvatarGroup>
               <KbdGroup>
-                <Kbd><Command /></Kbd>
+                <Kbd>
+                  <Command />
+                </Kbd>
                 <Kbd>Shift</Kbd>
                 <Kbd>P</Kbd>
               </KbdGroup>
@@ -711,7 +769,15 @@ function AccountMenu() {
 
 /* -------------------------------------------------------------------------- */
 
-const LOGOS = ["Linear", "Vercel", "Stripe", "Raycast", "Arc", "Family", "Mercury"]
+const LOGOS = [
+  "Linear",
+  "Vercel",
+  "Stripe",
+  "Raycast",
+  "Arc",
+  "Family",
+  "Mercury",
+]
 
 function MotionSection() {
   const [value, setValue] = React.useState(128_430.52)
@@ -802,13 +868,27 @@ function MotionSection() {
 
 const TRANSACTIONS = [
   { name: "Figma", category: "Software", amount: -45, status: "success" },
-  { name: "Acme Corp", category: "Invoice #1042", amount: 12_500, status: "success" },
-  { name: "AWS", category: "Infrastructure", amount: -1_284.32, status: "warning" },
+  {
+    name: "Acme Corp",
+    category: "Invoice #1042",
+    amount: 12_500,
+    status: "success",
+  },
+  {
+    name: "AWS",
+    category: "Infrastructure",
+    amount: -1_284.32,
+    status: "warning",
+  },
 ] as const
 
 function Compose() {
   const [range, setRange] = React.useState("30d")
-  const balances: Record<string, number> = { "7d": 84_210.18, "30d": 128_430.52, "90d": 342_118.9 }
+  const balances: Record<string, number> = {
+    "7d": 84_210.18,
+    "30d": 128_430.52,
+    "90d": 342_118.9,
+  }
 
   return (
     <>
@@ -850,9 +930,15 @@ function Compose() {
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{t.name}</p>
-                    <p className="truncate text-xs text-muted-foreground">{t.category}</p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {t.category}
+                    </p>
                   </div>
-                  <Badge variant={t.status} dot className="hidden sm:inline-flex">
+                  <Badge
+                    variant={t.status}
+                    dot
+                    className="hidden sm:inline-flex"
+                  >
                     {t.status === "success" ? "Cleared" : "Pending"}
                   </Badge>
                   <span
@@ -870,7 +956,9 @@ function Compose() {
               ))}
             </CardContent>
             <CardFooter className="justify-between border-t pt-6">
-              <span className="text-sm text-muted-foreground">3 of 248 transactions</span>
+              <span className="text-sm text-muted-foreground">
+                3 of 248 transactions
+              </span>
               <Button variant="ghost" size="sm">
                 View all <ArrowUpRight />
               </Button>

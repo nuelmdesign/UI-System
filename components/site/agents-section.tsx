@@ -20,6 +20,14 @@ import {
   ChatDemo,
   StreamingDemo,
 } from "@/components/site/chat-demos"
+import {
+  ActivityDemo,
+  CodeBlockDemo,
+  FileDiffDemo,
+  LoadingStatesDemo,
+  TodoDemo,
+  ToolResultDemo,
+} from "@/components/site/agent-work-demos"
 import { cn } from "@/lib/utils"
 
 type Palette = keyof typeof ORB_PALETTES
@@ -203,6 +211,38 @@ export function AgentsSection({ heading }: { heading: React.ReactNode }) {
 
         <AgentSpecimen title="Streaming Response" meta="actions · sources">
           <StreamingDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen title="Agent Activity" meta="steps · search · tools">
+          <ActivityDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen title="Todo List" meta="live plan · progress">
+          <TodoDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen title="Tool Result" meta="terminal · request · error">
+          <ToolResultDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen title="Code Block" meta="streaming · Shiki highlighting">
+          <CodeBlockDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="File Diff"
+          meta="additions · removals"
+          className="md:col-span-2"
+        >
+          <FileDiffDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="Agent Loading States"
+          meta="shimmer · progress · reasoning · loaders"
+          className="md:col-span-2"
+        >
+          <LoadingStatesDemo />
         </AgentSpecimen>
       </div>
     </>

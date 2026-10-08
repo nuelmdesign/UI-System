@@ -259,6 +259,17 @@
       ]
     },
     {
+      "name": "text-shimmer",
+      "type": "registry:lib",
+      "title": "text-shimmer",
+      "files": [
+        {
+          "path": "lib/text-shimmer.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
@@ -755,6 +766,71 @@
       ]
     },
     {
+      "name": "loader",
+      "type": "registry:component",
+      "title": "Loader",
+      "description": "Fifteen loading animations: spinner, dots, matrix, ASCII, metaballs and more.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/loader.tsx",
+          "type": "registry:component",
+          "target": "components/motion/loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "text-scramble",
+      "type": "registry:component",
+      "title": "Text Scramble",
+      "description": "Character scramble that resolves to its text.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/text-scramble.tsx",
+          "type": "registry:component",
+          "target": "components/motion/text-scramble.tsx"
+        }
+      ]
+    },
+    {
+      "name": "action-swap",
+      "type": "registry:component",
+      "title": "Action Swap",
+      "description": "Animated label and icon swaps (roll, blur, cascade) for buttons and counters.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/motion/action-swap.tsx",
+          "type": "registry:component",
+          "target": "components/motion/action-swap.tsx"
+        },
+        {
+          "path": "components/motion/action-swap-roll.tsx",
+          "type": "registry:component",
+          "target": "components/motion/action-swap-roll.tsx"
+        }
+      ]
+    },
+    {
       "name": "copy-button",
       "type": "registry:component",
       "title": "Copy Button",
@@ -936,6 +1012,189 @@
       ]
     },
     {
+      "name": "agent-code",
+      "type": "registry:component",
+      "title": "Agent Code",
+      "description": "Shared Shiki tokenizer and code renderer used by agent components.",
+      "dependencies": [
+        "shiki"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-code.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-code.tsx"
+        }
+      ]
+    },
+    {
+      "name": "todo-list",
+      "type": "registry:component",
+      "title": "Todo List",
+      "description": "Live task plan with per-item progress and a rolling completed count.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/action-swap"
+      ],
+      "files": [
+        {
+          "path": "components/agents/todo-list.tsx",
+          "type": "registry:component",
+          "target": "components/agents/todo-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tool-result",
+      "type": "registry:component",
+      "title": "Tool Result",
+      "description": "Tool call card for terminal, request and file output with status, copy and retry.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/action-swap",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/tool-result.tsx",
+          "type": "registry:component",
+          "target": "components/agents/tool-result.tsx"
+        }
+      ]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:component",
+      "title": "Code Block",
+      "description": "Streaming code block with Shiki highlighting, line highlights and copy.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/code-block.tsx",
+          "type": "registry:component",
+          "target": "components/agents/code-block.tsx"
+        }
+      ]
+    },
+    {
+      "name": "file-diff",
+      "type": "registry:component",
+      "title": "File Diff",
+      "description": "Streaming unified diff with added/removed counts.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/file-diff.tsx",
+          "type": "registry:component",
+          "target": "components/agents/file-diff.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-activity",
+      "type": "registry:component",
+      "title": "Agent Activity",
+      "description": "Collapsible run log of steps, searches and tool calls.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/loading-states"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-activity/index.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-activity/index.tsx"
+        },
+        {
+          "path": "components/agents/agent-activity/activity-row.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-activity/activity-row.tsx"
+        },
+        {
+          "path": "components/agents/agent-activity/types.ts",
+          "type": "registry:component",
+          "target": "components/agents/agent-activity/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "loading-states",
+      "type": "registry:component",
+      "title": "Loading States",
+      "description": "Thinking shimmer, elapsed-time progress and rotating reasoning text.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/shimmer-text",
+        "@nuelm/text-scramble",
+        "@nuelm/loader",
+        "@nuelm/text-shimmer"
+      ],
+      "files": [
+        {
+          "path": "components/agents/loading-states/index.ts",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/index.ts"
+        },
+        {
+          "path": "components/agents/loading-states/agent-progress.tsx",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/agent-progress.tsx"
+        },
+        {
+          "path": "components/agents/loading-states/reasoning-text.tsx",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/reasoning-text.tsx"
+        },
+        {
+          "path": "components/agents/loading-states/thinking-shimmer.tsx",
+          "type": "registry:component",
+          "target": "components/agents/loading-states/thinking-shimmer.tsx"
+        }
+      ]
+    },
+    {
       "name": "streaming-response",
       "type": "registry:component",
       "title": "Streaming Response",
@@ -973,6 +1232,7 @@
         "@nuelm/use-favicon",
         "@nuelm/touch",
         "@nuelm/favicon",
+        "@nuelm/text-shimmer",
         "@nuelm/button",
         "@nuelm/badge",
         "@nuelm/input",
@@ -1001,6 +1261,9 @@
         "@nuelm/reveal",
         "@nuelm/magnetic",
         "@nuelm/preview-rail",
+        "@nuelm/loader",
+        "@nuelm/text-scramble",
+        "@nuelm/action-swap",
         "@nuelm/copy-button",
         "@nuelm/voice-orb",
         "@nuelm/agent-disclosure",
@@ -1009,6 +1272,13 @@
         "@nuelm/message-scroller",
         "@nuelm/message",
         "@nuelm/prompt-input",
+        "@nuelm/agent-code",
+        "@nuelm/todo-list",
+        "@nuelm/tool-result",
+        "@nuelm/code-block",
+        "@nuelm/file-diff",
+        "@nuelm/agent-activity",
+        "@nuelm/loading-states",
         "@nuelm/streaming-response"
       ]
     }
