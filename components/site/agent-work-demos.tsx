@@ -26,7 +26,7 @@ import {
 import { Loader, type LoaderVariant } from "@/components/motion/loader"
 
 /** Remounts its child on Replay so each demo plays from the start. */
-function Replayable({
+export function Replayable({
   children,
   className,
 }: {

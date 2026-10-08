@@ -266,6 +266,19 @@
       ]
     },
     {
+      "name": "use-hover-capable",
+      "type": "registry:hook",
+      "title": "use-hover-capable",
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/hooks/use-hover-capable.ts",
+          "type": "registry:hook",
+          "target": "lib/hooks/use-hover-capable.ts"
+        }
+      ]
+    },
+    {
       "name": "touch",
       "type": "registry:lib",
       "title": "touch",
@@ -606,6 +619,25 @@
       "files": [
         {
           "path": "components/ui/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio Group",
+      "dependencies": [
+        "radix-ui",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/radio-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1242,6 +1274,83 @@
       ]
     },
     {
+      "name": "approval-card",
+      "type": "registry:component",
+      "title": "Approval Card",
+      "description": "Human-in-the-loop card: stepped questions or approve / request changes / reject.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/action-swap",
+        "@nuelm/button",
+        "@nuelm/checkbox",
+        "@nuelm/radio-group",
+        "@nuelm/input"
+      ],
+      "files": [
+        {
+          "path": "components/agents/approval-card/index.tsx",
+          "type": "registry:component",
+          "target": "components/agents/approval-card/index.tsx"
+        },
+        {
+          "path": "components/agents/approval-card/types.ts",
+          "type": "registry:component",
+          "target": "components/agents/approval-card/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "tool-approval",
+      "type": "registry:component",
+      "title": "Tool Approval",
+      "description": "Permission prompt for a tool call with parameters, allow once / always and deny.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/agent-disclosure",
+        "@nuelm/agent-code"
+      ],
+      "files": [
+        {
+          "path": "components/agents/tool-approval.tsx",
+          "type": "registry:component",
+          "target": "components/agents/tool-approval.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-generation",
+      "type": "registry:component",
+      "title": "Image Generation",
+      "description": "Image generation frame with queued, generating, refining and complete states.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion",
+        "@nuelm/use-hover-capable"
+      ],
+      "files": [
+        {
+          "path": "components/agents/image-generation.tsx",
+          "type": "registry:component",
+          "target": "components/agents/image-generation.tsx"
+        }
+      ]
+    },
+    {
       "name": "streaming-response",
       "type": "registry:component",
       "title": "Streaming Response",
@@ -1277,6 +1386,7 @@
         "@nuelm/use-tap-gesture",
         "@nuelm/use-hover-gesture",
         "@nuelm/use-favicon",
+        "@nuelm/use-hover-capable",
         "@nuelm/touch",
         "@nuelm/favicon",
         "@nuelm/text-shimmer",
@@ -1298,6 +1408,7 @@
         "@nuelm/dropdown-menu",
         "@nuelm/select",
         "@nuelm/popover",
+        "@nuelm/radio-group",
         "@nuelm/tooltip",
         "@nuelm/sonner",
         "@nuelm/animated-number",
@@ -1327,6 +1438,9 @@
         "@nuelm/file-diff",
         "@nuelm/agent-activity",
         "@nuelm/loading-states",
+        "@nuelm/approval-card",
+        "@nuelm/tool-approval",
+        "@nuelm/image-generation",
         "@nuelm/streaming-response"
       ]
     }

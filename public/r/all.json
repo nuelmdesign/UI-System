@@ -11,6 +11,7 @@
     "@nuelm/use-tap-gesture",
     "@nuelm/use-hover-gesture",
     "@nuelm/use-favicon",
+    "@nuelm/use-hover-capable",
     "@nuelm/touch",
     "@nuelm/favicon",
     "@nuelm/text-shimmer",
@@ -32,6 +33,7 @@
     "@nuelm/dropdown-menu",
     "@nuelm/select",
     "@nuelm/popover",
+    "@nuelm/radio-group",
     "@nuelm/tooltip",
     "@nuelm/sonner",
     "@nuelm/animated-number",
@@ -61,6 +63,9 @@
     "@nuelm/file-diff",
     "@nuelm/agent-activity",
     "@nuelm/loading-states",
+    "@nuelm/approval-card",
+    "@nuelm/tool-approval",
+    "@nuelm/image-generation",
     "@nuelm/streaming-response"
   ],
   "type": "registry:item"

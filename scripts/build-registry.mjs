@@ -158,6 +158,7 @@ const items = [
   hook("use-tap-gesture"),
   hook("use-hover-gesture", { reg: ["@nuelm/touch"] }),
   hook("use-favicon", { reg: ["@nuelm/favicon"] }),
+  hook("use-hover-capable"),
   lib("touch"),
   lib("favicon"),
   lib("text-shimmer"),
@@ -180,6 +181,7 @@ const items = [
   ui("dropdown-menu", { deps: ["radix-ui", "lucide-react"] }),
   ui("select", { deps: ["radix-ui", "lucide-react"] }),
   ui("popover", { deps: ["radix-ui"] }),
+  ui("radio-group", { deps: ["radix-ui", "motion"], reg: ["@nuelm/motion"] }),
   ui("tooltip", { deps: ["radix-ui"] }),
   ui("sonner", { deps: ["sonner"] }),
 
@@ -306,6 +308,28 @@ const items = [
       target: `components/agents/loading-states/${file}`,
     })),
   },
+  {
+    ...agent("approval-card", {
+      deps: ["motion", "lucide-react"],
+      reg: ["@nuelm/motion", "@nuelm/agent-disclosure", "@nuelm/action-swap", "@nuelm/button", "@nuelm/checkbox", "@nuelm/radio-group", "@nuelm/input"],
+      description: "Human-in-the-loop card: stepped questions or approve / request changes / reject.",
+    }),
+    files: ["index.tsx", "types.ts"].map((file) => ({
+      path: `components/agents/approval-card/${file}`,
+      type: "registry:component",
+      target: `components/agents/approval-card/${file}`,
+    })),
+  },
+  agent("tool-approval", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/agent-disclosure", "@nuelm/agent-code"],
+    description: "Permission prompt for a tool call with parameters, allow once / always and deny.",
+  }),
+  agent("image-generation", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@nuelm/motion", "@nuelm/use-hover-capable"],
+    description: "Image generation frame with queued, generating, refining and complete states.",
+  }),
   agent("streaming-response", {
     deps: ["motion", "lucide-react"],
     reg: ["@nuelm/motion", "@nuelm/citations", "@nuelm/agent-disclosure"],

@@ -28,6 +28,12 @@ import {
   TodoDemo,
   ToolResultDemo,
 } from "@/components/site/agent-work-demos"
+import {
+  ApprovalQuestionDemo,
+  ApprovalReviewDemo,
+  ImageGenerationDemo,
+  ToolApprovalDemo,
+} from "@/components/site/approval-demos"
 import { CELLS } from "@/components/site/cells"
 import { cn } from "@/lib/utils"
 
@@ -234,6 +240,31 @@ export function AgentsSection({ heading }: { heading: React.ReactNode }) {
           className="md:col-span-2"
         >
           <FileDiffDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="Approval Card"
+          meta="questions · single & multi choice"
+        >
+          <ApprovalQuestionDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="Approval Card · review"
+          meta="approve · request changes · reject"
+        >
+          <ApprovalReviewDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen title="Tool Approval" meta="parameters · always allow">
+          <ToolApprovalDemo />
+        </AgentSpecimen>
+
+        <AgentSpecimen
+          title="Image Generation"
+          meta="queued · generating · refining"
+        >
+          <ImageGenerationDemo />
         </AgentSpecimen>
 
         <AgentSpecimen
