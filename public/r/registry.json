@@ -675,6 +675,31 @@
       ]
     },
     {
+      "name": "voice-orb",
+      "type": "registry:component",
+      "title": "Voice Orb",
+      "description": "Breathing WebGL liquid orb that reacts to a voice level or an AnalyserNode.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@nuelm/utils",
+        "@nuelm/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/voice-orb.tsx",
+          "type": "registry:component",
+          "target": "components/agents/voice-orb.tsx"
+        },
+        {
+          "path": "components/agents/voice-orb/renderer.ts",
+          "type": "registry:component",
+          "target": "components/agents/voice-orb/renderer.ts"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -710,7 +735,8 @@
         "@nuelm/marquee",
         "@nuelm/reveal",
         "@nuelm/magnetic",
-        "@nuelm/copy-button"
+        "@nuelm/copy-button",
+        "@nuelm/voice-orb"
       ]
     }
   ]

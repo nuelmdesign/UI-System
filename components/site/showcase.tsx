@@ -102,11 +102,13 @@ import { Reveal } from "@/components/motion/reveal"
 import { Magnetic } from "@/components/motion/magnetic"
 import { CopyButton } from "@/components/motion/copy-button"
 import { ThemeToggle } from "@/components/site/theme-toggle"
+import { AgentsSection } from "@/components/site/agents-section"
 
 const NAV = [
   { href: "#foundations", label: "Foundations" },
   { href: "#components", label: "Components" },
   { href: "#motion", label: "Motion" },
+  { href: "#agents", label: "Agents" },
   { href: "#compose", label: "Compose" },
 ]
 
@@ -119,6 +121,16 @@ export function Showcase() {
         <Foundations />
         <Components />
         <MotionSection />
+        <AgentsSection
+          heading={
+            <SectionHeading
+              id="agents"
+              eyebrow="04 — AI Agents"
+              title="Built for agent interfaces"
+              description="Pieces for voice, chat and tool-using agents, adapted from beUI and tuned to the same tokens."
+            />
+          }
+        />
         <Compose />
       </main>
       <footer className="border-t py-8 text-center text-sm text-muted-foreground">
@@ -802,7 +814,7 @@ function Compose() {
     <>
       <SectionHeading
         id="compose"
-        eyebrow="04 — Compose"
+        eyebrow="05 — Compose"
         title="Put together"
         description="A sample banking view assembled only from library parts — the kind of screen this system is for."
       />

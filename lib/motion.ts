@@ -28,6 +28,8 @@ export const spring = {
   smooth: { type: "spring", stiffness: 300, damping: 30 },
   /** Large surfaces and page-level movement. */
   gentle: { type: "spring", stiffness: 150, damping: 22 },
+  /** Values that track live input (audio level, slider drag). Critically damped. */
+  glide: { type: "spring", stiffness: 700, damping: 50, mass: 0.5 },
   /** Playful moments only — success states, celebratory UI. */
   bouncy: { type: "spring", visualDuration: 0.45, bounce: 0.35 },
 } as const satisfies Record<string, Transition>

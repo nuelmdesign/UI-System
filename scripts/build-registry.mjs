@@ -95,6 +95,21 @@ const motionComponent = (name, { deps = [], reg = [], description } = {}) => ({
   ],
 })
 
+// AI agent components. Most are adapted from beUI (MIT); see THIRD_PARTY_NOTICES.md.
+const agent = (name, { deps = [], reg = [], extra = [], description } = {}) => ({
+  name,
+  type: "registry:component",
+  title: name.replace(/(^|-)(\w)/g, (_, s, c) => (s ? " " : "") + c.toUpperCase()),
+  description,
+  dependencies: deps,
+  registryDependencies: ["@nuelm/utils", ...reg],
+  files: [`${name}.tsx`, ...extra].map((file) => ({
+    path: `components/agents/${file}`,
+    type: "registry:component",
+    target: `components/agents/${file}`,
+  })),
+})
+
 const items = [
   {
     name: "theme",
@@ -153,6 +168,13 @@ const items = [
   motionComponent("reveal"),
   motionComponent("magnetic"),
   motionComponent("copy-button", { deps: ["lucide-react"], reg: ["@nuelm/button"] }),
+
+  agent("voice-orb", {
+    deps: ["motion"],
+    reg: ["@nuelm/motion"],
+    extra: ["voice-orb/renderer.ts"],
+    description: "Breathing WebGL liquid orb that reacts to a voice level or an AnalyserNode.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.

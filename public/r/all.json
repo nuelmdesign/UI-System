@@ -34,7 +34,8 @@
     "@nuelm/marquee",
     "@nuelm/reveal",
     "@nuelm/magnetic",
-    "@nuelm/copy-button"
+    "@nuelm/copy-button",
+    "@nuelm/voice-orb"
   ],
   "type": "registry:item"
 }
