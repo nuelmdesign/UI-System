@@ -56,6 +56,20 @@ Token names match shadcn's (`background`, `primary`, `muted`, `border`, …), so
 3. Replace hard-coded timings with `lib/motion.ts` (`spring.snappy`, `ease.out`, …).
 4. Add it to the list in `scripts/build-registry.mjs` and to the showcase.
 
+## Deploying (Vercel)
+
+The repo deploys with zero config: Vercel detects Next.js, and `pnpm build`
+regenerates the registry before building, so `public/r/*.json` ships with the site.
+
+1. Go to [vercel.com/new](https://vercel.com/new) and import `nuelmdesign/UI-System`.
+2. Name the project **`nuelm-ui`**, so the site lands at `https://nuelm-ui.vercel.app`,
+   the URL `components.json` points the `@nuelm` registry at. If that name is taken,
+   pick another and update the `registries` URL in `components.json` and this README.
+3. Leave the framework (Next.js), build command and output settings on their defaults.
+4. Until the pull request is merged into `main`, set **Settings → Git → Production Branch**
+   to `claude/wizardly-fermat-q17vrj` (or use that branch's preview URL).
+5. Check it worked: `https://nuelm-ui.vercel.app/r/button.json` should return JSON.
+
 ## Development
 
 ```bash
