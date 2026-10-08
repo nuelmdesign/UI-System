@@ -80,7 +80,7 @@ export function DocsShell({
           >
             <LogoMark />
             <span className="font-display text-xl tracking-[-0.01em]">
-              nuelm<span className="text-muted-foreground">/ui</span>
+              eLEment
             </span>
           </nav.Link>
           <nav className="hidden items-center gap-5 text-[13px] text-muted-foreground md:flex">
