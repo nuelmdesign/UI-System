@@ -104,7 +104,7 @@ function Header() {
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-8 border-x px-4 sm:px-8">
         <a href="#" className="flex items-center gap-2.5">
           <LogoMark />
-          <span className="font-display text-xl tracking-[-0.01em]">
+          <span className="font-sans text-lg tracking-[-0.01em]">
             openDraft
           </span>
         </a>

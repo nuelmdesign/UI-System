@@ -80,7 +80,7 @@ export function DocsShell({
             className="flex items-center gap-2.5"
           >
             <LogoMark />
-            <span className="font-display text-xl tracking-[-0.01em]">
+            <span className="font-sans text-lg tracking-[-0.01em]">
               openDraft
             </span>
           </nav.Link>
