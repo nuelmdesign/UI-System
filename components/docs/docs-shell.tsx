@@ -8,6 +8,7 @@ import {
   Menu,
   Search,
   Sparkles,
+  PanelsTopLeft,
   Workflow,
 } from "lucide-react"
 
@@ -58,13 +59,15 @@ export function DocsShell({
         label: e.title,
         group: CATEGORY_LABEL[e.category],
         icon:
-          e.category === "Agents"
-            ? Bot
-            : e.category === "Data"
-              ? Workflow
-              : e.category === "Motion"
-                ? Sparkles
-                : LayoutGrid,
+          e.category === "Blocks"
+            ? PanelsTopLeft
+            : e.category === "Agents"
+              ? Bot
+              : e.category === "Data"
+                ? Workflow
+                : e.category === "Motion"
+                  ? Sparkles
+                  : LayoutGrid,
         keywords: [e.description, e.slug],
         onSelect: () => nav.navigate(nav.href(e.slug)),
       })),

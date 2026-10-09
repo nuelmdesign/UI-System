@@ -1,6 +1,6 @@
 /** Every page in the docs: guides plus one page per installable component. */
 
-export type DocCategory = "Agents" | "Data" | "Components" | "Motion"
+export type DocCategory = "Blocks" | "Agents" | "Data" | "Components" | "Motion"
 
 export type DocEntry = {
   slug: string
@@ -45,6 +45,7 @@ export const GUIDES: GuideEntry[] = [
 ]
 
 export const CATEGORY_LABEL: Record<DocCategory, string> = {
+  Blocks: "Blocks",
   Agents: "AI Agents",
   Data: "Data & Workflows",
   Components: "Components",
@@ -52,6 +53,7 @@ export const CATEGORY_LABEL: Record<DocCategory, string> = {
 }
 
 export const CATEGORY_ORDER: DocCategory[] = [
+  "Blocks",
   "Agents",
   "Data",
   "Components",

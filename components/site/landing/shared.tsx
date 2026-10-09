@@ -13,6 +13,7 @@ import { ENTRIES, entriesIn } from "@/components/docs/entries"
 /** Live counts, so the page never claims more (or fewer) components than exist. */
 export const COUNTS = {
   total: ENTRIES.length,
+  blocks: entriesIn("Blocks").length,
   agents: entriesIn("Agents").length,
   data: entriesIn("Data").length,
   core: entriesIn("Components").length,

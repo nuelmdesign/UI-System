@@ -4,7 +4,7 @@ import * as React from "react"
 import {
   Accessibility,
   Bot,
-  Braces,
+  PanelsTopLeft,
   Component,
   FolderCode,
   Moon,
@@ -111,9 +111,9 @@ const FEATURES = [
     body: "Keyboard and screen-reader support comes from Radix primitives.",
   },
   {
-    icon: <Braces />,
-    title: "TypeScript",
-    body: "Typed props, with the types exported for your own code.",
+    icon: <PanelsTopLeft />,
+    title: "Ready-made screens",
+    body: "Blocks for a CRM board, analytics, settings, sign-in and an agent chat. Install one and pass your data.",
   },
   {
     icon: <FolderCode />,
