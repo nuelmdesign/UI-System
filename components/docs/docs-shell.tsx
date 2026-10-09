@@ -1,7 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { BookOpen, Bot, LayoutGrid, Menu, Search, Sparkles } from "lucide-react"
+import {
+  BookOpen,
+  Bot,
+  LayoutGrid,
+  Menu,
+  Search,
+  Sparkles,
+  Workflow,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -52,9 +60,11 @@ export function DocsShell({
         icon:
           e.category === "Agents"
             ? Bot
-            : e.category === "Motion"
-              ? Sparkles
-              : LayoutGrid,
+            : e.category === "Data"
+              ? Workflow
+              : e.category === "Motion"
+                ? Sparkles
+                : LayoutGrid,
         keywords: [e.description, e.slug],
         onSelect: () => nav.navigate(nav.href(e.slug)),
       })),

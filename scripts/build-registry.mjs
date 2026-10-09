@@ -193,6 +193,12 @@ const items = [
   motionComponent("animated-number"),
   motionComponent("blur-text"),
   motionComponent("shimmer-text"),
+  {
+    ...motionComponent("glide-menu"),
+    dependencies: [],
+    registryDependencies: ["@opendraft/utils"],
+    description: "List whose hover highlight glides between rows.",
+  },
   motionComponent("spotlight-card"),
   motionComponent("marquee"),
   motionComponent("reveal"),

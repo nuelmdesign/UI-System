@@ -1,6 +1,6 @@
 /** Every page in the docs: guides plus one page per installable component. */
 
-export type DocCategory = "Agents" | "Components" | "Motion"
+export type DocCategory = "Agents" | "Data" | "Components" | "Motion"
 
 export type DocEntry = {
   slug: string
@@ -40,11 +40,17 @@ export const GUIDES: GuideEntry[] = [
 
 export const CATEGORY_LABEL: Record<DocCategory, string> = {
   Agents: "AI Agents",
+  Data: "Data & Workflows",
   Components: "Components",
   Motion: "Motion",
 }
 
-export const CATEGORY_ORDER: DocCategory[] = ["Agents", "Components", "Motion"]
+export const CATEGORY_ORDER: DocCategory[] = [
+  "Agents",
+  "Data",
+  "Components",
+  "Motion",
+]
 
 export const ENTRIES: DocEntry[] = [
   // AI agents

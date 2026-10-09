@@ -517,7 +517,7 @@ function Library() {
         title="Open any component"
         description="Every component has its own page: a live preview you can play with, the code behind it, the install command and the full source."
       />
-      <div className={cn(CELLS, "md:grid-cols-3")}>
+      <div className={cn(CELLS, "sm:grid-cols-2 lg:grid-cols-4")}>
         {CATEGORY_ORDER.map((category) => {
           const entries = entriesIn(category)
           return (

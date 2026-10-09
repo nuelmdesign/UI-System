@@ -28,3 +28,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Beautiful UI
+
+Source: https://beautifului.dev (by the design studio Turbo)
+Used in: the components in `components/agents/` whose first line reads
+"Adapted from Beautiful UI by Turbo".
+
+Beautiful UI is published as free, copy-ready source code. The code was supplied
+to this project without a license file; it is adapted here (restyled to the
+opendraft tokens, with dependencies replaced) and credited at the top of each
+file. Confirm the terms with Turbo before redistributing these components
+outside this project.
