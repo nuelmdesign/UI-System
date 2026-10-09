@@ -7,7 +7,7 @@
     "shiki"
   ],
   "registryDependencies": [
-    "@nuelm/utils"
+    "@opendraft/utils"
   ],
   "files": [
     {

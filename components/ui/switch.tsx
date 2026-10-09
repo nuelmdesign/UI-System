@@ -40,7 +40,7 @@ function Switch({
           data-slot="switch-thumb"
           layout
           transition={spring.snappy}
-          className="pointer-events-none block size-4 rounded-[1px] bg-white shadow-sm ring-0 group-active:w-5"
+          className="pointer-events-none block size-4 rounded-xs bg-white shadow-sm ring-0 group-active:w-5"
         />
       </SwitchPrimitive.Thumb>
     </SwitchPrimitive.Root>

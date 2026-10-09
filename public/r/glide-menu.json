@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "glide-menu",
+  "title": "Glide Menu",
+  "description": "List whose hover highlight glides between rows.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@opendraft/utils"
+  ],
+  "files": [
+    {
+      "path": "components/motion/glide-menu.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\ntype Box = { top: number; left: number; width: number; height: number }\n\n/**\n * A list whose hover highlight glides between rows instead of each row\n * lighting up on its own. Mark each row with `data-menu-row` (or pass a\n * different `rowSelector`); the highlight follows the pointer and keyboard\n * focus, and fades out when neither is inside the list.\n */\nfunction GlideMenu({\n  className,\n  highlightClassName,\n  rowSelector = \"[data-menu-row]\",\n  children,\n  onPointerOver,\n  onPointerLeave,\n  onFocus,\n  onBlur,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  /** Classes for the moving highlight (color, inset, radius). */\n  highlightClassName?: string\n  rowSelector?: string\n}) {\n  const [box, setBox] = React.useState<Box | null>(null)\n  const [visible, setVisible] = React.useState(false)\n\n  const moveTo = (target: EventTarget | null, container: HTMLElement) => {\n    if (!(target instanceof Element)) return\n    const row = target.closest<HTMLElement>(rowSelector)\n    if (!row || !container.contains(row)) return\n    setBox({\n      top: row.offsetTop,\n      left: row.offsetLeft,\n      width: row.offsetWidth,\n      height: row.offsetHeight,\n    })\n    setVisible(true)\n  }\n\n  return (\n    <div\n      data-slot=\"glide-menu\"\n      className={cn(\"group/glide-menu relative\", className)}\n      onPointerOver={(event) => {\n        moveTo(event.target, event.currentTarget)\n        onPointerOver?.(event)\n      }}\n      onPointerLeave={(event) => {\n        setVisible(false)\n        onPointerLeave?.(event)\n      }}\n      onFocus={(event) => {\n        if (event.target.matches(\":focus-visible\"))\n          moveTo(event.target, event.currentTarget)\n        onFocus?.(event)\n      }}\n      onBlur={(event) => {\n        if (!event.currentTarget.contains(event.relatedTarget as Node | null))\n          setVisible(false)\n        onBlur?.(event)\n      }}\n      {...props}\n    >\n      <span\n        aria-hidden\n        data-slot=\"glide-menu-highlight\"\n        className={cn(\n          \"pointer-events-none absolute z-0 rounded-md bg-accent transition-[top,left,width,height,opacity] duration-200 ease-[var(--ease-out)]\",\n          highlightClassName\n        )}\n        style={{\n          top: box?.top ?? 0,\n          left: box?.left ?? 0,\n          width: box?.width ?? 0,\n          height: box?.height ?? 0,\n          opacity: visible && box ? 1 : 0,\n        }}\n      />\n      {children}\n    </div>\n  )\n}\n\nexport { GlideMenu }\n",
+      "type": "registry:component",
+      "target": "components/motion/glide-menu.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

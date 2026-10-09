@@ -1,0 +1,483 @@
+// Generates the AI-readable docs into public/:
+//   llms.txt        rules (content/ai/guidelines.md) + an index of every component
+//   llms/<slug>.md  one page per component: install, import, props, example
+//   llms-full.txt   rules + every component page in one file
+// Reads the docs entries, the built registry (public/r) and the example
+// sources, so run it after `pnpm registry:build` and `pnpm docs:build`.
+// Output is deterministic: no dates, stable ordering.
+
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+
+const root = new URL("../", import.meta.url)
+const read = (path) => readFileSync(new URL(path, root), "utf8")
+
+/* ---------------------------------- Inputs --------------------------------- */
+
+const siteSrc = read("lib/site.ts")
+const SITE_URL = siteSrc.match(/\burl:\s*"([^"]+)"/)?.[1]
+if (!SITE_URL) throw new Error("Couldn't find SITE.url in lib/site.ts")
+const FILES_URL = siteSrc.match(/\bfiles:\s*"([^"]+)"/)?.[1]
+if (!FILES_URL) throw new Error("Couldn't find SITE.files in lib/site.ts")
+
+const guidelines = read("content/ai/guidelines.md").trim()
+const examples = JSON.parse(read("components/docs/example-sources.json"))
+const entriesSrc = read("components/docs/entries.ts")
+
+/** The text of `export const NAME ... = [ ... ]` / `{ ... }` in entries.ts. */
+function constBlock(name) {
+  const start = entriesSrc.search(new RegExp(`export const ${name}\\b`))
+  if (start === -1) throw new Error(`Missing ${name} in entries.ts`)
+  const open = entriesSrc.slice(start).search(/=\s*[[{]/) + start
+  const first = entriesSrc.slice(open).search(/[[{]/) + open
+  const close = { "[": "]", "{": "}" }[entriesSrc[first]]
+  let depth = 0
+  for (let i = first; i < entriesSrc.length; i++) {
+    if (entriesSrc[i] === entriesSrc[first]) depth++
+    if (entriesSrc[i] === close && --depth === 0)
+      return entriesSrc.slice(first + 1, i)
+  }
+  throw new Error(`Unclosed ${name} in entries.ts`)
+}
+
+/** Object literals of string / boolean fields, in source order. */
+function objects(body) {
+  return [...body.matchAll(/\{([^{}]*)\}/g)].map(([, fields]) => {
+    const obj = {}
+    for (const [, key, value] of fields.matchAll(
+      /(\w+):\s*("(?:[^"\\]|\\.)*"|true|false)/g
+    ))
+      obj[key] = JSON.parse(value)
+    return obj
+  })
+}
+
+const GUIDES = objects(constBlock("GUIDES"))
+const ENTRIES = objects(constBlock("ENTRIES"))
+const CATEGORY_LABEL = Object.fromEntries(
+  [
+    ...constBlock("CATEGORY_LABEL").matchAll(/(\w+):\s*("(?:[^"\\]|\\.)*")/g),
+  ].map(([, k, v]) => [k, JSON.parse(v)])
+)
+const CATEGORY_ORDER = [
+  ...constBlock("CATEGORY_ORDER").matchAll(/"(\w+)"/g),
+].map((m) => m[1])
+
+/* ------------------------------ Source parsing ----------------------------- */
+
+const isPascal = (name) => /^[A-Z][A-Za-z0-9]*$/.test(name)
+
+/** Splits `{ A, type B, C as D }` into [{ name, isType }]. */
+function specifiers(list) {
+  return list
+    .split(",")
+    .map((s) => s.replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, "").trim())
+    .filter(Boolean)
+    .map((s) => {
+      const isType = s.startsWith("type ")
+      const parts = s.replace(/^type\s+/, "").split(/\s+as\s+/)
+      return { name: parts[parts.length - 1].trim(), isType }
+    })
+}
+
+/** Public names of a module: values (components) and types. */
+function exportsOf(src) {
+  const values = new Set()
+  const types = new Set()
+  for (const [, name] of src.matchAll(
+    /^export\s+(?:default\s+)?(?:async\s+)?function\s*\*?\s*([A-Za-z_$][\w$]*)/gm
+  ))
+    values.add(name)
+  for (const [, name] of src.matchAll(
+    /^export\s+(?:const|let|var|class)\s+([A-Za-z_$][\w$]*)/gm
+  ))
+    values.add(name)
+  for (const [, typeOnly, list] of src.matchAll(
+    /^export\s+(type\s+)?\{([^}]*)\}/gm
+  ))
+    for (const s of specifiers(list))
+      (typeOnly || s.isType ? types : values).add(s.name)
+  for (const [, name] of src.matchAll(
+    /^export\s+(?:declare\s+)?(?:type|interface|enum)\s+([A-Za-z_$][\w$]*)/gm
+  ))
+    types.add(name)
+  return { values, types }
+}
+
+/**
+ * Top-level `type` / `interface` declarations (exported or not), verbatim,
+ * with the doc comment right above them. Returns [{ name, code }].
+ */
+function typeDeclarations(src) {
+  const out = []
+  const re = /^(?:export\s+)?(type|interface)\s+([A-Za-z_$][\w$]*)/gm
+  let m
+  while ((m = re.exec(src))) {
+    const start = m.index
+    const end = declarationEnd(src, start, m[1] === "interface")
+    let from = start
+    const doc = src.slice(0, start).match(/\/\*\*(?:(?!\*\/)[\s\S])*\*\/\s*$/)
+    if (doc) from = start - doc[0].length
+    out.push({ name: m[2], code: src.slice(from, end).trimEnd() })
+    re.lastIndex = end
+  }
+  return out
+}
+
+/** Index of the bracket that closes the one at `open`, skipping strings. */
+function matching(src, open) {
+  const pairs = { "(": ")", "{": "}", "[": "]", "<": ">" }
+  const stack = []
+  for (let i = open; i < src.length; i++) {
+    const c = src[i]
+    if (c === '"' || c === "'" || c === "`") {
+      for (i++; i < src.length && src[i] !== c; i++) if (src[i] === "\\") i++
+      continue
+    }
+    if (src.startsWith("=>", i)) {
+      i++
+      continue
+    }
+    if (c in pairs && (c !== "<" || stack.at(-1) === ">" || i === open)) {
+      stack.push(pairs[c])
+    } else if (c === stack.at(-1)) {
+      stack.pop()
+      if (!stack.length) return i
+    }
+  }
+  return -1
+}
+
+/**
+ * The props annotation of `function Name(...)`, e.g.
+ * `React.ComponentProps<"div"> & { size?: number }`, or null.
+ */
+function propsAnnotation(src, name) {
+  const m = new RegExp(`^(?:export\\s+)?function\\s+${name}\\b`, "m").exec(src)
+  if (!m) return null
+  let i = m.index + m[0].length
+  if (src[i] === "<") i = matching(src, i) + 1
+  if (src[i] !== "(") return null
+  const close = matching(src, i)
+  const params = src.slice(i + 1, close)
+  // Skip the destructuring pattern / parameter name, then read the type.
+  let j = 0
+  while (j < params.length && /\s/.test(params[j])) j++
+  if (params[j] === "{" || params[j] === "[") j = matching(params, j) + 1
+  else while (j < params.length && /[\w$]/.test(params[j])) j++
+  const rest = params.slice(j).trim()
+  if (!rest.startsWith(":")) return null
+  return rest.slice(1).trim().replace(/,\s*$/, "")
+}
+
+/** `variant: default | ink | …` lines from a cva() call's variants block. */
+function cvaVariants(src) {
+  const out = []
+  for (const m of src.matchAll(/^(?:export\s+)?const\s+(\w+)\s*=\s*cva\(/gm)) {
+    const call = src.slice(m.index, matching(src, m.index + m[0].length - 1))
+    const v = call.search(/\bvariants:\s*\{/)
+    if (v === -1) continue
+    const open = call.indexOf("{", v)
+    const body = call.slice(open + 1, matching(call, open))
+    const defaults = {}
+    const d = call.search(/\bdefaultVariants:\s*\{/)
+    if (d !== -1) {
+      const dOpen = call.indexOf("{", d)
+      for (const [, k, val] of call
+        .slice(dOpen + 1, matching(call, dOpen))
+        .matchAll(/("?[\w-]+"?):\s*("[^"]*"|\w+)/g))
+        defaults[k.replace(/"/g, "")] = val.replace(/"/g, "")
+    }
+    const groups = []
+    let depth = 0
+    let group = null
+    for (const line of body
+      .replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "")
+      .split("\n")) {
+      const key = line.match(/^\s*("[^"]+"|[\w-]+)\s*:/)?.[1]?.replace(/"/g, "")
+      if (depth === 0 && key) {
+        group = { name: key, options: [] }
+        groups.push(group)
+      } else if (depth === 1 && key && group) {
+        group.options.push(key)
+      }
+      const stripped = line.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, "")
+      depth += (stripped.match(/\{/g) ?? []).length
+      depth -= (stripped.match(/\}/g) ?? []).length
+    }
+    for (const g of groups)
+      out.push(
+        `- \`${g.name}\`: ${g.options
+          .map((o) => `\`${o}\`${defaults[g.name] === o ? " (default)" : ""}`)
+          .join(", ")}`
+      )
+  }
+  return out
+}
+
+/** Type names referenced in a piece of code. */
+const referencedNames = (code) =>
+  new Set([...code.matchAll(/\b([A-Z][A-Za-z0-9]*)\b/g)].map((m) => m[1]))
+
+/** Index just past a type declaration, skipping strings and comments. */
+function declarationEnd(src, start, isInterface) {
+  let depth = 0
+  let seenBody = false
+  for (let i = start; i < src.length; i++) {
+    const c = src[i]
+    const two = src.slice(i, i + 2)
+    if (two === "//") {
+      i = src.indexOf("\n", i) - 1
+      if (i < 0) return src.length
+      continue
+    }
+    if (two === "/*") {
+      i = src.indexOf("*/", i + 2) + 1
+      continue
+    }
+    if (c === '"' || c === "'" || c === "`") {
+      for (i++; i < src.length && src[i] !== c; i++) if (src[i] === "\\") i++
+      continue
+    }
+    if (c === "{" || c === "(" || c === "[" || c === "<") {
+      depth++
+      seenBody = true
+      continue
+    }
+    if (c === ">" && src[i - 1] === "=") continue
+    if (c === "}" || c === ")" || c === "]" || c === ">") {
+      depth--
+      if (isInterface && depth === 0 && c === "}") return i + 1
+      continue
+    }
+    if (depth > 0) continue
+    if (c === ";") return i + 1
+    if (c === "\n" && !isInterface) {
+      // A type alias ends at a line break unless the next line continues it.
+      const rest = src.slice(i + 1)
+      const next = rest.match(/^[^\n]*/)[0]
+      const head = src.slice(start, i)
+      const continues =
+        /^\s/.test(next) ||
+        /^[|&]/.test(next) ||
+        /[=|&,<(:]\s*$/.test(head) ||
+        (!seenBody && !/=/.test(head))
+      if (!continues) return i
+    }
+  }
+  return src.length
+}
+
+/* ---------------------------------- Pages ---------------------------------- */
+
+const pageUrl = (slug) => `${FILES_URL}/llms/${slug}.md`
+const docsUrl = (slug) => `${SITE_URL}/docs/${slug}`
+const installCmd = (name) => `npx shadcn@latest add @opendraft/${name}`
+
+function registryItem(name) {
+  return JSON.parse(read(`public/r/${name}.json`))
+}
+
+/** "components/agents/prompt-bar.tsx" -> "@/components/agents/prompt-bar" */
+const modulePath = (file) =>
+  `@/${(file.target || file.path).replace(/\.(tsx?|jsx?)$/, "").replace(/\/index$/, "")}`
+
+/** Resolves `./x` relative to a file's path, matching an item file. */
+function resolveRelative(files, fromFile, spec) {
+  const dir = fromFile.path.split("/").slice(0, -1)
+  for (const part of spec.split("/")) {
+    if (part === "..") dir.pop()
+    else if (part !== ".") dir.push(part)
+  }
+  const base = dir.join("/")
+  return files.find((f) =>
+    [".ts", ".tsx", "/index.ts", "/index.tsx"].some(
+      (ext) => f.path === base + ext
+    )
+  )
+}
+
+function componentPage(entry) {
+  const name = entry.registry ?? entry.slug
+  const item = registryItem(name)
+  const files = item.files ?? []
+  const primary = files[0]
+  const src = primary?.content ?? ""
+  const { values, types } = exportsOf(src)
+
+  // Types the primary module re-exports from sibling files count as public.
+  const typeSources = [src]
+  for (const [, spec] of src.matchAll(
+    /^export\s+(?:type\s+)?\{[^}]*\}\s*from\s*"(\.[^"]+)"/gm
+  )) {
+    const file = resolveRelative(files, primary, spec)
+    if (file?.content && !typeSources.includes(file.content))
+      typeSources.push(file.content)
+  }
+  for (const [, spec] of src.matchAll(/^export\s+\*\s+from\s*"(\.[^"]+)"/gm)) {
+    const file = resolveRelative(files, primary, spec)
+    if (!file?.content) continue
+    const sub = exportsOf(file.content)
+    sub.values.forEach((v) => values.add(v))
+    sub.types.forEach((t) => types.add(t))
+    typeSources.push(file.content)
+  }
+
+  const components = [...values].filter(isPascal)
+
+  // Props: each component's annotation, plus the declarations it relies on.
+  // Public types, local *Props types and anything they reference are shown.
+  const allDecls = typeSources.flatMap(typeDeclarations)
+  const signatures = []
+  const wanted = new Set([...types].filter((t) => !values.has(t)))
+  for (const name of components) {
+    const annotation = propsAnnotation(src, name)
+    if (!annotation) continue
+    referencedNames(annotation).forEach((n) => wanted.add(n))
+    if (!/^[A-Z]\w*$/.test(annotation))
+      signatures.push(`function ${name}(props: ${annotation})`)
+  }
+  const byName = new Map()
+  for (const d of allDecls) if (!byName.has(d.name)) byName.set(d.name, d)
+  for (let grew = true; grew;) {
+    grew = false
+    for (const name of [...wanted]) {
+      const d = byName.get(name)
+      if (!d) continue
+      for (const n of referencedNames(
+        d.code.replace(/^[\s\S]*?(?:type|interface)\s+\w+/, "")
+      ))
+        if (byName.has(n) && !wanted.has(n)) {
+          wanted.add(n)
+          grew = true
+        }
+    }
+  }
+  const declarations = allDecls.filter(
+    (d, i) =>
+      wanted.has(d.name) && allDecls.findIndex((x) => x.name === d.name) === i
+  )
+  const variants = cvaVariants(src)
+
+  const npm = item.dependencies ?? []
+  const registryDeps = item.registryDependencies ?? []
+  const example = examples[entry.slug]
+
+  const lines = [
+    `# ${entry.title}`,
+    "",
+    entry.description,
+    "",
+    `Category: ${CATEGORY_LABEL[entry.category]}`,
+    "",
+    "## Install",
+    "",
+    "```bash",
+    installCmd(name),
+    "```",
+    "",
+    "Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See " +
+      `${FILES_URL}/llms.txt.`,
+    "",
+  ]
+
+  if (primary) {
+    lines.push("## Import", "", "```tsx")
+    lines.push(
+      components.length
+        ? `import { ${components.join(", ")} } from "${modulePath(primary)}"`
+        : `import "${modulePath(primary)}"`
+    )
+    lines.push("```", "")
+    if (files.length > 1) {
+      lines.push(
+        "Files added to the project:",
+        "",
+        ...files.map((f) => `- \`${f.target || f.path}\``),
+        ""
+      )
+    }
+  }
+
+  lines.push("## Dependencies", "")
+  if (!npm.length && !registryDeps.length) {
+    lines.push("None beyond React and Tailwind.", "")
+  } else {
+    if (npm.length)
+      lines.push(`- npm: ${npm.map((d) => `\`${d}\``).join(", ")}`)
+    if (registryDeps.length)
+      lines.push(
+        `- Registry (installed with it): ${registryDeps.map((d) => `\`${d}\``).join(", ")}`
+      )
+    lines.push("")
+  }
+
+  if (declarations.length || signatures.length) {
+    lines.push(
+      "## Props and types",
+      "",
+      "```ts",
+      [...declarations.map((d) => d.code), ...signatures].join("\n\n"),
+      "```",
+      ""
+    )
+  }
+
+  if (variants.length) {
+    lines.push("## Variants", "", ...variants, "")
+  }
+
+  if (example) {
+    lines.push("## Example", "", "```tsx", example, "```", "")
+  }
+
+  lines.push(
+    `Live docs: ${docsUrl(entry.slug)}. Rules for building with opendraft: ${FILES_URL}/llms.txt`
+  )
+  return lines.join("\n") + "\n"
+}
+
+/* ---------------------------------- Output --------------------------------- */
+
+const summary =
+  "> opendraft is a React + Tailwind CSS v4 design system distributed as a shadcn registry and built to be used by AI assistants. Components install as source files into your project with the shadcn CLI, behavior comes from Radix, and every color, radius and timing comes from a small set of theme tokens."
+
+const header = `# opendraft\n\n${summary}\n\n${guidelines}\n`
+
+const ordered = CATEGORY_ORDER.flatMap((category) =>
+  ENTRIES.filter((e) => e.category === category)
+)
+
+const componentIndex = CATEGORY_ORDER.map((category) => {
+  const rows = ENTRIES.filter((e) => e.category === category).map(
+    (e) =>
+      `- [${e.title}](${pageUrl(e.slug)}): ${e.description} Install: \`${installCmd(e.registry ?? e.slug)}\``
+  )
+  return `### ${CATEGORY_LABEL[category]}\n\n${rows.join("\n")}`
+}).join("\n\n")
+
+const docsIndex = GUIDES.map(
+  (g) => `- [${g.title}](${docsUrl(g.slug)}): ${g.description}`
+).join("\n")
+
+const llms = [
+  header,
+  `## Components\n\n${componentIndex}\n`,
+  `## Docs\n\n${docsIndex}\n`,
+  `## Optional\n\n- [llms-full.txt](${FILES_URL}/llms-full.txt): these rules plus every component page (props, types, examples) in one file\n- [Registry index](${FILES_URL}/r/registry.json): every installable registry item as JSON\n`,
+].join("\n")
+
+const pages = ordered.map((e) => [e.slug, componentPage(e)])
+
+const outDir = new URL("public/llms/", root)
+rmSync(outDir, { recursive: true, force: true })
+mkdirSync(outDir, { recursive: true })
+for (const [slug, body] of pages)
+  writeFileSync(new URL(`${slug}.md`, outDir), body)
+
+writeFileSync(new URL("public/llms.txt", root), llms)
+writeFileSync(
+  new URL("public/llms-full.txt", root),
+  [header, ...pages.map(([, body]) => body)].join("\n---\n\n")
+)
+
+console.log(`llms.txt, llms-full.txt, llms/: ${pages.length} component pages`)

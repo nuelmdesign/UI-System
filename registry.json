@@ -1,16 +1,31 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "nuelm",
+  "name": "opendraft",
   "homepage": "https://github.com/nuelmdesign/UI-System",
   "items": [
     {
       "name": "theme",
       "type": "registry:theme",
       "title": "Theme",
-      "description": "nuelm/ui color, radius, elevation and motion tokens (light + dark).",
+      "description": "opendraft color, radius, elevation and motion tokens (light + dark).",
       "cssVars": {
         "theme": {
-          "font-display": "var(--font-newsreader), ui-serif, Georgia, serif",
+          "font-sans": "var(--font-body)",
+          "font-display": "var(--font-heading)",
+          "font-mono": "var(--font-code)",
+          "text-xs": "calc(0.75rem * var(--text-scale))",
+          "text-sm": "calc(0.875rem * var(--text-scale))",
+          "text-base": "calc(1rem * var(--text-scale))",
+          "text-lg": "calc(1.125rem * var(--text-scale))",
+          "text-xl": "calc(1.25rem * var(--text-scale))",
+          "text-2xl": "calc(1.5rem * var(--text-scale))",
+          "text-3xl": "calc(1.875rem * var(--text-scale))",
+          "text-4xl": "calc(2.25rem * var(--text-scale))",
+          "text-5xl": "calc(3rem * var(--text-scale))",
+          "text-6xl": "calc(3.75rem * var(--text-scale))",
+          "text-7xl": "calc(4.5rem * var(--text-scale))",
+          "text-8xl": "calc(6rem * var(--text-scale))",
+          "text-9xl": "calc(8rem * var(--text-scale))",
           "color-blue-50": "var(--blue-50)",
           "color-blue-100": "var(--blue-100)",
           "color-blue-200": "var(--blue-200)",
@@ -48,13 +63,15 @@
           "color-border": "var(--border)",
           "color-input": "var(--input)",
           "color-ring": "var(--ring)",
-          "radius-xs": "0px",
-          "radius-sm": "1px",
-          "radius-md": "var(--radius)",
-          "radius-lg": "calc(var(--radius) + 1px)",
-          "radius-xl": "calc(var(--radius) + 2px)",
-          "radius-2xl": "calc(var(--radius) + 4px)",
-          "radius-3xl": "calc(var(--radius) + 6px)",
+          "radius-xs": "calc(var(--control-radius) * 0.25)",
+          "radius-sm": "calc(var(--control-radius) * 0.5)",
+          "radius-md": "var(--control-radius)",
+          "radius-control": "var(--control-radius)",
+          "radius-lg": "var(--surface-radius)",
+          "radius-surface": "var(--surface-radius)",
+          "radius-xl": "calc(var(--surface-radius) + 1px)",
+          "radius-2xl": "calc(var(--surface-radius) + 3px)",
+          "radius-3xl": "calc(var(--surface-radius) + 5px)",
           "shadow-xs": "var(--shadow-xs)",
           "shadow-sm": "var(--shadow-sm)",
           "shadow-md": "var(--shadow-md)",
@@ -67,7 +84,12 @@
           "animate-pop-in": "pop-in 160ms var(--ease-out)",
           "animate-pop-out": "pop-out 120ms var(--ease-in) forwards",
           "animate-shimmer": "shimmer 2.2s linear infinite",
-          "animate-marquee": "marquee var(--marquee-duration, 30s) linear infinite"
+          "animate-marquee": "marquee var(--marquee-duration, 30s) linear infinite",
+          "animate-fade-in": "fade-in 300ms var(--ease-out) both",
+          "animate-fade-up": "fade-up 320ms var(--ease-out) both",
+          "animate-pixel-on": "pixel-on 650ms var(--ease-in-out) infinite",
+          "animate-eq": "eq 900ms var(--ease-in-out) infinite",
+          "animate-blink": "blink 1.1s var(--ease-in-out) infinite"
         },
         "light": {
           "blue-50": "#f0f3ff",
@@ -81,7 +103,15 @@
           "blue-800": "#29359a",
           "blue-900": "#232d74",
           "blue-950": "#151a45",
-          "radius": "2px",
+          "font-heading": "var(--font-newsreader, ui-serif, Georgia, serif)",
+          "font-body": "var(--font-geist, ui-sans-serif, system-ui, sans-serif)",
+          "font-code": "var(--font-geist-mono, ui-monospace, monospace)",
+          "heading-weight": "300",
+          "heading-tracking": "-0.02em",
+          "control-radius": "2px",
+          "surface-radius": "3px",
+          "text-scale": "1",
+          "radius": "var(--control-radius)",
           "background": "#fafafa",
           "foreground": "#0e0e10",
           "card": "#ffffff",
@@ -151,6 +181,32 @@
         }
       },
       "css": {
+        "@layer base": {
+          "*": {
+            "border-color": "var(--border)",
+            "outline-color": "color-mix(in oklab, var(--ring) 50%, transparent)"
+          },
+          "html": {
+            "color-scheme": "light"
+          },
+          "html.dark": {
+            "color-scheme": "dark"
+          },
+          "body": {
+            "background-color": "var(--background)",
+            "color": "var(--foreground)",
+            "font-family": "var(--font-body)",
+            "-webkit-font-smoothing": "antialiased",
+            "-moz-osx-font-smoothing": "grayscale"
+          },
+          "h1, h2, h3, h4": {
+            "letter-spacing": "-0.025em",
+            "text-wrap": "balance"
+          },
+          "::selection": {
+            "background": "color-mix(in oklch, var(--brand) 28%, transparent)"
+          }
+        },
         "@keyframes pop-in": {
           "from": {
             "opacity": "0",
@@ -172,10 +228,64 @@
             "background-position": "-200% 0"
           }
         },
+        "@keyframes fade-in": {
+          "from": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes fade-up": {
+          "from": {
+            "opacity": "0",
+            "transform": "translateY(6px)"
+          }
+        },
+        "@keyframes pixel-on": {
+          "0%,\n    100%": {
+            "opacity": "0.15"
+          },
+          "40%": {
+            "opacity": "1"
+          }
+        },
+        "@keyframes eq": {
+          "0%,\n    100%": {
+            "transform": "scaleY(0.35)"
+          },
+          "50%": {
+            "transform": "scaleY(1)"
+          }
+        },
+        "@keyframes blink": {
+          "50%": {
+            "opacity": "0.3"
+          }
+        },
         "@keyframes marquee": {
           "to": {
             "transform": "translateX(calc(-50% - var(--marquee-gap, 1rem) / 2))"
           }
+        },
+        "@utility bg-dots": {
+          "background-image": "radial-gradient( var(--dot-color, color-mix(in oklch, var(--foreground) 14%, transparent)) 1px, transparent 1px )",
+          "background-size": "var(--dot-gap, 14px) var(--dot-gap, 14px)"
+        },
+        "@utility heading": {
+          "font-family": "var(--font-heading)",
+          "font-weight": "var(--heading-weight)",
+          "letter-spacing": "var(--heading-tracking)"
+        },
+        "@utility eyebrow": {
+          "font-family": "var(--font-mono)",
+          "font-size": "calc(11px * var(--text-scale))",
+          "line-height": "1",
+          "letter-spacing": "0.08em",
+          "text-transform": "uppercase"
+        },
+        "@utility scrollbar-hide": {
+          "&::-webkit-scrollbar": {
+            "display": "none"
+          },
+          "scrollbar-width": "none"
         }
       }
     },
@@ -240,7 +350,7 @@
       "type": "registry:hook",
       "title": "use-hover-gesture",
       "registryDependencies": [
-        "@nuelm/touch"
+        "@opendraft/touch"
       ],
       "files": [
         {
@@ -255,7 +365,7 @@
       "type": "registry:hook",
       "title": "use-favicon",
       "registryDependencies": [
-        "@nuelm/favicon"
+        "@opendraft/favicon"
       ],
       "files": [
         {
@@ -381,7 +491,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -399,7 +509,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -414,7 +524,7 @@
       "title": "Input",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -429,7 +539,7 @@
       "title": "Textarea",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -446,7 +556,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -461,7 +571,7 @@
       "title": "Card",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -478,7 +588,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -493,7 +603,7 @@
       "title": "Kbd",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -508,7 +618,7 @@
       "title": "Skeleton",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -525,7 +635,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -543,8 +653,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -562,8 +672,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -581,8 +691,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -601,8 +711,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -621,8 +731,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -640,7 +750,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -658,7 +768,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -675,7 +785,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -693,8 +803,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -711,7 +821,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -728,7 +838,7 @@
         "sonner"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -745,8 +855,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -764,8 +874,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -781,13 +891,30 @@
       "title": "Shimmer Text",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
           "path": "components/motion/shimmer-text.tsx",
           "type": "registry:component",
           "target": "components/motion/shimmer-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "glide-menu",
+      "type": "registry:component",
+      "title": "Glide Menu",
+      "description": "List whose hover highlight glides between rows.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/motion/glide-menu.tsx",
+          "type": "registry:component",
+          "target": "components/motion/glide-menu.tsx"
         }
       ]
     },
@@ -799,8 +926,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -816,7 +943,7 @@
       "title": "Marquee",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -834,8 +961,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -853,8 +980,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -873,11 +1000,11 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/use-dismiss",
-        "@nuelm/use-hover-gesture",
-        "@nuelm/use-tap-gesture"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/use-dismiss",
+        "@opendraft/use-hover-gesture",
+        "@opendraft/use-tap-gesture"
       ],
       "files": [
         {
@@ -896,8 +1023,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -916,8 +1043,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -936,8 +1063,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -959,8 +1086,8 @@
       "description": "Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer.",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/theme"
+        "@opendraft/utils",
+        "@opendraft/theme"
       ],
       "files": [
         {
@@ -980,8 +1107,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1005,9 +1132,9 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/presence-gate"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/presence-gate"
       ],
       "files": [
         {
@@ -1027,13 +1154,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/presence-gate",
-        "@nuelm/command-search",
-        "@nuelm/use-on-open",
-        "@nuelm/use-row-cursor",
-        "@nuelm/use-touch-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/presence-gate",
+        "@opendraft/command-search",
+        "@opendraft/use-on-open",
+        "@opendraft/use-row-cursor",
+        "@opendraft/use-touch-capable"
       ],
       "files": [
         {
@@ -1053,10 +1180,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/popover",
-        "@nuelm/use-hover-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/popover",
+        "@opendraft/use-hover-capable"
       ],
       "files": [
         {
@@ -1097,10 +1224,10 @@
         "@tanstack/react-virtual"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/checkbox",
-        "@nuelm/touch"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/checkbox",
+        "@opendraft/touch"
       ],
       "files": [
         {
@@ -1174,9 +1301,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/button"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/button"
       ],
       "files": [
         {
@@ -1195,8 +1322,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1220,8 +1347,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1241,10 +1368,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/use-favicon"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/use-favicon"
       ],
       "files": [
         {
@@ -1264,8 +1391,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1289,8 +1416,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/preview-rail"
+        "@opendraft/utils",
+        "@opendraft/preview-rail"
       ],
       "files": [
         {
@@ -1309,10 +1436,10 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/message-bubble",
-        "@nuelm/message-scroller"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/message-bubble",
+        "@opendraft/message-scroller"
       ],
       "files": [
         {
@@ -1332,11 +1459,11 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/button",
-        "@nuelm/popover",
-        "@nuelm/select"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/button",
+        "@opendraft/popover",
+        "@opendraft/select"
       ],
       "files": [
         {
@@ -1355,7 +1482,7 @@
         "shiki"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -1375,10 +1502,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/action-swap"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/action-swap"
       ],
       "files": [
         {
@@ -1398,11 +1525,11 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/action-swap",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/action-swap",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1422,9 +1549,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1444,10 +1571,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1467,10 +1594,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/loading-states"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/loading-states"
       ],
       "files": [
         {
@@ -1499,12 +1626,12 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/shimmer-text",
-        "@nuelm/text-scramble",
-        "@nuelm/loader",
-        "@nuelm/text-shimmer"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/shimmer-text",
+        "@opendraft/text-scramble",
+        "@opendraft/loader",
+        "@opendraft/text-shimmer"
       ],
       "files": [
         {
@@ -1539,14 +1666,14 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/action-swap",
-        "@nuelm/button",
-        "@nuelm/checkbox",
-        "@nuelm/radio-group",
-        "@nuelm/input"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/action-swap",
+        "@opendraft/button",
+        "@opendraft/checkbox",
+        "@opendraft/radio-group",
+        "@opendraft/input"
       ],
       "files": [
         {
@@ -1571,10 +1698,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1594,9 +1721,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/use-hover-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/use-hover-capable"
       ],
       "files": [
         {
@@ -1616,10 +1743,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/popover",
-        "@nuelm/use-touch-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/popover",
+        "@opendraft/use-touch-capable"
       ],
       "files": [
         {
@@ -1636,8 +1763,8 @@
       "description": "Chat application shell that folds its sidebar away when the shell gets narrow.",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/animated-sidebar"
+        "@opendraft/utils",
+        "@opendraft/animated-sidebar"
       ],
       "files": [
         {
@@ -1657,10 +1784,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/citations",
-        "@nuelm/agent-disclosure"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/citations",
+        "@opendraft/agent-disclosure"
       ],
       "files": [
         {
@@ -1671,86 +1798,532 @@
       ]
     },
     {
+      "name": "question-card",
+      "type": "registry:component",
+      "title": "Question Card",
+      "description": "One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/glide-menu",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/question-card.tsx",
+          "type": "registry:component",
+          "target": "components/agents/question-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chat-panel",
+      "type": "registry:component",
+      "title": "Chat Panel",
+      "description": "Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/chat-panel.tsx",
+          "type": "registry:component",
+          "target": "components/agents/chat-panel.tsx"
+        }
+      ]
+    },
+    {
+      "name": "recommendation-card",
+      "type": "registry:component",
+      "title": "Recommendation Card",
+      "description": "Recommendation with a confidence meter, an alternatives drawer that swaps the pick, and a confirm action.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/agents/recommendation-card.tsx",
+          "type": "registry:component",
+          "target": "components/agents/recommendation-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "context-cards",
+      "type": "registry:component",
+      "title": "Context Cards",
+      "description": "Retrieved context chunks that stagger in, then reveal their source file chips.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/context-cards.tsx",
+          "type": "registry:component",
+          "target": "components/agents/context-cards.tsx"
+        }
+      ]
+    },
+    {
+      "name": "search-list",
+      "type": "registry:component",
+      "title": "Search List",
+      "description": "Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu"
+      ],
+      "files": [
+        {
+          "path": "components/agents/search-list.tsx",
+          "type": "registry:component",
+          "target": "components/agents/search-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "filter-table",
+      "type": "registry:component",
+      "title": "Filter Table",
+      "description": "Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/filter-table.tsx",
+          "type": "registry:component",
+          "target": "components/agents/filter-table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "flowchart",
+      "type": "registry:component",
+      "title": "Flowchart",
+      "description": "Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu"
+      ],
+      "files": [
+        {
+          "path": "components/agents/flowchart.tsx",
+          "type": "registry:component",
+          "target": "components/agents/flowchart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "insight-cards",
+      "type": "registry:component",
+      "title": "Insight Cards",
+      "description": "Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/insight-cards.tsx",
+          "type": "registry:component",
+          "target": "components/agents/insight-cards.tsx"
+        }
+      ]
+    },
+    {
+      "name": "prompt-bar",
+      "type": "registry:component",
+      "title": "Prompt Bar",
+      "description": "A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/prompt-bar.tsx",
+          "type": "registry:component",
+          "target": "components/agents/prompt-bar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "selection-actions",
+      "type": "registry:component",
+      "title": "Selection Actions",
+      "description": "A contextual AI bar under selected text that animates its width between modes and streams in a rewrite.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/shimmer-text",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/selection-actions.tsx",
+          "type": "registry:component",
+          "target": "components/agents/selection-actions.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pixel-loader",
+      "type": "registry:component",
+      "title": "Pixel Loader",
+      "description": "A 3×3 pixel-grid loader with a shimmering status label and a live elapsed timer, in four motion variants.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/shimmer-text"
+      ],
+      "files": [
+        {
+          "path": "components/agents/pixel-loader.tsx",
+          "type": "registry:component",
+          "target": "components/agents/pixel-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "thinking-trace",
+      "type": "registry:component",
+      "title": "Thinking Trace",
+      "description": "An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/shimmer-text"
+      ],
+      "files": [
+        {
+          "path": "components/agents/thinking-trace.tsx",
+          "type": "registry:component",
+          "target": "components/agents/thinking-trace.tsx"
+        }
+      ]
+    },
+    {
+      "name": "streaming-answer",
+      "type": "registry:component",
+      "title": "Streaming Answer",
+      "description": "An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/streaming-answer.tsx",
+          "type": "registry:component",
+          "target": "components/agents/streaming-answer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "task-rows",
+      "type": "registry:component",
+      "title": "Task Rows",
+      "description": "Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/task-rows.tsx",
+          "type": "registry:component",
+          "target": "components/agents/task-rows.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tool-chips",
+      "type": "registry:component",
+      "title": "Tool Chips",
+      "description": "An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/tool-chips.tsx",
+          "type": "registry:component",
+          "target": "components/agents/tool-chips.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-screen",
+      "type": "registry:component",
+      "title": "Agent Screen",
+      "description": "Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-screen.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-screen.tsx"
+        }
+      ]
+    },
+    {
+      "name": "code-panel",
+      "type": "registry:component",
+      "title": "Code Panel",
+      "description": "Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/code-panel.tsx",
+          "type": "registry:component",
+          "target": "components/agents/code-panel.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fine-tune-card",
+      "type": "registry:component",
+      "title": "Fine Tune Card",
+      "description": "Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu",
+        "@opendraft/shimmer-text"
+      ],
+      "files": [
+        {
+          "path": "components/agents/fine-tune-card.tsx",
+          "type": "registry:component",
+          "target": "components/agents/fine-tune-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sidebar-nav",
+      "type": "registry:component",
+      "title": "Sidebar Nav",
+      "description": "Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/glide-menu",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/sidebar-nav.tsx",
+          "type": "registry:component",
+          "target": "components/agents/sidebar-nav.tsx"
+        }
+      ]
+    },
+    {
+      "name": "records-table",
+      "type": "registry:component",
+      "title": "Records Table",
+      "description": "AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu",
+        "@opendraft/checkbox",
+        "@opendraft/switch"
+      ],
+      "files": [
+        {
+          "path": "components/agents/records-table.tsx",
+          "type": "registry:component",
+          "target": "components/agents/records-table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "diff-table",
+      "type": "registry:component",
+      "title": "Diff Table",
+      "description": "A proposed table edit that plays once; click each changed row to keep or drop it before applying.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/agents/diff-table.tsx",
+          "type": "registry:component",
+          "target": "components/agents/diff-table.tsx"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
-      "description": "The theme plus every nuelm/ui component.",
+      "description": "The theme plus every opendraft component.",
       "registryDependencies": [
-        "@nuelm/theme",
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/use-dismiss",
-        "@nuelm/use-tap-gesture",
-        "@nuelm/use-hover-gesture",
-        "@nuelm/use-favicon",
-        "@nuelm/use-hover-capable",
-        "@nuelm/use-touch-capable",
-        "@nuelm/use-on-open",
-        "@nuelm/use-row-cursor",
-        "@nuelm/touch",
-        "@nuelm/favicon",
-        "@nuelm/text-shimmer",
-        "@nuelm/command-search",
-        "@nuelm/presence-gate",
-        "@nuelm/button",
-        "@nuelm/badge",
-        "@nuelm/input",
-        "@nuelm/textarea",
-        "@nuelm/label",
-        "@nuelm/card",
-        "@nuelm/separator",
-        "@nuelm/kbd",
-        "@nuelm/skeleton",
-        "@nuelm/avatar",
-        "@nuelm/switch",
-        "@nuelm/checkbox",
-        "@nuelm/tabs",
-        "@nuelm/accordion",
-        "@nuelm/dialog",
-        "@nuelm/dropdown-menu",
-        "@nuelm/select",
-        "@nuelm/popover",
-        "@nuelm/radio-group",
-        "@nuelm/tooltip",
-        "@nuelm/sonner",
-        "@nuelm/animated-number",
-        "@nuelm/blur-text",
-        "@nuelm/shimmer-text",
-        "@nuelm/spotlight-card",
-        "@nuelm/marquee",
-        "@nuelm/reveal",
-        "@nuelm/magnetic",
-        "@nuelm/preview-rail",
-        "@nuelm/loader",
-        "@nuelm/text-scramble",
-        "@nuelm/action-swap",
-        "@nuelm/pixel-field",
-        "@nuelm/animated-sidebar",
-        "@nuelm/drawer",
-        "@nuelm/command-palette",
-        "@nuelm/date-range-picker",
-        "@nuelm/table",
-        "@nuelm/copy-button",
-        "@nuelm/voice-orb",
-        "@nuelm/agent-disclosure",
-        "@nuelm/citations",
-        "@nuelm/message-bubble",
-        "@nuelm/message-scroller",
-        "@nuelm/message",
-        "@nuelm/prompt-input",
-        "@nuelm/agent-code",
-        "@nuelm/todo-list",
-        "@nuelm/tool-result",
-        "@nuelm/code-block",
-        "@nuelm/file-diff",
-        "@nuelm/agent-activity",
-        "@nuelm/loading-states",
-        "@nuelm/approval-card",
-        "@nuelm/tool-approval",
-        "@nuelm/image-generation",
-        "@nuelm/ai-sidebar",
-        "@nuelm/chat-app",
-        "@nuelm/streaming-response"
+        "@opendraft/theme",
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/use-dismiss",
+        "@opendraft/use-tap-gesture",
+        "@opendraft/use-hover-gesture",
+        "@opendraft/use-favicon",
+        "@opendraft/use-hover-capable",
+        "@opendraft/use-touch-capable",
+        "@opendraft/use-on-open",
+        "@opendraft/use-row-cursor",
+        "@opendraft/touch",
+        "@opendraft/favicon",
+        "@opendraft/text-shimmer",
+        "@opendraft/command-search",
+        "@opendraft/presence-gate",
+        "@opendraft/button",
+        "@opendraft/badge",
+        "@opendraft/input",
+        "@opendraft/textarea",
+        "@opendraft/label",
+        "@opendraft/card",
+        "@opendraft/separator",
+        "@opendraft/kbd",
+        "@opendraft/skeleton",
+        "@opendraft/avatar",
+        "@opendraft/switch",
+        "@opendraft/checkbox",
+        "@opendraft/tabs",
+        "@opendraft/accordion",
+        "@opendraft/dialog",
+        "@opendraft/dropdown-menu",
+        "@opendraft/select",
+        "@opendraft/popover",
+        "@opendraft/radio-group",
+        "@opendraft/tooltip",
+        "@opendraft/sonner",
+        "@opendraft/animated-number",
+        "@opendraft/blur-text",
+        "@opendraft/shimmer-text",
+        "@opendraft/glide-menu",
+        "@opendraft/spotlight-card",
+        "@opendraft/marquee",
+        "@opendraft/reveal",
+        "@opendraft/magnetic",
+        "@opendraft/preview-rail",
+        "@opendraft/loader",
+        "@opendraft/text-scramble",
+        "@opendraft/action-swap",
+        "@opendraft/pixel-field",
+        "@opendraft/animated-sidebar",
+        "@opendraft/drawer",
+        "@opendraft/command-palette",
+        "@opendraft/date-range-picker",
+        "@opendraft/table",
+        "@opendraft/copy-button",
+        "@opendraft/voice-orb",
+        "@opendraft/agent-disclosure",
+        "@opendraft/citations",
+        "@opendraft/message-bubble",
+        "@opendraft/message-scroller",
+        "@opendraft/message",
+        "@opendraft/prompt-input",
+        "@opendraft/agent-code",
+        "@opendraft/todo-list",
+        "@opendraft/tool-result",
+        "@opendraft/code-block",
+        "@opendraft/file-diff",
+        "@opendraft/agent-activity",
+        "@opendraft/loading-states",
+        "@opendraft/approval-card",
+        "@opendraft/tool-approval",
+        "@opendraft/image-generation",
+        "@opendraft/ai-sidebar",
+        "@opendraft/chat-app",
+        "@opendraft/streaming-response",
+        "@opendraft/question-card",
+        "@opendraft/chat-panel",
+        "@opendraft/recommendation-card",
+        "@opendraft/context-cards",
+        "@opendraft/search-list",
+        "@opendraft/filter-table",
+        "@opendraft/flowchart",
+        "@opendraft/insight-cards",
+        "@opendraft/prompt-bar",
+        "@opendraft/selection-actions",
+        "@opendraft/pixel-loader",
+        "@opendraft/thinking-trace",
+        "@opendraft/streaming-answer",
+        "@opendraft/task-rows",
+        "@opendraft/tool-chips",
+        "@opendraft/agent-screen",
+        "@opendraft/code-panel",
+        "@opendraft/fine-tune-card",
+        "@opendraft/sidebar-nav",
+        "@opendraft/records-table",
+        "@opendraft/diff-table"
       ]
     }
   ]

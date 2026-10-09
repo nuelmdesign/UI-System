@@ -40,7 +40,7 @@ const buttonVariants = cva(
       },
       /** Small uppercase label, as on editorial CTAs ("START FOR FREE"). */
       caps: {
-        true: "font-mono text-[11px] tracking-[0.08em] uppercase",
+        true: "font-mono text-[calc(11px*var(--text-scale))] tracking-[0.08em] uppercase",
         false: "",
       },
     },

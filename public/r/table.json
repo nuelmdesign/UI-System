@@ -9,10 +9,10 @@
     "@tanstack/react-virtual"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/checkbox",
-    "@nuelm/touch"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/checkbox",
+    "@opendraft/touch"
   ],
   "files": [
     {

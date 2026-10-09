@@ -5,8 +5,8 @@
   "description": "Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer.",
   "dependencies": [],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/theme"
+    "@opendraft/utils",
+    "@opendraft/theme"
   ],
   "files": [
     {

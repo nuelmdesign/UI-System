@@ -3,7 +3,7 @@
   "name": "use-hover-gesture",
   "title": "use-hover-gesture",
   "registryDependencies": [
-    "@nuelm/touch"
+    "@opendraft/touch"
   ],
   "files": [
     {

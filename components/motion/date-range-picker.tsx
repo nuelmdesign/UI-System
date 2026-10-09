@@ -178,10 +178,10 @@ export function DateRangePickerSummary({
       )}
     >
       <div className="min-w-0">
-        <p className="mb-1 text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
+        <p className="mb-1 text-[calc(10px*var(--text-scale))] font-medium tracking-wider text-muted-foreground uppercase">
           Start date
         </p>
-        <p className="text-[13px] font-medium tabular-nums">
+        <p className="text-[calc(13px*var(--text-scale))] font-medium tabular-nums">
           {value ? shortFormat.format(parse(value.from)) : "Select date"}
         </p>
       </div>
@@ -191,12 +191,12 @@ export function DateRangePickerSummary({
         aria-hidden="true"
       />
       <div className="min-w-0">
-        <p className="mb-1 text-[10px] font-medium tracking-wider text-muted-foreground uppercase">
+        <p className="mb-1 text-[calc(10px*var(--text-scale))] font-medium tracking-wider text-muted-foreground uppercase">
           End date
         </p>
         <p
           className={cn(
-            "text-[13px] font-medium tabular-nums",
+            "text-[calc(13px*var(--text-scale))] font-medium tabular-nums",
             !value?.to && "text-muted-foreground"
           )}
         >
@@ -246,7 +246,7 @@ export function DateRangePickerHeader({
           disabled={disabled}
           onClick={() => openChoices("months")}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] font-semibold transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-40",
+            "inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[calc(13px*var(--text-scale))] font-semibold transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-40",
             view === "years" && "hidden"
           )}
         >
@@ -268,7 +268,7 @@ export function DateRangePickerHeader({
           aria-controls={view === "years" ? choicesId : undefined}
           disabled={disabled}
           onClick={() => openChoices("years")}
-          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] font-medium text-muted-foreground tabular-nums transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[calc(13px*var(--text-scale))] font-medium text-muted-foreground tabular-nums transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-40"
         >
           {view === "years" ? `${yearPage}–${yearPageEnd}` : year}
           <ChevronDown
@@ -434,7 +434,7 @@ export function DateRangePickerGrid({
                           key={day}
                           scope="col"
                           abbr={day}
-                          className="h-6 pb-1.5 text-center text-[11px] font-medium text-muted-foreground"
+                          className="h-6 pb-1.5 text-center text-[calc(11px*var(--text-scale))] font-medium text-muted-foreground"
                         >
                           {new Intl.DateTimeFormat(locale, {
                             weekday: "short",
@@ -757,7 +757,7 @@ export function DateRangePickerTrigger({
         disabled={disabled || ctx.disabled}
         aria-label={props["aria-label"] ?? `${ctx.label}: ${summary}`}
         className={cn(
-          "inline-flex h-9 w-fit max-w-full items-center gap-2 rounded-xl border border-border bg-background px-3 text-[13px] font-medium text-foreground transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-40",
+          "inline-flex h-9 w-fit max-w-full items-center gap-2 rounded-xl border border-border bg-background px-3 text-[calc(13px*var(--text-scale))] font-medium text-foreground transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-40",
           className
         )}
       >
@@ -988,7 +988,7 @@ function CalendarChoices({
           whileTap={reduce ? undefined : { scale: 0.96 }}
           transition={spring.snappy}
           className={cn(
-            "flex h-13 items-center justify-center rounded-xl px-1 text-[13px] tabular-nums transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-25",
+            "flex h-13 items-center justify-center rounded-xl px-1 text-[calc(13px*var(--text-scale))] tabular-nums transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:opacity-25",
             choice.id === selected
               ? "bg-primary font-medium text-primary-foreground"
               : "bg-muted/40 hover:bg-muted"

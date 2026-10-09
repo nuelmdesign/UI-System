@@ -8,11 +8,11 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/button",
-    "@nuelm/popover",
-    "@nuelm/select"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/button",
+    "@opendraft/popover",
+    "@opendraft/select"
   ],
   "files": [
     {

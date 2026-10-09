@@ -3,7 +3,7 @@
   "name": "use-favicon",
   "title": "use-favicon",
   "registryDependencies": [
-    "@nuelm/favicon"
+    "@opendraft/favicon"
   ],
   "files": [
     {

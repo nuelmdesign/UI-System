@@ -1,31 +1,52 @@
-<title>nuelm/ui</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap">
-<link rel="stylesheet" href="app.css">
+<title>opendraft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap"
+/>
+<link rel="stylesheet" href="app.css" />
 <style>
   /* next/font isn't available outside Next, so point the font tokens at Google Fonts. */
-  :root { --font-geist: "Geist"; --font-geist-mono: "Geist Mono"; --font-newsreader: "Newsreader"; }
-  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: 16px; }
-  html.dark { color-scheme: dark; }
+  :root {
+    --font-geist: "Geist";
+    --font-geist-mono: "Geist Mono";
+    --font-newsreader: "Newsreader";
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 16px;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
 </style>
 <script>
-  (function () {
-    var root = document.documentElement;
-    root.lang = "en";
-    var saved = null;
-    try { saved = localStorage.getItem("theme"); } catch (e) {}
+  ;(function () {
+    var root = document.documentElement
+    root.lang = "en"
+    var saved = null
+    try {
+      saved = localStorage.getItem("theme")
+    } catch (e) {}
     function apply() {
-      var explicit = root.getAttribute("data-theme");
-      var dark = explicit ? explicit === "dark"
-        : saved ? saved === "dark"
-        : matchMedia("(prefers-color-scheme: dark)").matches;
-      root.classList.toggle("dark", dark);
+      var explicit = root.getAttribute("data-theme")
+      var dark = explicit
+        ? explicit === "dark"
+        : saved
+          ? saved === "dark"
+          : matchMedia("(prefers-color-scheme: dark)").matches
+      root.classList.toggle("dark", dark)
     }
-    apply();
+    apply()
     // Follow the viewer's theme setting when it changes.
-    new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
-  })();
+    new MutationObserver(apply).observe(root, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    })
+  })()
 </script>
 <div id="root" class="flex min-h-full flex-col"></div>
 <script src="app.js"></script>

@@ -786,7 +786,7 @@ export const AnimatedSidebarGroupLabel = forwardRef<
       aria-hidden={collapsed}
       data-slot="sidebar-group-label"
       className={cn(
-        "mb-1 h-7 overflow-hidden px-2 text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase transition-opacity",
+        "mb-1 h-7 overflow-hidden px-2 text-[calc(10px*var(--text-scale))] font-medium tracking-[0.14em] text-muted-foreground uppercase transition-opacity",
         collapsed ? "opacity-0" : "opacity-100",
         className
       )}

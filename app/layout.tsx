@@ -22,9 +22,9 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "nuelm/ui",
+  title: "opendraft",
   description:
-    "A personal design system: shadcn structure, Motion feel, one set of tokens.",
+    "A design system your AI builds with: React components, one theme file, and docs assistants can read.",
 }
 
 // Applies the saved (or system) theme before first paint to avoid a flash.

@@ -1,16 +1,19 @@
 {
-  "name": "nuelm-ui",
+  "name": "opendraft",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm registry:build && next build",
+    "build": "pnpm registry:build && pnpm docs:build && pnpm llms:build && next build",
     "start": "next start",
     "lint": "eslint",
     "registry:build": "node scripts/build-registry.mjs && shadcn build",
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
-    "preview:build": "node scripts/preview/build.mjs"
+    "preview:build": "node scripts/preview/build.mjs",
+    "docs:build": "node scripts/build-docs.mjs",
+    "llms:build": "node scripts/build-llms.mjs",
+    "fonts:build": "node scripts/build-google-fonts.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "3.14.13",

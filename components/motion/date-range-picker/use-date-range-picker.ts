@@ -97,7 +97,7 @@ export function useDateRangePickerController({
   const [focusChoices, setFocusChoices] = useState(false)
   const monthTrigger = useRef<HTMLButtonElement>(null)
   const yearTrigger = useRef<HTMLButtonElement>(null)
-  const returnToTrigger = useRef<"months" | "years" | null>(null)
+  const returnToTrigger = useRef<"months" | "years"| null>(null)
   const grid = useRef<HTMLTableElement>(null)
   const pendingFocus = useRef(autoFocus)
   const heading = useId()
@@ -106,7 +106,7 @@ export function useDateRangePickerController({
   const reduce = useReducedMotion() ?? false
   const canHover = useHoverCapable()
   const monthFormat = new Intl.DateTimeFormat(locale, {
-    month: "long",
+    month:"long",
     year: "numeric",
     timeZone: "UTC",
   })

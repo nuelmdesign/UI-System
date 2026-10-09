@@ -7,9 +7,9 @@
     "motion"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/presence-gate"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/presence-gate"
   ],
   "files": [
     {

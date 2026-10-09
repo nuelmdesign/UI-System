@@ -112,12 +112,12 @@ export function CodeBlock({
             {filename}
           </span>
         ) : null}
-        <span className="text-[10px] font-medium tracking-wide text-muted-foreground/55 uppercase">
+        <span className="text-[calc(10px*var(--text-scale))] font-medium tracking-wide text-muted-foreground/55 uppercase">
           {language}
         </span>
         <span
           className={cn(
-            "ml-auto inline-flex shrink-0 items-center gap-1 text-[10px] font-medium",
+            "ml-auto inline-flex shrink-0 items-center gap-1 text-[calc(10px*var(--text-scale))] font-medium",
             streaming ? "text-brand" : "text-success"
           )}
         >
@@ -154,7 +154,12 @@ export function CodeBlock({
         className="scrollbar-hide overflow-auto border-t border-foreground/[0.06] py-2"
         style={{ maxHeight }}
       >
-        <pre className="m-0 min-w-max font-mono text-xs leading-5 text-foreground/85">
+        <pre
+          className={cn(
+            "m-0 font-mono text-xs leading-5 text-foreground/85",
+            wrap ? "min-w-0" : "min-w-max"
+          )}
+        >
           <code>
             {lines.map((line, index) => {
               const lineNumber = index + 1

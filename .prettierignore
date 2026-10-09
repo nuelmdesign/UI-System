@@ -3,3 +3,8 @@ registry.json
 pnpm-lock.yaml
 .next
 preview-dist
+components/docs/example-sources.json
+public/llms.txt
+public/llms-full.txt
+public/llms/
+lib/google-fonts.json

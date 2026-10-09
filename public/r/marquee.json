@@ -4,7 +4,7 @@
   "title": "Marquee",
   "dependencies": [],
   "registryDependencies": [
-    "@nuelm/utils"
+    "@opendraft/utils"
   ],
   "files": [
     {

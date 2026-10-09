@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
-   nuelm/ui tokens
+   opendraft tokens
    Direction: editorial-technical. Hairline borders and square corners, a
    near-black / off-white neutral base, and a blue scale (periwinkle to royal)
    as the primary color. Token names match shadcn's, so any shadcn or
@@ -25,7 +25,23 @@
   --blue-900: #232d74;
   --blue-950: #151a45;
 
-  --radius: 2px;
+  /* ---- Brand knobs --------------------------------------------------------
+     The look is a set of defaults. To make opendraft yours, change these and
+     every component follows: fonts by role, heading weight, corner radius for
+     controls (buttons, inputs, tabs) and for surfaces (cards, menus, dialogs).
+     The primary color is --primary / --brand below (and in .dark). */
+  --font-heading: var(--font-newsreader, ui-serif, Georgia, serif);
+  --font-body: var(--font-geist, ui-sans-serif, system-ui, sans-serif);
+  --font-code: var(--font-geist-mono, ui-monospace, monospace);
+  --heading-weight: 300;
+  --heading-tracking: -0.02em;
+  --control-radius: 2px;
+  --surface-radius: 3px;
+  /* Multiplies every text size (1 = default, 1.1 = 10% larger). Spacing
+     stays put, so only the type grows or shrinks. */
+  --text-scale: 1;
+  /* shadcn compatibility: stock components read --radius. */
+  --radius: var(--control-radius);
 
   /* Surfaces */
   --background: #fafafa;
@@ -116,9 +132,24 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+  --font-mono: var(--font-code);
+
+  /* Text sizes follow the --text-scale knob. */
+  --text-xs: calc(0.75rem * var(--text-scale));
+  --text-sm: calc(0.875rem * var(--text-scale));
+  --text-base: calc(1rem * var(--text-scale));
+  --text-lg: calc(1.125rem * var(--text-scale));
+  --text-xl: calc(1.25rem * var(--text-scale));
+  --text-2xl: calc(1.5rem * var(--text-scale));
+  --text-3xl: calc(1.875rem * var(--text-scale));
+  --text-4xl: calc(2.25rem * var(--text-scale));
+  --text-5xl: calc(3rem * var(--text-scale));
+  --text-6xl: calc(3.75rem * var(--text-scale));
+  --text-7xl: calc(4.5rem * var(--text-scale));
+  --text-8xl: calc(6rem * var(--text-scale));
+  --text-9xl: calc(8rem * var(--text-scale));
 
   --color-blue-50: var(--blue-50);
   --color-blue-100: var(--blue-100);
@@ -159,14 +190,18 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Square by default. Pills (rounded-full) are kept for avatars and toggles. */
-  --radius-xs: 0px;
-  --radius-sm: 1px;
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 1px);
-  --radius-xl: calc(var(--radius) + 2px);
-  --radius-2xl: calc(var(--radius) + 4px);
-  --radius-3xl: calc(var(--radius) + 6px);
+  /* Corner scale, driven by the two radius knobs. Small steps (sm, md) follow
+     controls, large steps (lg and up) follow surfaces. rounded-full is kept
+     for avatars, dots and spinners. */
+  --radius-xs: calc(var(--control-radius) * 0.25);
+  --radius-sm: calc(var(--control-radius) * 0.5);
+  --radius-md: var(--control-radius);
+  --radius-control: var(--control-radius);
+  --radius-lg: var(--surface-radius);
+  --radius-surface: var(--surface-radius);
+  --radius-xl: calc(var(--surface-radius) + 1px);
+  --radius-2xl: calc(var(--surface-radius) + 3px);
+  --radius-3xl: calc(var(--surface-radius) + 5px);
 
   --shadow-xs: var(--shadow-xs);
   --shadow-sm: var(--shadow-sm);
@@ -186,6 +221,13 @@
   --animate-pop-out: pop-out 120ms var(--ease-in) forwards;
   --animate-shimmer: shimmer 2.2s linear infinite;
   --animate-marquee: marquee var(--marquee-duration, 30s) linear infinite;
+  /* Entrances and loops shared by the agent pieces. Stagger with an inline
+     animation-delay; reduced motion collapses them globally. */
+  --animate-fade-in: fade-in 300ms var(--ease-out) both;
+  --animate-fade-up: fade-up 320ms var(--ease-out) both;
+  --animate-pixel-on: pixel-on 650ms var(--ease-in-out) infinite;
+  --animate-eq: eq 900ms var(--ease-in-out) infinite;
+  --animate-blink: blink 1.1s var(--ease-in-out) infinite;
 
   @keyframes pop-in {
     from {
@@ -208,6 +250,40 @@
       background-position: -200% 0;
     }
   }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+  @keyframes pixel-on {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+  @keyframes eq {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0.3;
+    }
+  }
   @keyframes marquee {
     to {
       transform: translateX(calc(-50% - var(--marquee-gap, 1rem) / 2));
@@ -225,10 +301,18 @@
   background-size: var(--dot-gap, 14px) var(--dot-gap, 14px);
 }
 
+/* Headings: the heading font at its weight and tracking. Prefer this over
+   font-display so a new heading font brings its own weight. */
+@utility heading {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-tracking);
+}
+
 /* Small uppercase mono label: section eyebrows, card indices, meta. */
 @utility eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale));
   line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -252,7 +336,7 @@
     color-scheme: dark;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-base text-foreground antialiased;
   }
   h1,
   h2,

@@ -8,8 +8,8 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion"
+    "@opendraft/utils",
+    "@opendraft/motion"
   ],
   "files": [
     {
