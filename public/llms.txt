@@ -18,7 +18,7 @@ Requirements: React 19, Tailwind CSS v4, TypeScript, and a shadcn `components.js
 ```json
 {
   "registries": {
-    "@opendraft": "https://opendraft-ui.vercel.app/r/{name}.json"
+    "@opendraft": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/{name}.json"
   }
 }
 ```
@@ -103,103 +103,103 @@ Components use Radix primitives and come with keyboard and screen-reader support
 
 ### AI Agents
 
-- [Voice Orb](https://opendraft-ui.vercel.app/llms/voice-orb.md): Breathing WebGL liquid orb that reacts to a voice level or an audio analyser. Install: `npx shadcn@latest add @opendraft/voice-orb`
-- [Message Bubble](https://opendraft-ui.vercel.app/llms/message-bubble.md): Chat bubble surfaces with variants, a pop-in entrance and a collapsible body. Install: `npx shadcn@latest add @opendraft/message-bubble`
-- [Message](https://opendraft-ui.vercel.app/llms/message.md): Message rows with avatar, header, footer, markers and a typing indicator. Install: `npx shadcn@latest add @opendraft/message`
-- [Message Scroller](https://opendraft-ui.vercel.app/llms/message-scroller.md): Transcript that follows streamed output, with a rail for jumping between turns. Install: `npx shadcn@latest add @opendraft/message-scroller`
-- [Prompt Input](https://opendraft-ui.vercel.app/llms/prompt-input.md): Auto-growing prompt box with a model picker, an action menu and send / stop. Install: `npx shadcn@latest add @opendraft/prompt-input`
-- [Streaming Response](https://opendraft-ui.vercel.app/llms/streaming-response.md): Streamed answer with copy, retry, feedback and a sources footer. Install: `npx shadcn@latest add @opendraft/streaming-response`
-- [Citations](https://opendraft-ui.vercel.app/llms/citations.md): Inline citation markers, favicon stacks and a collapsible source list. Install: `npx shadcn@latest add @opendraft/citations`
-- [Agent Activity](https://opendraft-ui.vercel.app/llms/agent-activity.md): Collapsible run log of steps, web searches and tool calls. Install: `npx shadcn@latest add @opendraft/agent-activity`
-- [Agent Loading States](https://opendraft-ui.vercel.app/llms/loading-states.md): Thinking shimmer, elapsed-time progress and rotating reasoning text. Install: `npx shadcn@latest add @opendraft/loading-states`
-- [Todo List](https://opendraft-ui.vercel.app/llms/todo-list.md): Live task plan with per-item progress and a rolling completed count. Install: `npx shadcn@latest add @opendraft/todo-list`
-- [Tool Result](https://opendraft-ui.vercel.app/llms/tool-result.md): Tool call card for terminal, request and file output with status, copy and retry. Install: `npx shadcn@latest add @opendraft/tool-result`
-- [Code Block](https://opendraft-ui.vercel.app/llms/code-block.md): Streaming code with Shiki highlighting, line highlights and copy. Install: `npx shadcn@latest add @opendraft/code-block`
-- [File Diff](https://opendraft-ui.vercel.app/llms/file-diff.md): Streaming unified diff with added and removed counts. Install: `npx shadcn@latest add @opendraft/file-diff`
-- [Approval Card](https://opendraft-ui.vercel.app/llms/approval-card.md): Human-in-the-loop card: stepped questions, or approve / request changes / reject. Install: `npx shadcn@latest add @opendraft/approval-card`
-- [Tool Approval](https://opendraft-ui.vercel.app/llms/tool-approval.md): Permission prompt for a tool call: parameters, allow once or always, deny. Install: `npx shadcn@latest add @opendraft/tool-approval`
-- [Image Generation](https://opendraft-ui.vercel.app/llms/image-generation.md): Image frame with queued, generating, refining and complete states. Install: `npx shadcn@latest add @opendraft/image-generation`
-- [AI Sidebar](https://opendraft-ui.vercel.app/llms/ai-sidebar.md): Resource tree for agent workspaces: select, expand, drag to move and rename. Install: `npx shadcn@latest add @opendraft/ai-sidebar`
-- [Chat App](https://opendraft-ui.vercel.app/llms/chat-app.md): Chat shell with a conversation sidebar that folds away when space runs out. Install: `npx shadcn@latest add @opendraft/chat-app`
-- [Question Card](https://opendraft-ui.vercel.app/llms/question-card.md): One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice. Install: `npx shadcn@latest add @opendraft/question-card`
-- [Chat Panel](https://opendraft-ui.vercel.app/llms/chat-panel.md): Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer. Install: `npx shadcn@latest add @opendraft/chat-panel`
-- [Recommendation Card](https://opendraft-ui.vercel.app/llms/recommendation-card.md): Recommendation with a confidence meter, an alternatives drawer that swaps the pick, and a confirm action. Install: `npx shadcn@latest add @opendraft/recommendation-card`
-- [Context Cards](https://opendraft-ui.vercel.app/llms/context-cards.md): Retrieved context chunks that stagger in, then reveal their source file chips. Install: `npx shadcn@latest add @opendraft/context-cards`
-- [Prompt Bar](https://opendraft-ui.vercel.app/llms/prompt-bar.md): A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo. Install: `npx shadcn@latest add @opendraft/prompt-bar`
-- [Selection Actions](https://opendraft-ui.vercel.app/llms/selection-actions.md): A contextual AI bar under selected text that animates its width between modes and streams in a rewrite. Install: `npx shadcn@latest add @opendraft/selection-actions`
-- [Pixel Loader](https://opendraft-ui.vercel.app/llms/pixel-loader.md): A 3×3 pixel-grid loader with a shimmering status label and a live elapsed timer, in four motion variants. Install: `npx shadcn@latest add @opendraft/pixel-loader`
-- [Thinking Trace](https://opendraft-ui.vercel.app/llms/thinking-trace.md): An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants. Install: `npx shadcn@latest add @opendraft/thinking-trace`
-- [Streaming Answer](https://opendraft-ui.vercel.app/llms/streaming-answer.md): An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups. Install: `npx shadcn@latest add @opendraft/streaming-answer`
-- [Task Rows](https://opendraft-ui.vercel.app/llms/task-rows.md): Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence. Install: `npx shadcn@latest add @opendraft/task-rows`
-- [Tool Chips](https://opendraft-ui.vercel.app/llms/tool-chips.md): An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover. Install: `npx shadcn@latest add @opendraft/tool-chips`
-- [Agent Screen](https://opendraft-ui.vercel.app/llms/agent-screen.md): Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording. Install: `npx shadcn@latest add @opendraft/agent-screen`
-- [Code Panel](https://opendraft-ui.vercel.app/llms/code-panel.md): Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights. Install: `npx shadcn@latest add @opendraft/code-panel`
+- [Voice Orb](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/voice-orb.md): Breathing WebGL liquid orb that reacts to a voice level or an audio analyser. Install: `npx shadcn@latest add @opendraft/voice-orb`
+- [Message Bubble](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/message-bubble.md): Chat bubble surfaces with variants, a pop-in entrance and a collapsible body. Install: `npx shadcn@latest add @opendraft/message-bubble`
+- [Message](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/message.md): Message rows with avatar, header, footer, markers and a typing indicator. Install: `npx shadcn@latest add @opendraft/message`
+- [Message Scroller](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/message-scroller.md): Transcript that follows streamed output, with a rail for jumping between turns. Install: `npx shadcn@latest add @opendraft/message-scroller`
+- [Prompt Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/prompt-input.md): Auto-growing prompt box with a model picker, an action menu and send / stop. Install: `npx shadcn@latest add @opendraft/prompt-input`
+- [Streaming Response](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/streaming-response.md): Streamed answer with copy, retry, feedback and a sources footer. Install: `npx shadcn@latest add @opendraft/streaming-response`
+- [Citations](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/citations.md): Inline citation markers, favicon stacks and a collapsible source list. Install: `npx shadcn@latest add @opendraft/citations`
+- [Agent Activity](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-activity.md): Collapsible run log of steps, web searches and tool calls. Install: `npx shadcn@latest add @opendraft/agent-activity`
+- [Agent Loading States](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/loading-states.md): Thinking shimmer, elapsed-time progress and rotating reasoning text. Install: `npx shadcn@latest add @opendraft/loading-states`
+- [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md): Live task plan with per-item progress and a rolling completed count. Install: `npx shadcn@latest add @opendraft/todo-list`
+- [Tool Result](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-result.md): Tool call card for terminal, request and file output with status, copy and retry. Install: `npx shadcn@latest add @opendraft/tool-result`
+- [Code Block](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-block.md): Streaming code with Shiki highlighting, line highlights and copy. Install: `npx shadcn@latest add @opendraft/code-block`
+- [File Diff](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md): Streaming unified diff with added and removed counts. Install: `npx shadcn@latest add @opendraft/file-diff`
+- [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md): Human-in-the-loop card: stepped questions, or approve / request changes / reject. Install: `npx shadcn@latest add @opendraft/approval-card`
+- [Tool Approval](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-approval.md): Permission prompt for a tool call: parameters, allow once or always, deny. Install: `npx shadcn@latest add @opendraft/tool-approval`
+- [Image Generation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/image-generation.md): Image frame with queued, generating, refining and complete states. Install: `npx shadcn@latest add @opendraft/image-generation`
+- [AI Sidebar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/ai-sidebar.md): Resource tree for agent workspaces: select, expand, drag to move and rename. Install: `npx shadcn@latest add @opendraft/ai-sidebar`
+- [Chat App](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/chat-app.md): Chat shell with a conversation sidebar that folds away when space runs out. Install: `npx shadcn@latest add @opendraft/chat-app`
+- [Question Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/question-card.md): One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice. Install: `npx shadcn@latest add @opendraft/question-card`
+- [Chat Panel](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/chat-panel.md): Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer. Install: `npx shadcn@latest add @opendraft/chat-panel`
+- [Recommendation Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/recommendation-card.md): Recommendation with a confidence meter, an alternatives drawer that swaps the pick, and a confirm action. Install: `npx shadcn@latest add @opendraft/recommendation-card`
+- [Context Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/context-cards.md): Retrieved context chunks that stagger in, then reveal their source file chips. Install: `npx shadcn@latest add @opendraft/context-cards`
+- [Prompt Bar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/prompt-bar.md): A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo. Install: `npx shadcn@latest add @opendraft/prompt-bar`
+- [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md): A contextual AI bar under selected text that animates its width between modes and streams in a rewrite. Install: `npx shadcn@latest add @opendraft/selection-actions`
+- [Pixel Loader](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/pixel-loader.md): A 3×3 pixel-grid loader with a shimmering status label and a live elapsed timer, in four motion variants. Install: `npx shadcn@latest add @opendraft/pixel-loader`
+- [Thinking Trace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/thinking-trace.md): An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants. Install: `npx shadcn@latest add @opendraft/thinking-trace`
+- [Streaming Answer](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/streaming-answer.md): An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups. Install: `npx shadcn@latest add @opendraft/streaming-answer`
+- [Task Rows](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/task-rows.md): Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence. Install: `npx shadcn@latest add @opendraft/task-rows`
+- [Tool Chips](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md): An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover. Install: `npx shadcn@latest add @opendraft/tool-chips`
+- [Agent Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-screen.md): Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording. Install: `npx shadcn@latest add @opendraft/agent-screen`
+- [Code Panel](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-panel.md): Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights. Install: `npx shadcn@latest add @opendraft/code-panel`
 
 ### Data & Workflows
 
-- [Filter Table](https://opendraft-ui.vercel.app/llms/filter-table.md): Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning. Install: `npx shadcn@latest add @opendraft/filter-table`
-- [Flowchart](https://opendraft-ui.vercel.app/llms/flowchart.md): Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector. Install: `npx shadcn@latest add @opendraft/flowchart`
-- [Insight Cards](https://opendraft-ui.vercel.app/llms/insight-cards.md): Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade. Install: `npx shadcn@latest add @opendraft/insight-cards`
-- [Fine-tune Card](https://opendraft-ui.vercel.app/llms/fine-tune-card.md): Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu. Install: `npx shadcn@latest add @opendraft/fine-tune-card`
-- [Records Table](https://opendraft-ui.vercel.app/llms/records-table.md): AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting. Install: `npx shadcn@latest add @opendraft/records-table`
-- [Diff Table](https://opendraft-ui.vercel.app/llms/diff-table.md): A proposed table edit that plays once; click each changed row to keep or drop it before applying. Install: `npx shadcn@latest add @opendraft/diff-table`
+- [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md): Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning. Install: `npx shadcn@latest add @opendraft/filter-table`
+- [Flowchart](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/flowchart.md): Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector. Install: `npx shadcn@latest add @opendraft/flowchart`
+- [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md): Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade. Install: `npx shadcn@latest add @opendraft/insight-cards`
+- [Fine-tune Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/fine-tune-card.md): Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu. Install: `npx shadcn@latest add @opendraft/fine-tune-card`
+- [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md): AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting. Install: `npx shadcn@latest add @opendraft/records-table`
+- [Diff Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/diff-table.md): A proposed table edit that plays once; click each changed row to keep or drop it before applying. Install: `npx shadcn@latest add @opendraft/diff-table`
 
 ### Components
 
-- [Accordion](https://opendraft-ui.vercel.app/llms/accordion.md): Stacked sections that expand with a spring-driven height animation. Install: `npx shadcn@latest add @opendraft/accordion`
-- [Sidebar](https://opendraft-ui.vercel.app/llms/animated-sidebar.md): Docked, icon rail or off-canvas sidebar with a mobile sheet, menus and sub-menus. Install: `npx shadcn@latest add @opendraft/animated-sidebar`
-- [Avatar](https://opendraft-ui.vercel.app/llms/avatar.md): Image or initials, alone or overlapped in a group. Install: `npx shadcn@latest add @opendraft/avatar`
-- [Badge](https://opendraft-ui.vercel.app/llms/badge.md): Small square status label, with an optional dot. Install: `npx shadcn@latest add @opendraft/badge`
-- [Button](https://opendraft-ui.vercel.app/llms/button.md): Primary, ink, secondary, outline, ghost, destructive and link, with a loading state. Install: `npx shadcn@latest add @opendraft/button`
-- [Card](https://opendraft-ui.vercel.app/llms/card.md): Bordered surface with header, action, content and footer slots. Install: `npx shadcn@latest add @opendraft/card`
-- [Checkbox](https://opendraft-ui.vercel.app/llms/checkbox.md): Checkbox with a drawn check and an indeterminate state. Install: `npx shadcn@latest add @opendraft/checkbox`
-- [Command Palette](https://opendraft-ui.vercel.app/llms/command-palette.md): ⌘K palette with fuzzy search, groups, hints and keyboard navigation. Install: `npx shadcn@latest add @opendraft/command-palette`
-- [Data Table](https://opendraft-ui.vercel.app/llms/table.md): Virtualized table: sort, resize and reorder columns, select rows, edit cells. Install: `npx shadcn@latest add @opendraft/table`
-- [Date Range Picker](https://opendraft-ui.vercel.app/llms/date-range-picker.md): Range calendar in a popover, with month and year choosers and min / max. Install: `npx shadcn@latest add @opendraft/date-range-picker`
-- [Dialog](https://opendraft-ui.vercel.app/llms/dialog.md): Modal dialog that springs in, with header, body and footer slots. Install: `npx shadcn@latest add @opendraft/dialog`
-- [Drawer](https://opendraft-ui.vercel.app/llms/drawer.md): Side sheet with a backdrop that closes on Esc or an outside click. Install: `npx shadcn@latest add @opendraft/drawer`
-- [Dropdown Menu](https://opendraft-ui.vercel.app/llms/dropdown-menu.md): Menu with shortcuts, checkbox items and sub-menus. Install: `npx shadcn@latest add @opendraft/dropdown-menu`
-- [Input](https://opendraft-ui.vercel.app/llms/input.md): Text field with focus, invalid and disabled states. Install: `npx shadcn@latest add @opendraft/input`
-- [Kbd](https://opendraft-ui.vercel.app/llms/kbd.md): Keyboard keys and shortcuts. Install: `npx shadcn@latest add @opendraft/kbd`
-- [Label](https://opendraft-ui.vercel.app/llms/label.md): Accessible label for form controls. Install: `npx shadcn@latest add @opendraft/label`
-- [Popover](https://opendraft-ui.vercel.app/llms/popover.md): Floating panel anchored to a trigger. Install: `npx shadcn@latest add @opendraft/popover`
-- [Radio Group](https://opendraft-ui.vercel.app/llms/radio-group.md): Single choice from a set, with a spring-in indicator. Install: `npx shadcn@latest add @opendraft/radio-group`
-- [Select](https://opendraft-ui.vercel.app/llms/select.md): Dropdown select with groups and labels. Install: `npx shadcn@latest add @opendraft/select`
-- [Separator](https://opendraft-ui.vercel.app/llms/separator.md): Horizontal or vertical hairline. Install: `npx shadcn@latest add @opendraft/separator`
-- [Skeleton](https://opendraft-ui.vercel.app/llms/skeleton.md): Shimmering placeholder while content loads. Install: `npx shadcn@latest add @opendraft/skeleton`
-- [Switch](https://opendraft-ui.vercel.app/llms/switch.md): On / off toggle with a spring-driven thumb. Install: `npx shadcn@latest add @opendraft/switch`
-- [Tabs](https://opendraft-ui.vercel.app/llms/tabs.md): Tabs with a sliding indicator, in pill or underline style. Install: `npx shadcn@latest add @opendraft/tabs`
-- [Textarea](https://opendraft-ui.vercel.app/llms/textarea.md): Multi-line text field that grows with its content. Install: `npx shadcn@latest add @opendraft/textarea`
-- [Toast](https://opendraft-ui.vercel.app/llms/sonner.md): Stacked notifications with actions, themed to the tokens. Install: `npx shadcn@latest add @opendraft/sonner`
-- [Tooltip](https://opendraft-ui.vercel.app/llms/tooltip.md): Short hint on hover or focus, with optional shortcuts. Install: `npx shadcn@latest add @opendraft/tooltip`
-- [Search List](https://opendraft-ui.vercel.app/llms/search-list.md): Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state. Install: `npx shadcn@latest add @opendraft/search-list`
-- [Sidebar Nav](https://opendraft-ui.vercel.app/llms/sidebar-nav.md): Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail. Install: `npx shadcn@latest add @opendraft/sidebar-nav`
+- [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md): Stacked sections that expand with a spring-driven height animation. Install: `npx shadcn@latest add @opendraft/accordion`
+- [Sidebar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/animated-sidebar.md): Docked, icon rail or off-canvas sidebar with a mobile sheet, menus and sub-menus. Install: `npx shadcn@latest add @opendraft/animated-sidebar`
+- [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md): Image or initials, alone or overlapped in a group. Install: `npx shadcn@latest add @opendraft/avatar`
+- [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md): Small square status label, with an optional dot. Install: `npx shadcn@latest add @opendraft/badge`
+- [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md): Primary, ink, secondary, outline, ghost, destructive and link, with a loading state. Install: `npx shadcn@latest add @opendraft/button`
+- [Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/card.md): Bordered surface with header, action, content and footer slots. Install: `npx shadcn@latest add @opendraft/card`
+- [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md): Checkbox with a drawn check and an indeterminate state. Install: `npx shadcn@latest add @opendraft/checkbox`
+- [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md): ⌘K palette with fuzzy search, groups, hints and keyboard navigation. Install: `npx shadcn@latest add @opendraft/command-palette`
+- [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md): Virtualized table: sort, resize and reorder columns, select rows, edit cells. Install: `npx shadcn@latest add @opendraft/table`
+- [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md): Range calendar in a popover, with month and year choosers and min / max. Install: `npx shadcn@latest add @opendraft/date-range-picker`
+- [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md): Modal dialog that springs in, with header, body and footer slots. Install: `npx shadcn@latest add @opendraft/dialog`
+- [Drawer](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/drawer.md): Side sheet with a backdrop that closes on Esc or an outside click. Install: `npx shadcn@latest add @opendraft/drawer`
+- [Dropdown Menu](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropdown-menu.md): Menu with shortcuts, checkbox items and sub-menus. Install: `npx shadcn@latest add @opendraft/dropdown-menu`
+- [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md): Text field with focus, invalid and disabled states. Install: `npx shadcn@latest add @opendraft/input`
+- [Kbd](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/kbd.md): Keyboard keys and shortcuts. Install: `npx shadcn@latest add @opendraft/kbd`
+- [Label](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/label.md): Accessible label for form controls. Install: `npx shadcn@latest add @opendraft/label`
+- [Popover](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/popover.md): Floating panel anchored to a trigger. Install: `npx shadcn@latest add @opendraft/popover`
+- [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md): Single choice from a set, with a spring-in indicator. Install: `npx shadcn@latest add @opendraft/radio-group`
+- [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md): Dropdown select with groups and labels. Install: `npx shadcn@latest add @opendraft/select`
+- [Separator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/separator.md): Horizontal or vertical hairline. Install: `npx shadcn@latest add @opendraft/separator`
+- [Skeleton](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/skeleton.md): Shimmering placeholder while content loads. Install: `npx shadcn@latest add @opendraft/skeleton`
+- [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md): On / off toggle with a spring-driven thumb. Install: `npx shadcn@latest add @opendraft/switch`
+- [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md): Tabs with a sliding indicator, in pill or underline style. Install: `npx shadcn@latest add @opendraft/tabs`
+- [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md): Multi-line text field that grows with its content. Install: `npx shadcn@latest add @opendraft/textarea`
+- [Toast](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md): Stacked notifications with actions, themed to the tokens. Install: `npx shadcn@latest add @opendraft/sonner`
+- [Tooltip](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tooltip.md): Short hint on hover or focus, with optional shortcuts. Install: `npx shadcn@latest add @opendraft/tooltip`
+- [Search List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/search-list.md): Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state. Install: `npx shadcn@latest add @opendraft/search-list`
+- [Sidebar Nav](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sidebar-nav.md): Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail. Install: `npx shadcn@latest add @opendraft/sidebar-nav`
 
 ### Motion
 
-- [Action Swap](https://opendraft-ui.vercel.app/llms/action-swap.md): Buttons whose label and icon roll, blur or cascade between states. Install: `npx shadcn@latest add @opendraft/action-swap`
-- [Animated Number](https://opendraft-ui.vercel.app/llms/animated-number.md): Spring-animated number with Intl formatting. Install: `npx shadcn@latest add @opendraft/animated-number`
-- [Blur Text](https://opendraft-ui.vercel.app/llms/blur-text.md): Text that arrives word by word or character by character. Install: `npx shadcn@latest add @opendraft/blur-text`
-- [Copy Button](https://opendraft-ui.vercel.app/llms/copy-button.md): Copies a value and morphs its icon into a check. Install: `npx shadcn@latest add @opendraft/copy-button`
-- [Loader](https://opendraft-ui.vercel.app/llms/loader.md): Fifteen loading animations, from spinners to ASCII and metaballs. Install: `npx shadcn@latest add @opendraft/loader`
-- [Magnetic](https://opendraft-ui.vercel.app/llms/magnetic.md): Pulls its child gently toward the cursor. Install: `npx shadcn@latest add @opendraft/magnetic`
-- [Marquee](https://opendraft-ui.vercel.app/llms/marquee.md): Seamless scrolling row with faded edges. Install: `npx shadcn@latest add @opendraft/marquee`
-- [Pixel Field](https://opendraft-ui.vercel.app/llms/pixel-field.md): Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer. Install: `npx shadcn@latest add @opendraft/pixel-field`
-- [Preview Rail](https://opendraft-ui.vercel.app/llms/preview-rail.md): Tick rail with hover previews for jumping between sections. Install: `npx shadcn@latest add @opendraft/preview-rail`
-- [Reveal](https://opendraft-ui.vercel.app/llms/reveal.md): Fades and lifts content into view as it scrolls in. Install: `npx shadcn@latest add @opendraft/reveal`
-- [Shimmer Text](https://opendraft-ui.vercel.app/llms/shimmer-text.md): A light sweep across text, for thinking and loading labels. Install: `npx shadcn@latest add @opendraft/shimmer-text`
-- [Spotlight Card](https://opendraft-ui.vercel.app/llms/spotlight-card.md): Card whose border and surface light up under the cursor. Install: `npx shadcn@latest add @opendraft/spotlight-card`
-- [Text Scramble](https://opendraft-ui.vercel.app/llms/text-scramble.md): Characters scramble, then resolve to the new text. Install: `npx shadcn@latest add @opendraft/text-scramble`
+- [Action Swap](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/action-swap.md): Buttons whose label and icon roll, blur or cascade between states. Install: `npx shadcn@latest add @opendraft/action-swap`
+- [Animated Number](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/animated-number.md): Spring-animated number with Intl formatting. Install: `npx shadcn@latest add @opendraft/animated-number`
+- [Blur Text](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/blur-text.md): Text that arrives word by word or character by character. Install: `npx shadcn@latest add @opendraft/blur-text`
+- [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md): Copies a value and morphs its icon into a check. Install: `npx shadcn@latest add @opendraft/copy-button`
+- [Loader](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/loader.md): Fifteen loading animations, from spinners to ASCII and metaballs. Install: `npx shadcn@latest add @opendraft/loader`
+- [Magnetic](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/magnetic.md): Pulls its child gently toward the cursor. Install: `npx shadcn@latest add @opendraft/magnetic`
+- [Marquee](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/marquee.md): Seamless scrolling row with faded edges. Install: `npx shadcn@latest add @opendraft/marquee`
+- [Pixel Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/pixel-field.md): Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer. Install: `npx shadcn@latest add @opendraft/pixel-field`
+- [Preview Rail](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/preview-rail.md): Tick rail with hover previews for jumping between sections. Install: `npx shadcn@latest add @opendraft/preview-rail`
+- [Reveal](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/reveal.md): Fades and lifts content into view as it scrolls in. Install: `npx shadcn@latest add @opendraft/reveal`
+- [Shimmer Text](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/shimmer-text.md): A light sweep across text, for thinking and loading labels. Install: `npx shadcn@latest add @opendraft/shimmer-text`
+- [Spotlight Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/spotlight-card.md): Card whose border and surface light up under the cursor. Install: `npx shadcn@latest add @opendraft/spotlight-card`
+- [Text Scramble](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/text-scramble.md): Characters scramble, then resolve to the new text. Install: `npx shadcn@latest add @opendraft/text-scramble`
 
 ## Docs
 
-- [Introduction](https://opendraft-ui.vercel.app/docs/introduction): What opendraft is and how it's put together.
-- [Use with AI](https://opendraft-ui.vercel.app/docs/ai): Give an AI assistant one link so it builds with opendraft's components and tokens.
-- [Installation](https://opendraft-ui.vercel.app/docs/installation): Add the registry to a project and install components.
-- [Theming](https://opendraft-ui.vercel.app/docs/theming): Color, type, shape and texture tokens, in both themes.
-- [Motion](https://opendraft-ui.vercel.app/docs/motion): The shared springs, easings and durations in lib/motion.ts.
+- [Introduction](https://ui-system-virid.vercel.app/docs/introduction): What opendraft is and how it's put together.
+- [Use with AI](https://ui-system-virid.vercel.app/docs/ai): Give an AI assistant one link so it builds with opendraft's components and tokens.
+- [Installation](https://ui-system-virid.vercel.app/docs/installation): Add the registry to a project and install components.
+- [Theming](https://ui-system-virid.vercel.app/docs/theming): Color, type, shape and texture tokens, in both themes.
+- [Motion](https://ui-system-virid.vercel.app/docs/motion): The shared springs, easings and durations in lib/motion.ts.
 
 ## Optional
 
-- [llms-full.txt](https://opendraft-ui.vercel.app/llms-full.txt): these rules plus every component page (props, types, examples) in one file
-- [Registry index](https://opendraft-ui.vercel.app/r/registry.json): every installable registry item as JSON
+- [llms-full.txt](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms-full.txt): these rules plus every component page (props, types, examples) in one file
+- [Registry index](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/registry.json): every installable registry item as JSON

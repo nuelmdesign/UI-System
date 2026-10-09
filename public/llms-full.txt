@@ -18,7 +18,7 @@ Requirements: React 19, Tailwind CSS v4, TypeScript, and a shadcn `components.js
 ```json
 {
   "registries": {
-    "@opendraft": "https://opendraft-ui.vercel.app/r/{name}.json"
+    "@opendraft": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/{name}.json"
   }
 }
 ```
@@ -113,7 +113,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/voice-orb
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -271,7 +271,7 @@ export default function VoiceOrbDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/voice-orb. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/voice-orb. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -287,7 +287,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/message-bubble
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -410,7 +410,7 @@ export default function MessageBubbleDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/message-bubble. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/message-bubble. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -426,7 +426,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/message
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -541,7 +541,7 @@ export default function MessageDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/message. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/message. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -557,7 +557,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/message-scroller
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -846,7 +846,7 @@ function ChatRow({ message }: { message: ChatMessage }) {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/message-scroller. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/message-scroller. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -862,7 +862,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/prompt-input
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -988,7 +988,7 @@ export default function PromptInputDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/prompt-input. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/prompt-input. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -1004,7 +1004,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/streaming-response
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -1136,7 +1136,7 @@ export default function StreamingResponseDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/streaming-response. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/streaming-response. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -1152,7 +1152,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/citations
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -1258,7 +1258,7 @@ export default function CitationsDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/citations. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/citations. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -1274,7 +1274,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/agent-activity
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -1498,7 +1498,7 @@ export default function AgentActivityDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/agent-activity. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/agent-activity. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -1514,7 +1514,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/loading-states
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -1648,7 +1648,7 @@ function Labeled({
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/loading-states. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/loading-states. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -1664,7 +1664,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/todo-list
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -1753,7 +1753,7 @@ export default function TodoListDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/todo-list. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/todo-list. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -1769,7 +1769,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/tool-result
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -1934,7 +1934,7 @@ export default function ToolResultDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/tool-result. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/tool-result. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -1950,7 +1950,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/code-block
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -2032,7 +2032,7 @@ export default function CodeBlockDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/code-block. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/code-block. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -2048,7 +2048,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/file-diff
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -2174,7 +2174,7 @@ export default function FileDiffDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/file-diff. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/file-diff. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -2190,7 +2190,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/approval-card
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -2388,7 +2388,7 @@ export default function ApprovalCardDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/approval-card. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/approval-card. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -2404,7 +2404,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/tool-approval
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -2515,7 +2515,7 @@ export default function ToolApprovalDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/tool-approval. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/tool-approval. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -2531,7 +2531,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/image-generation
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -2624,7 +2624,7 @@ export default function ImageGenerationDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/image-generation. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/image-generation. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -2640,7 +2640,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/ai-sidebar
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -2896,7 +2896,7 @@ export default function AISidebarDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/ai-sidebar. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/ai-sidebar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -2912,7 +2912,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/chat-app
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3180,7 +3180,7 @@ export default function ChatAppDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/chat-app. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/chat-app. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3196,7 +3196,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/question-card
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3269,7 +3269,7 @@ export default function QuestionCardDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/question-card. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/question-card. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3285,7 +3285,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/chat-panel
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3347,7 +3347,7 @@ export default function ChatPanelDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/chat-panel. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/chat-panel. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3363,7 +3363,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/recommendation-card
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3425,7 +3425,7 @@ export default function RecommendationCardDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/recommendation-card. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/recommendation-card. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3441,7 +3441,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/context-cards
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3498,7 +3498,7 @@ export default function ContextCardsDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/context-cards. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/context-cards. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3514,7 +3514,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/prompt-bar
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3619,7 +3619,7 @@ export default function PromptBarDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/prompt-bar. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/prompt-bar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3635,7 +3635,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/selection-actions
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3711,7 +3711,7 @@ export default function SelectionActionsDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/selection-actions. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/selection-actions. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3727,7 +3727,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/pixel-loader
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3795,7 +3795,7 @@ export default function PixelLoaderDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/pixel-loader. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/pixel-loader. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3811,7 +3811,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/thinking-trace
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3902,7 +3902,7 @@ export default function ThinkingTraceDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/thinking-trace. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/thinking-trace. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -3918,7 +3918,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/streaming-answer
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -3993,7 +3993,7 @@ export default function StreamingAnswerDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/streaming-answer. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/streaming-answer. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4009,7 +4009,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/task-rows
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4090,7 +4090,7 @@ export default function TaskRowsDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/task-rows. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/task-rows. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4106,7 +4106,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/tool-chips
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4183,7 +4183,7 @@ export default function ToolChipsDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/tool-chips. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/tool-chips. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4199,7 +4199,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/agent-screen
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4260,7 +4260,7 @@ export default function AgentScreenDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/agent-screen. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/agent-screen. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4276,7 +4276,7 @@ Category: AI Agents
 npx shadcn@latest add @opendraft/code-panel
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4356,7 +4356,7 @@ export default function CodePanelDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/code-panel. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/code-panel. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4372,7 +4372,7 @@ Category: Data & Workflows
 npx shadcn@latest add @opendraft/filter-table
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4425,7 +4425,7 @@ export default function FilterTableDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/filter-table. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/filter-table. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4441,7 +4441,7 @@ Category: Data & Workflows
 npx shadcn@latest add @opendraft/flowchart
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4509,7 +4509,7 @@ export default function FlowchartDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/flowchart. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/flowchart. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4525,7 +4525,7 @@ Category: Data & Workflows
 npx shadcn@latest add @opendraft/insight-cards
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4632,7 +4632,7 @@ export default function InsightCardsDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/insight-cards. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/insight-cards. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4648,7 +4648,7 @@ Category: Data & Workflows
 npx shadcn@latest add @opendraft/fine-tune-card
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4719,7 +4719,7 @@ export default function FineTuneCardDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/fine-tune-card. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/fine-tune-card. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4735,7 +4735,7 @@ Category: Data & Workflows
 npx shadcn@latest add @opendraft/records-table
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4784,7 +4784,7 @@ export default function RecordsTableDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/records-table. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/records-table. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4800,7 +4800,7 @@ Category: Data & Workflows
 npx shadcn@latest add @opendraft/diff-table
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4864,7 +4864,7 @@ export default function DiffTableDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/diff-table. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/diff-table. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4880,7 +4880,7 @@ Category: Components
 npx shadcn@latest add @opendraft/accordion
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -4950,7 +4950,7 @@ export default function AccordionDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/accordion. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/accordion. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -4966,7 +4966,7 @@ Category: Components
 npx shadcn@latest add @opendraft/animated-sidebar
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -5168,7 +5168,7 @@ export default function AnimatedSidebarDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/animated-sidebar. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/animated-sidebar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -5184,7 +5184,7 @@ Category: Components
 npx shadcn@latest add @opendraft/avatar
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -5232,7 +5232,7 @@ export default function AvatarDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/avatar. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/avatar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -5248,7 +5248,7 @@ Category: Components
 npx shadcn@latest add @opendraft/badge
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -5300,7 +5300,7 @@ export default function BadgeDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/badge. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/badge. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -5316,7 +5316,7 @@ Category: Components
 npx shadcn@latest add @opendraft/button
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -5400,7 +5400,7 @@ export default function ButtonDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/button. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/button. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -5416,7 +5416,7 @@ Category: Components
 npx shadcn@latest add @opendraft/card
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -5490,7 +5490,7 @@ export default function CardDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/card. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/card. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -5506,7 +5506,7 @@ Category: Components
 npx shadcn@latest add @opendraft/checkbox
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -5575,7 +5575,7 @@ export default function CheckboxDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/checkbox. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/checkbox. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -5591,7 +5591,7 @@ Category: Components
 npx shadcn@latest add @opendraft/command-palette
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -5750,7 +5750,7 @@ export default function CommandPaletteDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/command-palette. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/command-palette. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -5766,7 +5766,7 @@ Category: Components
 npx shadcn@latest add @opendraft/table
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6012,7 +6012,7 @@ export default function TableDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/table. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/table. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6028,7 +6028,7 @@ Category: Components
 npx shadcn@latest add @opendraft/date-range-picker
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6220,7 +6220,7 @@ export default function DateRangePickerDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/date-range-picker. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/date-range-picker. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6236,7 +6236,7 @@ Category: Components
 npx shadcn@latest add @opendraft/dialog
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6325,7 +6325,7 @@ export default function DialogDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/dialog. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/dialog. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6341,7 +6341,7 @@ Category: Components
 npx shadcn@latest add @opendraft/drawer
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6454,7 +6454,7 @@ export default function DrawerDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/drawer. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/drawer. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6470,7 +6470,7 @@ Category: Components
 npx shadcn@latest add @opendraft/dropdown-menu
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6584,7 +6584,7 @@ export default function DropdownMenuDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/dropdown-menu. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/dropdown-menu. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6600,7 +6600,7 @@ Category: Components
 npx shadcn@latest add @opendraft/input
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6647,7 +6647,7 @@ export default function InputDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/input. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/input. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6663,7 +6663,7 @@ Category: Components
 npx shadcn@latest add @opendraft/kbd
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6714,7 +6714,7 @@ export default function KbdDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/kbd. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/kbd. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6730,7 +6730,7 @@ Category: Components
 npx shadcn@latest add @opendraft/label
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6765,7 +6765,7 @@ export default function LabelDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/label. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/label. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6781,7 +6781,7 @@ Category: Components
 npx shadcn@latest add @opendraft/popover
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6838,7 +6838,7 @@ export default function PopoverDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/popover. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/popover. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6854,7 +6854,7 @@ Category: Components
 npx shadcn@latest add @opendraft/radio-group
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6904,7 +6904,7 @@ export default function RadioGroupDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/radio-group. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/radio-group. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -6920,7 +6920,7 @@ Category: Components
 npx shadcn@latest add @opendraft/select
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -6995,7 +6995,7 @@ export default function SelectDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/select. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/select. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7011,7 +7011,7 @@ Category: Components
 npx shadcn@latest add @opendraft/separator
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7055,7 +7055,7 @@ export default function SeparatorDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/separator. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/separator. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7071,7 +7071,7 @@ Category: Components
 npx shadcn@latest add @opendraft/skeleton
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7111,7 +7111,7 @@ export default function SkeletonDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/skeleton. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/skeleton. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7127,7 +7127,7 @@ Category: Components
 npx shadcn@latest add @opendraft/switch
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7172,7 +7172,7 @@ export default function SwitchDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/switch. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/switch. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7188,7 +7188,7 @@ Category: Components
 npx shadcn@latest add @opendraft/tabs
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7253,7 +7253,7 @@ export default function TabsDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/tabs. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/tabs. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7269,7 +7269,7 @@ Category: Components
 npx shadcn@latest add @opendraft/textarea
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7306,7 +7306,7 @@ export default function TextareaDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/textarea. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/textarea. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7322,7 +7322,7 @@ Category: Components
 npx shadcn@latest add @opendraft/sonner
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7369,7 +7369,7 @@ export default function ToastDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/sonner. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/sonner. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7385,7 +7385,7 @@ Category: Components
 npx shadcn@latest add @opendraft/tooltip
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7443,7 +7443,7 @@ export default function TooltipDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/tooltip. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/tooltip. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7459,7 +7459,7 @@ Category: Components
 npx shadcn@latest add @opendraft/search-list
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7509,7 +7509,7 @@ export default function SearchListDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/search-list. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/search-list. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7525,7 +7525,7 @@ Category: Components
 npx shadcn@latest add @opendraft/sidebar-nav
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7580,7 +7580,7 @@ export default function SidebarNavDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/sidebar-nav. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/sidebar-nav. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7596,7 +7596,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/action-swap
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7702,7 +7702,7 @@ export default function ActionSwapDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/action-swap. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/action-swap. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7718,7 +7718,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/animated-number
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7780,7 +7780,7 @@ export default function AnimatedNumberDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/animated-number. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/animated-number. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7796,7 +7796,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/blur-text
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7849,7 +7849,7 @@ export default function BlurTextDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/blur-text. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/blur-text. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7865,7 +7865,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/copy-button
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -7903,7 +7903,7 @@ export default function CopyButtonDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/copy-button. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/copy-button. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7919,7 +7919,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/loader
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8009,7 +8009,7 @@ export default function LoaderDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/loader. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/loader. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8025,7 +8025,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/magnetic
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8065,7 +8065,7 @@ export default function MagneticDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/magnetic. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/magnetic. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8081,7 +8081,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/marquee
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8138,7 +8138,7 @@ export default function MarqueeDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/marquee. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/marquee. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8154,7 +8154,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/pixel-field
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8205,7 +8205,7 @@ export default function PixelFieldDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/pixel-field. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/pixel-field. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8221,7 +8221,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/preview-rail
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8324,7 +8324,7 @@ export default function PreviewRailDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/preview-rail. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/preview-rail. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8340,7 +8340,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/reveal
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8385,7 +8385,7 @@ export default function RevealDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/reveal. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/reveal. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8401,7 +8401,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/shimmer-text
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8438,7 +8438,7 @@ export default function ShimmerTextDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/shimmer-text. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/shimmer-text. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8454,7 +8454,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/spotlight-card
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8493,7 +8493,7 @@ export default function SpotlightCardDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/spotlight-card. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/spotlight-card. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -8509,7 +8509,7 @@ Category: Motion
 npx shadcn@latest add @opendraft/text-scramble
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -8570,4 +8570,4 @@ export default function TextScrambleDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/text-scramble. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/text-scramble. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt

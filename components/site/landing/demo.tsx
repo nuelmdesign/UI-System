@@ -5,7 +5,7 @@ import { ArrowUpRight, Check, FileCode2, Play, Sparkles } from "lucide-react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
-import { SITE } from "@/lib/site"
+import { LLMS_URL } from "@/lib/site"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -255,7 +255,7 @@ export function Demo() {
               aria-label="What Claude did"
             >
               {[
-                `Read ${SITE.url.replace("https://", "")}/llms.txt`,
+                `Read ${LLMS_URL.replace("https://", "")}`,
                 `npx shadcn add ${example.install.map((n) => `@opendraft/${n}`).join(" ")}`,
                 `Wrote ${example.file}`,
               ].map((step, i) => (

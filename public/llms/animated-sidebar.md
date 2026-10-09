@@ -10,7 +10,7 @@ Category: Components
 npx shadcn@latest add @opendraft/animated-sidebar
 ```
 
-Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://opendraft-ui.vercel.app/llms.txt.
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
 
 ## Import
 
@@ -212,4 +212,4 @@ export default function AnimatedSidebarDemo() {
 }
 ```
 
-Live docs: https://opendraft-ui.vercel.app/docs/animated-sidebar. Rules for building with opendraft: https://opendraft-ui.vercel.app/llms.txt
+Live docs: https://ui-system-virid.vercel.app/docs/animated-sidebar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt

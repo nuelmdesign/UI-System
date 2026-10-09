@@ -115,7 +115,7 @@ function Introduction() {
 
 /* -------------------------------- Use with AI ------------------------------- */
 
-const SAVE_RULES = `curl -o opendraft.md ${SITE.url}/llms-full.txt`
+const SAVE_RULES = `curl -o opendraft.md ${SITE.files}/llms-full.txt`
 
 function UseWithAi() {
   const nav = useDocsNav()
@@ -264,7 +264,7 @@ function UseWithAi() {
 
 const COMPONENTS_JSON = `{
   "registries": {
-    "@opendraft": "https://opendraft-ui.vercel.app/r/{name}.json"
+    "@opendraft": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/{name}.json"
   }
 }`
 

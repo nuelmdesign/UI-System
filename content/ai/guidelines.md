@@ -14,7 +14,7 @@ Requirements: React 19, Tailwind CSS v4, TypeScript, and a shadcn `components.js
 ```json
 {
   "registries": {
-    "@opendraft": "https://opendraft-ui.vercel.app/r/{name}.json"
+    "@opendraft": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/{name}.json"
   }
 }
 ```

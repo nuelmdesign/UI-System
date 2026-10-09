@@ -149,7 +149,7 @@ export function Hero() {
               </nav.Link>
             </Button>
           </div>
-          <div className="mt-6 flex items-center gap-1 border bg-card py-1 pr-1 pl-3 font-mono text-xs text-muted-foreground">
+          <div className="mt-6 flex max-w-full min-w-0 items-center gap-1 border bg-card py-1 pr-1 pl-3 font-mono text-xs text-muted-foreground">
             <span className="text-brand">→</span>
             <span className="ml-1 truncate">
               {LLMS_URL.replace("https://", "")}

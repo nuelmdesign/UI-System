@@ -55,7 +55,7 @@ export function HowItWorks() {
           <Reveal
             key={step.title}
             delay={i * 0.06}
-            className="flex flex-col gap-3 bg-card p-6 sm:p-8"
+            className="flex min-w-0 flex-col gap-3 bg-card p-6 sm:p-8"
           >
             <span className="font-mono text-xs text-brand">0{i + 1}</span>
             <h3 className="text-lg font-medium tracking-[-0.01em]">

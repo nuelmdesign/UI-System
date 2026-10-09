@@ -206,7 +206,7 @@ function AiActions({ entry }: { entry: DocEntry }) {
   const [copying, setCopying] = React.useState(false)
   const pageUrl = `${base}llms/${entry.slug}.md`
   const prompt = aiPrompt(
-    `Use the ${entry.title} component (${SITE.url}/llms/${entry.slug}.md) in my project.`
+    `Use the ${entry.title} component (${SITE.files}/llms/${entry.slug}.md) in my project.`
   )
 
   async function copy() {

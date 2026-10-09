@@ -16,6 +16,8 @@ const read = (path) => readFileSync(new URL(path, root), "utf8")
 const siteSrc = read("lib/site.ts")
 const SITE_URL = siteSrc.match(/\burl:\s*"([^"]+)"/)?.[1]
 if (!SITE_URL) throw new Error("Couldn't find SITE.url in lib/site.ts")
+const FILES_URL = siteSrc.match(/\bfiles:\s*"([^"]+)"/)?.[1]
+if (!FILES_URL) throw new Error("Couldn't find SITE.files in lib/site.ts")
 
 const guidelines = read("content/ai/guidelines.md").trim()
 const examples = JSON.parse(read("components/docs/example-sources.json"))
@@ -267,7 +269,7 @@ function declarationEnd(src, start, isInterface) {
 
 /* ---------------------------------- Pages ---------------------------------- */
 
-const pageUrl = (slug) => `${SITE_URL}/llms/${slug}.md`
+const pageUrl = (slug) => `${FILES_URL}/llms/${slug}.md`
 const docsUrl = (slug) => `${SITE_URL}/docs/${slug}`
 const installCmd = (name) => `npx shadcn@latest add @opendraft/${name}`
 
@@ -374,7 +376,7 @@ function componentPage(entry) {
     "```",
     "",
     "Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See " +
-      `${SITE_URL}/llms.txt.`,
+      `${FILES_URL}/llms.txt.`,
     "",
   ]
 
@@ -429,7 +431,7 @@ function componentPage(entry) {
   }
 
   lines.push(
-    `Live docs: ${docsUrl(entry.slug)}. Rules for building with opendraft: ${SITE_URL}/llms.txt`
+    `Live docs: ${docsUrl(entry.slug)}. Rules for building with opendraft: ${FILES_URL}/llms.txt`
   )
   return lines.join("\n") + "\n"
 }
@@ -461,7 +463,7 @@ const llms = [
   header,
   `## Components\n\n${componentIndex}\n`,
   `## Docs\n\n${docsIndex}\n`,
-  `## Optional\n\n- [llms-full.txt](${SITE_URL}/llms-full.txt): these rules plus every component page (props, types, examples) in one file\n- [Registry index](${SITE_URL}/r/registry.json): every installable registry item as JSON\n`,
+  `## Optional\n\n- [llms-full.txt](${FILES_URL}/llms-full.txt): these rules plus every component page (props, types, examples) in one file\n- [Registry index](${FILES_URL}/r/registry.json): every installable registry item as JSON\n`,
 ].join("\n")
 
 const pages = ordered.map((e) => [e.slug, componentPage(e)])
