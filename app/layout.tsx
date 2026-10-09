@@ -1,11 +1,5 @@
 import type { Metadata } from "next"
-import {
-  Geist,
-  Geist_Mono,
-  IBM_Plex_Sans,
-  Inter,
-  Newsreader,
-} from "next/font/google"
+import { Geist, Geist_Mono, Newsreader } from "next/font/google"
 
 import { Providers } from "@/components/site/providers"
 import "./globals.css"
@@ -20,21 +14,6 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
-})
-
-// Alternatives offered in the theme builder. Loaded lazily by the browser:
-// only the fonts a page actually uses are downloaded.
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  preload: false,
-})
-
-const plex = IBM_Plex_Sans({
-  variable: "--font-ibm-plex-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  preload: false,
 })
 
 const geistMono = Geist_Mono({
@@ -56,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geist.variable} ${geistMono.variable} ${newsreader.variable} ${inter.variable} ${plex.variable} h-full`}
+      className={`${geist.variable} ${geistMono.variable} ${newsreader.variable} h-full`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

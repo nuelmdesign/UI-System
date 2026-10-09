@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "preview:build": "node scripts/preview/build.mjs",
     "docs:build": "node scripts/build-docs.mjs",
-    "llms:build": "node scripts/build-llms.mjs"
+    "llms:build": "node scripts/build-llms.mjs",
+    "fonts:build": "node scripts/build-google-fonts.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "3.14.13",

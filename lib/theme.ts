@@ -4,48 +4,83 @@
  * Defaults match app/globals.css.
  */
 
-export type FontId = "newsreader" | "geist" | "inter" | "plex"
+/** A Google Font, as listed in lib/google-fonts.json. */
+export type FontPick = {
+  family: string
+  /** Static weights the family ships (a variable font covers the range). */
+  weights: number[]
+  variable?: boolean
+  /** False for families with no Latin subset (Arabic, Devanagari, …). */
+  latin?: boolean
+}
 
-export const FONTS: Record<
-  FontId,
-  {
-    label: string
-    /** CSS variable a Next.js app gets from next/font. */
-    variable: string
-    stack: string
-    /** Weight and tracking that suit this face as a heading. */
-    headingWeight: number
-    headingTracking: string
+/** Parses one [family, weights, flags] row of lib/google-fonts.json. */
+export function fontFromRow([family, weights, flags]: [
+  string,
+  string,
+  string,
+]): FontPick {
+  return {
+    family,
+    weights: weights.split(";").filter(Boolean).map(Number),
+    variable: flags.includes("v"),
+    latin: !flags.includes("x"),
   }
-> = {
-  newsreader: {
-    label: "Newsreader",
-    variable: "--font-newsreader",
-    stack: "ui-serif, Georgia, serif",
-    headingWeight: 300,
-    headingTracking: "-0.02em",
-  },
-  geist: {
-    label: "Geist",
-    variable: "--font-geist",
-    stack: "ui-sans-serif, system-ui, sans-serif",
-    headingWeight: 500,
-    headingTracking: "-0.03em",
-  },
-  inter: {
-    label: "Inter",
-    variable: "--font-inter",
-    stack: "ui-sans-serif, system-ui, sans-serif",
-    headingWeight: 600,
-    headingTracking: "-0.03em",
-  },
-  plex: {
-    label: "IBM Plex Sans",
-    variable: "--font-ibm-plex-sans",
-    stack: "ui-sans-serif, system-ui, sans-serif",
-    headingWeight: 600,
-    headingTracking: "-0.02em",
-  },
+}
+
+const SERIF_HINT =
+  /serif|garamond|baskerville|bodoni|caslon|playfair|merriweather|lora|newsreader|fraunces|spectral|cormorant|crimson|literata|gelasio|cardo|alegreya(?! sans)|domine|vollkorn|prata|marcellus|cinzel|tinos|rozha|abhaya|aleo|arvo|bitter|zilla|young serif|instrument serif|dm serif|libre caslon|eb garamond|old standard|ovo|petrona|rufina|sorts mill|unna|yrsa|rasa|gloock|bagnard|besley|brygada|castoro|frank ruhl|hahmlet|kurale|lusitana|neuton|noticia|radley|trirong|cambo|halant|amiri|scheherazade/i
+
+/** A sensible fallback stack for a family, from its name. */
+export function fontStack(family: string) {
+  if (/mono|code|consol/i.test(family)) return "ui-monospace, monospace"
+  if (SERIF_HINT.test(family) && !/sans/i.test(family))
+    return "ui-serif, Georgia, serif"
+  return "ui-sans-serif, system-ui, sans-serif"
+}
+
+export const isSerif = (family: string) =>
+  fontStack(family).includes("serif") && !fontStack(family).includes("sans")
+
+/** The CSS variable next/font would expose, e.g. "--font-ibm-plex-sans". */
+export const fontVariable = (family: string) =>
+  `--font-${family
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")}`
+
+/** The next/font/google export name, e.g. "IBM_Plex_Sans". */
+export const nextFontExport = (family: string) =>
+  family.replace(/[^A-Za-z0-9]+/g, "_")
+
+/** The available weight closest to a target. */
+export function nearestWeight(font: FontPick, target: number) {
+  if (!font.weights.length) return 400
+  return font.weights.reduce((best, w) =>
+    Math.abs(w - target) < Math.abs(best - target) ? w : best
+  )
+}
+
+/** A heading weight that suits the family: light serifs, firmer sans faces. */
+export function suggestedHeadingWeight(font: FontPick) {
+  if (font.family === "Newsreader") return 300
+  return nearestWeight(font, isSerif(font.family) ? 400 : 600)
+}
+
+export const headingTracking = (font: FontPick) =>
+  isSerif(font.family) ? "-0.02em" : "-0.03em"
+
+/** Google Fonts stylesheet URL for a family at the given weights. */
+export function googleFontsUrl(font: FontPick, wanted: number[]) {
+  const name = font.family.replace(/ /g, "+")
+  const weights = [...new Set(wanted.map((w) => nearestWeight(font, w)))].sort(
+    (a, b) => a - b
+  )
+  const axis =
+    weights.length === 1 && weights[0] === 400
+      ? ""
+      : `:wght@${weights.join(";")}`
+  return `https://fonts.googleapis.com/css2?family=${name}${axis}&display=swap`
 }
 
 export type PrimaryId = "blue" | "black" | "green" | "custom"
@@ -65,8 +100,9 @@ export const PRIMARIES: Record<
 }
 
 export type ThemeChoice = {
-  heading: FontId
-  body: FontId
+  heading: FontPick
+  body: FontPick
+  headingWeight: number
   primary: PrimaryId
   /** Hex color used when primary is "custom". */
   customColor: string
@@ -77,8 +113,19 @@ export type ThemeChoice = {
 }
 
 export const DEFAULT_THEME: ThemeChoice = {
-  heading: "newsreader",
-  body: "geist",
+  heading: {
+    family: "Newsreader",
+    weights: [200, 300, 400, 500, 600, 700, 800],
+    variable: true,
+    latin: true,
+  },
+  body: {
+    family: "Geist",
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    variable: true,
+    latin: true,
+  },
+  headingWeight: 300,
   primary: "blue",
   customColor: "#0f766e",
   controlRadius: 2,
@@ -117,8 +164,9 @@ function primaryValues(t: ThemeChoice) {
   }
 }
 
-const fontValue = (id: FontId) =>
-  `var(${FONTS[id].variable}), ${FONTS[id].stack}`
+/** Theme-file value: the next/font variable, else the family by name. */
+const fontValue = (font: FontPick) =>
+  `var(${fontVariable(font.family)}, "${font.family}"), ${fontStack(font.family)}`
 
 /** CSS custom properties for a live preview of the choice. */
 export function themeStyle(t: ThemeChoice, dark: boolean) {
@@ -127,8 +175,8 @@ export function themeStyle(t: ThemeChoice, dark: boolean) {
   return {
     "--font-heading": fontValue(t.heading),
     "--font-body": fontValue(t.body),
-    "--heading-weight": String(FONTS[t.heading].headingWeight),
-    "--heading-tracking": FONTS[t.heading].headingTracking,
+    "--heading-weight": String(t.headingWeight),
+    "--heading-tracking": headingTracking(t.heading),
     "--primary": color,
     "--brand": color,
     "--primary-foreground": p.foreground,
@@ -148,8 +196,8 @@ export function themeCss(t: ThemeChoice) {
   return `:root {
   --font-heading: ${fontValue(t.heading)};
   --font-body: ${fontValue(t.body)};
-  --heading-weight: ${FONTS[t.heading].headingWeight};
-  --heading-tracking: ${FONTS[t.heading].headingTracking};
+  --heading-weight: ${t.headingWeight};
+  --heading-tracking: ${headingTracking(t.heading)};
   --control-radius: ${t.controlRadius}px;
   --surface-radius: ${t.surfaceRadius}px;
   --primary: ${p.light};
@@ -166,11 +214,15 @@ export function themeCss(t: ThemeChoice) {
 export function themeNotes(t: ThemeChoice) {
   const d = DEFAULT_THEME
   const notes: string[] = []
-  if (t.heading !== d.heading)
+  if (
+    t.heading.family !== d.heading.family ||
+    t.headingWeight !== d.headingWeight
+  )
     notes.push(
-      `headings in ${FONTS[t.heading].label} (weight ${FONTS[t.heading].headingWeight})`
+      `headings in ${t.heading.family} from Google Fonts (weight ${t.headingWeight})`
     )
-  if (t.body !== d.body) notes.push(`body text in ${FONTS[t.body].label}`)
+  if (t.body.family !== d.body.family)
+    notes.push(`body text in ${t.body.family} from Google Fonts`)
   if (t.primary !== d.primary)
     notes.push(
       `primary color ${t.primary === "custom" ? t.customColor : PRIMARIES[t.primary].label.toLowerCase()}`
@@ -181,4 +233,42 @@ export function themeNotes(t: ThemeChoice) {
     notes.push(`${t.surfaceRadius}px corners on cards, menus and dialogs`)
   if (!notes.length) return ""
   return `Theme: ${notes.join("; ")}. Apply these by changing opendraft's brand tokens in the global stylesheet (see "Make it yours" in llms.txt), not by restyling components.`
+}
+
+/** How to load the chosen fonts in a Next.js app with next/font. */
+export function nextFontSnippet(t: ThemeChoice) {
+  const picks = [
+    { role: "heading", font: t.heading, weights: [t.headingWeight] },
+    { role: "body", font: t.body, weights: [400, 500, 600] },
+  ].filter(
+    (p, i, all) => all.findIndex((q) => q.font.family === p.font.family) === i
+  )
+  const imports = picks.map((p) => nextFontExport(p.font.family)).join(", ")
+  const consts = picks
+    .map((p) => {
+      const opts = [
+        p.font.latin === false ? "preload: false" : `subsets: ["latin"]`,
+        `variable: "${fontVariable(p.font.family)}"`,
+      ]
+      if (!p.font.variable) {
+        const weights = [
+          ...new Set(
+            (p.role === "heading" && t.body.family === t.heading.family
+              ? [t.headingWeight, 400, 500, 600]
+              : p.weights
+            ).map((w) => nearestWeight(p.font, w))
+          ),
+        ].sort((a, b) => a - b)
+        opts.push(`weight: [${weights.map((w) => `"${w}"`).join(", ")}]`)
+      }
+      return `const ${p.role} = ${nextFontExport(p.font.family)}({ ${opts.join(", ")} })`
+    })
+    .join("\n")
+  const classes = picks.map((p) => `\${${p.role}.variable}`).join(" ")
+  return `// app/layout.tsx
+import { ${imports} } from "next/font/google"
+
+${consts}
+
+// <html className={\`${classes}\`}>`
 }

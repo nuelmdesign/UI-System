@@ -80,19 +80,19 @@ opendraft ships with a look: editorial headings, square corners, hairline border
 
 | They ask for | Change |
 |---|---|
-| A heading font (e.g. Inter) | `--font-heading`, plus `--heading-weight` (about 300 for light serifs like the default Newsreader, 500 to 600 for sans faces like Inter) and `--heading-tracking` |
-| A body / interface font (e.g. IBM Plex Sans) | `--font-body` |
+| A heading font (any Google Font, e.g. Inter) | `--font-heading`, plus `--heading-weight` (about 300 for light serifs like the default Newsreader, 500 to 600 for sans faces like Inter) and `--heading-tracking` |
+| A body / interface font (any Google Font, e.g. IBM Plex Sans) | `--font-body` |
 | A code font | `--font-code` |
 | A primary color (e.g. black) | `--primary` and `--brand` in `:root` and in `.dark`. Set `--primary-foreground` to a color that reads on it (white on dark colors, near-black on light ones). For black, use `var(--ink)` and `var(--ink-foreground)`: they invert in dark mode. |
 | Rounder buttons and inputs (e.g. 12px) | `--control-radius` |
 | Rounder cards, menus and dialogs | `--surface-radius` (usually the same as or a little larger than `--control-radius`) |
 
-Load any new font with `next/font` (or a `<link>` outside Next.js) and point the token at its variable, keeping a fallback stack:
+Any of the roughly 1,900 Google Fonts works. Load it with `next/font/google` (the export name replaces spaces with underscores, e.g. `IBM_Plex_Sans`; pass `variable: "--font-ibm-plex-sans"`, and `weight` for fonts that aren't variable), or with a `<link>` from fonts.google.com outside Next.js. Point the token at the variable, falling back to the family name and a generic stack so it works either way:
 
 ```css
 :root {
-  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-ibm-plex-sans, "IBM Plex Sans"), ui-sans-serif, system-ui, sans-serif;
   --heading-weight: 600;
   --heading-tracking: -0.03em;
   --primary: var(--ink);

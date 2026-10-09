@@ -8,13 +8,14 @@ import { cn } from "@/lib/utils"
 import { aiPrompt, claudeUrl } from "@/lib/site"
 import {
   DEFAULT_THEME,
-  FONTS,
   PRIMARIES,
   isHex,
+  nextFontSnippet,
+  suggestedHeadingWeight,
   themeCss,
   themeNotes,
   themeStyle,
-  type FontId,
+  type FontPick,
   type PrimaryId,
   type ThemeChoice,
 } from "@/lib/theme"
@@ -32,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { FontPicker, useGoogleFont } from "@/components/site/font-picker"
 import {
   Card,
   CardContent,
@@ -41,7 +43,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-const FONT_IDS = Object.keys(FONTS) as FontId[]
 const CONTROL_PRESETS = [0, 2, 6, 12, 16]
 const SURFACE_PRESETS = [0, 3, 8, 16, 24]
 
@@ -59,6 +60,10 @@ export function ThemeBuilder({ className }: { className?: string }) {
   const prompt = aiPrompt(undefined, notes)
   const css = themeCss(t)
   const changed = notes !== ""
+
+  // Fetch the chosen families from Google Fonts for the preview.
+  useGoogleFont(t.heading, [t.headingWeight])
+  useGoogleFont(t.body, [400, 500, 600])
 
   return (
     <div className={cn("border bg-card shadow-sm", className)}>
@@ -80,12 +85,24 @@ export function ThemeBuilder({ className }: { className?: string }) {
           <FontField
             label="Headings"
             value={t.heading}
-            onChange={(v) => set("heading", v)}
-          />
+            onChange={(font) =>
+              setT((v) => ({
+                ...v,
+                heading: font,
+                headingWeight: suggestedHeadingWeight(font),
+              }))
+            }
+          >
+            <WeightField
+              font={t.heading}
+              value={t.headingWeight}
+              onChange={(w) => set("headingWeight", w)}
+            />
+          </FontField>
           <FontField
             label="Body text"
             value={t.body}
-            onChange={(v) => set("body", v)}
+            onChange={(font) => set("body", font)}
           />
 
           <fieldset className="grid gap-2.5">
@@ -205,14 +222,16 @@ export function ThemeBuilder({ className }: { className?: string }) {
         <TabsContent value="css" className="p-4">
           <Output text={css} label="CSS" />
           <p className="mt-3 text-sm text-pretty text-muted-foreground">
-            Paste over the matching lines in your global stylesheet. Load any
-            new font with{" "}
-            <code className="font-mono text-foreground">next/font</code> under
-            the variable shown, for example{" "}
-            <code className="font-mono text-foreground">
-              {FONTS[t.heading].variable}
-            </code>
-            .
+            Paste over the matching lines in your global stylesheet, then load
+            the fonts. In Next.js:
+          </p>
+          <div className="mt-3">
+            <Output text={nextFontSnippet(t)} label="font setup" />
+          </div>
+          <p className="mt-3 text-sm text-pretty text-muted-foreground">
+            Outside Next.js, add the fonts from fonts.google.com with a{" "}
+            <code className="font-mono text-foreground">&lt;link&gt;</code>; the
+            CSS falls back to the family name, so it works either way.
           </p>
         </TabsContent>
       </Tabs>
@@ -224,30 +243,54 @@ function FontField({
   label,
   value,
   onChange,
+  children,
 }: {
   label: string
-  value: FontId
-  onChange: (v: FontId) => void
+  value: FontPick
+  onChange: (font: FontPick) => void
+  children?: React.ReactNode
 }) {
   const id = React.useId()
   return (
     <div className="grid gap-2">
       <Label htmlFor={id}>{label}</Label>
-      <Select value={value} onValueChange={(v) => onChange(v as FontId)}>
-        <SelectTrigger id={id} className="w-full">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {FONT_IDS.map((f) => (
-            <SelectItem key={f} value={f}>
-              <span style={{ fontFamily: `var(${FONTS[f].variable})` }}>
-                {FONTS[f].label}
-              </span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex gap-1.5">
+        <div className="min-w-0 flex-1">
+          <FontPicker id={id} value={value} onChange={onChange} />
+        </div>
+        {children}
+      </div>
     </div>
+  )
+}
+
+/** Heading weight, limited to the weights the family ships. */
+function WeightField({
+  font,
+  value,
+  onChange,
+}: {
+  font: FontPick
+  value: number
+  onChange: (weight: number) => void
+}) {
+  const weights = font.weights.length ? font.weights : [400]
+  return (
+    <Select value={String(value)} onValueChange={(v) => onChange(Number(v))}>
+      <SelectTrigger
+        aria-label="Heading weight"
+        className="w-20 font-mono text-xs"
+      >
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {weights.map((w) => (
+          <SelectItem key={w} value={String(w)} className="font-mono text-xs">
+            {w}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
 
