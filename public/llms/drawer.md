@@ -84,9 +84,7 @@ export default function DrawerDemo() {
       >
         <div>
           <p className="eyebrow text-muted-foreground">Workspace</p>
-          <h2 className="mt-3 font-display text-3xl font-light tracking-[-0.02em]">
-            Settings
-          </h2>
+          <h2 className="mt-3 heading text-3xl">Settings</h2>
         </div>
         <div className="grid gap-4 border-t pt-6">
           {SETTINGS.map((setting) => (

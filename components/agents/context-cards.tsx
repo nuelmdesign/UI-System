@@ -125,7 +125,7 @@ export function ContextCards({
               >
                 <span
                   className={cn(
-                    "flex h-3.5 min-w-3.5 items-center justify-center rounded-[2px] px-0.5 font-mono text-[7px] font-bold",
+                    "flex h-3.5 min-w-3.5 items-center justify-center rounded-sm px-0.5 font-mono text-[7px] font-bold",
                     TONE_BG[chunk.tone]
                   )}
                 >

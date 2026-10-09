@@ -25,7 +25,20 @@
   --blue-900: #232d74;
   --blue-950: #151a45;
 
-  --radius: 2px;
+  /* ---- Brand knobs --------------------------------------------------------
+     The look is a set of defaults. To make opendraft yours, change these and
+     every component follows: fonts by role, heading weight, corner radius for
+     controls (buttons, inputs, tabs) and for surfaces (cards, menus, dialogs).
+     The primary color is --primary / --brand below (and in .dark). */
+  --font-heading: var(--font-newsreader, ui-serif, Georgia, serif);
+  --font-body: var(--font-geist, ui-sans-serif, system-ui, sans-serif);
+  --font-code: var(--font-geist-mono, ui-monospace, monospace);
+  --heading-weight: 300;
+  --heading-tracking: -0.02em;
+  --control-radius: 2px;
+  --surface-radius: 3px;
+  /* shadcn compatibility: stock components read --radius. */
+  --radius: var(--control-radius);
 
   /* Surfaces */
   --background: #fafafa;
@@ -116,9 +129,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+  --font-mono: var(--font-code);
 
   --color-blue-50: var(--blue-50);
   --color-blue-100: var(--blue-100);
@@ -159,14 +172,18 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Square by default. Pills (rounded-full) are kept for avatars and toggles. */
-  --radius-xs: 0px;
-  --radius-sm: 1px;
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 1px);
-  --radius-xl: calc(var(--radius) + 2px);
-  --radius-2xl: calc(var(--radius) + 4px);
-  --radius-3xl: calc(var(--radius) + 6px);
+  /* Corner scale, driven by the two radius knobs. Small steps (sm, md) follow
+     controls, large steps (lg and up) follow surfaces. rounded-full is kept
+     for avatars, dots and spinners. */
+  --radius-xs: calc(var(--control-radius) * 0.25);
+  --radius-sm: calc(var(--control-radius) * 0.5);
+  --radius-md: var(--control-radius);
+  --radius-control: var(--control-radius);
+  --radius-lg: var(--surface-radius);
+  --radius-surface: var(--surface-radius);
+  --radius-xl: calc(var(--surface-radius) + 1px);
+  --radius-2xl: calc(var(--surface-radius) + 3px);
+  --radius-3xl: calc(var(--surface-radius) + 5px);
 
   --shadow-xs: var(--shadow-xs);
   --shadow-sm: var(--shadow-sm);
@@ -264,6 +281,14 @@
     transparent 1px
   );
   background-size: var(--dot-gap, 14px) var(--dot-gap, 14px);
+}
+
+/* Headings: the heading font at its weight and tracking. Prefer this over
+   font-display so a new heading font brings its own weight. */
+@utility heading {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  letter-spacing: var(--heading-tracking);
 }
 
 /* Small uppercase mono label: section eyebrows, card indices, meta. */

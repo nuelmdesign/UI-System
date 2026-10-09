@@ -329,7 +329,7 @@ export function QuestionCard({
                                 "flex size-4 shrink-0 items-center justify-center transition-colors duration-200",
                                 question.type === "radio"
                                   ? "rounded-full"
-                                  : "rounded-[2px]",
+                                  : "rounded-sm",
                                 on
                                   ? "bg-primary text-primary-foreground"
                                   : "text-transparent ring-[1.5px] ring-input ring-inset"
@@ -404,7 +404,7 @@ export function QuestionCard({
               aria-label="Previous question"
               disabled={qi <= 0}
               onClick={() => goTo(qi - 1)}
-              className="flex size-[18px] items-center justify-center rounded-[2px] transition-colors duration-100 enabled:hover:text-foreground disabled:opacity-30"
+              className="flex size-[18px] items-center justify-center rounded-sm transition-colors duration-100 enabled:hover:text-foreground disabled:opacity-30"
             >
               <ChevronUp className="size-3.5" />
             </button>
@@ -424,7 +424,7 @@ export function QuestionCard({
               aria-label="Next question"
               disabled={last}
               onClick={() => goTo(qi + 1)}
-              className="flex size-[18px] items-center justify-center rounded-[2px] transition-colors duration-100 enabled:hover:text-foreground disabled:opacity-30"
+              className="flex size-[18px] items-center justify-center rounded-sm transition-colors duration-100 enabled:hover:text-foreground disabled:opacity-30"
             >
               <ChevronDown className="size-3.5" />
             </button>

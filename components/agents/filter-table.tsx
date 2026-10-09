@@ -146,7 +146,7 @@ export function FilterTable({
               {f.label}
               <span
                 className={cn(
-                  "rounded-[2px] px-1 font-mono text-[10.5px] tabular-nums",
+                  "rounded-sm px-1 font-mono text-[10.5px] tabular-nums",
                   active
                     ? "bg-muted text-muted-foreground"
                     : "text-muted-foreground/70"

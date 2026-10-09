@@ -98,9 +98,8 @@ const themeVars = {
   ...vars(block("@theme inline")),
   ...vars(motionTheme.replace(/@keyframes[\s\S]*$/, "")),
 }
-// Fonts come from the consuming app.
-delete themeVars["font-sans"]
-delete themeVars["font-mono"]
+// Font families resolve through the --font-heading/body/code knobs in :root,
+// which fall back to system stacks when the app hasn't loaded the fonts.
 
 const ui = (name, { deps = [], reg = [], description } = {}) => ({
   name,

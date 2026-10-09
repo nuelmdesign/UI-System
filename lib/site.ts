@@ -20,8 +20,11 @@ export const LLMS_URL = `${SITE.files}/llms.txt`
 export const REGISTRY_URL = `${SITE.files}/r/{name}.json`
 
 /** A ready-to-paste prompt that points an assistant at opendraft. */
-export function aiPrompt(task = "[describe what you want to build]") {
-  return `Use the opendraft design system for this. Read ${LLMS_URL} first and follow its rules: install components from the @opendraft registry and style only with its tokens.\n\nBuild: ${task}`
+export function aiPrompt(
+  task = "[describe what you want to build]",
+  theme = ""
+) {
+  return `Use the opendraft design system for this. Read ${LLMS_URL} first and follow its rules: install components from the @opendraft registry and style only with its tokens.${theme ? `\n\n${theme}` : ""}\n\nBuild: ${task}`
 }
 
 /** Opens a new Claude chat with the prompt filled in. */

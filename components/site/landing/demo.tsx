@@ -64,7 +64,7 @@ export default function SignInPage() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="font-display text-2xl font-light">
+        <CardTitle className="heading text-2xl">
           Welcome back
         </CardTitle>
         <CardDescription>Sign in to your workspace.</CardDescription>
@@ -298,9 +298,7 @@ function SignInPreview() {
   return (
     <Card className="mx-auto w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="font-display text-2xl font-light">
-          Welcome back
-        </CardTitle>
+        <CardTitle className="heading text-2xl">Welcome back</CardTitle>
         <CardDescription>Sign in to your workspace.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">

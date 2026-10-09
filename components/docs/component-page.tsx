@@ -68,7 +68,7 @@ export function ComponentPage({
           <span>/</span>
           <span className="text-foreground">{entry.title}</span>
         </p>
-        <h1 className="mt-4 flex items-center gap-3 font-display text-4xl leading-tight font-light tracking-[-0.02em] sm:text-5xl">
+        <h1 className="mt-4 flex items-center gap-3 heading text-4xl leading-tight sm:text-5xl">
           {entry.title}
           {entry.isNew ? (
             <Badge variant="brand" className="font-mono text-[10px] uppercase">
@@ -241,7 +241,7 @@ function Heading({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <h2
       id={id}
-      className="mt-14 mb-4 scroll-mt-20 border-b pb-3 font-display text-2xl font-light tracking-[-0.01em]"
+      className="mt-14 mb-4 scroll-mt-20 border-b pb-3 heading text-2xl"
     >
       {children}
     </h2>

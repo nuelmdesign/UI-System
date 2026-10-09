@@ -67,7 +67,7 @@ export function SectionIntro({
       )}
     >
       <SectionLabel icon={icon}>{label}</SectionLabel>
-      <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light tracking-[-0.02em] text-balance sm:text-5xl">
+      <h2 className="mt-5 heading text-4xl leading-[1.05] text-balance sm:text-5xl">
         {title}
       </h2>
       {children ? (

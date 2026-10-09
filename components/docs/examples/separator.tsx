@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator"
 export default function SeparatorDemo() {
   return (
     <div className="w-full max-w-sm">
-      <p className="font-display text-xl font-light">opendraft</p>
+      <p className="heading text-xl">opendraft</p>
       <p className="text-sm text-muted-foreground">
         A design system for agent interfaces.
       </p>

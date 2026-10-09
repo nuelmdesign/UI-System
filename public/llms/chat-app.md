@@ -213,9 +213,7 @@ export default function ChatAppDemo() {
           <AnimatedSidebarTrigger className="size-8 rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
             <PanelLeft aria-hidden className="size-4" />
           </AnimatedSidebarTrigger>
-          <p className="min-w-0 truncate font-display text-lg font-light">
-            {active.title}
-          </p>
+          <p className="min-w-0 truncate heading text-lg">{active.title}</p>
           <Badge variant="brand" className="ml-auto">
             Agent 5.6
           </Badge>

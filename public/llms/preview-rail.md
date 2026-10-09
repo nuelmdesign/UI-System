@@ -106,7 +106,7 @@ export default function PreviewRailDemo() {
     >
       <div className="grid h-full content-center gap-2 pl-6">
         <p className="eyebrow text-muted-foreground">Hover the ticks</p>
-        <p className="font-display text-3xl font-light">{current.label}</p>
+        <p className="heading text-3xl">{current.label}</p>
       </div>
     </PreviewRail>
   )

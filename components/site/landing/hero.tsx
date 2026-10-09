@@ -132,7 +132,7 @@ export function Hero() {
             <span aria-hidden className="size-1 bg-border" />
             <span>shadcn registry</span>
           </p>
-          <h1 className="mt-6 font-display text-5xl leading-[1.02] font-light tracking-[-0.03em] text-balance sm:text-7xl">
+          <h1 className="mt-6 heading text-5xl leading-[1.02] text-balance sm:text-7xl">
             A design system your <span className="text-brand">AI</span> builds
             with
           </h1>

@@ -34,6 +34,10 @@ const FAQ: { group: string; items: [string, React.ReactNode][] }[] = [
         "Yes. Any assistant that can open a link can read llms.txt. For tools that work from files in your project, like Cursor or Claude Code, save llms-full.txt into the project and point your rules file at it.",
       ],
       [
+        "Can I use my own fonts, colors and corner radius?",
+        "Yes. opendraft's look is a default. Tell Claude what you want, like Inter for headings, IBM Plex Sans for body text, a black primary and 12px buttons, and it changes the brand tokens so every component follows. The theme builder on this page writes that prompt for you.",
+      ],
+      [
         "Will the assistant still write its own components?",
         "Only when nothing in opendraft fits. The rules tell it to install existing components first, and to build anything new from opendraft parts and tokens.",
       ],
@@ -77,7 +81,7 @@ export function Faq() {
       <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <Reveal>
           <SectionLabel>FAQ</SectionLabel>
-          <h2 className="mt-5 font-display text-4xl leading-[1.05] font-light tracking-[-0.02em] sm:text-5xl">
+          <h2 className="mt-5 heading text-4xl leading-[1.05] sm:text-5xl">
             Questions, answered
           </h2>
           <p className="mt-4 max-w-sm text-muted-foreground">
@@ -115,7 +119,7 @@ export function Closing() {
     <Section className="text-center">
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center">
         <LogoMark className="size-10" />
-        <h2 className="mt-6 font-display text-4xl leading-[1.05] font-light tracking-[-0.02em] text-balance sm:text-6xl">
+        <h2 className="mt-6 heading text-4xl leading-[1.05] text-balance sm:text-6xl">
           Build your next screen with opendraft
         </h2>
         <p className="mt-4 max-w-md text-muted-foreground">
@@ -260,7 +264,7 @@ export function Footer() {
       </div>
       <p
         aria-hidden
-        className="pointer-events-none -mb-[0.22em] text-center font-display text-[22vw] leading-none font-light tracking-[-0.04em] text-transparent select-none [-webkit-text-stroke:1px_var(--input)] lg:text-[15rem]"
+        className="pointer-events-none -mb-[0.22em] text-center heading text-[22vw] leading-none text-transparent select-none [-webkit-text-stroke:1px_var(--input)] lg:text-[15rem]"
       >
         opendraft
       </p>

@@ -15,6 +15,7 @@ import {
 } from "@/components/docs/entries"
 import { useDocsNav, useSiteBase } from "@/components/docs/docs-nav"
 import { CodeBlock } from "@/components/agents/code-block"
+import { ThemeBuilder } from "@/components/site/theme-builder"
 import { CopyButton } from "@/components/motion/copy-button"
 import { PixelField } from "@/components/motion/pixel-field"
 import { Button } from "@/components/ui/button"
@@ -29,7 +30,7 @@ export function GuidePage({ slug }: { slug: string }) {
       <p className="flex items-center gap-2 eyebrow text-muted-foreground">
         <span className="size-2 bg-primary" /> Get started
       </p>
-      <h1 className="mt-4 font-display text-4xl leading-tight font-light tracking-[-0.02em] sm:text-5xl">
+      <h1 className="mt-4 heading text-4xl leading-tight sm:text-5xl">
         {guide.title}
       </h1>
       <p className="mt-3 text-pretty text-muted-foreground">
@@ -43,11 +44,7 @@ export function GuidePage({ slug }: { slug: string }) {
 }
 
 function H2({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="border-b pb-3 font-display text-2xl font-light tracking-[-0.01em]">
-      {children}
-    </h2>
-  )
+  return <h2 className="border-b pb-3 heading text-2xl">{children}</h2>
 }
 
 function Prose({ children }: { children: React.ReactNode }) {
@@ -83,9 +80,7 @@ function Introduction() {
             href={nav.href("")}
             className="grid gap-2 border-r border-b bg-card p-5 transition-colors hover:bg-accent"
           >
-            <span className="font-display text-3xl font-light">
-              {entriesIn(c).length}
-            </span>
+            <span className="heading text-3xl">{entriesIn(c).length}</span>
             <span className="text-sm text-muted-foreground">
               {CATEGORY_LABEL[c]}
             </span>
@@ -375,6 +370,20 @@ function Theming() {
   return (
     <>
       <section className="grid gap-4">
+        <H2>Make it yours</H2>
+        <Prose>
+          <p>
+            The look below is opendraft&apos;s default. Seven brand tokens at
+            the top of the theme change it everywhere: heading, body and code
+            fonts, heading weight, the primary color, and corner radius for
+            controls (buttons, inputs, tabs) and for surfaces (cards, menus,
+            dialogs). Pick yours here, then copy the CSS, or copy the prompt and
+            Claude will make the change for you.
+          </p>
+        </Prose>
+        <ThemeBuilder />
+      </section>
+      <section className="grid gap-4">
         <H2>Color</H2>
         <Prose>
           <p>
@@ -428,8 +437,8 @@ function Theming() {
       <section className="grid gap-4">
         <H2>Type</H2>
         <div className="grid gap-5 border bg-card p-6">
-          <p className="font-display text-4xl leading-none font-light tracking-[-0.02em]">
-            Newsreader, light, for display
+          <p className="heading text-4xl leading-none">
+            Newsreader, light, for headings (the default)
           </p>
           <p className="text-sm">
             Geist for interface text, labels, inputs and data.
@@ -443,9 +452,11 @@ function Theming() {
         <H2>Shape and texture</H2>
         <Prose>
           <p>
-            Corners stay square (0 to 6px); <code>rounded-full</code> is only
-            for avatars, dots and radios. Hairline borders carry structure;
-            shadows only lift floating layers. Use <code>bg-dots</code> or{" "}
+            By default corners are nearly square (2px on controls, 3px on
+            surfaces), set by <code>--control-radius</code> and{" "}
+            <code>--surface-radius</code>; <code>rounded-full</code> is only for
+            avatars, dots and radios. Hairline borders carry structure; shadows
+            only lift floating layers. Use <code>bg-dots</code> or{" "}
             <code>PixelField</code> for texture, and add the <code>dark</code>{" "}
             class to any section to make it a dark band in either theme.
           </p>

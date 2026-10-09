@@ -50,7 +50,7 @@ export default function BlurTextDemo() {
       <BlurText
         as="h2"
         text="Text that arrives, word by word."
-        className="font-display text-4xl font-light tracking-[-0.02em]"
+        className="heading text-4xl"
       />
       <BlurText
         by="char"

@@ -25,7 +25,7 @@ export function DocsIndex() {
           <p className="flex items-center gap-2 eyebrow text-muted-foreground">
             <span className="size-2 bg-primary" /> Components
           </p>
-          <h1 className="font-display text-4xl leading-[1.05] font-light tracking-[-0.02em] sm:text-5xl">
+          <h1 className="heading text-4xl leading-[1.05] sm:text-5xl">
             Every piece, live.
           </h1>
           <p className="max-w-xl text-pretty text-muted-foreground">

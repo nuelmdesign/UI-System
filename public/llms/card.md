@@ -62,9 +62,7 @@ export default function CardDemo() {
     <Card className="w-full max-w-sm">
       <CardHeader>
         <CardDescription>Monthly recurring revenue</CardDescription>
-        <CardTitle className="font-display text-4xl font-light">
-          $48,210
-        </CardTitle>
+        <CardTitle className="heading text-4xl">$48,210</CardTitle>
         <CardAction>
           <Badge variant="success" dot>
             +12.4%

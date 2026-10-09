@@ -56,7 +56,7 @@ export default function AnimatedNumberDemo() {
       <AnimatedNumber
         value={value}
         format={{ style: "currency", currency: "USD" }}
-        className="font-display text-5xl font-light tracking-[-0.02em]"
+        className="heading text-5xl"
       />
       <Button
         variant="outline"

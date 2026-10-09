@@ -150,7 +150,7 @@ export default function AISidebarDemo() {
             <p className="flex items-center gap-2 eyebrow text-muted-foreground">
               <span className="size-2 bg-primary" /> Selected resource
             </p>
-            <h3 className="mt-4 font-display text-3xl leading-tight font-light tracking-[-0.02em] sm:text-4xl">
+            <h3 className="mt-4 heading text-3xl leading-tight sm:text-4xl">
               {findLabel(items, active) ?? active}
             </h3>
             <p className="mt-4 max-w-lg text-sm leading-6 text-muted-foreground">

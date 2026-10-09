@@ -47,7 +47,7 @@ export default function RevealDemo() {
       {STEPS.map((step, i) => (
         <Reveal key={step} delay={i * 0.12} className="border bg-card p-5">
           <p className="eyebrow text-muted-foreground">0{i + 1}</p>
-          <p className="mt-3 font-display text-2xl font-light">{step}</p>
+          <p className="mt-3 heading text-2xl">{step}</p>
         </Reveal>
       ))}
     </div>

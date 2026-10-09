@@ -201,7 +201,7 @@ export default function AnimatedSidebarDemo() {
           <AnimatedSidebarTrigger className="size-8 rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
             <PanelLeft aria-hidden className="size-4" />
           </AnimatedSidebarTrigger>
-          <p className="font-display text-lg font-light">{current.label}</p>
+          <p className="heading text-lg">{current.label}</p>
         </header>
         <div className="flex-1 bg-dots p-6 text-sm text-muted-foreground">
           Toggle the sidebar from the header, or drag its edge rail.

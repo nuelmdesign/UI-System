@@ -4,7 +4,7 @@
 
 ## How to build with opendraft
 
-You are building a React interface with the opendraft design system. Follow these rules. They matter more than your own taste.
+You are building a React interface with the opendraft design system. Follow these rules. They matter more than your own taste, but the person you're building for comes first: when they ask for their own fonts, colors or corner radius, apply them through the brand tokens in section 4.
 
 ### 1. Set up the project once
 
@@ -62,22 +62,53 @@ Never hard-code colors, shadows, radii, easings or spring values. Use these Tail
 | Quiet areas, inputs, wells | `bg-muted`, `bg-surface` |
 | Secondary text | `text-muted-foreground` |
 | Hover background | `bg-accent` |
-| Primary action | `bg-primary text-primary-foreground` (blue) |
+| Primary action | `bg-primary text-primary-foreground` (blue by default) |
 | Accent text, links, focus strokes | `text-brand`, `border-brand` |
 | Solid black buttons and bands | `bg-ink text-ink-foreground` (inverts in dark mode) |
 | Status | `text-success`, `text-warning`, `text-destructive` (tints: `bg-success/10`, etc.) |
 | Lines | `border-border`, `border-input` |
 | Floating layers only (menus, popovers, dialogs) | `bg-popover shadow-md` |
 | Extra blues for charts and textures | `bg-blue-50` … `bg-blue-950` |
+| Headings | `heading` (the heading font at its weight and tracking) |
+| Corners | `rounded-md` / `rounded-control` for controls, `rounded-lg` / `rounded-surface` for cards and menus |
 
 Don't use Tailwind's palette colors (`bg-gray-100`, `text-emerald-600`, …) and don't add `dark:` color twins. The tokens already switch between light and dark.
 
-### 4. The look
+### 4. The look, and making it yours
 
-- **Square corners.** Radius is 0 to 6px: `rounded-md` for controls, `rounded-lg` at most for cards. Use `rounded-full` only for avatars, status dots and spinners.
+opendraft ships with a look: editorial headings, square corners, hairline borders, a blue primary. Treat it as the default. If the person asks for something different, their request wins, and you apply it by changing the brand tokens at the top of `:root` in the global stylesheet. Never restyle individual components to get a new look; change the token and every component follows.
+
+| They ask for | Change |
+|---|---|
+| A heading font (e.g. Inter) | `--font-heading`, plus `--heading-weight` (about 300 for light serifs like the default Newsreader, 500 to 600 for sans faces like Inter) and `--heading-tracking` |
+| A body / interface font (e.g. IBM Plex Sans) | `--font-body` |
+| A code font | `--font-code` |
+| A primary color (e.g. black) | `--primary` and `--brand` in `:root` and in `.dark`. Set `--primary-foreground` to a color that reads on it (white on dark colors, near-black on light ones). For black, use `var(--ink)` and `var(--ink-foreground)`: they invert in dark mode. |
+| Rounder buttons and inputs (e.g. 12px) | `--control-radius` |
+| Rounder cards, menus and dialogs | `--surface-radius` (usually the same as or a little larger than `--control-radius`) |
+
+Load any new font with `next/font` (or a `<link>` outside Next.js) and point the token at its variable, keeping a fallback stack:
+
+```css
+:root {
+  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --heading-weight: 600;
+  --heading-tracking: -0.03em;
+  --primary: var(--ink);
+  --brand: var(--ink);
+  --primary-foreground: var(--ink-foreground);
+  --control-radius: 12px;
+  --surface-radius: 16px;
+}
+```
+
+The defaults, for anything they haven't asked to change:
+
+- **Corners.** Controls use `rounded-md`, cards and menus `rounded-lg`; both follow the radius tokens. Use `rounded-full` only for avatars, status dots and spinners.
 - **Hairlines over shadows.** Structure comes from 1px borders. Shadows are only for things that float above the page.
-- **Blue is the primary color.** Use it for the main action and focus. Keep everything else neutral.
-- **Type.** Headings use `font-display` (Newsreader, `font-light`, tight tracking). Interface text uses the default sans (Geist). Labels, counts and metadata use `font-mono`; small uppercase section labels use the `eyebrow` utility.
+- **One primary color.** Use it for the main action and focus. Keep everything else neutral.
+- **Type.** Headings use the `heading` utility. Interface text uses the default sans (`font-sans`, which is `--font-body`). Labels, counts and metadata use `font-mono`; small uppercase section labels use the `eyebrow` utility.
 - **Texture.** Use `bg-dots` or the `PixelField` component for background texture. Don't use gradients or blobs.
 - **Dark sections.** Add the `dark` class to any section to render it dark in either theme.
 
@@ -94,10 +125,10 @@ Components use Radix primitives and come with keyboard and screen-reader support
 
 ### 7. Before you finish
 
-- Every color, radius, shadow and timing comes from a token.
+- Every color, radius, shadow and timing comes from a token, and any look the person asked for lives in the brand tokens, not in component overrides.
 - Every piece of UI that exists in opendraft uses the opendraft component.
 - The screen works in both light and dark mode.
-- Headings use `font-display`; nothing else does.
+- Headings use the `heading` utility; nothing else does.
 
 ## Components
 
