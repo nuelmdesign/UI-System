@@ -65,7 +65,21 @@ npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 ```
 
 6. Load three fonts and expose them as CSS variables: Geist as `--font-geist`, Geist Mono as `--font-geist-mono`, Newsreader as `--font-newsreader`. In Next.js use `next/font/google` (the starter's `--font-geist-sans` is not the same variable; rename it).
-7. Dark mode is the `dark` class on `<html>`. To follow the visitor's system setting, toggle that class with a small script, or use `next-themes` with `attribute="class"`.
+7. Dark mode is the `dark` class on `<html>`. The `theme-toggle` component (`npx shadcn@latest add @opendraft/theme-toggle`) handles it: it switches system, light and dark and remembers the choice. To avoid a flash of the wrong theme on load, also run its exported `themeScript` before the page paints, and add `suppressHydrationWarning` to `<html>` because the script changes its class:
+
+```tsx
+import { themeScript } from "@/components/ui/theme-toggle"
+
+// app/layout.tsx
+;<html lang="en" suppressHydrationWarning>
+  <head>
+    <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+  </head>
+  <body>{children}</body>
+</html>
+```
+
+   Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead.
 8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
 
 ```tsx
