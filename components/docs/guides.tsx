@@ -6,7 +6,7 @@ import { ArrowUpRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { duration, ease, spring } from "@/lib/motion"
-import { SITE, aiPrompt, claudeUrl } from "@/lib/site"
+import { SITE, aiPrompt, chatgptUrl, claudeUrl } from "@/lib/site"
 import {
   CATEGORY_LABEL,
   CATEGORY_ORDER,
@@ -168,6 +168,11 @@ function UseWithAi() {
           <Button size="sm" asChild>
             <a href={claudeUrl(prompt)} target="_blank" rel="noreferrer">
               Open in Claude <ArrowUpRight />
+            </a>
+          </Button>
+          <Button size="sm" variant="outline" asChild>
+            <a href={chatgptUrl(prompt)} target="_blank" rel="noreferrer">
+              Open in ChatGPT <ArrowUpRight />
             </a>
           </Button>
         </div>

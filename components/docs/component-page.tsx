@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
-import { SITE, aiPrompt, claudeUrl } from "@/lib/site"
+import { SITE, aiPrompt, chatgptUrl, claudeUrl } from "@/lib/site"
 import {
   CATEGORY_LABEL,
   ENTRY_BY_SLUG,
@@ -200,7 +200,7 @@ export function ComponentPage({
   )
 }
 
-/** "Copy for AI" and "Open in Claude", for handing this page to an assistant. */
+/** "Copy for AI" and "Open in Claude" and "Open in ChatGPT", for handing this page to an assistant. */
 function AiActions({ entry }: { entry: DocEntry }) {
   const base = useSiteBase()
   const [copying, setCopying] = React.useState(false)
@@ -231,6 +231,11 @@ function AiActions({ entry }: { entry: DocEntry }) {
       <Button variant="outline" size="sm" asChild>
         <a href={claudeUrl(prompt)} target="_blank" rel="noreferrer">
           Open in Claude <ArrowUpRight />
+        </a>
+      </Button>
+      <Button variant="outline" size="sm" asChild>
+        <a href={chatgptUrl(prompt)} target="_blank" rel="noreferrer">
+          Open in ChatGPT <ArrowUpRight />
         </a>
       </Button>
     </div>

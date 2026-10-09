@@ -24,10 +24,15 @@ export function aiPrompt(
   task = "[describe what you want to build]",
   theme = ""
 ) {
-  return `Use the opendraft design system for this. Read ${LLMS_URL} first and follow its rules: install components from the @opendraft registry and style only with its tokens.${theme ? `\n\n${theme}` : ""}\n\nBuild: ${task}`
+  return `Use the opendraft design system for this. Read ${LLMS_URL} first and follow its rules: install components from the @opendraft registry and style only with its tokens. If you can't run shell commands, fetch each component's file from ${SITE.files}/r/<name>.json (each file's content is inside) and create them in the project yourself.${theme ? `\n\n${theme}` : ""}\n\nBuild: ${task}`
 }
 
 /** Opens a new Claude chat with the prompt filled in. */
 export function claudeUrl(prompt: string) {
   return `https://claude.ai/new?q=${encodeURIComponent(prompt)}`
+}
+
+/** Opens a new ChatGPT chat with the prompt filled in. */
+export function chatgptUrl(prompt: string) {
+  return `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`
 }
