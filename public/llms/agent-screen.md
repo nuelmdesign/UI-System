@@ -1,6 +1,6 @@
 # Agent Screen
 
-Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording.
+Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

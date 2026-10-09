@@ -1,6 +1,6 @@
 # Context Cards
 
-Retrieved context chunks that stagger in, then reveal their source file chips.
+Retrieved context chunks that stagger in, then reveal their source file chips. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

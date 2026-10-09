@@ -8,11 +8,35 @@ opendraft ships through a shadcn registry. Components install as source files in
 
 Requirements: React 19, Tailwind CSS v4, TypeScript, and a shadcn `components.json`. Next.js is supported but not required.
 
-If you can't run shell commands (a chat assistant, or a hosted builder), install by hand: for each item, fetch `https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/<name>.json`. Its `files[].content` is the source and `files[].path` is where to write it in the project. Also fetch every item named in `registryDependencies` (strip the `@opendraft/` prefix), and add the `dependencies` with the project's package manager. Install `theme` first and paste its `css` into the global stylesheet.
+If you can't run shell commands (a chat assistant, or a hosted builder), install by hand: for each item, fetch `https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/<name>.json`. Its `files[].content` is the source and `files[].path` is where to write it in the project. Then repeat for every name in its `registryDependencies`, and for theirs in turn (it is transitive). Strip the `@opendraft/` prefix; a bare name such as `utils` is an opendraft item too. Add every package in each item's `dependencies` with the project's package manager. The `theme` item has no files: it only has a `css` field, which you paste into the global stylesheet (do this first). Skip any file you've already written.
 
 Not on Next.js (Vite, Lovable, Remix, Astro): everything works the same except fonts and the `"use client"` lines. Load the three fonts with a Google Fonts `<link>` or `@fontsource` packages and set `--font-geist`, `--font-geist-mono` and `--font-newsreader` on `:root` to the family names. Ignore `"use client"`; it's harmless. Use `import "./index.css"` (or your global stylesheet) where steps below say `app/globals.css`, and add the `dark` class to `<html>` yourself.
 
-1. If the project has no `components.json`, run `npx shadcn@latest init`.
+1. If the project has no `components.json`, run `npx shadcn@latest init`. That command fetches from ui.shadcn.com. If it fails (a blocked network), write the file by hand:
+
+```json
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  }
+}
+```
+
 2. Add the registry to `components.json`:
 
 ```json
@@ -29,10 +53,11 @@ Not on Next.js (Vite, Lovable, Remix, Astro): everything works the same except f
 npx shadcn@latest add @opendraft/theme
 ```
 
-4. Clean up the starter stylesheet. Projects made with `create-next-app` leave rules at the bottom of `app/globals.css` that fight the theme. Delete them:
+4. Clean up the starter stylesheet. Projects made with `create-next-app` leave rules in `app/globals.css` that fight the theme, and after the theme is added they can sit in the middle of the file, so search the whole file. Delete them:
    - the `@media (prefers-color-scheme: dark) { :root { … } }` block (dark mode here is the `dark` class, not the operating system setting)
    - the starter's `body { background: …; color: …; font-family: Arial, … }` rule (the theme sets the body styles)
    - the starter's own `:root { --background; --foreground }` values, if they remain after the theme's (the theme's must win)
+   - the starter's `@theme inline { … }` block that maps `--font-sans` / `--font-mono` to `--font-geist-sans` / `--font-geist-mono` (the theme maps the fonts itself)
 5. Install each component you use, by name:
 
 ```bash
@@ -41,13 +66,20 @@ npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 
 6. Load three fonts and expose them as CSS variables: Geist as `--font-geist`, Geist Mono as `--font-geist-mono`, Newsreader as `--font-newsreader`. In Next.js use `next/font/google` (the starter's `--font-geist-sans` is not the same variable; rename it).
 7. Dark mode is the `dark` class on `<html>`. To follow the visitor's system setting, toggle that class with a small script, or use `next-themes` with `attribute="class"`.
-8. Wrap the app once so motion respects the user's "reduce motion" setting:
+8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
 
 ```tsx
 import { MotionConfig } from "motion/react"
 
-;<MotionConfig reducedMotion="user">{children}</MotionConfig>
+import { Toaster } from "@/components/ui/sonner"
+
+;<MotionConfig reducedMotion="user">
+  {children}
+  <Toaster />
+</MotionConfig>
 ```
+
+On Next.js 16 with Cache Components (the new `create-next-app` default), a component that reads `usePathname()`, `useSearchParams()`, `params` or `searchParams` must sit inside a `<Suspense>` boundary, or the build fails. Also, a server component can't pass a function (including an icon component such as a lucide icon) to a client component as a prop: pass the element (`<Icon />`) or an icon name instead.
 
 ### 2. Use components before writing your own
 
@@ -55,8 +87,9 @@ import { MotionConfig } from "motion/react"
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.
-- Many components render sample content when you give them no data (ice-cream shop names, example transactions, demo prompts). Always pass the real content through their props: rows, items, labels, options, callbacks. Check the component's page for its props. Leaving the defaults in a real screen is a bug.
+- Many components render sample content when you give them no data (their pages say "sample content") (ice-cream shop names, example transactions, demo prompts). Always pass the real content through their props: rows, items, labels, options, callbacks. Check the component's page for its props. Leaving the defaults in a real screen is a bug.
 - Some components have a `fill` or `demo` prop. `demo` runs a self-playing walkthrough, so set `demo={false}` in a real screen. `fill` makes a scrolling area take its container's height instead of a fixed maximum, so give the container a height.
+- Know the limits before you pick one. `SearchList` takes plain strings only and isn't a way to filter a grid of rich cards: use `Input` and filter your own data. `Table` needs a fixed pixel `rowHeight`; give it `height` for a scrolling area or `maxHeight` to size to its rows. `CardTitle` and `DialogTitle` are already styled: don't add `heading` to them.
 - Only write a new component when nothing fits. Build it from the existing parts and follow the rules below.
 
 ### 3. Style only with tokens
@@ -77,8 +110,10 @@ Never hard-code colors, shadows, radii, easings or spring values. Use these Tail
 | Lines                                           | `border-border`, `border-input`                                                                     |
 | Floating layers only (menus, popovers, dialogs) | `bg-popover shadow-md`                                                                              |
 | Extra blues for charts and textures             | `bg-blue-50` … `bg-blue-950`                                                                        |
-| Headings                                        | `heading` (the heading font at its weight and tracking)                                             |
+| Headings and big numbers (stats, prices)        | `heading` (the heading font at its weight and tracking)                                             |
 | Corners                                         | `rounded-md` / `rounded-control` for controls, `rounded-lg` / `rounded-surface` for cards and menus |
+
+Text over a texture (`PixelField`, `bg-dots`): don't put it straight on the texture and don't add a gradient scrim. Put the text in a `dark` section, or on a solid `bg-background` panel, so it stays readable. Fonts: `font-sans` is the body font, `font-display` (or the `heading` utility) the heading font, `font-mono` the code font; use `font-mono` for money, dates and IDs.
 
 Don't use Tailwind's palette colors (`bg-gray-100`, `text-emerald-600`, …) and don't add `dark:` color twins. The tokens already switch between light and dark.
 

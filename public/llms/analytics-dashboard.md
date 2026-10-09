@@ -68,6 +68,24 @@ export type AnalyticsRangeData = {
   channels: AnalyticsChannel[]
 }
 
+/** Every fixed piece of text, so the screen can describe any product. */
+export type AnalyticsLabels = {
+  /** Small line above the title. */
+  eyebrow: string
+  export: string
+  channels: string
+  channelsAria: string
+  /** Heading and accessible name of the table. */
+  table: string
+  /** Table column headings. The row fields stay name / visitors / conversion / duration. */
+  columns: {
+    name: string
+    visitors: string
+    conversion: string
+    duration: string
+  }
+}
+
 export type AnalyticsDashboardProps = {
   data?: Record<AnalyticsRange, AnalyticsRangeData>
   /** Controlled range. Uncontrolled when omitted. */
@@ -76,6 +94,10 @@ export type AnalyticsDashboardProps = {
   onRangeChange?: (range: AnalyticsRange) => void
   onExport?: (range: AnalyticsRange) => void
   title?: string
+  /** Override any fixed text, for example to relabel the table for events. */
+  labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
+    columns?: Partial<AnalyticsLabels["columns"]>
+  }
   className?: string
 }
 ```

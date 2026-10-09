@@ -99,6 +99,7 @@ export function Table<T>({
   onDeleteColumn,
   rowHeight = 48,
   height = 440,
+  maxHeight,
   overscan = 10,
   onEndReached,
   loading = false,
@@ -272,7 +273,7 @@ export function Table<T>({
         ref={scrollRef}
         onScroll={handleScroll}
         className="overflow-auto"
-        style={{ height }}
+        style={maxHeight != null ? { maxHeight } : { height }}
       >
         <table
           className={cn("border-collapse", sized ? "w-max" : undefined)}
@@ -327,7 +328,10 @@ export function Table<T>({
             {sortedRows.length === 0 ? (
               loading ? (
                 <SkeletonRows
-                  count={Math.max(1, Math.ceil(height / rowHeight))}
+                  count={Math.max(
+                    1,
+                    Math.ceil((maxHeight ?? height) / rowHeight)
+                  )}
                   columns={orderedColumns}
                   selectable={selectable}
                   rowHeight={rowHeight}

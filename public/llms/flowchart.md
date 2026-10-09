@@ -1,6 +1,6 @@
 # Flowchart
 
-Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector.
+Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Data & Workflows
 

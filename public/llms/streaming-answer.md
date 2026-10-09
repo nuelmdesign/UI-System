@@ -1,6 +1,6 @@
 # Streaming Answer
 
-An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups.
+An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

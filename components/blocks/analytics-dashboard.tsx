@@ -57,6 +57,38 @@ export type AnalyticsRangeData = {
   channels: AnalyticsChannel[]
 }
 
+/** Every fixed piece of text, so the screen can describe any product. */
+export type AnalyticsLabels = {
+  /** Small line above the title. */
+  eyebrow: string
+  export: string
+  channels: string
+  channelsAria: string
+  /** Heading and accessible name of the table. */
+  table: string
+  /** Table column headings. The row fields stay name / visitors / conversion / duration. */
+  columns: {
+    name: string
+    visitors: string
+    conversion: string
+    duration: string
+  }
+}
+
+export const DEFAULT_ANALYTICS_LABELS: AnalyticsLabels = {
+  eyebrow: "Overview",
+  export: "Export",
+  channels: "Channels",
+  channelsAria: "Traffic by channel",
+  table: "Top pages and sources",
+  columns: {
+    name: "Page / source",
+    visitors: "Visitors",
+    conversion: "Conv.",
+    duration: "Avg. time",
+  },
+}
+
 export type AnalyticsDashboardProps = {
   data?: Record<AnalyticsRange, AnalyticsRangeData>
   /** Controlled range. Uncontrolled when omitted. */
@@ -65,6 +97,10 @@ export type AnalyticsDashboardProps = {
   onRangeChange?: (range: AnalyticsRange) => void
   onExport?: (range: AnalyticsRange) => void
   title?: string
+  /** Override any fixed text, for example to relabel the table for events. */
+  labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
+    columns?: Partial<AnalyticsLabels["columns"]>
+  }
   className?: string
 }
 
@@ -265,8 +301,14 @@ function AnalyticsDashboard({
   onRangeChange,
   onExport,
   title = "Analytics",
+  labels: labelsProp,
   className,
 }: AnalyticsDashboardProps) {
+  const labels: AnalyticsLabels = {
+    ...DEFAULT_ANALYTICS_LABELS,
+    ...labelsProp,
+    columns: { ...DEFAULT_ANALYTICS_LABELS.columns, ...labelsProp?.columns },
+  }
   const [internalRange, setInternalRange] =
     React.useState<AnalyticsRange>(defaultRange)
   const range = rangeProp ?? internalRange
@@ -319,10 +361,10 @@ function AnalyticsDashboard({
   )
 
   const columns: { key: SortKey; label: string; align?: "right" }[] = [
-    { key: "name", label: "Page / source" },
-    { key: "visitors", label: "Visitors", align: "right" },
-    { key: "conversion", label: "Conv.", align: "right" },
-    { key: "duration", label: "Avg. time", align: "right" },
+    { key: "name", label: labels.columns.name },
+    { key: "visitors", label: labels.columns.visitors, align: "right" },
+    { key: "conversion", label: labels.columns.conversion, align: "right" },
+    { key: "duration", label: labels.columns.duration, align: "right" },
   ]
 
   return (
@@ -336,7 +378,7 @@ function AnalyticsDashboard({
       {/* header */}
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="eyebrow text-muted-foreground">Overview</p>
+          <p className="eyebrow text-muted-foreground">{labels.eyebrow}</p>
           <h2 className="heading text-2xl sm:text-3xl">{title}</h2>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -352,7 +394,7 @@ function AnalyticsDashboard({
           </Tabs>
           <Button variant="outline" onClick={() => onExport?.(range)}>
             <Download aria-hidden />
-            Export
+            {labels.export}
           </Button>
         </div>
       </header>
@@ -438,10 +480,10 @@ function AnalyticsDashboard({
         </section>
 
         <section
-          aria-label="Traffic by channel"
+          aria-label={labels.channelsAria}
           className="flex flex-col gap-4 rounded-lg border bg-card p-4"
         >
-          <h3 className="heading text-lg">Channels</h3>
+          <h3 className="heading text-lg">{labels.channels}</h3>
           <div className="flex h-2 gap-px overflow-hidden rounded-sm bg-muted">
             {current.channels.map((c) => (
               <span
@@ -469,12 +511,9 @@ function AnalyticsDashboard({
       </div>
 
       {/* table */}
-      <section
-        aria-label="Top pages and sources"
-        className="rounded-lg border bg-card"
-      >
+      <section aria-label={labels.table} className="rounded-lg border bg-card">
         <div className="border-b px-4 py-3">
-          <h3 className="heading text-lg">Top pages and sources</h3>
+          <h3 className="heading text-lg">{labels.table}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[480px] text-sm">

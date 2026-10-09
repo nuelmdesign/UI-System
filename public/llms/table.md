@@ -106,6 +106,8 @@ export interface TableProps<T> {
   rowHeight?: number
   /** Scroll viewport height in px. */
   height?: number
+  /** Size to the rows, up to this many px, instead of the fixed `height`. */
+  maxHeight?: number
   /** Rows rendered above/below the viewport. */
   overscan?: number
   /** Fires when the viewport scrolls near the bottom — load the next page. */
