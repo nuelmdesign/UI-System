@@ -46,11 +46,12 @@ npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 ```tsx
 import { MotionConfig } from "motion/react"
 
-<MotionConfig reducedMotion="user">{children}</MotionConfig>
+;<MotionConfig reducedMotion="user">{children}</MotionConfig>
 ```
 
 ### 2. Use components before writing your own
 
+- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.
@@ -62,22 +63,22 @@ import { MotionConfig } from "motion/react"
 
 Never hard-code colors, shadows, radii, easings or spring values. Use these Tailwind classes, which read the theme tokens:
 
-| Purpose | Use |
-|---|---|
-| Page background / text | `bg-background`, `text-foreground` |
-| Cards and panels | `bg-card`, `border` (a hairline) |
-| Quiet areas, inputs, wells | `bg-muted`, `bg-surface` |
-| Secondary text | `text-muted-foreground` |
-| Hover background | `bg-accent` |
-| Primary action | `bg-primary text-primary-foreground` (blue by default) |
-| Accent text, links, focus strokes | `text-brand`, `border-brand` |
-| Solid black buttons and bands | `bg-ink text-ink-foreground` (inverts in dark mode) |
-| Status | `text-success`, `text-warning`, `text-destructive` (tints: `bg-success/10`, etc.) |
-| Lines | `border-border`, `border-input` |
-| Floating layers only (menus, popovers, dialogs) | `bg-popover shadow-md` |
-| Extra blues for charts and textures | `bg-blue-50` … `bg-blue-950` |
-| Headings | `heading` (the heading font at its weight and tracking) |
-| Corners | `rounded-md` / `rounded-control` for controls, `rounded-lg` / `rounded-surface` for cards and menus |
+| Purpose                                         | Use                                                                                                 |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Page background / text                          | `bg-background`, `text-foreground`                                                                  |
+| Cards and panels                                | `bg-card`, `border` (a hairline)                                                                    |
+| Quiet areas, inputs, wells                      | `bg-muted`, `bg-surface`                                                                            |
+| Secondary text                                  | `text-muted-foreground`                                                                             |
+| Hover background                                | `bg-accent`                                                                                         |
+| Primary action                                  | `bg-primary text-primary-foreground` (blue by default)                                              |
+| Accent text, links, focus strokes               | `text-brand`, `border-brand`                                                                        |
+| Solid black buttons and bands                   | `bg-ink text-ink-foreground` (inverts in dark mode)                                                 |
+| Status                                          | `text-success`, `text-warning`, `text-destructive` (tints: `bg-success/10`, etc.)                   |
+| Lines                                           | `border-border`, `border-input`                                                                     |
+| Floating layers only (menus, popovers, dialogs) | `bg-popover shadow-md`                                                                              |
+| Extra blues for charts and textures             | `bg-blue-50` … `bg-blue-950`                                                                        |
+| Headings                                        | `heading` (the heading font at its weight and tracking)                                             |
+| Corners                                         | `rounded-md` / `rounded-control` for controls, `rounded-lg` / `rounded-surface` for cards and menus |
 
 Don't use Tailwind's palette colors (`bg-gray-100`, `text-emerald-600`, …) and don't add `dark:` color twins. The tokens already switch between light and dark.
 
@@ -85,22 +86,25 @@ Don't use Tailwind's palette colors (`bg-gray-100`, `text-emerald-600`, …) and
 
 opendraft ships with a look: editorial headings, square corners, hairline borders, a blue primary. Treat it as the default. If the person asks for something different, their request wins, and you apply it by changing the brand tokens at the top of `:root` in the global stylesheet. Never restyle individual components to get a new look; change the token and every component follows.
 
-| They ask for | Change |
-|---|---|
-| A heading font (any Google Font, e.g. Inter) | `--font-heading`, plus `--heading-weight` (about 300 for light serifs like the default Newsreader, 500 to 600 for sans faces like Inter) and `--heading-tracking` |
-| A body / interface font (any Google Font, e.g. IBM Plex Sans) | `--font-body` |
-| A code font | `--font-code` |
-| A primary color (e.g. black) | `--primary` and `--brand` in `:root` and in `.dark`. Set `--primary-foreground` to a color that reads on it (white on dark colors, near-black on light ones). For black, use `var(--ink)` and `var(--ink-foreground)`: they invert in dark mode. |
-| Rounder buttons and inputs (e.g. 12px) | `--control-radius` |
-| Rounder cards, menus and dialogs | `--surface-radius` (usually the same as or a little larger than `--control-radius`) |
-| Larger or smaller text | `--text-scale` (1 is the default; 1.1 makes every text size 10% larger, 0.9 10% smaller). Spacing stays the same. |
+| They ask for                                                  | Change                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A heading font (any Google Font, e.g. Inter)                  | `--font-heading`, plus `--heading-weight` (about 300 for light serifs like the default Newsreader, 500 to 600 for sans faces like Inter) and `--heading-tracking`                                                                                |
+| A body / interface font (any Google Font, e.g. IBM Plex Sans) | `--font-body`                                                                                                                                                                                                                                    |
+| A code font                                                   | `--font-code`                                                                                                                                                                                                                                    |
+| A primary color (e.g. black)                                  | `--primary` and `--brand` in `:root` and in `.dark`. Set `--primary-foreground` to a color that reads on it (white on dark colors, near-black on light ones). For black, use `var(--ink)` and `var(--ink-foreground)`: they invert in dark mode. |
+| Rounder buttons and inputs (e.g. 12px)                        | `--control-radius`                                                                                                                                                                                                                               |
+| Rounder cards, menus and dialogs                              | `--surface-radius` (usually the same as or a little larger than `--control-radius`)                                                                                                                                                              |
+| Larger or smaller text                                        | `--text-scale` (1 is the default; 1.1 makes every text size 10% larger, 0.9 10% smaller). Spacing stays the same.                                                                                                                                |
 
 Any of the roughly 1,900 Google Fonts works. Load it with `next/font/google` (the export name replaces spaces with underscores, e.g. `IBM_Plex_Sans`; pass `variable: "--font-ibm-plex-sans"`, and `weight` for fonts that aren't variable), or with a `<link>` from fonts.google.com outside Next.js. Point the token at the variable, falling back to the family name and a generic stack so it works either way:
 
 ```css
 :root {
-  --font-heading: var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-ibm-plex-sans, "IBM Plex Sans"), ui-sans-serif, system-ui, sans-serif;
+  --font-heading:
+    var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
+  --font-body:
+    var(--font-ibm-plex-sans, "IBM Plex Sans"), ui-sans-serif, system-ui,
+    sans-serif;
   --heading-weight: 600;
   --heading-tracking: -0.03em;
   --primary: var(--ink);
@@ -138,6 +142,514 @@ Components use Radix primitives and come with keyboard and screen-reader support
 - Every piece of UI that exists in opendraft uses the opendraft component.
 - The screen works in both light and dark mode.
 - Headings use the `heading` utility; nothing else does.
+
+---
+
+# CRM Pipeline
+
+Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/crm-pipeline
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { CrmPipeline } from "@/components/blocks/crm-pipeline"
+```
+
+## Dependencies
+
+- npm: `lucide-react`, `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/badge`, `@opendraft/avatar`, `@opendraft/input`, `@opendraft/label`, `@opendraft/select`, `@opendraft/dialog`, `@opendraft/dropdown-menu`, `@opendraft/tabs`, `@opendraft/animated-number`
+
+## Props and types
+
+```ts
+export interface CrmStage {
+  id: string
+  label: string
+}
+
+export interface CrmActivity {
+  id: string
+  /** What happened, e.g. "Sent revised proposal". */
+  text: string
+  /** Display label, e.g. "2 days ago". */
+  when: string
+  kind?: "note" | "email" | "call" | "stage"
+}
+
+export interface CrmDeal {
+  id: string
+  company: string
+  contact: string
+  email?: string
+  phone?: string
+  /** Deal value in whole currency units. */
+  value: number
+  stage: string
+  owner: string
+  /** ISO date (YYYY-MM-DD) for the expected close. */
+  due: string
+  /** Display label, e.g. "3 days ago". */
+  lastTouched: string
+  tags?: string[]
+  activity?: CrmActivity[]
+}
+
+export interface CrmPipelineProps {
+  stages?: CrmStage[]
+  deals?: CrmDeal[]
+  /** Called after a deal is moved to another stage. */
+  onMove?: (dealId: string, toStage: string, deal: CrmDeal) => void
+  /** Called with the deal created from the Add deal form. */
+  onAdd?: (deal: CrmDeal) => void
+  /** Called when a deal is opened in the detail panel. */
+  onSelect?: (deal: CrmDeal) => void
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { CrmPipeline } from "@/components/blocks/crm-pipeline"
+
+export default function CrmPipelineDemo() {
+  return (
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
+      <CrmPipeline />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/crm-pipeline. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Analytics Dashboard
+
+Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/analytics-dashboard
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { AnalyticsDashboard } from "@/components/blocks/analytics-dashboard"
+```
+
+## Dependencies
+
+- npm: `lucide-react`, `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/insight-cards`, `@opendraft/animated-number`, `@opendraft/badge`, `@opendraft/button`, `@opendraft/tabs`
+
+## Props and types
+
+```ts
+export type AnalyticsRange = "7d" | "30d" | "90d"
+
+export type AnalyticsMetric = {
+  id: string
+  label: string
+  value: number
+  /** Percent change versus the previous period, e.g. 12.4 or -3.1. */
+  delta: number
+  /** Intl.NumberFormat options for the value. */
+  format?: Intl.NumberFormatOptions
+  tone?: InsightTone
+}
+
+export type AnalyticsRow = {
+  id: string
+  /** Page path or traffic source. */
+  name: string
+  visitors: number
+  /** 0-1 */
+  conversion: number
+  /** Seconds. */
+  duration: number
+}
+
+export type AnalyticsChannel = {
+  id: string
+  label: string
+  /** Share of traffic, 0-100. */
+  share: number
+  tone: InsightTone
+}
+
+export type AnalyticsRangeData = {
+  metrics: AnalyticsMetric[]
+  /** Axis labels, one per point. */
+  labels: string[]
+  /** Chart values per metric id, one per label. */
+  series: Record<string, number[]>
+  rows: AnalyticsRow[]
+  channels: AnalyticsChannel[]
+}
+
+export type AnalyticsDashboardProps = {
+  data?: Record<AnalyticsRange, AnalyticsRangeData>
+  /** Controlled range. Uncontrolled when omitted. */
+  range?: AnalyticsRange
+  defaultRange?: AnalyticsRange
+  onRangeChange?: (range: AnalyticsRange) => void
+  onExport?: (range: AnalyticsRange) => void
+  title?: string
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { AnalyticsDashboard } from "@/components/blocks/analytics-dashboard"
+
+export default function AnalyticsDashboardDemo() {
+  return (
+    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+      <AnalyticsDashboard />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/analytics-dashboard. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Settings Page
+
+Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/settings-page
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { SettingsPage } from "@/components/blocks/settings-page"
+```
+
+## Dependencies
+
+- npm: `lucide-react`, `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/avatar`, `@opendraft/badge`, `@opendraft/button`, `@opendraft/dialog`, `@opendraft/input`, `@opendraft/label`, `@opendraft/select`, `@opendraft/switch`, `@opendraft/textarea`
+
+## Props and types
+
+```ts
+export type SettingsSection = "profile" | "notifications" | "team" | "billing"
+
+export type ProfileValues = {
+  name: string
+  email: string
+  bio: string
+  timezone: string
+  avatarUrl?: string
+}
+
+export type NotificationItem = {
+  id: string
+  label: string
+  description: string
+  enabled: boolean
+}
+
+export type NotificationGroup = {
+  id: string
+  title: string
+  description?: string
+  items: NotificationItem[]
+}
+
+export type TeamRole = "owner" | "admin" | "member" | "viewer"
+
+export type TeamMember = {
+  id: string
+  name: string
+  email: string
+  role: TeamRole
+  status?: "active" | "pending"
+}
+
+export type UsageMeter = {
+  id: string
+  label: string
+  used: number
+  limit: number
+  unit?: string
+}
+
+export type Invoice = {
+  id: string
+  date: string
+  amount: string
+  status: "paid" | "open" | "failed"
+}
+
+export type BillingValues = {
+  plan: string
+  price: string
+  interval: string
+  renewsOn: string
+  features: string[]
+  usage: UsageMeter[]
+  invoices: Invoice[]
+}
+
+export type SettingsSaveValues = {
+  profile: ProfileValues
+  notifications: Record<string, boolean>
+  members: TeamMember[]
+}
+
+export type SettingsPageProps = {
+  profile?: ProfileValues
+  notifications?: NotificationGroup[]
+  members?: TeamMember[]
+  billing?: BillingValues
+  workspaceName?: string
+  timezones?: { value: string; label: string }[]
+  onSave?: (values: SettingsSaveValues) => void | Promise<void>
+  onInvite?: (invite: { email: string; role: TeamRole }) => void
+  onDelete?: () => void
+  onDownloadInvoice?: (invoice: Invoice) => void
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { SettingsPage } from "@/components/blocks/settings-page"
+
+export default function SettingsPageDemo() {
+  return (
+    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+      <SettingsPage />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/settings-page. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Auth Screen
+
+Split sign-in and sign-up screen with validation, social providers, loading and error states, and a brand panel.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/auth-screen
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { AuthScreen } from "@/components/blocks/auth-screen"
+```
+
+## Dependencies
+
+- npm: `lucide-react`, `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/input`, `@opendraft/label`, `@opendraft/checkbox`, `@opendraft/tabs`, `@opendraft/pixel-field`
+
+## Props and types
+
+```ts
+export type AuthMode = "sign-in" | "sign-up"
+
+export type AuthValues = {
+  mode: AuthMode
+  email: string
+  password: string
+  remember: boolean
+}
+
+export type AuthProvider = {
+  id: string
+  label: string
+  icon?: React.ReactNode
+}
+
+export type AuthBrand = {
+  name: string
+  quote: string
+  author: string
+  role?: string
+}
+
+export type AuthScreenProps = {
+  /** Async. Throw (or reject) to show the error message above the button. */
+  onSubmit?: (values: AuthValues) => void | Promise<void>
+  /** Called when a "Continue with" button is pressed. */
+  onProvider?: (providerId: string) => void
+  onForgotPassword?: () => void
+  providers?: AuthProvider[]
+  brand?: AuthBrand
+  defaultMode?: AuthMode
+  logo?: React.ReactNode
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+import { AuthScreen } from "@/components/blocks/auth-screen"
+
+export default function AuthScreenDemo() {
+  return (
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
+      <AuthScreen
+        onSubmit={async ({ password }) => {
+          await new Promise((r) => setTimeout(r, 1200))
+          if (password === "password1")
+            throw new Error("Incorrect email or password.")
+        }}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/auth-screen. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Agent Workspace
+
+AI agent chat workspace: conversation rail, thread with thinking, tool calls and streamed answers, prompt bar and a live task panel.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/agent-workspace
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { AgentWorkspace } from "@/components/blocks/agent-workspace"
+```
+
+## Dependencies
+
+- npm: `lucide-react`, `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/sidebar-nav`, `@opendraft/prompt-bar`, `@opendraft/thinking-trace`, `@opendraft/tool-chips`, `@opendraft/streaming-answer`, `@opendraft/todo-list`, `@opendraft/shimmer-text`
+
+## Props and types
+
+```ts
+export type AgentConversation = SidebarRecent
+
+export type AgentUserMessage = {
+  id: string
+  role: "user"
+  text: string
+}
+
+export type AgentReply = {
+  /** Trace rows shown while the agent thinks. */
+  thinking?: ThinkingTraceRow[]
+  /** Tool calls run after thinking. */
+  tools?: {
+    steps: ToolStep[]
+    diffs?: ToolDiff[]
+    diffLines?: Record<string, ToolDiffLine[]>
+    labels?: Partial<ToolChipsLabels>
+  }
+  /** The streamed answer. */
+  answer: StreamingToken[]
+  sources?: StreamingSource[]
+  followUps?: string[]
+}
+
+export type AgentAssistantMessage = AgentReply & {
+  id: string
+  role: "assistant"
+  /** Play thinking and tools before the answer. Defaults to false for history. */
+  live?: boolean
+}
+
+export type AgentMessage = AgentUserMessage | AgentAssistantMessage
+
+export type AgentWorkspaceProps = {
+  conversations?: AgentConversation[]
+  messages?: AgentMessage[]
+  tasks?: TodoItem[]
+  /**
+   * Supply the reply for a prompt. When omitted the workspace simulates one;
+   * when it returns nothing no reply is added.
+   */
+  onSend?: (text: string) => AgentReply | void | Promise<AgentReply | void>
+  /** Title shown above the thread. */
+  title?: string
+  placeholder?: string
+  /** Workspace shown at the top of the history rail. */
+  workspace?: SidebarWorkspace
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+import { AgentWorkspace } from "@/components/blocks/agent-workspace"
+
+export default function AgentWorkspaceDemo() {
+  return (
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
+      <AgentWorkspace />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/agent-workspace. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -7581,7 +8093,20 @@ export type SidebarRecent = {
   prompt?: string
 }
 
+export type SidebarWorkspace = { key: string; name: string; monogram: string }
+
+export type SidebarNavItem = {
+  key: string
+  label: string
+  icon: React.ReactNode
+  count?: string
+}
+
 export type SidebarNavProps = {
+  /** Workspace shown in the switcher. Defaults to a demo workspace. */
+  workspace?: SidebarWorkspace
+  /** Primary navigation items. Defaults to demo items. */
+  navItems?: SidebarNavItem[]
   activeTitle?: string | null
   className?: string
   /** Fill the parent's height instead of the fixed 600px demo height. */

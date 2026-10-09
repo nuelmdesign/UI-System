@@ -100,7 +100,12 @@
     "@opendraft/fine-tune-card",
     "@opendraft/sidebar-nav",
     "@opendraft/records-table",
-    "@opendraft/diff-table"
+    "@opendraft/diff-table",
+    "@opendraft/crm-pipeline",
+    "@opendraft/analytics-dashboard",
+    "@opendraft/settings-page",
+    "@opendraft/auth-screen",
+    "@opendraft/agent-workspace"
   ],
   "type": "registry:item"
 }

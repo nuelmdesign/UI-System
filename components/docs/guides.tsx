@@ -73,7 +73,7 @@ function Introduction() {
           shadcn&apos;s, so stock shadcn components pick up the theme too.
         </p>
       </Prose>
-      <div className="grid border-t border-l sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid border-t border-l sm:grid-cols-2 lg:grid-cols-5">
         {CATEGORY_ORDER.map((c) => (
           <nav.Link
             key={c}

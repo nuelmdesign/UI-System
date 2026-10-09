@@ -78,6 +78,11 @@ import FineTuneCardExample from "./fine-tune-card"
 import SidebarNavExample from "./sidebar-nav"
 import RecordsTableExample from "./records-table"
 import DiffTableExample from "./diff-table"
+import CrmPipelineExample from "./crm-pipeline"
+import AnalyticsDashboardExample from "./analytics-dashboard"
+import SettingsPageExample from "./settings-page"
+import AuthScreenExample from "./auth-screen"
+import AgentWorkspaceExample from "./agent-workspace"
 
 /** Live example for each component page, keyed by slug. */
 export const EXAMPLES: Record<string, ComponentType> = {
@@ -159,4 +164,9 @@ export const EXAMPLES: Record<string, ComponentType> = {
   "sidebar-nav": SidebarNavExample,
   "records-table": RecordsTableExample,
   "diff-table": DiffTableExample,
+  "crm-pipeline": CrmPipelineExample,
+  "analytics-dashboard": AnalyticsDashboardExample,
+  "settings-page": SettingsPageExample,
+  "auth-screen": AuthScreenExample,
+  "agent-workspace": AgentWorkspaceExample,
 }

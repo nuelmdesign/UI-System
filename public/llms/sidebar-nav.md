@@ -32,7 +32,20 @@ export type SidebarRecent = {
   prompt?: string
 }
 
+export type SidebarWorkspace = { key: string; name: string; monogram: string }
+
+export type SidebarNavItem = {
+  key: string
+  label: string
+  icon: React.ReactNode
+  count?: string
+}
+
 export type SidebarNavProps = {
+  /** Workspace shown in the switcher. Defaults to a demo workspace. */
+  workspace?: SidebarWorkspace
+  /** Primary navigation items. Defaults to demo items. */
+  navItems?: SidebarNavItem[]
   activeTitle?: string | null
   className?: string
   /** Fill the parent's height instead of the fixed 600px demo height. */
