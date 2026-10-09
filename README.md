@@ -91,3 +91,10 @@ pnpm format           # prettier (with Tailwind class sorting)
 ```
 
 Components adapted from [beUI](https://beui.dev) (MIT) are credited in `THIRD_PARTY_NOTICES.md` and at the top of each file.
+
+## License
+
+opendraft's own code is released under the [MIT License](LICENSE). Components
+adapted from other projects keep their credits and terms; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and check it before
+redistributing those files.

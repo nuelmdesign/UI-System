@@ -65,7 +65,7 @@ const FAQ: { group: string; items: [string, React.ReactNode][] }[] = [
     items: [
       [
         "Is opendraft free?",
-        "Yes. Once a component is installed, the code is in your project and yours to change.",
+        "Yes. opendraft's own code is MIT-licensed. Once a component is installed, the code is in your project and yours to change.",
       ],
       [
         "Where do the components come from?",

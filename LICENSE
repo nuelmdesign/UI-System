@@ -1,15 +1,6 @@
-# Third-party notices
-
-opendraft's own code is MIT-licensed (see LICENSE). It also adapts components from the projects below, which keep their own credits and terms. Their license notices are reproduced as required.
-
-## beUI
-
-Source: https://github.com/starc007/ui-components · https://beui.dev
-Used in: `components/agents/*`
-
 MIT License
 
-Copyright (c) 2026 Saurabh Chauhan
+Copyright (c) 2026 nuelmdesign
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,15 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## Beautiful UI
-
-Source: https://beautifului.dev (by the design studio Turbo)
-Used in: the components in `components/agents/` whose first line reads
-"Adapted from Beautiful UI by Turbo".
-
-Beautiful UI is published as free, copy-ready source code. The code was supplied
-to this project without a license file; it is adapted here (restyled to the
-opendraft tokens, with dependencies replaced) and credited at the top of each
-file. Confirm the terms with Turbo before redistributing these components
-outside this project.
