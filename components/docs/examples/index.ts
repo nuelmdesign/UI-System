@@ -92,6 +92,9 @@ import ThemeToggleExample from "./theme-toggle"
 import SiteHeaderExample from "./site-header"
 import QrCodeExample from "./qr-code"
 import TicketPassExample from "./ticket-pass"
+import CheckoutExample from "./checkout"
+import CatalogExample from "./catalog"
+import DetailPageExample from "./detail-page"
 
 /** Live example for each component page, keyed by slug. */
 export const EXAMPLES: Record<string, ComponentType> = {
@@ -187,4 +190,7 @@ export const EXAMPLES: Record<string, ComponentType> = {
   "site-header": SiteHeaderExample,
   "qr-code": QrCodeExample,
   "ticket-pass": TicketPassExample,
+  checkout: CheckoutExample,
+  catalog: CatalogExample,
+  "detail-page": DetailPageExample,
 }

@@ -114,7 +114,10 @@
     "@opendraft/theme-toggle",
     "@opendraft/site-header",
     "@opendraft/qr-code",
-    "@opendraft/ticket-pass"
+    "@opendraft/ticket-pass",
+    "@opendraft/checkout",
+    "@opendraft/catalog",
+    "@opendraft/detail-page"
   ],
   "type": "registry:item"
 }
