@@ -2,17 +2,20 @@
 
 import * as React from "react"
 import { motion } from "motion/react"
+import { ArrowUpRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { duration, ease, spring } from "@/lib/motion"
+import { SITE, aiPrompt, claudeUrl } from "@/lib/site"
 import {
   CATEGORY_LABEL,
   CATEGORY_ORDER,
   GUIDES,
   entriesIn,
 } from "@/components/docs/entries"
-import { useDocsNav } from "@/components/docs/docs-nav"
+import { useDocsNav, useSiteBase } from "@/components/docs/docs-nav"
 import { CodeBlock } from "@/components/agents/code-block"
+import { CopyButton } from "@/components/motion/copy-button"
 import { PixelField } from "@/components/motion/pixel-field"
 import { Button } from "@/components/ui/button"
 
@@ -104,6 +107,153 @@ function Introduction() {
             <code>lib/motion.ts</code>. Components never hard-code colors,
             shadows, easings or springs.
           </p>
+        </Prose>
+      </section>
+    </>
+  )
+}
+
+/* -------------------------------- Use with AI ------------------------------- */
+
+const SAVE_RULES = `curl -o opendraft.md ${SITE.url}/llms-full.txt`
+
+function UseWithAi() {
+  const nav = useDocsNav()
+  const base = useSiteBase()
+  const prompt = aiPrompt()
+  const files = [
+    {
+      href: `${base}llms.txt`,
+      name: "llms.txt",
+      about:
+        "The setup steps, design rules and tokens, followed by an index of every component with its install command. This is the link in the prompt.",
+    },
+    {
+      href: `${base}llms-full.txt`,
+      name: "llms-full.txt",
+      about:
+        "The rules plus every component page in one file, for tools that can't follow links.",
+    },
+    {
+      href: `${base}llms/prompt-bar.md`,
+      name: "llms/<slug>.md",
+      about:
+        "One page per component: install command, import, props and types, and a working example. The Copy for AI button on each component page copies it.",
+    },
+  ]
+
+  return (
+    <>
+      <Prose>
+        <p>
+          Paste one link into an AI assistant and it learns opendraft&apos;s
+          setup steps, design rules, tokens and the full component list. It then
+          installs the real components instead of inventing look-alikes.
+        </p>
+      </Prose>
+      <section className="grid gap-4">
+        <H2>1. Paste the prompt</H2>
+        <Prose>
+          <p>
+            Start a chat with this prompt and replace the last line with what
+            you want to build.
+          </p>
+        </Prose>
+        <CodeBlock
+          filename="prompt"
+          language="text"
+          code={prompt}
+          status="complete"
+          copyable={false}
+          showLineNumbers={false}
+          wrap
+        />
+        <div className="flex flex-wrap items-center gap-2">
+          <CopyButton value={prompt} variant="outline" size="icon-sm" />
+          <Button size="sm" asChild>
+            <a href={claudeUrl(prompt)} target="_blank" rel="noreferrer">
+              Open in Claude <ArrowUpRight />
+            </a>
+          </Button>
+        </div>
+      </section>
+      <section className="grid gap-4">
+        <H2>2. What the assistant reads</H2>
+        <div className="grid border-t border-l">
+          {files.map((file) => (
+            <a
+              key={file.name}
+              href={file.href}
+              target="_blank"
+              rel="noreferrer"
+              className="grid gap-1 border-r border-b bg-card p-4 transition-colors hover:bg-accent"
+            >
+              <span className="flex items-center gap-1.5 font-mono text-sm text-brand">
+                {file.name} <ArrowUpRight className="size-3.5" />
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {file.about}
+              </span>
+            </a>
+          ))}
+        </div>
+        <Prose>
+          <p>
+            All three are generated from the same sources as these docs, so they
+            list the same components and props.
+          </p>
+        </Prose>
+      </section>
+      <section className="grid gap-4">
+        <H2>3. Editors with project rules</H2>
+        <Prose>
+          <p>
+            Tools that read a rules file from the project (Cursor rules, Claude
+            Code&apos;s <code>CLAUDE.md</code>, and similar) work best with the
+            rules saved locally. Download <code>llms-full.txt</code> into the
+            project:
+          </p>
+        </Prose>
+        <CodeBlock
+          filename="terminal"
+          language="bash"
+          code={SAVE_RULES}
+          status="complete"
+          showLineNumbers={false}
+        />
+        <Prose>
+          <p>
+            Then reference it from the rules file, for example a line in{" "}
+            <code>CLAUDE.md</code> that says{" "}
+            <code>Build UI with opendraft. Follow @opendraft.md.</code> Download
+            it again when you want the latest components.
+          </p>
+        </Prose>
+      </section>
+      <section className="grid gap-4">
+        <H2>What to expect</H2>
+        <Prose>
+          <ul className="grid list-disc gap-2 pl-5">
+            <li>
+              It installs <code>@opendraft</code> components with the shadcn
+              CLI, starting with <code>@opendraft/theme</code>, and imports them
+              from <code>@/components</code>.
+            </li>
+            <li>
+              It styles only with tokens such as <code>bg-primary</code> and{" "}
+              <code>text-muted-foreground</code>, never raw palette colors.
+            </li>
+            <li>
+              It writes a new component only when nothing in the{" "}
+              <nav.Link
+                href={nav.href("")}
+                className="text-brand underline-offset-4 hover:underline"
+              >
+                component list
+              </nav.Link>{" "}
+              fits, and builds it from existing parts.
+            </li>
+          </ul>
         </Prose>
       </section>
     </>
@@ -397,6 +547,7 @@ function MotionGuide() {
 
 const BODIES: Record<string, React.ComponentType> = {
   introduction: Introduction,
+  ai: UseWithAi,
   installation: Installation,
   theming: Theming,
   motion: MotionGuide,

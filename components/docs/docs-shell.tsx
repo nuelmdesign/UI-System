@@ -116,6 +116,15 @@ export function DocsShell({
             >
               Theming
             </nav.Link>
+            <nav.Link
+              href={nav.href("ai")}
+              className={cn(
+                "transition-colors hover:text-foreground",
+                current === "ai" && "text-foreground"
+              )}
+            >
+              Use with AI
+            </nav.Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <button

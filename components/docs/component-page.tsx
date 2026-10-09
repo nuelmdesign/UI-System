@@ -1,9 +1,17 @@
 "use client"
 
 import * as React from "react"
-import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react"
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Copy,
+  RotateCcw,
+} from "lucide-react"
+import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
+import { SITE, aiPrompt, claudeUrl } from "@/lib/site"
 import {
   CATEGORY_LABEL,
   ENTRY_BY_SLUG,
@@ -11,7 +19,7 @@ import {
   READING_ORDER,
   type DocEntry,
 } from "@/components/docs/entries"
-import { useDocsNav } from "@/components/docs/docs-nav"
+import { useDocsNav, useSiteBase } from "@/components/docs/docs-nav"
 import { EXAMPLES } from "@/components/docs/examples"
 import { CodeBlock } from "@/components/agents/code-block"
 import { CopyButton } from "@/components/motion/copy-button"
@@ -71,6 +79,7 @@ export function ComponentPage({
         <p className="mt-3 max-w-2xl text-pretty text-muted-foreground">
           {entry.description}
         </p>
+        <AiActions entry={entry} />
 
         <section id="preview" className="mt-10 scroll-mt-20">
           <Tabs defaultValue="preview" variant="underline">
@@ -187,6 +196,43 @@ export function ComponentPage({
           ))}
         </nav>
       </aside>
+    </div>
+  )
+}
+
+/** "Copy for AI" and "Open in Claude", for handing this page to an assistant. */
+function AiActions({ entry }: { entry: DocEntry }) {
+  const base = useSiteBase()
+  const [copying, setCopying] = React.useState(false)
+  const pageUrl = `${base}llms/${entry.slug}.md`
+  const prompt = aiPrompt(
+    `Use the ${entry.title} component (${SITE.url}/llms/${entry.slug}.md) in my project.`
+  )
+
+  async function copy() {
+    setCopying(true)
+    try {
+      const res = await fetch(pageUrl)
+      if (!res.ok) throw new Error(String(res.status))
+      await navigator.clipboard.writeText(await res.text())
+      toast.success("Copied page for AI")
+    } catch {
+      toast.error("Couldn't copy the page")
+    } finally {
+      setCopying(false)
+    }
+  }
+
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-2">
+      <Button variant="outline" size="sm" loading={copying} onClick={copy}>
+        <Copy /> Copy for AI
+      </Button>
+      <Button variant="outline" size="sm" asChild>
+        <a href={claudeUrl(prompt)} target="_blank" rel="noreferrer">
+          Open in Claude <ArrowUpRight />
+        </a>
+      </Button>
     </div>
   )
 }

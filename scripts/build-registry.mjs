@@ -45,6 +45,39 @@ function keyframes(body) {
   return out
 }
 
+// `@utility name { ... }` blocks (eyebrow, bg-dots, …) so installs get them too.
+function utilities() {
+  const out = {}
+  const re = /@utility\s+([\w-]+)\s*\{/g
+  let m
+  while ((m = re.exec(css))) {
+    let depth = 0
+    const open = re.lastIndex - 1
+    for (let i = open; i < css.length; i++) {
+      if (css[i] === "{") depth++
+      if (css[i] === "}" && --depth === 0) {
+        out[`@utility ${m[1]}`] = declarations(css.slice(open + 1, i))
+        break
+      }
+    }
+  }
+  return out
+}
+
+// Declarations plus one level of nested rules (e.g. `&::-webkit-scrollbar`).
+function declarations(body) {
+  const out = {}
+  const nested = /([^{};]+)\{([^{}]*)\}/g
+  for (const [, selector, inner] of body.matchAll(nested)) {
+    out[selector.trim()] = declarations(inner)
+  }
+  for (const d of body.replace(nested, "").split(";")) {
+    const [k, ...v] = d.split(":")
+    if (k.trim()) out[k.trim()] = v.join(":").replace(/\s+/g, " ").trim()
+  }
+  return out
+}
+
 function parseRules(body) {
   const out = {}
   const re = /([^{}]+)\{([^{}]*)\}/g
@@ -136,7 +169,7 @@ const items = [
       light: vars(block(":root")),
       dark: vars(block(".dark")),
     },
-    css: keyframes(motionTheme),
+    css: { ...keyframes(motionTheme), ...utilities() },
   },
   {
     name: "utils",

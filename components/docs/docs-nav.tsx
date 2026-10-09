@@ -51,3 +51,11 @@ export const DocsNavProvider = DocsNavContext.Provider
 export function useDocsNav() {
   return React.useContext(DocsNavContext)
 }
+
+/**
+ * Where the site's static files (llms.txt, llms/*.md) live: "/" in Next,
+ * "" in the hash-routed preview. Derived from the registry base ("/r/", "r/").
+ */
+export function useSiteBase() {
+  return useDocsNav().registryBase.replace(/r\/$/, "")
+}

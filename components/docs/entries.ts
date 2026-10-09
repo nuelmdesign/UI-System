@@ -22,6 +22,12 @@ export const GUIDES: GuideEntry[] = [
     description: "What opendraft is and how it's put together.",
   },
   {
+    slug: "ai",
+    title: "Use with AI",
+    description:
+      "Give an AI assistant one link so it builds with opendraft's components and tokens.",
+  },
+  {
     slug: "installation",
     title: "Installation",
     description: "Add the registry to a project and install components.",
