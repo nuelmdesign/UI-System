@@ -8,6 +8,10 @@ opendraft ships through a shadcn registry. Components install as source files in
 
 Requirements: React 19, Tailwind CSS v4, TypeScript, and a shadcn `components.json`. Next.js is supported but not required.
 
+If you can't run shell commands (a chat assistant, or a hosted builder), install by hand: for each item, fetch `https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/<name>.json`. Its `files[].content` is the source and `files[].path` is where to write it in the project. Also fetch every item named in `registryDependencies` (strip the `@opendraft/` prefix), and add the `dependencies` with the project's package manager. Install `theme` first and paste its `css` into the global stylesheet.
+
+Not on Next.js (Vite, Lovable, Remix, Astro): everything works the same except fonts and the `"use client"` lines. Load the three fonts with a Google Fonts `<link>` or `@fontsource` packages and set `--font-geist`, `--font-geist-mono` and `--font-newsreader` on `:root` to the family names. Ignore `"use client"`; it's harmless. Use `import "./index.css"` (or your global stylesheet) where steps below say `app/globals.css`, and add the `dark` class to `<html>` yourself.
+
 1. If the project has no `components.json`, run `npx shadcn@latest init`.
 2. Add the registry to `components.json`:
 

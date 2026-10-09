@@ -98,7 +98,7 @@ export function Section({
 
 /** Copies the ready-made prompt that points an assistant at opendraft. */
 export function CopyPromptButton({
-  label = "Copy prompt for Claude",
+  label = "Copy prompt",
   className,
   ...props
 }: Omit<React.ComponentProps<typeof Button>, "onClick" | "children"> & {
@@ -119,7 +119,8 @@ export function CopyPromptButton({
         await navigator.clipboard.writeText(aiPrompt())
         setCopied(true)
         toast("Prompt copied", {
-          description: "Paste it into Claude and describe what to build.",
+          description:
+            "Paste it into Claude, ChatGPT, Lovable or Cursor and describe what to build.",
         })
       }}
       {...props}

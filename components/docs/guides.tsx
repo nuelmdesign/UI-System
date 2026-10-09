@@ -2,11 +2,17 @@
 
 import * as React from "react"
 import { motion } from "motion/react"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Copy } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { duration, ease, spring } from "@/lib/motion"
-import { SITE, aiPrompt, claudeUrl } from "@/lib/site"
+import {
+  SITE,
+  aiPrompt,
+  aiPromptInline,
+  chatgptUrl,
+  claudeUrl,
+} from "@/lib/site"
 import {
   CATEGORY_LABEL,
   CATEGORY_ORDER,
@@ -19,6 +25,7 @@ import { ThemeBuilder } from "@/components/site/theme-builder"
 import { CopyButton } from "@/components/motion/copy-button"
 import { PixelField } from "@/components/motion/pixel-field"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 
 export function GuidePage({ slug }: { slug: string }) {
   const guide = GUIDES.find((g) => g.slug === slug)
@@ -116,6 +123,21 @@ function UseWithAi() {
   const nav = useDocsNav()
   const base = useSiteBase()
   const prompt = aiPrompt()
+  const [copyingInline, setCopyingInline] = React.useState(false)
+
+  async function copyInline() {
+    setCopyingInline(true)
+    try {
+      const res = await fetch(`${base}llms.txt`)
+      if (!res.ok) throw new Error(String(res.status))
+      await navigator.clipboard.writeText(aiPromptInline(await res.text()))
+      toast.success("Copied the prompt with the rules inside")
+    } catch {
+      toast.error("Couldn't copy the prompt")
+    } finally {
+      setCopyingInline(false)
+    }
+  }
   const files = [
     {
       href: `${base}llms.txt`,
@@ -170,7 +192,29 @@ function UseWithAi() {
               Open in Claude <ArrowUpRight />
             </a>
           </Button>
+          <Button size="sm" variant="outline" asChild>
+            <a href={chatgptUrl(prompt)} target="_blank" rel="noreferrer">
+              Open in ChatGPT <ArrowUpRight />
+            </a>
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            loading={copyingInline}
+            onClick={copyInline}
+          >
+            <Copy /> Copy with rules included
+          </Button>
         </div>
+        <Prose>
+          <p>
+            Some assistants can&apos;t open links, and ChatGPT often can&apos;t
+            open GitHub files. &quot;Copy with rules included&quot; puts the
+            rules and component index in the prompt itself, so nothing needs
+            fetching. The assistant writes the code and lists the install
+            commands; you run them in your project.
+          </p>
+        </Prose>
       </section>
       <section className="grid gap-4">
         <H2>2. What the assistant reads</H2>

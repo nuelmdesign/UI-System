@@ -5,7 +5,7 @@ import { Check, Copy, Moon, RotateCcw, Sun } from "lucide-react"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
-import { aiPrompt, claudeUrl } from "@/lib/site"
+import { aiPrompt, chatgptUrl, claudeUrl } from "@/lib/site"
 import {
   DEFAULT_THEME,
   PRIMARIES,
@@ -206,7 +206,7 @@ export function ThemeBuilder({ className }: { className?: string }) {
       <Tabs defaultValue="prompt" className="gap-0 border-t">
         <div className="flex items-center justify-between gap-3 px-4 pt-3">
           <TabsList>
-            <TabsTrigger value="prompt">Prompt for Claude</TabsTrigger>
+            <TabsTrigger value="prompt">Prompt</TabsTrigger>
             <TabsTrigger value="css">CSS</TabsTrigger>
           </TabsList>
         </div>
@@ -217,11 +217,16 @@ export function ThemeBuilder({ className }: { className?: string }) {
                 Open in Claude
               </a>
             </Button>
+            <Button variant="outline" size="sm" asChild>
+              <a href={chatgptUrl(prompt)} target="_blank" rel="noreferrer">
+                Open in ChatGPT
+              </a>
+            </Button>
           </Output>
           <p className="mt-3 text-sm text-pretty text-muted-foreground">
             {changed
-              ? "The theme line tells Claude which tokens to change. Replace the last line with what you want to build."
-              : "Change a setting above and the prompt picks it up. With the defaults, Claude uses opendraft's own look."}
+              ? "The theme line tells the assistant which tokens to change. Replace the last line with what you want to build."
+              : "Change a setting above and the prompt picks it up. With the defaults, the assistant uses opendraft's own look."}
           </p>
         </TabsContent>
         <TabsContent value="css" className="p-4">

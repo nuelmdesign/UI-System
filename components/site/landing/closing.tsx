@@ -31,7 +31,7 @@ const FAQ: { group: string; items: [string, React.ReactNode][] }[] = [
       ],
       [
         "Does it work with other AI tools?",
-        "Yes. Any assistant that can open a link can read llms.txt. For tools that work from files in your project, like Cursor or Claude Code, save llms-full.txt into the project and point your rules file at it.",
+        'Yes, though only Claude is tested so far. Any assistant that can open a link can read llms.txt, and the prompt on this page has "Open in ChatGPT" too. Lovable and other React, Tailwind and shadcn builders fit the stack. Chat tools that can\'t run commands read the files from the registry and write them for you. For editors like Cursor or Claude Code, save llms-full.txt into the project and point your rules file at it.',
       ],
       [
         "Can I use my own fonts, colors and corner radius?",
