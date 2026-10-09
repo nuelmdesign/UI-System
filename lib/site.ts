@@ -36,3 +36,23 @@ export function claudeUrl(prompt: string) {
 export function chatgptUrl(prompt: string) {
   return `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`
 }
+
+/**
+ * A prompt that carries the rules itself, for assistants that can't open links
+ * or run commands. They write the code; the person installs the components.
+ */
+export function aiPromptInline(
+  rules: string,
+  task = "[describe what you want to build]",
+  theme = ""
+) {
+  return `Use the opendraft design system for this. You can't open links or run commands here, so the rules and component index are below. Follow them: use only components from the index, style only with its tokens, and import from the paths the rules give (for example @/components/ui/button).
+
+When you finish, list every opendraft component you used with its install command, like \`npx shadcn@latest add @opendraft/button\`, so I can install them. Only use props you're sure exist; if unsure, ask me to paste that component's page from ${SITE.files}/llms/<name>.md.${theme ? `\n\n${theme}` : ""}
+
+Build: ${task}
+
+--- opendraft rules and components ---
+
+${rules}`
+}
