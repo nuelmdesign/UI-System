@@ -1,6 +1,6 @@
 # Diff Table
 
-A proposed table edit that plays once; click each changed row to keep or drop it before applying.
+A proposed table edit that plays once; click each changed row to keep or drop it before applying. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Data & Workflows
 

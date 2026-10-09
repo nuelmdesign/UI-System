@@ -1,6 +1,6 @@
 # Fine-tune Card
 
-Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu.
+Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Data & Workflows
 

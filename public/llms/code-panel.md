@@ -1,6 +1,6 @@
 # Code Panel
 
-Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights.
+Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

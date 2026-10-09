@@ -1,6 +1,6 @@
 # Prompt Bar
 
-A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo.
+A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

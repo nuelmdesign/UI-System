@@ -1,6 +1,6 @@
 # Tool Chips
 
-An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover.
+An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

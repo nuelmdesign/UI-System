@@ -8,6 +8,33 @@
 
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 
+/** Components that render ice-cream-shop demo content until given real data. */
+const SAMPLE_CONTENT = new Set([
+  "agent-screen",
+  "chat-panel",
+  "code-panel",
+  "context-cards",
+  "diff-table",
+  "filter-table",
+  "fine-tune-card",
+  "flowchart",
+  "insight-cards",
+  "prompt-bar",
+  "question-card",
+  "records-table",
+  "search-list",
+  "sidebar-nav",
+  "streaming-answer",
+  "thinking-trace",
+  "tool-chips",
+])
+
+/** Description plus a warning when the component ships demo content. */
+const describe = (entry) =>
+  SAMPLE_CONTENT.has(entry.slug)
+    ? `${entry.description} Shows sample content (an ice cream shop) until you pass your own data through its props.`
+    : entry.description
+
 const root = new URL("../", import.meta.url)
 const read = (path) => readFileSync(new URL(path, root), "utf8")
 
@@ -365,7 +392,7 @@ function componentPage(entry) {
   const lines = [
     `# ${entry.title}`,
     "",
-    entry.description,
+    describe(entry),
     "",
     `Category: ${CATEGORY_LABEL[entry.category]}`,
     "",
@@ -450,7 +477,7 @@ const ordered = CATEGORY_ORDER.flatMap((category) =>
 const componentIndex = CATEGORY_ORDER.map((category) => {
   const rows = ENTRIES.filter((e) => e.category === category).map(
     (e) =>
-      `- [${e.title}](${pageUrl(e.slug)}): ${e.description} Install: \`${installCmd(e.registry ?? e.slug)}\``
+      `- [${e.title}](${pageUrl(e.slug)}): ${describe(e)} Install: \`${installCmd(e.registry ?? e.slug)}\``
   )
   return `### ${CATEGORY_LABEL[category]}\n\n${rows.join("\n")}`
 }).join("\n\n")

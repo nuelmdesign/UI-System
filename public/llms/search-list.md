@@ -1,6 +1,6 @@
 # Search List
 
-Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state.
+Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Components
 

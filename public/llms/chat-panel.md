@@ -1,6 +1,6 @@
 # Chat Panel
 
-Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer.
+Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

@@ -1,6 +1,6 @@
 # Question Card
 
-One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice.
+One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 

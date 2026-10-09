@@ -1,6 +1,6 @@
 # Thinking Trace
 
-An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants.
+An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: AI Agents
 
