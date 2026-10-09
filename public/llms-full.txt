@@ -29,14 +29,19 @@ Requirements: React 19, Tailwind CSS v4, TypeScript, and a shadcn `components.js
 npx shadcn@latest add @opendraft/theme
 ```
 
-4. Install each component you use, by name:
+4. Clean up the starter stylesheet. Projects made with `create-next-app` leave rules at the bottom of `app/globals.css` that fight the theme. Delete them:
+   - the `@media (prefers-color-scheme: dark) { :root { … } }` block (dark mode here is the `dark` class, not the operating system setting)
+   - the starter's `body { background: …; color: …; font-family: Arial, … }` rule (the theme sets the body styles)
+   - the starter's own `:root { --background; --foreground }` values, if they remain after the theme's (the theme's must win)
+5. Install each component you use, by name:
 
 ```bash
 npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 ```
 
-5. Load three fonts and expose them as CSS variables: Geist as `--font-geist`, Geist Mono as `--font-geist-mono`, Newsreader as `--font-newsreader`. In Next.js use `next/font/google`.
-6. Wrap the app once so motion respects the user's "reduce motion" setting:
+6. Load three fonts and expose them as CSS variables: Geist as `--font-geist`, Geist Mono as `--font-geist-mono`, Newsreader as `--font-newsreader`. In Next.js use `next/font/google` (the starter's `--font-geist-sans` is not the same variable; rename it).
+7. Dark mode is the `dark` class on `<html>`. To follow the visitor's system setting, toggle that class with a small script, or use `next-themes` with `attribute="class"`.
+8. Wrap the app once so motion respects the user's "reduce motion" setting:
 
 ```tsx
 import { MotionConfig } from "motion/react"
@@ -49,6 +54,8 @@ import { MotionConfig } from "motion/react"
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.
+- Many components render sample content when you give them no data (ice-cream shop names, example transactions, demo prompts). Always pass the real content through their props: rows, items, labels, options, callbacks. Check the component's page for its props. Leaving the defaults in a real screen is a bug.
+- Some components have a `fill` or `demo` prop. `demo` runs a self-playing walkthrough, so set `demo={false}` in a real screen. `fill` makes a scrolling area take its container's height instead of a fixed maximum, so give the container a height.
 - Only write a new component when nothing fits. Build it from the existing parts and follow the rules below.
 
 ### 3. Style only with tokens

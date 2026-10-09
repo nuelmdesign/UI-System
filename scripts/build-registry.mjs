@@ -157,6 +157,31 @@ const lib = (name) => ({
   files: [{ path: `lib/${name}.ts`, type: "registry:lib" }],
 })
 
+// Base styles every project needs for the tokens to take effect. Mirrors the
+// `@layer base` block in app/globals.css, written as plain CSS so the shadcn
+// CLI can merge it into a project's stylesheet.
+const BASE_LAYER = {
+  "@layer base": {
+    "*": {
+      "border-color": "var(--border)",
+      "outline-color": "color-mix(in oklab, var(--ring) 50%, transparent)",
+    },
+    html: { "color-scheme": "light" },
+    "html.dark": { "color-scheme": "dark" },
+    body: {
+      "background-color": "var(--background)",
+      color: "var(--foreground)",
+      "font-family": "var(--font-body)",
+      "-webkit-font-smoothing": "antialiased",
+      "-moz-osx-font-smoothing": "grayscale",
+    },
+    "h1, h2, h3, h4": { "letter-spacing": "-0.025em", "text-wrap": "balance" },
+    "::selection": {
+      background: "color-mix(in oklch, var(--brand) 28%, transparent)",
+    },
+  },
+}
+
 const items = [
   {
     name: "theme",
@@ -168,7 +193,7 @@ const items = [
       light: vars(block(":root")),
       dark: vars(block(".dark")),
     },
-    css: { ...keyframes(motionTheme), ...utilities() },
+    css: { ...BASE_LAYER, ...keyframes(motionTheme), ...utilities() },
   },
   {
     name: "utils",
