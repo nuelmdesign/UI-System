@@ -2531,6 +2531,93 @@
       ]
     },
     {
+      "name": "checkout",
+      "type": "registry:block",
+      "title": "Checkout",
+      "description": "Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge",
+        "@opendraft/button",
+        "@opendraft/checkbox",
+        "@opendraft/empty-state",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/quantity-stepper",
+        "@opendraft/radio-group",
+        "@opendraft/stepper",
+        "@opendraft/ticket-pass"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/checkout.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/checkout.tsx"
+        }
+      ]
+    },
+    {
+      "name": "catalog",
+      "type": "registry:block",
+      "title": "Catalog",
+      "description": "Browse and discovery screen: featured band, search, category chips, sort, price filter, availability switch, card grid, active filters, empty state and loading skeleton.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/badge",
+        "@opendraft/input",
+        "@opendraft/select",
+        "@opendraft/switch",
+        "@opendraft/progress",
+        "@opendraft/skeleton",
+        "@opendraft/empty-state"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/catalog.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/catalog.tsx"
+        }
+      ]
+    },
+    {
+      "name": "detail-page",
+      "type": "registry:block",
+      "title": "Detail Page",
+      "description": "Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/avatar",
+        "@opendraft/badge",
+        "@opendraft/button",
+        "@opendraft/accordion",
+        "@opendraft/progress",
+        "@opendraft/quantity-stepper",
+        "@opendraft/radio-group",
+        "@opendraft/stat",
+        "@opendraft/tabs"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/detail-page.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/detail-page.tsx"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -2646,7 +2733,10 @@
         "@opendraft/theme-toggle",
         "@opendraft/site-header",
         "@opendraft/qr-code",
-        "@opendraft/ticket-pass"
+        "@opendraft/ticket-pass",
+        "@opendraft/checkout",
+        "@opendraft/catalog",
+        "@opendraft/detail-page"
       ]
     }
   ]

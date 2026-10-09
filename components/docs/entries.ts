@@ -724,6 +724,30 @@ export const ENTRIES: DocEntry[] = [
       "Digital ticket card with a title band, details grid, tear line, QR stub and a status badge.",
     isNew: true,
   },
+  {
+    slug: "checkout",
+    title: "Checkout",
+    category: "Blocks",
+    description:
+      "Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code.",
+    isNew: true,
+  },
+  {
+    slug: "catalog",
+    title: "Catalog",
+    category: "Blocks",
+    description:
+      "Browse and discovery screen: featured band, search, category chips, sort, price filter, availability switch, card grid, active filters, empty state and loading skeleton.",
+    isNew: true,
+  },
+  {
+    slug: "detail-page",
+    title: "Detail Page",
+    category: "Blocks",
+    description:
+      "Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.",
+    isNew: true,
+  },
 ]
 
 export const ENTRY_BY_SLUG = Object.fromEntries(ENTRIES.map((e) => [e.slug, e]))

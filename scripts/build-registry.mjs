@@ -883,6 +883,54 @@ const items = [
     description:
       "Digital ticket card with a title band, details grid, tear line, QR stub and a status badge.",
   }),
+  screen("checkout", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/badge",
+      "@opendraft/button",
+      "@opendraft/checkbox",
+      "@opendraft/empty-state",
+      "@opendraft/input",
+      "@opendraft/label",
+      "@opendraft/quantity-stepper",
+      "@opendraft/radio-group",
+      "@opendraft/stepper",
+      "@opendraft/ticket-pass",
+    ],
+    description:
+      "Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code.",
+  }),
+  screen("catalog", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/badge",
+      "@opendraft/input",
+      "@opendraft/select",
+      "@opendraft/switch",
+      "@opendraft/progress",
+      "@opendraft/skeleton",
+      "@opendraft/empty-state",
+    ],
+    description:
+      "Browse and discovery screen: featured band, search, category chips, sort, price filter, availability switch, card grid, active filters, empty state and loading skeleton.",
+  }),
+  screen("detail-page", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/avatar",
+      "@opendraft/badge",
+      "@opendraft/button",
+      "@opendraft/accordion",
+      "@opendraft/progress",
+      "@opendraft/quantity-stepper",
+      "@opendraft/radio-group",
+      "@opendraft/stat",
+      "@opendraft/tabs",
+    ],
+    description:
+      "Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.
