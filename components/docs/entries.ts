@@ -652,6 +652,78 @@ export const ENTRIES: DocEntry[] = [
       "AI agent chat workspace: conversation rail, thread with thinking, tool calls and streamed answers, prompt bar and a live task panel.",
     isNew: true,
   },
+  {
+    slug: "quantity-stepper",
+    title: "Quantity Stepper",
+    category: "Components",
+    description:
+      "Minus, value and plus control with min, max and step, controlled or uncontrolled, with optional press-and-hold repeat.",
+    isNew: true,
+  },
+  {
+    slug: "progress",
+    title: "Progress",
+    category: "Components",
+    description:
+      "Horizontal progress bar with a label row and a tone that follows how full or empty it is, for quotas and stock.",
+    isNew: true,
+  },
+  {
+    slug: "stat",
+    title: "Stat",
+    category: "Components",
+    description:
+      "KPI tile with a label, a large value, a change chip and an optional toggle-button mode, plus a grouped grid.",
+    isNew: true,
+  },
+  {
+    slug: "empty-state",
+    title: "Empty State",
+    category: "Components",
+    description:
+      "Centered empty block with an optional icon, title, description and action slots, for tables, lists and cards.",
+    isNew: true,
+  },
+  {
+    slug: "stepper",
+    title: "Stepper",
+    category: "Components",
+    description:
+      "Numbered step indicator for multi-step flows like checkout, horizontal or vertical, that never overflows on mobile.",
+    isNew: true,
+  },
+  {
+    slug: "theme-toggle",
+    title: "Theme Toggle",
+    category: "Components",
+    description:
+      "Icon menu that switches between system, light and dark by toggling the dark class, and remembers the choice.",
+    isNew: true,
+  },
+  {
+    slug: "site-header",
+    title: "Site Header",
+    category: "Components",
+    description:
+      "Sticky top bar with a brand slot, nav links, an actions slot and a mobile menu.",
+    isNew: true,
+  },
+  {
+    slug: "qr-code",
+    title: "QR Code",
+    category: "Components",
+    description:
+      "A real, scannable QR code drawn as an inline SVG, readable in light and dark themes.",
+    isNew: true,
+  },
+  {
+    slug: "ticket-pass",
+    title: "Ticket Pass",
+    category: "Components",
+    description:
+      "Digital ticket card with a title band, details grid, tear line, QR stub and a status badge.",
+    isNew: true,
+  },
 ]
 
 export const ENTRY_BY_SLUG = Object.fromEntries(ENTRIES.map((e) => [e.slug, e]))

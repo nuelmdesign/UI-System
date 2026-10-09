@@ -832,6 +832,57 @@ const items = [
     description:
       "AI agent chat workspace: conversation rail, thread with thinking, tool calls and streamed answers, prompt bar and a live task panel.",
   }),
+  ui("quantity-stepper", {
+    deps: ["lucide-react", "class-variance-authority"],
+    reg: ["@opendraft/button"],
+    description:
+      "Minus, value and plus control with min, max and step, controlled or uncontrolled, with optional press-and-hold repeat.",
+  }),
+  ui("progress", {
+    deps: ["motion", "class-variance-authority"],
+    reg: ["@opendraft/motion"],
+    description:
+      "Horizontal progress bar with a label row and a tone that follows how full or empty it is, for quotas and stock.",
+  }),
+  ui("stat", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/badge"],
+    description:
+      "KPI tile with a label, a large value, a change chip and an optional toggle-button mode, plus a grouped grid.",
+  }),
+  ui("empty-state", {
+    deps: ["class-variance-authority"],
+    description:
+      "Centered empty block with an optional icon, title, description and action slots, for tables, lists and cards.",
+  }),
+  ui("stepper", {
+    deps: ["lucide-react"],
+    description:
+      "Numbered step indicator for multi-step flows like checkout, horizontal or vertical, that never overflows on mobile.",
+  }),
+  ui("theme-toggle", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/dropdown-menu"],
+    description:
+      "Icon menu that switches between system, light and dark by toggling the dark class, and remembers the choice.",
+  }),
+  ui("site-header", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button"],
+    description:
+      "Sticky top bar with a brand slot, nav links, an actions slot and a mobile menu.",
+  }),
+  ui("qr-code", {
+    deps: ["uqr"],
+    description:
+      "A real, scannable QR code drawn as an inline SVG, readable in light and dark themes.",
+  }),
+  ui("ticket-pass", {
+    deps: ["class-variance-authority"],
+    reg: ["@opendraft/qr-code", "@opendraft/badge"],
+    description:
+      "Digital ticket card with a title band, details grid, tear line, QR stub and a status badge.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.
