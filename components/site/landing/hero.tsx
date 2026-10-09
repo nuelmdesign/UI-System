@@ -63,9 +63,12 @@ export function Header() {
               </a>
             </Button>
             <ThemeToggle />
-            <Button variant="ink" size="sm" caps asChild className="ml-1">
-              <nav.Link href={nav.href("installation")}>Get started</nav.Link>
-            </Button>
+            <CopyPromptButton
+              variant="ink"
+              size="sm"
+              label="Copy prompt"
+              className="ml-1 hidden sm:inline-flex"
+            />
           </div>
         </header>
       </div>
