@@ -8,14 +8,14 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/agent-disclosure",
-    "@nuelm/action-swap",
-    "@nuelm/button",
-    "@nuelm/checkbox",
-    "@nuelm/radio-group",
-    "@nuelm/input"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/agent-disclosure",
+    "@opendraft/action-swap",
+    "@opendraft/button",
+    "@opendraft/checkbox",
+    "@opendraft/radio-group",
+    "@opendraft/input"
   ],
   "files": [
     {

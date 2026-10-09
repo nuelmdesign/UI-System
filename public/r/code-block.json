@@ -8,9 +8,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/agent-code"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/agent-code"
   ],
   "files": [
     {

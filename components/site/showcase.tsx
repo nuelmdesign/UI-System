@@ -70,7 +70,7 @@ export function Showcase() {
         </Section>
       </main>
       <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-x border-t px-4 py-6 text-muted-foreground sm:px-8">
-        <span className="eyebrow">nuelm/ui · 0.2</span>
+        <span className="eyebrow">opendraft · 0.2</span>
         <span className="text-sm">Built on shadcn, Radix and Motion.</span>
       </footer>
     </div>
@@ -88,7 +88,7 @@ function AnnouncementBar() {
     >
       <span className="truncate">
         <span className="text-ink-foreground dark:text-foreground">
-          nuelm/ui 0.2
+          opendraft 0.2
         </span>{" "}
         · A new editorial direction, plus 18 agent components
       </span>

@@ -1,6 +1,6 @@
 import { CopyButton } from "@/components/motion/copy-button"
 
-const COMMAND = "npx shadcn add @nuelm/button"
+const COMMAND = "npx shadcn add @opendraft/button"
 
 export default function CopyButtonDemo() {
   return (

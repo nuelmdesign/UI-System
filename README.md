@@ -1,4 +1,4 @@
-# nuelm/ui
+# opendraft
 
 A personal design system for everything I build. **shadcn structure, Motion feel, one set of tokens.**
 
@@ -14,7 +14,7 @@ Add the registry to your project's `components.json`:
 ```json
 {
   "registries": {
-    "@nuelm": "https://nuelm-ui.vercel.app/r/{name}.json"
+    "@opendraft": "https://opendraft-ui.vercel.app/r/{name}.json"
   }
 }
 ```
@@ -22,12 +22,12 @@ Add the registry to your project's `components.json`:
 Then:
 
 ```bash
-npx shadcn add @nuelm/theme      # tokens (do this first)
-npx shadcn add @nuelm/button     # any single component
-npx shadcn add @nuelm/all        # everything
+npx shadcn add @opendraft/theme      # tokens (do this first)
+npx shadcn add @opendraft/button     # any single component
+npx shadcn add @opendraft/all        # everything
 ```
 
-> The registry URL assumes this repo is deployed to Vercel as `nuelm-ui`. If you deploy elsewhere, update the URL in `components.json`.
+> The registry URL assumes this repo is deployed to Vercel as `opendraft-ui`. If you deploy elsewhere, update the URL in `components.json`.
 
 Wrap your app once so Motion respects the OS "reduce motion" setting:
 
@@ -62,13 +62,13 @@ The repo deploys with zero config: Vercel detects Next.js, and `pnpm build`
 regenerates the registry before building, so `public/r/*.json` ships with the site.
 
 1. Go to [vercel.com/new](https://vercel.com/new) and import `nuelmdesign/UI-System`.
-2. Name the project **`nuelm-ui`**, so the site lands at `https://nuelm-ui.vercel.app`,
-   the URL `components.json` points the `@nuelm` registry at. If that name is taken,
+2. Name the project **`opendraft-ui`**, so the site lands at `https://opendraft-ui.vercel.app`,
+   the URL `components.json` points the `@opendraft` registry at. If that name is taken,
    pick another and update the `registries` URL in `components.json` and this README.
 3. Leave the framework (Next.js), build command and output settings on their defaults.
 4. Until the pull request is merged into `main`, set **Settings → Git → Production Branch**
    to `claude/wizardly-fermat-q17vrj` (or use that branch's preview URL).
-5. Check it worked: `https://nuelm-ui.vercel.app/r/button.json` should return JSON.
+5. Check it worked: `https://opendraft-ui.vercel.app/r/button.json` should return JSON.
 
 ## Development
 

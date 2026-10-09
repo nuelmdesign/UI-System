@@ -8,10 +8,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/popover",
-    "@nuelm/use-hover-capable"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/popover",
+    "@opendraft/use-hover-capable"
   ],
   "files": [
     {

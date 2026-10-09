@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# nuelm/ui conventions
+# opendraft conventions
 
 - Tokens live in `app/globals.css`; motion timings live in `lib/motion.ts`. Never hard-code colors, shadows, easings or spring values in components. Use the tokens.
 - Keep shadcn token names (`background`, `primary`, `muted`, …) so third-party shadcn/beUI components stay compatible. Extra tokens: `brand` (accent text/strokes), `ink` (solid black buttons and bands, inverts in dark), `surface`, `success`, `warning`, and the `--blue-50…950` scale.

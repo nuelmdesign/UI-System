@@ -7,9 +7,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/button"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/button"
   ],
   "files": [
     {

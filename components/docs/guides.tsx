@@ -63,7 +63,7 @@ function Introduction() {
     <>
       <Prose>
         <p>
-          <strong>nuelm/ui</strong> is a personal design system for apps and
+          <strong>opendraft</strong> is a personal design system for apps and
           agent interfaces. Behavior comes from Radix, the look comes from one
           token file, and every state change moves with the same set of springs.
         </p>
@@ -114,13 +114,13 @@ function Introduction() {
 
 const COMPONENTS_JSON = `{
   "registries": {
-    "@nuelm": "https://nuelm-ui.vercel.app/r/{name}.json"
+    "@opendraft": "https://opendraft-ui.vercel.app/r/{name}.json"
   }
 }`
 
-const COMMANDS = `npx shadcn@latest add @nuelm/theme      # tokens, light and dark
-npx shadcn@latest add @nuelm/button     # any single component
-npx shadcn@latest add @nuelm/all        # everything`
+const COMMANDS = `npx shadcn@latest add @opendraft/theme      # tokens, light and dark
+npx shadcn@latest add @opendraft/button     # any single component
+npx shadcn@latest add @opendraft/all        # everything`
 
 const MOTION_CONFIG = `import { MotionConfig } from "motion/react"
 
@@ -137,7 +137,8 @@ function Installation() {
         <Prose>
           <p>
             In a project that already uses shadcn (Tailwind v4, a{" "}
-            <code>components.json</code>), add the <code>@nuelm</code> registry:
+            <code>components.json</code>), add the <code>@opendraft</code>{" "}
+            registry:
           </p>
         </Prose>
         <CodeBlock

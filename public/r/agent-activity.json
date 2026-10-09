@@ -8,10 +8,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/agent-disclosure",
-    "@nuelm/loading-states"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/agent-disclosure",
+    "@opendraft/loading-states"
   ],
   "files": [
     {

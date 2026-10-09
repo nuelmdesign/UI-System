@@ -89,7 +89,7 @@ function ReviewFlow() {
     >
       <dl className="grid gap-1 text-xs">
         {[
-          ["Release", "nuelm/ui 0.2"],
+          ["Release", "opendraft 0.2"],
           ["Checks", "4 passed"],
           ["Visibility", "Public registry"],
         ].map(([term, value]) => (

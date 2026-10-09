@@ -7,10 +7,10 @@
     "motion"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/message-bubble",
-    "@nuelm/message-scroller"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/message-bubble",
+    "@opendraft/message-scroller"
   ],
   "files": [
     {

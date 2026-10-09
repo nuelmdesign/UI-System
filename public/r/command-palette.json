@@ -8,13 +8,13 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/presence-gate",
-    "@nuelm/command-search",
-    "@nuelm/use-on-open",
-    "@nuelm/use-row-cursor",
-    "@nuelm/use-touch-capable"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/presence-gate",
+    "@opendraft/command-search",
+    "@opendraft/use-on-open",
+    "@opendraft/use-row-cursor",
+    "@opendraft/use-touch-capable"
   ],
   "files": [
     {

@@ -19,7 +19,7 @@ export const GUIDES: GuideEntry[] = [
   {
     slug: "introduction",
     title: "Introduction",
-    description: "What nuelm/ui is and how it's put together.",
+    description: "What opendraft is and how it's put together.",
   },
   {
     slug: "installation",

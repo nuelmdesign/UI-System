@@ -7,7 +7,7 @@
     "class-variance-authority"
   ],
   "registryDependencies": [
-    "@nuelm/utils"
+    "@opendraft/utils"
   ],
   "files": [
     {

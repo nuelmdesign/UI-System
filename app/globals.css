@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
-   nuelm/ui tokens
+   opendraft tokens
    Direction: editorial-technical. Hairline borders and square corners, a
    near-black / off-white neutral base, and a blue scale (periwinkle to royal)
    as the primary color. Token names match shadcn's, so any shadcn or

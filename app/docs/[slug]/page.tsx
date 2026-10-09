@@ -16,7 +16,7 @@ export function generateStaticParams() {
 export async function generateMetadata(props: PageProps<"/docs/[slug]">): Promise<Metadata> {
   const { slug } = await props.params
   const page = ENTRY_BY_SLUG[slug] ?? GUIDES.find((g) => g.slug === slug)
-  return page ? { title: `${page.title} · nuelm/ui`, description: page.description } : {}
+  return page ? { title: `${page.title} · opendraft`, description: page.description } : {}
 }
 
 export default async function DocPage(props: PageProps<"/docs/[slug]">) {

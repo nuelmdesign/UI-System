@@ -4,7 +4,7 @@
   "title": "Shimmer Text",
   "dependencies": [],
   "registryDependencies": [
-    "@nuelm/utils"
+    "@opendraft/utils"
   ],
   "files": [
     {

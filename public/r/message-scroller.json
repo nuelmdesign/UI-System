@@ -7,8 +7,8 @@
     "motion"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/preview-rail"
+    "@opendraft/utils",
+    "@opendraft/preview-rail"
   ],
   "files": [
     {

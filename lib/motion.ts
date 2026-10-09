@@ -1,7 +1,7 @@
 import type { Transition, Variants } from "motion/react"
 
 /**
- * nuelm/ui motion tokens — the single source of "feel" for the library.
+ * opendraft motion tokens — the single source of "feel" for the library.
  * Every animated component pulls from here. When you bring in a component
  * from beUI or anywhere else, swap its hard-coded timings for these.
  * CSS-driven animation uses the matching --ease-* tokens in globals.css.

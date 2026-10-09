@@ -5,8 +5,8 @@
   "description": "Chat application shell that folds its sidebar away when the shell gets narrow.",
   "dependencies": [],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/animated-sidebar"
+    "@opendraft/utils",
+    "@opendraft/animated-sidebar"
   ],
   "files": [
     {

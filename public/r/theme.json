@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "theme",
   "title": "Theme",
-  "description": "nuelm/ui color, radius, elevation and motion tokens (light + dark).",
+  "description": "opendraft color, radius, elevation and motion tokens (light + dark).",
   "cssVars": {
     "theme": {
       "font-display": "var(--font-newsreader), ui-serif, Georgia, serif",

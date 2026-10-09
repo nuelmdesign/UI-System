@@ -7,11 +7,11 @@
     "motion"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/use-dismiss",
-    "@nuelm/use-hover-gesture",
-    "@nuelm/use-tap-gesture"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/use-dismiss",
+    "@opendraft/use-hover-gesture",
+    "@opendraft/use-tap-gesture"
   ],
   "files": [
     {

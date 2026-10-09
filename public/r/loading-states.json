@@ -7,12 +7,12 @@
     "motion"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/shimmer-text",
-    "@nuelm/text-scramble",
-    "@nuelm/loader",
-    "@nuelm/text-shimmer"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/shimmer-text",
+    "@opendraft/text-scramble",
+    "@opendraft/loader",
+    "@opendraft/text-shimmer"
   ],
   "files": [
     {

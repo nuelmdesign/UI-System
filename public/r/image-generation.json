@@ -8,9 +8,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "@nuelm/utils",
-    "@nuelm/motion",
-    "@nuelm/use-hover-capable"
+    "@opendraft/utils",
+    "@opendraft/motion",
+    "@opendraft/use-hover-capable"
   ],
   "files": [
     {

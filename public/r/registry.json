@@ -1,13 +1,13 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "nuelm",
+  "name": "opendraft",
   "homepage": "https://github.com/nuelmdesign/UI-System",
   "items": [
     {
       "name": "theme",
       "type": "registry:theme",
       "title": "Theme",
-      "description": "nuelm/ui color, radius, elevation and motion tokens (light + dark).",
+      "description": "opendraft color, radius, elevation and motion tokens (light + dark).",
       "cssVars": {
         "theme": {
           "font-display": "var(--font-newsreader), ui-serif, Georgia, serif",
@@ -240,7 +240,7 @@
       "type": "registry:hook",
       "title": "use-hover-gesture",
       "registryDependencies": [
-        "@nuelm/touch"
+        "@opendraft/touch"
       ],
       "files": [
         {
@@ -255,7 +255,7 @@
       "type": "registry:hook",
       "title": "use-favicon",
       "registryDependencies": [
-        "@nuelm/favicon"
+        "@opendraft/favicon"
       ],
       "files": [
         {
@@ -381,7 +381,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -399,7 +399,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -414,7 +414,7 @@
       "title": "Input",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -429,7 +429,7 @@
       "title": "Textarea",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -446,7 +446,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -461,7 +461,7 @@
       "title": "Card",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -478,7 +478,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -493,7 +493,7 @@
       "title": "Kbd",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -508,7 +508,7 @@
       "title": "Skeleton",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -525,7 +525,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -543,8 +543,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -562,8 +562,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -581,8 +581,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -601,8 +601,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -621,8 +621,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -640,7 +640,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -658,7 +658,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -675,7 +675,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -693,8 +693,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -711,7 +711,7 @@
         "radix-ui"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -728,7 +728,7 @@
         "sonner"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -745,8 +745,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -764,8 +764,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -781,7 +781,7 @@
       "title": "Shimmer Text",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -799,8 +799,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -816,7 +816,7 @@
       "title": "Marquee",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -834,8 +834,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -853,8 +853,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -873,11 +873,11 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/use-dismiss",
-        "@nuelm/use-hover-gesture",
-        "@nuelm/use-tap-gesture"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/use-dismiss",
+        "@opendraft/use-hover-gesture",
+        "@opendraft/use-tap-gesture"
       ],
       "files": [
         {
@@ -896,8 +896,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -916,8 +916,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -936,8 +936,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -959,8 +959,8 @@
       "description": "Canvas pixel textures in the blue scale: mosaic, dot matrix and equalizer.",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/theme"
+        "@opendraft/utils",
+        "@opendraft/theme"
       ],
       "files": [
         {
@@ -980,8 +980,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1005,9 +1005,9 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/presence-gate"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/presence-gate"
       ],
       "files": [
         {
@@ -1027,13 +1027,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/presence-gate",
-        "@nuelm/command-search",
-        "@nuelm/use-on-open",
-        "@nuelm/use-row-cursor",
-        "@nuelm/use-touch-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/presence-gate",
+        "@opendraft/command-search",
+        "@opendraft/use-on-open",
+        "@opendraft/use-row-cursor",
+        "@opendraft/use-touch-capable"
       ],
       "files": [
         {
@@ -1053,10 +1053,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/popover",
-        "@nuelm/use-hover-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/popover",
+        "@opendraft/use-hover-capable"
       ],
       "files": [
         {
@@ -1097,10 +1097,10 @@
         "@tanstack/react-virtual"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/checkbox",
-        "@nuelm/touch"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/checkbox",
+        "@opendraft/touch"
       ],
       "files": [
         {
@@ -1174,9 +1174,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/button"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/button"
       ],
       "files": [
         {
@@ -1195,8 +1195,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1220,8 +1220,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1241,10 +1241,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/use-favicon"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/use-favicon"
       ],
       "files": [
         {
@@ -1264,8 +1264,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion"
+        "@opendraft/utils",
+        "@opendraft/motion"
       ],
       "files": [
         {
@@ -1289,8 +1289,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/preview-rail"
+        "@opendraft/utils",
+        "@opendraft/preview-rail"
       ],
       "files": [
         {
@@ -1309,10 +1309,10 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/message-bubble",
-        "@nuelm/message-scroller"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/message-bubble",
+        "@opendraft/message-scroller"
       ],
       "files": [
         {
@@ -1332,11 +1332,11 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/button",
-        "@nuelm/popover",
-        "@nuelm/select"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/button",
+        "@opendraft/popover",
+        "@opendraft/select"
       ],
       "files": [
         {
@@ -1355,7 +1355,7 @@
         "shiki"
       ],
       "registryDependencies": [
-        "@nuelm/utils"
+        "@opendraft/utils"
       ],
       "files": [
         {
@@ -1375,10 +1375,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/action-swap"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/action-swap"
       ],
       "files": [
         {
@@ -1398,11 +1398,11 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/action-swap",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/action-swap",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1422,9 +1422,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1444,10 +1444,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1467,10 +1467,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/loading-states"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/loading-states"
       ],
       "files": [
         {
@@ -1499,12 +1499,12 @@
         "motion"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/shimmer-text",
-        "@nuelm/text-scramble",
-        "@nuelm/loader",
-        "@nuelm/text-shimmer"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/shimmer-text",
+        "@opendraft/text-scramble",
+        "@opendraft/loader",
+        "@opendraft/text-shimmer"
       ],
       "files": [
         {
@@ -1539,14 +1539,14 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/action-swap",
-        "@nuelm/button",
-        "@nuelm/checkbox",
-        "@nuelm/radio-group",
-        "@nuelm/input"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/action-swap",
+        "@opendraft/button",
+        "@opendraft/checkbox",
+        "@opendraft/radio-group",
+        "@opendraft/input"
       ],
       "files": [
         {
@@ -1571,10 +1571,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/agent-disclosure",
-        "@nuelm/agent-code"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/agent-disclosure",
+        "@opendraft/agent-code"
       ],
       "files": [
         {
@@ -1594,9 +1594,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/use-hover-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/use-hover-capable"
       ],
       "files": [
         {
@@ -1616,10 +1616,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/popover",
-        "@nuelm/use-touch-capable"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/popover",
+        "@opendraft/use-touch-capable"
       ],
       "files": [
         {
@@ -1636,8 +1636,8 @@
       "description": "Chat application shell that folds its sidebar away when the shell gets narrow.",
       "dependencies": [],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/animated-sidebar"
+        "@opendraft/utils",
+        "@opendraft/animated-sidebar"
       ],
       "files": [
         {
@@ -1657,10 +1657,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/citations",
-        "@nuelm/agent-disclosure"
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/citations",
+        "@opendraft/agent-disclosure"
       ],
       "files": [
         {
@@ -1674,83 +1674,83 @@
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
-      "description": "The theme plus every nuelm/ui component.",
+      "description": "The theme plus every opendraft component.",
       "registryDependencies": [
-        "@nuelm/theme",
-        "@nuelm/utils",
-        "@nuelm/motion",
-        "@nuelm/use-dismiss",
-        "@nuelm/use-tap-gesture",
-        "@nuelm/use-hover-gesture",
-        "@nuelm/use-favicon",
-        "@nuelm/use-hover-capable",
-        "@nuelm/use-touch-capable",
-        "@nuelm/use-on-open",
-        "@nuelm/use-row-cursor",
-        "@nuelm/touch",
-        "@nuelm/favicon",
-        "@nuelm/text-shimmer",
-        "@nuelm/command-search",
-        "@nuelm/presence-gate",
-        "@nuelm/button",
-        "@nuelm/badge",
-        "@nuelm/input",
-        "@nuelm/textarea",
-        "@nuelm/label",
-        "@nuelm/card",
-        "@nuelm/separator",
-        "@nuelm/kbd",
-        "@nuelm/skeleton",
-        "@nuelm/avatar",
-        "@nuelm/switch",
-        "@nuelm/checkbox",
-        "@nuelm/tabs",
-        "@nuelm/accordion",
-        "@nuelm/dialog",
-        "@nuelm/dropdown-menu",
-        "@nuelm/select",
-        "@nuelm/popover",
-        "@nuelm/radio-group",
-        "@nuelm/tooltip",
-        "@nuelm/sonner",
-        "@nuelm/animated-number",
-        "@nuelm/blur-text",
-        "@nuelm/shimmer-text",
-        "@nuelm/spotlight-card",
-        "@nuelm/marquee",
-        "@nuelm/reveal",
-        "@nuelm/magnetic",
-        "@nuelm/preview-rail",
-        "@nuelm/loader",
-        "@nuelm/text-scramble",
-        "@nuelm/action-swap",
-        "@nuelm/pixel-field",
-        "@nuelm/animated-sidebar",
-        "@nuelm/drawer",
-        "@nuelm/command-palette",
-        "@nuelm/date-range-picker",
-        "@nuelm/table",
-        "@nuelm/copy-button",
-        "@nuelm/voice-orb",
-        "@nuelm/agent-disclosure",
-        "@nuelm/citations",
-        "@nuelm/message-bubble",
-        "@nuelm/message-scroller",
-        "@nuelm/message",
-        "@nuelm/prompt-input",
-        "@nuelm/agent-code",
-        "@nuelm/todo-list",
-        "@nuelm/tool-result",
-        "@nuelm/code-block",
-        "@nuelm/file-diff",
-        "@nuelm/agent-activity",
-        "@nuelm/loading-states",
-        "@nuelm/approval-card",
-        "@nuelm/tool-approval",
-        "@nuelm/image-generation",
-        "@nuelm/ai-sidebar",
-        "@nuelm/chat-app",
-        "@nuelm/streaming-response"
+        "@opendraft/theme",
+        "@opendraft/utils",
+        "@opendraft/motion",
+        "@opendraft/use-dismiss",
+        "@opendraft/use-tap-gesture",
+        "@opendraft/use-hover-gesture",
+        "@opendraft/use-favicon",
+        "@opendraft/use-hover-capable",
+        "@opendraft/use-touch-capable",
+        "@opendraft/use-on-open",
+        "@opendraft/use-row-cursor",
+        "@opendraft/touch",
+        "@opendraft/favicon",
+        "@opendraft/text-shimmer",
+        "@opendraft/command-search",
+        "@opendraft/presence-gate",
+        "@opendraft/button",
+        "@opendraft/badge",
+        "@opendraft/input",
+        "@opendraft/textarea",
+        "@opendraft/label",
+        "@opendraft/card",
+        "@opendraft/separator",
+        "@opendraft/kbd",
+        "@opendraft/skeleton",
+        "@opendraft/avatar",
+        "@opendraft/switch",
+        "@opendraft/checkbox",
+        "@opendraft/tabs",
+        "@opendraft/accordion",
+        "@opendraft/dialog",
+        "@opendraft/dropdown-menu",
+        "@opendraft/select",
+        "@opendraft/popover",
+        "@opendraft/radio-group",
+        "@opendraft/tooltip",
+        "@opendraft/sonner",
+        "@opendraft/animated-number",
+        "@opendraft/blur-text",
+        "@opendraft/shimmer-text",
+        "@opendraft/spotlight-card",
+        "@opendraft/marquee",
+        "@opendraft/reveal",
+        "@opendraft/magnetic",
+        "@opendraft/preview-rail",
+        "@opendraft/loader",
+        "@opendraft/text-scramble",
+        "@opendraft/action-swap",
+        "@opendraft/pixel-field",
+        "@opendraft/animated-sidebar",
+        "@opendraft/drawer",
+        "@opendraft/command-palette",
+        "@opendraft/date-range-picker",
+        "@opendraft/table",
+        "@opendraft/copy-button",
+        "@opendraft/voice-orb",
+        "@opendraft/agent-disclosure",
+        "@opendraft/citations",
+        "@opendraft/message-bubble",
+        "@opendraft/message-scroller",
+        "@opendraft/message",
+        "@opendraft/prompt-input",
+        "@opendraft/agent-code",
+        "@opendraft/todo-list",
+        "@opendraft/tool-result",
+        "@opendraft/code-block",
+        "@opendraft/file-diff",
+        "@opendraft/agent-activity",
+        "@opendraft/loading-states",
+        "@opendraft/approval-card",
+        "@opendraft/tool-approval",
+        "@opendraft/image-generation",
+        "@opendraft/ai-sidebar",
+        "@opendraft/chat-app",
+        "@opendraft/streaming-response"
       ]
     }
   ]

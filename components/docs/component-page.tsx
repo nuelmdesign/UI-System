@@ -45,7 +45,7 @@ export function ComponentPage({
   const nav = useDocsNav()
   const Example = EXAMPLES[entry.slug]
   const registryName = entry.registry ?? entry.slug
-  const install = `npx shadcn@latest add @nuelm/${registryName}`
+  const install = `npx shadcn@latest add @opendraft/${registryName}`
   const [run, setRun] = React.useState(0)
   const item = useRegistryItem(nav.registryBase, registryName)
 
@@ -114,8 +114,9 @@ export function ComponentPage({
           <CopyButton value={install} />
         </div>
         <p className="mt-3 text-sm text-muted-foreground">
-          Needs the <code className="font-mono text-foreground">@nuelm</code>{" "}
-          registry in your{" "}
+          Needs the{" "}
+          <code className="font-mono text-foreground">@opendraft</code> registry
+          in your{" "}
           <code className="font-mono text-foreground">components.json</code>.
           See{" "}
           <nav.Link
@@ -205,7 +206,7 @@ function Dependencies({ item }: { item: RegistryItem }) {
   const nav = useDocsNav()
   const npm = item.dependencies ?? []
   const internal = (item.registryDependencies ?? []).map((d) =>
-    d.replace(/^@nuelm\//, "")
+    d.replace(/^@opendraft\//, "")
   )
 
   if (!npm.length && !internal.length) {

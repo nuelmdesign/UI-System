@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "nuelm/ui",
+  title: "opendraft",
   description:
     "A personal design system: shadcn structure, Motion feel, one set of tokens.",
 }

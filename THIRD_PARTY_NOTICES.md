@@ -1,6 +1,6 @@
 # Third-party notices
 
-nuelm/ui adapts components from the projects below. Their license notices are reproduced as required.
+opendraft adapts components from the projects below. Their license notices are reproduced as required.
 
 ## beUI
 
