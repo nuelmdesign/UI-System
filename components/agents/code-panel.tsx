@@ -236,7 +236,7 @@ function CodePanel({
       {/* header — file · (diff stat | copy) */}
       <div
         data-slot="code-panel-header"
-        className="flex h-11 items-center gap-2 border-b px-4 text-[12.5px]"
+        className="flex h-11 items-center gap-2 border-b px-4 text-[calc(12.5px*var(--text-scale))]"
       >
         <span className="inline-flex min-w-0 items-center gap-[7px]">
           <CodeXml
@@ -279,7 +279,7 @@ function CodePanel({
       {/* body — equal 12px inset on top / left / right; lines wrap */}
       <div
         data-slot="code-panel-body"
-        className="py-3 font-mono text-[12.5px] leading-[1.65] text-muted-foreground"
+        className="py-3 font-mono text-[calc(12.5px*var(--text-scale))] leading-[1.65] text-muted-foreground"
       >
         <div className="relative">
           <span className="pointer-events-none absolute inset-y-0 left-5 w-px bg-border" />
@@ -311,7 +311,7 @@ function CodePanel({
                     )}
                     <span
                       className={cn(
-                        "text-center text-[11px] select-none",
+                        "text-center text-[calc(11px*var(--text-scale))] select-none",
                         add
                           ? "text-success"
                           : del
@@ -333,7 +333,7 @@ function CodePanel({
                   data-slot="code-panel-row"
                   className="grid grid-cols-[20px_minmax(0,1fr)] items-start"
                 >
-                  <span className="text-center text-[11px] text-muted-foreground/70 select-none">
+                  <span className="text-center text-[calc(11px*var(--text-scale))] text-muted-foreground/70 select-none">
                     {i + 1}
                   </span>
                   <code className="pr-3 pl-1 break-words whitespace-pre-wrap">

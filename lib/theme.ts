@@ -110,6 +110,8 @@ export type ThemeChoice = {
   controlRadius: number
   /** Cards, menus, popovers, dialogs. */
   surfaceRadius: number
+  /** Multiplier for every text size; 1 is the default. */
+  textScale: number
 }
 
 export const DEFAULT_THEME: ThemeChoice = {
@@ -130,6 +132,7 @@ export const DEFAULT_THEME: ThemeChoice = {
   customColor: "#0f766e",
   controlRadius: 2,
   surfaceRadius: 3,
+  textScale: 1,
 }
 
 /** Black or white text, whichever reads better on a hex background. */
@@ -183,6 +186,7 @@ export function themeStyle(t: ThemeChoice, dark: boolean) {
     "--ring": `color-mix(in oklch, ${color} 45%, transparent)`,
     "--control-radius": `${t.controlRadius}px`,
     "--surface-radius": `${t.surfaceRadius}px`,
+    "--text-scale": String(t.textScale),
   } as Record<string, string>
 }
 
@@ -200,6 +204,7 @@ export function themeCss(t: ThemeChoice) {
   --heading-tracking: ${headingTracking(t.heading)};
   --control-radius: ${t.controlRadius}px;
   --surface-radius: ${t.surfaceRadius}px;
+  --text-scale: ${t.textScale};
   --primary: ${p.light};
   --brand: ${p.light};${fg}
 }
@@ -231,6 +236,12 @@ export function themeNotes(t: ThemeChoice) {
     notes.push(`${t.controlRadius}px corners on buttons, inputs and tabs`)
   if (t.surfaceRadius !== d.surfaceRadius)
     notes.push(`${t.surfaceRadius}px corners on cards, menus and dialogs`)
+  if (t.textScale !== d.textScale) {
+    const pct = Math.round(Math.abs(t.textScale - 1) * 100)
+    notes.push(
+      `text ${pct}% ${t.textScale > 1 ? "larger" : "smaller"} than the default (--text-scale: ${t.textScale}; body text ${Math.round(14 * t.textScale * 10) / 10}px)`
+    )
+  }
   if (!notes.length) return ""
   return `Theme: ${notes.join("; ")}. Apply these by changing opendraft's brand tokens in the global stylesheet (see "Make it yours" in llms.txt), not by restyling components.`
 }

@@ -237,13 +237,13 @@ export function ThinkingTrace({
           {working ? (
             <ShimmerText
               duration={1.4}
-              className="text-[13px] font-medium whitespace-nowrap"
+              className="text-[calc(13px*var(--text-scale))] font-medium whitespace-nowrap"
             >
               {v.active}
             </ShimmerText>
           ) : (
             <span
-              className="animate-fade-in text-[13px] font-medium whitespace-nowrap text-muted-foreground"
+              className="animate-fade-in text-[calc(13px*var(--text-scale))] font-medium whitespace-nowrap text-muted-foreground"
               style={{ animationDuration: "350ms" }}
             >
               {v.done}
@@ -289,7 +289,7 @@ export function ThinkingTrace({
                     aria-hidden
                     className="size-3.5 shrink-0 text-muted-foreground/70"
                   />
-                  <span className="text-[12.5px] text-muted-foreground">
+                  <span className="text-[calc(12.5px*var(--text-scale))] text-muted-foreground">
                     {v.query}
                   </span>
                 </div>
@@ -316,7 +316,7 @@ export function ThinkingTrace({
                       ))}
                     <span
                       className={cn(
-                        "min-w-0 truncate text-[12.5px]",
+                        "min-w-0 truncate text-[calc(12.5px*var(--text-scale))]",
                         variant === "reasoning"
                           ? "leading-relaxed whitespace-normal text-muted-foreground"
                           : "font-medium text-foreground",
@@ -329,7 +329,7 @@ export function ThinkingTrace({
                     {row.secondary && (
                       <span
                         className={cn(
-                          "shrink-0 text-[11.5px] text-muted-foreground/70",
+                          "shrink-0 text-[calc(11.5px*var(--text-scale))] text-muted-foreground/70",
                           row.mono && "font-mono"
                         )}
                       >
@@ -337,7 +337,7 @@ export function ThinkingTrace({
                       </span>
                     )}
                     {row.add !== undefined && (
-                      <span className="shrink-0 font-mono text-[11px] tabular-nums">
+                      <span className="shrink-0 font-mono text-[calc(11px*var(--text-scale))] tabular-nums">
                         <span className="text-success">+{row.add}</span>{" "}
                         <span className="text-destructive">−{row.del}</span>
                       </span>

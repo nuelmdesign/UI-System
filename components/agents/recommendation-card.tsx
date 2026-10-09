@@ -56,7 +56,7 @@ const TONE_BG: Record<RecommendationTone, string> = {
 /** An inline entity reference: icon + name. */
 function EntityChip({ name }: { name: string }) {
   return (
-    <span className="inline-flex translate-y-[-1px] items-center gap-1 rounded-md border bg-muted px-1.5 align-middle text-[12.5px] leading-5 font-medium text-foreground">
+    <span className="inline-flex translate-y-[-1px] items-center gap-1 rounded-md border bg-muted px-1.5 align-middle text-[calc(12.5px*var(--text-scale))] leading-5 font-medium text-foreground">
       <Building2 className="size-3 text-muted-foreground" />
       {name}
     </span>
@@ -74,7 +74,7 @@ function ValuePill({
   return (
     <span
       className={cn(
-        "inline-flex rounded-md px-1.5 align-middle font-mono text-[12px] leading-5 font-medium tabular-nums",
+        "inline-flex rounded-md px-1.5 align-middle font-mono text-[calc(12px*var(--text-scale))] leading-5 font-medium tabular-nums",
         tone === "success"
           ? "bg-success/10 text-success"
           : "bg-muted text-foreground"
@@ -183,7 +183,7 @@ export function RecommendationCard({
         <p
           key={active.key}
           data-slot="recommendation-card-body"
-          className="mt-1.5 min-h-12 animate-fade-in text-[13px] leading-relaxed text-muted-foreground"
+          className="mt-1.5 min-h-12 animate-fade-in text-[calc(13px*var(--text-scale))] leading-relaxed text-muted-foreground"
         >
           {active.body}
         </p>
@@ -214,10 +214,10 @@ export function RecommendationCard({
                 className="flex w-full items-center gap-2.5 rounded-md px-1.5 py-1.5 text-left transition-colors duration-100 hover:bg-accent"
               >
                 <Meter signal={o.signal} tone={o.tone} />
-                <span className="min-w-0 flex-1 truncate text-[12.5px] text-foreground">
+                <span className="min-w-0 flex-1 truncate text-[calc(12.5px*var(--text-scale))] text-foreground">
                   {o.short}
                 </span>
-                <span className="shrink-0 text-[11px] text-muted-foreground/70">
+                <span className="shrink-0 text-[calc(11px*var(--text-scale))] text-muted-foreground/70">
                   {o.label}
                 </span>
               </button>
@@ -229,7 +229,7 @@ export function RecommendationCard({
       <div className="flex items-center justify-between gap-3 border-t bg-card px-3 py-2">
         <span className="flex items-center gap-2">
           <Meter signal={active.signal} tone={active.tone} />
-          <span className="text-[12.5px] font-medium text-muted-foreground">
+          <span className="text-[calc(12.5px*var(--text-scale))] font-medium text-muted-foreground">
             {active.label}
           </span>
         </span>
@@ -240,7 +240,7 @@ export function RecommendationCard({
             size="xs"
             aria-expanded={open}
             onClick={() => setOpen((current) => !current)}
-            className="text-[12.5px]"
+            className="text-[calc(12.5px*var(--text-scale))]"
           >
             {t.alternatives}
           </Button>
@@ -252,7 +252,7 @@ export function RecommendationCard({
               onAccept?.(active.key)
             }}
             className={cn(
-              "text-[12.5px]",
+              "text-[calc(12.5px*var(--text-scale))]",
               accepted &&
                 "bg-success text-primary-foreground hover:bg-success/90"
             )}

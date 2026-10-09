@@ -216,10 +216,10 @@ function WorkspaceMenu({
           onClick={onClose}
           className={cn(row, "h-10")}
         >
-          <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-ink text-[11px] font-semibold text-ink-foreground">
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-ink text-[calc(11px*var(--text-scale))] font-semibold text-ink-foreground">
             {WORKSPACE.monogram}
           </span>
-          <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium text-foreground">
+          <span className="min-w-0 flex-1 truncate text-[calc(13.5px*var(--text-scale))] font-medium text-foreground">
             {WORKSPACE.name}
           </span>
           <Check className="size-4 shrink-0 text-brand" />
@@ -237,7 +237,7 @@ function WorkspaceMenu({
             <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
               {item.icon}
             </span>
-            <span className="min-w-0 flex-1 truncate text-[13.5px] text-foreground">
+            <span className="min-w-0 flex-1 truncate text-[calc(13.5px*var(--text-scale))] text-foreground">
               {item.label}
             </span>
           </button>
@@ -253,7 +253,7 @@ function WorkspaceMenu({
           <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
             <LogOut className="size-4" />
           </span>
-          <span className="min-w-0 flex-1 truncate text-[13.5px] text-foreground">
+          <span className="min-w-0 flex-1 truncate text-[calc(13.5px*var(--text-scale))] text-foreground">
             Sign out
           </span>
         </button>
@@ -491,7 +491,7 @@ function SidebarNav({
             <div
               aria-hidden={searchOpen}
               className={cn(
-                "absolute inset-0 flex items-center gap-1.5 px-2 text-[12.5px] font-medium text-muted-foreground/70 transition-[opacity,translate] ease-out",
+                "absolute inset-0 flex items-center gap-1.5 px-2 text-[calc(12.5px*var(--text-scale))] font-medium text-muted-foreground/70 transition-[opacity,translate] ease-out",
                 searchOpen
                   ? "pointer-events-none -translate-x-1 opacity-0"
                   : "translate-x-0 opacity-100"
@@ -544,7 +544,7 @@ function SidebarNav({
                 }}
                 placeholder="Search chats"
                 aria-label="Search chat history"
-                className="ml-1.5 min-w-0 flex-1 bg-transparent text-[13px] font-medium text-foreground outline-none placeholder:text-muted-foreground/70"
+                className="ml-1.5 min-w-0 flex-1 bg-transparent text-[calc(13px*var(--text-scale))] font-medium text-foreground outline-none placeholder:text-muted-foreground/70"
               />
               <button
                 type="button"
@@ -597,7 +597,7 @@ function SidebarNav({
               <div
                 className={cn(
                   COPY,
-                  "mx-2 px-2 py-2 text-[12.5px] text-muted-foreground/70"
+                  "mx-2 px-2 py-2 text-[calc(12.5px*var(--text-scale))] text-muted-foreground/70"
                 )}
               >
                 No chats found
@@ -614,7 +614,7 @@ function SidebarNav({
           <Button
             variant="secondary"
             size="sm"
-            className="w-full text-[12.5px]"
+            className="w-full text-[calc(12.5px*var(--text-scale))]"
             onClick={onFooterClick ?? onNewChat}
           >
             {footerIcon}

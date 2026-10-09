@@ -112,12 +112,12 @@ export function CodeBlock({
             {filename}
           </span>
         ) : null}
-        <span className="text-[10px] font-medium tracking-wide text-muted-foreground/55 uppercase">
+        <span className="text-[calc(10px*var(--text-scale))] font-medium tracking-wide text-muted-foreground/55 uppercase">
           {language}
         </span>
         <span
           className={cn(
-            "ml-auto inline-flex shrink-0 items-center gap-1 text-[10px] font-medium",
+            "ml-auto inline-flex shrink-0 items-center gap-1 text-[calc(10px*var(--text-scale))] font-medium",
             streaming ? "text-brand" : "text-success"
           )}
         >

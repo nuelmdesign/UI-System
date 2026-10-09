@@ -95,7 +95,7 @@ function ScrubField({
         className="min-w-0 flex-1 bg-transparent font-mono text-xs text-foreground tabular-nums outline-none"
       />
       {suffix && (
-        <span className="shrink-0 pr-0.5 text-[11.5px] text-muted-foreground/70">
+        <span className="shrink-0 pr-0.5 text-[calc(11.5px*var(--text-scale))] text-muted-foreground/70">
           {suffix}
         </span>
       )}
@@ -262,7 +262,7 @@ function FineTuneCard({
     >
       {/* header */}
       <div className="flex h-10 items-center justify-between border-b px-3">
-        <span className="text-[13px] font-medium text-foreground">
+        <span className="text-[calc(13px*var(--text-scale))] font-medium text-foreground">
           {text.title}
         </span>
         {done ? (
@@ -290,7 +290,7 @@ function FineTuneCard({
 
       {/* layout section */}
       <div className="flex flex-col gap-2 border-b p-3">
-        <p className="text-[12.5px] font-medium text-foreground">
+        <p className="text-[calc(12.5px*var(--text-scale))] font-medium text-foreground">
           {text.layout}
         </p>
         {/* segmented control: muted track, sliding card thumb */}
@@ -395,7 +395,7 @@ function FineTuneCard({
                     type="button"
                     onClick={() => selectType(item)}
                     className={cn(
-                      "relative z-10 flex h-6.5 w-full items-center rounded-md px-2 text-left text-[12.5px] text-foreground outline-none",
+                      "relative z-10 flex h-6.5 w-full items-center rounded-md px-2 text-left text-[calc(12.5px*var(--text-scale))] text-foreground outline-none",
                       item === typeValue &&
                         "bg-muted group-hover/glide-menu:bg-transparent"
                     )}

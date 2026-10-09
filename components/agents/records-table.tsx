@@ -302,13 +302,13 @@ const POPOVER =
 const SUBMENU =
   "absolute top-0 left-full z-30 ml-5 origin-top-left animate-pop-in rounded-lg border bg-popover p-1.5 shadow-md"
 const MENU_LABEL =
-  "px-2 pt-1 pb-1 text-[12px] font-medium text-muted-foreground"
+  "px-2 pt-1 pb-1 text-[calc(12px*var(--text-scale))] font-medium text-muted-foreground"
 const MENU_ROW =
-  "relative z-10 flex h-9 w-full items-center gap-2.5 rounded-md px-2 text-left text-[13px] text-foreground outline-none [&_svg]:size-[15px] [&>svg]:text-muted-foreground"
+  "relative z-10 flex h-9 w-full items-center gap-2.5 rounded-md px-2 text-left text-[calc(13px*var(--text-scale))] text-foreground outline-none [&_svg]:size-[15px] [&>svg]:text-muted-foreground"
 const PICKER_ROW =
-  "relative z-10 flex h-8 w-full items-center gap-1.5 rounded-md px-1.5 text-left text-[13px] font-medium text-foreground outline-none"
+  "relative z-10 flex h-8 w-full items-center gap-1.5 rounded-md px-1.5 text-left text-[calc(13px*var(--text-scale))] font-medium text-foreground outline-none"
 const CONFIG_TRIGGER =
-  "flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[13px] font-medium text-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+  "flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[calc(13px*var(--text-scale))] font-medium text-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
 const ICON_BUTTON =
   "flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors duration-100 outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
 
@@ -345,7 +345,7 @@ function Tag({ name }: { name: string }) {
   return (
     <span
       data-slot="records-table-tag"
-      className="inline-flex h-5 shrink-0 items-center rounded-md border border-[color-mix(in_oklab,var(--tag)_28%,var(--card))] bg-[color-mix(in_oklab,var(--tag)_14%,var(--card))] px-1.5 text-[11.5px] font-medium whitespace-nowrap text-[color-mix(in_oklab,var(--tag)_72%,var(--foreground))] dark:border-[color-mix(in_oklab,var(--tag)_40%,var(--card))] dark:bg-[color-mix(in_oklab,var(--tag)_22%,var(--card))] dark:text-[color-mix(in_oklab,var(--tag)_55%,var(--foreground))]"
+      className="inline-flex h-5 shrink-0 items-center rounded-md border border-[color-mix(in_oklab,var(--tag)_28%,var(--card))] bg-[color-mix(in_oklab,var(--tag)_14%,var(--card))] px-1.5 text-[calc(11.5px*var(--text-scale))] font-medium whitespace-nowrap text-[color-mix(in_oklab,var(--tag)_72%,var(--foreground))] dark:border-[color-mix(in_oklab,var(--tag)_40%,var(--card))] dark:bg-[color-mix(in_oklab,var(--tag)_22%,var(--card))] dark:text-[color-mix(in_oklab,var(--tag)_55%,var(--foreground))]"
       style={{ "--tag": tone } as React.CSSProperties}
     >
       {name}
@@ -354,7 +354,7 @@ function Tag({ name }: { name: string }) {
 }
 
 const MORE_TAG =
-  "inline-flex h-5 shrink-0 items-center rounded-md border bg-muted px-1.5 font-mono text-[11px] text-muted-foreground tabular-nums"
+  "inline-flex h-5 shrink-0 items-center rounded-md border bg-muted px-1.5 font-mono text-[calc(11px*var(--text-scale))] text-muted-foreground tabular-nums"
 
 function TagList({ tags }: { tags: string[] }) {
   const containerRef = React.useRef<HTMLDivElement>(null)
@@ -522,7 +522,7 @@ function HeaderCell({
         aria-expanded={selected}
         onClick={onPick}
         className={cn(
-          "flex h-9 w-full min-w-0 items-center gap-1.5 px-3 text-[13px] transition-colors duration-100 outline-none hover:bg-accent/60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+          "flex h-9 w-full min-w-0 items-center gap-1.5 px-3 text-[calc(13px*var(--text-scale))] transition-colors duration-100 outline-none hover:bg-accent/60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
           selected ? "text-foreground" : "text-muted-foreground"
         )}
       >
@@ -573,7 +573,9 @@ function ConfigRow({
 }) {
   return (
     <div className="relative flex h-8 items-center justify-between">
-      <span className="text-[13px] text-muted-foreground">{label}</span>
+      <span className="text-[calc(13px*var(--text-scale))] text-muted-foreground">
+        {label}
+      </span>
       {children}
     </div>
   )
@@ -592,7 +594,7 @@ function ConfigPicker({
 }) {
   return (
     <div role="menu" aria-label={label} className={cn(SUBMENU, "w-[210px]")}>
-      <div className="px-2 pt-0.5 pb-1 text-[11.5px] font-medium text-muted-foreground">
+      <div className="px-2 pt-0.5 pb-1 text-[calc(11.5px*var(--text-scale))] font-medium text-muted-foreground">
         {label}
       </div>
       <GlideMenu className="flex flex-col gap-px">
@@ -641,7 +643,7 @@ function InputPicker({
       aria-label="Calculation inputs"
       className={cn(SUBMENU, "w-[220px]")}
     >
-      <div className="px-2 pt-0.5 pb-1 text-[11.5px] font-medium text-muted-foreground">
+      <div className="px-2 pt-0.5 pb-1 text-[calc(11.5px*var(--text-scale))] font-medium text-muted-foreground">
         Use values from
       </div>
       <GlideMenu className="flex flex-col gap-px">
@@ -966,7 +968,7 @@ export function RecordsTable({
     <div
       data-slot="records-table"
       className={cn(
-        "relative w-full overflow-hidden rounded-lg border bg-card text-[13px] text-foreground",
+        "relative w-full overflow-hidden rounded-lg border bg-card text-[calc(13px*var(--text-scale))] text-foreground",
         fill && "flex h-full flex-col",
         className
       )}
@@ -1031,7 +1033,7 @@ export function RecordsTable({
                     aria-expanded={colSel("Company")}
                     onClick={openProp("Company")}
                     className={cn(
-                      "flex h-9 min-w-0 flex-1 items-center gap-1.5 pr-3 text-[13px] transition-colors duration-100 outline-none focus-visible:underline",
+                      "flex h-9 min-w-0 flex-1 items-center gap-1.5 pr-3 text-[calc(13px*var(--text-scale))] transition-colors duration-100 outline-none focus-visible:underline",
                       colSel("Company")
                         ? "text-foreground"
                         : "text-muted-foreground hover:text-foreground"
@@ -1179,7 +1181,7 @@ export function RecordsTable({
                         <span
                           aria-hidden
                           className={cn(
-                            "font-mono text-[11px] text-muted-foreground/70 tabular-nums transition-opacity duration-100",
+                            "font-mono text-[calc(11px*var(--text-scale))] text-muted-foreground/70 tabular-nums transition-opacity duration-100",
                             rowSelected
                               ? "opacity-0"
                               : "group-focus-within/row:opacity-0 group-hover/row:opacity-0"
@@ -1201,7 +1203,7 @@ export function RecordsTable({
                       </span>
                       <span
                         aria-hidden
-                        className="flex size-5 shrink-0 items-center justify-center rounded-md border bg-muted text-[11px] font-medium text-muted-foreground"
+                        className="flex size-5 shrink-0 items-center justify-center rounded-md border bg-muted text-[calc(11px*var(--text-scale))] font-medium text-muted-foreground"
                       >
                         {row.name.slice(0, 1).toUpperCase()}
                       </span>
@@ -1301,7 +1303,7 @@ export function RecordsTable({
           <tfoot>
             <tr
               data-slot="records-table-footer"
-              className="text-[12px] text-muted-foreground"
+              className="text-[calc(12px*var(--text-scale))] text-muted-foreground"
             >
               <td className={foot(true)}>
                 <span>
@@ -1369,7 +1371,7 @@ export function RecordsTable({
                 className={cn(POPOVER, "w-80 origin-top-left px-3 pt-3 pb-1.5")}
                 style={{ top: prop.y, left: prop.x }}
               >
-                <div className="pb-2 text-[13.5px] font-medium text-foreground">
+                <div className="pb-2 text-[calc(13.5px*var(--text-scale))] font-medium text-foreground">
                   {prop.col}
                 </div>
 
@@ -1484,7 +1486,7 @@ export function RecordsTable({
                   {groundingHelpOpen && (
                     <div
                       role="status"
-                      className="absolute top-[30px] right-0 z-30 w-[230px] origin-top-right animate-pop-in rounded-md bg-ink px-3 py-2.5 text-[12px] leading-relaxed text-ink-foreground shadow-md"
+                      className="absolute top-[30px] right-0 z-30 w-[230px] origin-top-right animate-pop-in rounded-md bg-ink px-3 py-2.5 text-[calc(12px*var(--text-scale))] leading-relaxed text-ink-foreground shadow-md"
                     >
                       Grounding lets the model verify generated values against
                       connected sources.
@@ -1511,13 +1513,13 @@ export function RecordsTable({
                         {selectedInputs.slice(0, 2).map((input) => (
                           <span
                             key={input}
-                            className="max-w-[92px] truncate rounded-md bg-brand/10 px-1.5 py-0.5 text-[12px] font-medium text-brand"
+                            className="max-w-[92px] truncate rounded-md bg-brand/10 px-1.5 py-0.5 text-[calc(12px*var(--text-scale))] font-medium text-brand"
                           >
                             {input}
                           </span>
                         ))}
                         {selectedInputs.length > 2 && (
-                          <span className="font-mono text-[11px] font-medium text-muted-foreground/70">
+                          <span className="font-mono text-[calc(11px*var(--text-scale))] font-medium text-muted-foreground/70">
                             +{selectedInputs.length - 2}
                           </span>
                         )}
@@ -1561,7 +1563,7 @@ export function RecordsTable({
                   aria-label={`${prop.col} calculation prompt`}
                   aria-multiline="true"
                   spellCheck
-                  className="mt-2 min-h-[88px] cursor-text rounded-md border bg-muted p-3 text-[13px] leading-relaxed transition-[box-shadow,border-color] duration-150 outline-none focus:border-brand focus:ring-2 focus:ring-ring"
+                  className="mt-2 min-h-[88px] cursor-text rounded-md border bg-muted p-3 text-[calc(13px*var(--text-scale))] leading-relaxed transition-[box-shadow,border-color] duration-150 outline-none focus:border-brand focus:ring-2 focus:ring-ring"
                 >
                   {meta.prompt ? (
                     <span className="text-foreground">
@@ -1569,7 +1571,7 @@ export function RecordsTable({
                       {meta.prompt.chip && (
                         <span
                           contentEditable={false}
-                          className="rounded-md bg-brand/10 px-1.5 py-0.5 text-[12px] font-medium text-brand"
+                          className="rounded-md bg-brand/10 px-1.5 py-0.5 text-[calc(12px*var(--text-scale))] font-medium text-brand"
                         >
                           {meta.prompt.chip}
                         </span>
@@ -1590,7 +1592,7 @@ export function RecordsTable({
                     setCalc({ col: prop.col, resolved: 0 })
                     setProp(null)
                   }}
-                  className="mt-2.5 flex h-9 w-full items-center justify-center gap-2 rounded-md border bg-card text-[12.5px] font-medium text-foreground transition-[background-color,border-color,transform] duration-150 ease-out outline-none hover:border-foreground/25 hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98] disabled:opacity-60"
+                  className="mt-2.5 flex h-9 w-full items-center justify-center gap-2 rounded-md border bg-card text-[calc(12.5px*var(--text-scale))] font-medium text-foreground transition-[background-color,border-color,transform] duration-150 ease-out outline-none hover:border-foreground/25 hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98] disabled:opacity-60"
                 >
                   <RotateCw className="size-3.5" aria-hidden />
                   Go calculate

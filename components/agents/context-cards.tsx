@@ -82,10 +82,10 @@ export function ContextCards({
       className={cn("flex w-full max-w-95 flex-col gap-2", className)}
     >
       <div className="flex animate-fade-in items-center gap-2 px-0.5">
-        <span className="text-[13px] font-semibold text-foreground">
+        <span className="text-[calc(13px*var(--text-scale))] font-semibold text-foreground">
           {copy.header}
         </span>
-        <span className="inline-flex h-5 items-center rounded-md border bg-muted px-1.5 font-mono text-[11px] font-medium text-muted-foreground tabular-nums">
+        <span className="inline-flex h-5 items-center rounded-md border bg-muted px-1.5 font-mono text-[calc(11px*var(--text-scale))] font-medium text-muted-foreground tabular-nums">
           {copy.count}
         </span>
       </div>
@@ -100,15 +100,15 @@ export function ContextCards({
             style={{ animationDelay: `${i * 100}ms` }}
           >
             <div className="flex h-10 items-center gap-2.5 border-b px-3">
-              <span className="flex min-w-0 items-center gap-1.5 text-[13px] font-medium text-foreground">
+              <span className="flex min-w-0 items-center gap-1.5 text-[calc(13px*var(--text-scale))] font-medium text-foreground">
                 <TextQuote className="size-3 shrink-0" strokeWidth={2.5} />
                 <span className="truncate">{chunk.title}</span>
               </span>
-              <span className="ml-auto shrink-0 font-mono text-[11px] text-muted-foreground/70 tabular-nums">
+              <span className="ml-auto shrink-0 font-mono text-[calc(11px*var(--text-scale))] text-muted-foreground/70 tabular-nums">
                 {chunk.chars}
               </span>
             </div>
-            <p className="px-3 pt-2 pb-1 text-[12.5px] leading-relaxed text-muted-foreground">
+            <p className="px-3 pt-2 pb-1 text-[calc(12.5px*var(--text-scale))] leading-relaxed text-muted-foreground">
               {chunk.body}
             </p>
             <div className="px-3 pb-3">
@@ -125,7 +125,7 @@ export function ContextCards({
               >
                 <span
                   className={cn(
-                    "flex h-3.5 min-w-3.5 items-center justify-center rounded-sm px-0.5 font-mono text-[7px] font-bold",
+                    "flex h-3.5 min-w-3.5 items-center justify-center rounded-sm px-0.5 font-mono text-[calc(7px*var(--text-scale))] font-bold",
                     TONE_BG[chunk.tone]
                   )}
                 >

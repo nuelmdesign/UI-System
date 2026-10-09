@@ -105,6 +105,11 @@ export function ThemeBuilder({ className }: { className?: string }) {
             onChange={(font) => set("body", font)}
           />
 
+          <TextSizeField
+            value={t.textScale}
+            onChange={(v) => set("textScale", v)}
+          />
+
           <fieldset className="grid gap-2.5">
             <legend className="mb-2.5 text-sm font-medium">
               Primary color
@@ -259,6 +264,64 @@ function FontField({
           <FontPicker id={id} value={value} onChange={onChange} />
         </div>
         {children}
+      </div>
+    </div>
+  )
+}
+
+const TEXT_PRESETS = [
+  { label: "S", value: 0.9 },
+  { label: "M", value: 1 },
+  { label: "L", value: 1.1 },
+  { label: "XL", value: 1.2 },
+]
+
+/** One multiplier for every text size; spacing stays as it is. */
+function TextSizeField({
+  value,
+  onChange,
+}: {
+  value: number
+  onChange: (scale: number) => void
+}) {
+  const id = React.useId()
+  const body = Math.round(14 * value * 10) / 10
+  return (
+    <div className="grid gap-2.5">
+      <div className="flex items-center justify-between">
+        <Label htmlFor={id}>Text size</Label>
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
+          {Math.round(value * 100)}% · body {body}px
+        </span>
+      </div>
+      <input
+        id={id}
+        type="range"
+        min={0.85}
+        max={1.3}
+        step={0.05}
+        value={value}
+        onChange={(e) => onChange(Number(Number(e.target.value).toFixed(2)))}
+        className="w-full accent-primary"
+      />
+      <div className="flex gap-1">
+        {TEXT_PRESETS.map((p) => (
+          <button
+            key={p.label}
+            type="button"
+            onClick={() => onChange(p.value)}
+            aria-pressed={value === p.value}
+            aria-label={`Text size ${Math.round(p.value * 100)}%`}
+            className={cn(
+              "h-7 flex-1 border font-mono text-[11px] transition-colors",
+              value === p.value
+                ? "border-foreground text-foreground"
+                : "text-muted-foreground hover:bg-accent"
+            )}
+          >
+            {p.label}
+          </button>
+        ))}
       </div>
     </div>
   )

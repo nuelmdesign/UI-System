@@ -160,11 +160,11 @@ export function DiffTable({
     <div data-slot="diff-table" className={cn("w-full max-w-95", className)}>
       <div className="relative overflow-hidden rounded-lg border bg-card">
         <div className="flex h-10 items-center justify-between border-b px-3">
-          <span className="text-[12.5px] font-medium text-foreground">
+          <span className="text-[calc(12.5px*var(--text-scale))] font-medium text-foreground">
             {title}
           </span>
           {settled && !accepted && (
-            <span className="animate-fade-in text-[11px] text-muted-foreground/70">
+            <span className="animate-fade-in text-[calc(11px*var(--text-scale))] text-muted-foreground/70">
               Click changed rows to toggle
             </span>
           )}
@@ -181,7 +181,7 @@ export function DiffTable({
               {columns.map((h) => (
                 <th
                   key={h}
-                  className="px-3 py-2 text-[12px] font-medium text-muted-foreground/70"
+                  className="px-3 py-2 text-[calc(12px*var(--text-scale))] font-medium text-muted-foreground/70"
                 >
                   {h}
                 </th>
@@ -217,7 +217,7 @@ export function DiffTable({
                 >
                   <td
                     className={cn(
-                      "px-3 py-2 text-[13px] font-medium tabular-nums transition-colors duration-200",
+                      "px-3 py-2 text-[calc(13px*var(--text-scale))] font-medium tabular-nums transition-colors duration-200",
                       out ? "text-destructive" : "text-foreground"
                     )}
                   >
@@ -226,7 +226,7 @@ export function DiffTable({
                   <td className="px-3 py-2">
                     <span
                       className={cn(
-                        "inline-flex h-5.5 items-center gap-1.5 rounded-md border bg-muted px-2 text-[11.5px] font-medium transition-opacity duration-200",
+                        "inline-flex h-5.5 items-center gap-1.5 rounded-md border bg-muted px-2 text-[calc(11.5px*var(--text-scale))] font-medium transition-opacity duration-200",
                         out ? "opacity-55" : "opacity-100"
                       )}
                     >
@@ -241,7 +241,7 @@ export function DiffTable({
                   </td>
                   <td
                     className={cn(
-                      "px-3 py-2 text-[12.5px] whitespace-nowrap decoration-destructive/50 transition-colors duration-200",
+                      "px-3 py-2 text-[calc(12.5px*var(--text-scale))] whitespace-nowrap decoration-destructive/50 transition-colors duration-200",
                       out
                         ? "text-destructive line-through"
                         : "text-muted-foreground"
@@ -295,14 +295,14 @@ export function DiffTable({
                     >
                       <span
                         className={cn(
-                          "px-3 py-2 text-[13px] font-medium tabular-nums transition-colors duration-200",
+                          "px-3 py-2 text-[calc(13px*var(--text-scale))] font-medium tabular-nums transition-colors duration-200",
                           addedOn ? "text-success" : "text-muted-foreground/70"
                         )}
                       >
                         {added.id}
                       </span>
                       <span className="px-3 py-2">
-                        <span className="inline-flex h-5.5 items-center gap-1.5 rounded-md border bg-card px-2 text-[11.5px] font-medium">
+                        <span className="inline-flex h-5.5 items-center gap-1.5 rounded-md border bg-card px-2 text-[calc(11.5px*var(--text-scale))] font-medium">
                           <span className="size-1.5 rounded-full bg-success" />
                           <span className="text-muted-foreground">
                             {added.dept}
@@ -311,7 +311,7 @@ export function DiffTable({
                       </span>
                       <span
                         className={cn(
-                          "px-3 py-2 text-[13px] transition-colors duration-200",
+                          "px-3 py-2 text-[calc(13px*var(--text-scale))] transition-colors duration-200",
                           addedOn ? "text-success" : "text-muted-foreground/70"
                         )}
                       >
@@ -339,7 +339,7 @@ export function DiffTable({
             {accepted ? (
               <span
                 role="status"
-                className="inline-flex animate-pop-in items-center gap-1.5 rounded-md bg-success/10 py-1 pr-2.5 pl-1 text-[12.5px] font-medium text-success"
+                className="inline-flex animate-pop-in items-center gap-1.5 rounded-md bg-success/10 py-1 pr-2.5 pl-1 text-[calc(12.5px*var(--text-scale))] font-medium text-success"
               >
                 <span className="flex size-4.5 items-center justify-center rounded-full bg-success text-background">
                   <Check className="size-3" strokeWidth={3} />
@@ -348,7 +348,7 @@ export function DiffTable({
               </span>
             ) : (
               <>
-                <span className="font-mono text-[11.5px] text-muted-foreground/70 tabular-nums">
+                <span className="font-mono text-[calc(11.5px*var(--text-scale))] text-muted-foreground/70 tabular-nums">
                   {plural(removals, "removal", "removals")} ·{" "}
                   {plural(additions, "addition", "additions")}
                 </span>
@@ -356,7 +356,7 @@ export function DiffTable({
                   size="sm"
                   disabled={total === 0}
                   onClick={apply}
-                  className="text-[12px]"
+                  className="text-[calc(12px*var(--text-scale))]"
                 >
                   Apply {plural(total, "change", "changes")}
                 </Button>

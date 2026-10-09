@@ -182,7 +182,7 @@ function LoadingScreen() {
           />
         </svg>
       </span>
-      <span className="absolute inset-x-0 top-[calc(50%+28px)] text-center text-[12.5px] font-medium text-muted-foreground">
+      <span className="absolute inset-x-0 top-[calc(50%+28px)] text-center text-[calc(12.5px*var(--text-scale))] font-medium text-muted-foreground">
         Connecting to agent&apos;s screen
       </span>
     </div>
@@ -210,13 +210,13 @@ function FauxWindow() {
       <div className="flex shrink-0 items-center gap-2 border-b px-2.5 py-1.5 text-muted-foreground/70">
         <ChevronLeft className="size-3" />
         <ChevronRight className="size-3" />
-        <span className="min-w-0 flex-1 truncate rounded-md bg-muted px-2.5 py-[3px] font-mono text-[9px] text-muted-foreground/70">
+        <span className="min-w-0 flex-1 truncate rounded-md bg-muted px-2.5 py-[3px] font-mono text-[calc(9px*var(--text-scale))] text-muted-foreground/70">
           scoops.example/suppliers/search
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-2.5 overflow-hidden p-3">
         <div className="flex items-center gap-2">
-          <span className="grid size-4 place-items-center rounded-sm bg-brand/15 text-[8px] font-bold text-brand">
+          <span className="grid size-4 place-items-center rounded-sm bg-brand/15 text-[calc(8px*var(--text-scale))] font-bold text-brand">
             s
           </span>
           <span className="h-1.5 w-12 bg-input" />
@@ -351,7 +351,7 @@ function AgentScreen({
             {/* hover reveal — scoped to this frame's named group */}
             <div className="absolute inset-0 flex items-center justify-center bg-ink/0 transition-colors duration-150 ease-out group-focus-within/screen:bg-ink/15 group-hover/screen:bg-ink/15">
               {recording && (
-                <span className="absolute top-2 left-2 inline-flex items-center gap-1.5 rounded-md bg-destructive px-1.5 py-0.5 font-mono text-[10.5px] font-medium text-destructive-foreground tabular-nums">
+                <span className="absolute top-2 left-2 inline-flex items-center gap-1.5 rounded-md bg-destructive px-1.5 py-0.5 font-mono text-[calc(10.5px*var(--text-scale))] font-medium text-destructive-foreground tabular-nums">
                   <span className="size-1.5 animate-blink rounded-full bg-current" />
                   REC {fmt(secs)}
                 </span>
@@ -373,7 +373,7 @@ function AgentScreen({
         )}
       </div>
 
-      <div className="mt-2.5 truncate px-0.5 text-[13px] font-medium text-foreground">
+      <div className="mt-2.5 truncate px-0.5 text-[calc(13px*var(--text-scale))] font-medium text-foreground">
         {agentName}&apos;s screen
       </div>
 
@@ -396,13 +396,13 @@ function AgentScreen({
               {/* title bar — agent name far left, controls right */}
               <div className="flex h-11 shrink-0 items-center justify-between gap-3 px-1.5">
                 <div className="flex min-w-0 items-center gap-2">
-                  <span className="truncate text-[13px] font-semibold text-foreground">
+                  <span className="truncate text-[calc(13px*var(--text-scale))] font-semibold text-foreground">
                     {agentName}
                   </span>
                   {recording && (
                     <span
                       data-slot="agent-screen-rec"
-                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-destructive/10 py-0.5 pr-2 pl-1.5 font-mono text-[11.5px] font-medium text-destructive tabular-nums"
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-destructive/10 py-0.5 pr-2 pl-1.5 font-mono text-[calc(11.5px*var(--text-scale))] font-medium text-destructive tabular-nums"
                     >
                       <span className="size-2 animate-blink rounded-full bg-destructive" />
                       <span className="sr-only">Recording</span>

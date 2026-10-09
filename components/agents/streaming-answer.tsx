@@ -118,7 +118,7 @@ function SourceMark({
     <span
       aria-hidden
       className={cn(
-        "flex shrink-0 items-center justify-center bg-brand/10 font-mono text-[8px] text-brand uppercase [&_svg]:size-[70%] [&_svg]:stroke-[2.25]",
+        "flex shrink-0 items-center justify-center bg-brand/10 font-mono text-[calc(8px*var(--text-scale))] text-brand uppercase [&_svg]:size-[70%] [&_svg]:stroke-[2.25]",
         className
       )}
     >
@@ -135,7 +135,7 @@ function SourceChip({ source }: { source?: StreamingSource }) {
       href={source.href}
       target="_blank"
       rel="noreferrer"
-      className="mr-1 inline-flex h-4.5 -translate-y-px animate-pop-in items-center gap-1 rounded-sm border bg-muted px-[3px] align-middle font-mono text-[10.5px] text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
+      className="mr-1 inline-flex h-4.5 -translate-y-px animate-pop-in items-center gap-1 rounded-sm border bg-muted px-[3px] align-middle font-mono text-[calc(10.5px*var(--text-scale))] text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
       style={{ animationDuration: "250ms" }}
     >
       <SourceMark source={source} className="size-3 rounded-sm" />
@@ -205,7 +205,7 @@ export function StreamingAnswer({
       data-state={done ? "done" : "streaming"}
       className={cn(fill ? "w-full" : "min-h-62 w-full max-w-95", className)}
     >
-      <p className="text-[13px] leading-relaxed text-foreground">
+      <p className="text-[calc(13px*var(--text-scale))] leading-relaxed text-foreground">
         {content.slice(0, count).map((token, i) =>
           token.cite ? (
             <SourceChip key={i} source={sources[0]} />
@@ -286,7 +286,7 @@ export function StreamingAnswer({
                 <span className="underline decoration-transparent underline-offset-2 transition-[text-decoration-color] duration-150 group-hover/source:decoration-current">
                   {source.name}
                 </span>
-                <span className="ml-auto font-mono text-[10.5px] text-muted-foreground/70">
+                <span className="ml-auto font-mono text-[calc(10.5px*var(--text-scale))] text-muted-foreground/70">
                   {source.domain}
                 </span>
               </a>
@@ -312,7 +312,7 @@ export function StreamingAnswer({
               type="button"
               onClick={() => onFollowUp?.(text, i)}
               className={cn(
-                "-mx-1.5 flex items-center gap-2 rounded-md border-b px-1.5 py-1.5 text-left text-[12.5px] text-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring",
+                "-mx-1.5 flex items-center gap-2 rounded-md border-b px-1.5 py-1.5 text-left text-[calc(12.5px*var(--text-scale))] text-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring",
                 done ? "animate-fade-up" : "opacity-0"
               )}
               style={

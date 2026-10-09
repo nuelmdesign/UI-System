@@ -115,7 +115,10 @@ export function PixelLoader({
   const row = (
     <div className="flex items-center gap-2.5">
       <LoaderGrid {...pattern} />
-      <ShimmerText duration={1.4} className="text-[13px] font-medium">
+      <ShimmerText
+        duration={1.4}
+        className="text-[calc(13px*var(--text-scale))] font-medium"
+      >
         {resolvedLabel}
       </ShimmerText>
       <span className="font-mono text-xs text-muted-foreground/70 tabular-nums">
@@ -169,7 +172,7 @@ export function PixelLoader({
                 {...PATTERNS.drive}
                 cellClassName="bg-ink-foreground"
               />
-              <span className="px-3 text-center font-mono text-[10px] text-ink-foreground/60">
+              <span className="px-3 text-center font-mono text-[calc(10px*var(--text-scale))] text-ink-foreground/60">
                 {videoSrc ? "Video unavailable" : "Working in the background"}
               </span>
             </div>

@@ -142,7 +142,7 @@ function SpinnerRing({
           />
         )}
       </svg>
-      <span className="relative text-[10.5px] font-semibold text-foreground tabular-nums">
+      <span className="relative text-[calc(10.5px*var(--text-scale))] font-semibold text-foreground tabular-nums">
         {children}
       </span>
     </span>
@@ -184,7 +184,7 @@ function Pill({
     <span
       data-slot="task-rows-status"
       className={cn(
-        "inline-flex h-5.5 items-center gap-1.5 rounded-md px-2 text-[11.5px] font-medium",
+        "inline-flex h-5.5 items-center gap-1.5 rounded-md px-2 text-[calc(11.5px*var(--text-scale))] font-medium",
         tone === "destructive"
           ? "bg-destructive/10 text-destructive"
           : "bg-success/10 text-success",
@@ -298,10 +298,10 @@ export function TaskRows({
               <span className="flex size-6 shrink-0 items-center justify-center">
                 {badgeFor(row)}
               </span>
-              <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-foreground">
+              <span className="min-w-0 flex-1 truncate text-[calc(13px*var(--text-scale))] font-medium text-foreground">
                 {row.label}
               </span>
-              <span className="text-[12.5px] text-muted-foreground tabular-nums">
+              <span className="text-[calc(12.5px*var(--text-scale))] text-muted-foreground tabular-nums">
                 {row.amount}
               </span>
               {pillFor(row)}
@@ -348,7 +348,7 @@ export function TaskRows({
                         <span className="text-xs text-muted-foreground">
                           {d.label}
                         </span>
-                        <span className="font-mono text-[11.5px] text-muted-foreground/70 tabular-nums">
+                        <span className="font-mono text-[calc(11.5px*var(--text-scale))] text-muted-foreground/70 tabular-nums">
                           {d.meta}
                         </span>
                       </div>

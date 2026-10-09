@@ -82,6 +82,7 @@ opendraft ships with a look: editorial headings, square corners, hairline border
 | A primary color (e.g. black) | `--primary` and `--brand` in `:root` and in `.dark`. Set `--primary-foreground` to a color that reads on it (white on dark colors, near-black on light ones). For black, use `var(--ink)` and `var(--ink-foreground)`: they invert in dark mode. |
 | Rounder buttons and inputs (e.g. 12px) | `--control-radius` |
 | Rounder cards, menus and dialogs | `--surface-radius` (usually the same as or a little larger than `--control-radius`) |
+| Larger or smaller text | `--text-scale` (1 is the default; 1.1 makes every text size 10% larger, 0.9 10% smaller). Spacing stays the same. |
 
 Any of the roughly 1,900 Google Fonts works. Load it with `next/font/google` (the export name replaces spaces with underscores, e.g. `IBM_Plex_Sans`; pass `variable: "--font-ibm-plex-sans"`, and `weight` for fonts that aren't variable), or with a `<link>` from fonts.google.com outside Next.js. Point the token at the variable, falling back to the family name and a generic stack so it works either way:
 
@@ -96,6 +97,7 @@ Any of the roughly 1,900 Google Fonts works. Load it with `next/font/google` (th
   --primary-foreground: var(--ink-foreground);
   --control-radius: 12px;
   --surface-radius: 16px;
+  --text-scale: 1.1;
 }
 ```
 

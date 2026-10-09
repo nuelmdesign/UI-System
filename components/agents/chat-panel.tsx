@@ -93,7 +93,9 @@ function Section({
             for {time}
           </span>
         </div>
-        <p className="text-[13px] leading-normal text-foreground">{body}</p>
+        <p className="text-[calc(13px*var(--text-scale))] leading-normal text-foreground">
+          {body}
+        </p>
       </div>
     </div>
   )
@@ -155,7 +157,7 @@ export function ChatPanel({
               aria-pressed={tab === item}
               onClick={() => setTab(item)}
               className={cn(
-                "rounded-md px-2 py-[3px] text-[13px] text-foreground transition-[background-color,opacity] duration-100",
+                "rounded-md px-2 py-[3px] text-[calc(13px*var(--text-scale))] text-foreground transition-[background-color,opacity] duration-100",
                 tab === item ? "bg-muted" : "opacity-50 hover:opacity-75"
               )}
             >
@@ -186,7 +188,7 @@ export function ChatPanel({
         <div className="flex justify-end pl-14">
           <div
             className={cn(
-              "rounded-md bg-muted px-3 py-1.5 text-[13px] leading-[1.4] text-foreground transition-[opacity,transform] duration-300 ease-out",
+              "rounded-md bg-muted px-3 py-1.5 text-[calc(13px*var(--text-scale))] leading-[1.4] text-foreground transition-[opacity,transform] duration-300 ease-out",
               sent ? "translate-y-0 opacity-100" : "translate-y-2.5 opacity-0"
             )}
           >
@@ -219,7 +221,7 @@ export function ChatPanel({
             }}
             placeholder={l.placeholder}
             aria-label="Chat prompt"
-            className="min-h-4.5 bg-transparent text-[13px] leading-[1.4] text-foreground outline-none placeholder:text-muted-foreground/70"
+            className="min-h-4.5 bg-transparent text-[calc(13px*var(--text-scale))] leading-[1.4] text-foreground outline-none placeholder:text-muted-foreground/70"
           />
           <div className="flex items-center justify-end">
             <button

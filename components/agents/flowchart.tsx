@@ -158,11 +158,11 @@ function ChipMenu({
             onClick={() => onPick(item.name)}
             className="relative z-10 flex h-7.5 w-full cursor-pointer items-center gap-2 rounded-md px-2 text-left outline-none"
           >
-            <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium text-foreground">
+            <span className="min-w-0 flex-1 truncate text-[calc(12.5px*var(--text-scale))] font-medium text-foreground">
               {item.name}
             </span>
             {item.tag && (
-              <span className="shrink-0 text-[11px] text-muted-foreground/70">
+              <span className="shrink-0 text-[calc(11px*var(--text-scale))] text-muted-foreground/70">
                 {item.tag}
               </span>
             )}
@@ -185,7 +185,7 @@ function SourceChip({ label }: { label: string }) {
   return (
     <span
       data-ui
-      className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md border bg-card px-1.5 text-[12px] font-medium text-foreground"
+      className="inline-flex h-6 shrink-0 items-center gap-1 rounded-md border bg-card px-1.5 text-[calc(12px*var(--text-scale))] font-medium text-foreground"
     >
       <IceCreamCone aria-hidden className="size-3 text-muted-foreground" />
       {label}
@@ -222,7 +222,7 @@ function SelectChip({
         aria-expanded={open}
         onClick={() => onToggle(id)}
         className={cn(
-          "inline-flex h-6 min-w-0 cursor-pointer items-center gap-1 rounded-md px-1.5 text-[12px] font-medium text-foreground transition-colors duration-100 outline-none focus-visible:ring-[3px] focus-visible:ring-ring",
+          "inline-flex h-6 min-w-0 cursor-pointer items-center gap-1 rounded-md px-1.5 text-[calc(12px*var(--text-scale))] font-medium text-foreground transition-colors duration-100 outline-none focus-visible:ring-[3px] focus-visible:ring-ring",
           open ? "bg-accent" : "bg-muted hover:bg-accent"
         )}
       >
@@ -307,7 +307,8 @@ function ConditionBody({
     />
   )
 
-  const label = "w-7 text-[12.5px] text-muted-foreground"
+  const label =
+    "w-7 text-[calc(12.5px*var(--text-scale))] text-muted-foreground"
   const grip = "size-4 shrink-0 cursor-grab text-muted-foreground/50"
 
   return (
@@ -317,7 +318,9 @@ function ConditionBody({
         <span className={label}>If</span>
         <SourceChip label={source} />
         {chip("prop1", properties, "w-36")}
-        <span className="text-[12.5px] text-muted-foreground">is</span>
+        <span className="text-[calc(12.5px*var(--text-scale))] text-muted-foreground">
+          is
+        </span>
         {chip("val1", firstValues, "w-44", { dot: true, align: "right" })}
       </div>
       <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1.5">
@@ -325,7 +328,9 @@ function ConditionBody({
         <span className={label}>and</span>
         <SourceChip label={source} />
         {chip("prop2", properties, "w-36")}
-        <span className="text-[12.5px] text-muted-foreground">is</span>
+        <span className="text-[calc(12.5px*var(--text-scale))] text-muted-foreground">
+          is
+        </span>
         <span className="max-w-full pl-[49px]">
           {chip("val2", secondaryValues, "w-64", { dot: true })}
         </span>
@@ -348,10 +353,10 @@ function StepBody({ node }: { node: FlowchartStep }) {
         <IceCreamCone aria-hidden className="size-4" />
       </span>
       <span className="min-w-0 text-left">
-        <span className="block truncate text-[13px] leading-tight font-semibold text-foreground">
+        <span className="block truncate text-[calc(13px*var(--text-scale))] leading-tight font-semibold text-foreground">
           {node.title}
         </span>
-        <span className="mt-0.5 block text-[12px] leading-snug text-muted-foreground">
+        <span className="mt-0.5 block text-[calc(12px*var(--text-scale))] leading-snug text-muted-foreground">
           {node.caption}
         </span>
       </span>
@@ -575,7 +580,7 @@ function Flowchart({
             {node.kind && kindTone && (
               <span
                 className={cn(
-                  "inline-flex h-6 items-center rounded-md px-2 text-[11.5px] font-medium",
+                  "inline-flex h-6 items-center rounded-md px-2 text-[calc(11.5px*var(--text-scale))] font-medium",
                   kindTone.pill
                 )}
                 style={kindTone.style}

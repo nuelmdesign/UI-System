@@ -343,7 +343,7 @@ export function SelectionActions({
       type="button"
       variant="ghost"
       size="xs"
-      className="shrink-0 gap-1 px-2 text-[12.5px] font-normal"
+      className="shrink-0 gap-1 px-2 text-[calc(12.5px*var(--text-scale))] font-normal"
       onClick={item.action ? () => run(item.action!) : undefined}
     >
       {item.icon}
@@ -357,7 +357,7 @@ export function SelectionActions({
       className={cn("w-full max-w-[460px]", className)}
     >
       <div ref={hostRef} className="relative pb-12 select-none">
-        <p className="text-[13px] leading-relaxed text-foreground">
+        <p className="text-[calc(13px*var(--text-scale))] leading-relaxed text-foreground">
           {passage.lead}
           <span
             ref={selectionRef}
@@ -407,7 +407,7 @@ export function SelectionActions({
               {busy && (
                 <span
                   role="status"
-                  className="inline-flex h-7 items-center gap-1.5 px-2.5 text-[12.5px] whitespace-nowrap text-muted-foreground"
+                  className="inline-flex h-7 items-center gap-1.5 px-2.5 text-[calc(12.5px*var(--text-scale))] whitespace-nowrap text-muted-foreground"
                 >
                   <span className="size-3 shrink-0 animate-spin rounded-full border-[1.5px] border-input border-t-muted-foreground [animation-duration:700ms]" />
                   {mode === "thinking" ? (
@@ -424,7 +424,7 @@ export function SelectionActions({
                     type="button"
                     variant="ink"
                     size="xs"
-                    className="shrink-0 gap-1 text-[12.5px] font-normal"
+                    className="shrink-0 gap-1 text-[calc(12.5px*var(--text-scale))] font-normal"
                     onClick={reset}
                   >
                     <Check />
@@ -434,7 +434,7 @@ export function SelectionActions({
                     type="button"
                     variant="ghost"
                     size="xs"
-                    className="shrink-0 gap-1 px-2 text-[12.5px] font-normal"
+                    className="shrink-0 gap-1 px-2 text-[calc(12.5px*var(--text-scale))] font-normal"
                     onClick={reset}
                   >
                     <X />
@@ -496,7 +496,7 @@ export function SelectionActions({
                         }}
                         aria-label={copy.placeholder}
                         placeholder={copy.placeholder}
-                        className="h-7 w-full bg-transparent pr-2.5 pl-3 text-[12.5px] text-foreground outline-none placeholder:text-muted-foreground/70"
+                        className="h-7 w-full bg-transparent pr-2.5 pl-3 text-[calc(12.5px*var(--text-scale))] text-foreground outline-none placeholder:text-muted-foreground/70"
                       />
                     </form>
                   </div>

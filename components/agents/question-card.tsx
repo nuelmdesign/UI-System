@@ -238,7 +238,7 @@ export function QuestionCard({
           className
         )}
       >
-        <span className="inline-flex items-center gap-1.5 rounded-md bg-success/10 py-1 pr-2.5 pl-1 text-[12.5px] font-medium text-success">
+        <span className="inline-flex items-center gap-1.5 rounded-md bg-success/10 py-1 pr-2.5 pl-1 text-[calc(12.5px*var(--text-scale))] font-medium text-success">
           <span className="flex size-4.5 items-center justify-center rounded-full bg-success text-primary-foreground">
             <Check className="size-3" strokeWidth={3} />
           </span>
@@ -348,7 +348,7 @@ export function QuestionCard({
                             </span>
                             <span
                               className={cn(
-                                "text-[13px] leading-none transition-colors duration-200",
+                                "text-[calc(13px*var(--text-scale))] leading-none transition-colors duration-200",
                                 on ? "text-foreground" : "text-muted-foreground"
                               )}
                             >
@@ -385,7 +385,7 @@ export function QuestionCard({
                           }}
                           placeholder={t.customPlaceholder}
                           aria-label="Custom answer"
-                          className="min-w-0 flex-1 bg-transparent pl-1.5 text-[13px] text-foreground outline-none placeholder:text-muted-foreground/70"
+                          className="min-w-0 flex-1 bg-transparent pl-1.5 text-[calc(13px*var(--text-scale))] text-foreground outline-none placeholder:text-muted-foreground/70"
                         />
                       </label>
                     </GlideMenu>

@@ -454,7 +454,7 @@ export function PromptBar({
                         {source.icon}
                       </span>
                     )}
-                    <span className="shrink-0 text-[12.5px] font-medium text-foreground">
+                    <span className="shrink-0 text-[calc(12.5px*var(--text-scale))] font-medium text-foreground">
                       {row.name}
                     </span>
                     <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground/70">
@@ -487,7 +487,7 @@ export function PromptBar({
                 No matches for “{query}”
               </div>
             )}
-            <div className="mt-1 border-t px-2 pt-1.5 pb-1 text-[11px] text-muted-foreground/70">
+            <div className="mt-1 border-t px-2 pt-1.5 pb-1 text-[calc(11px*var(--text-scale))] text-muted-foreground/70">
               {menu === "at"
                 ? "Type to search sources & files"
                 : "Type to search commands"}
@@ -515,11 +515,11 @@ export function PromptBar({
                 }}
                 className="relative z-10 flex h-7.5 w-full items-center gap-2 rounded-md px-2 text-left outline-none"
               >
-                <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium text-foreground">
+                <span className="min-w-0 flex-1 truncate text-[calc(12.5px*var(--text-scale))] font-medium text-foreground">
                   {m.name}
                 </span>
                 {m.tag && (
-                  <span className="shrink-0 text-[11px] text-muted-foreground/70">
+                  <span className="shrink-0 text-[calc(11px*var(--text-scale))] text-muted-foreground/70">
                     {m.tag}
                   </span>
                 )}
@@ -563,7 +563,7 @@ export function PromptBar({
           <span
             ref={measureRef}
             aria-hidden="true"
-            className="pointer-events-none invisible absolute text-[13px] leading-[18px] whitespace-pre"
+            className="pointer-events-none invisible absolute text-[calc(13px*var(--text-scale))] leading-[18px] whitespace-pre"
           >
             {draft}
           </span>
@@ -580,7 +580,7 @@ export function PromptBar({
                   key={`${file}-${i}`}
                   data-slot="prompt-bar-attachment"
                   className={cn(
-                    "flex h-6.5 animate-pop-in items-center gap-1.5 border bg-muted py-1 pr-1 pl-1.5 text-[11.5px] text-muted-foreground",
+                    "flex h-6.5 animate-pop-in items-center gap-1.5 border bg-muted py-1 pr-1 pl-1.5 text-[calc(11.5px*var(--text-scale))] text-muted-foreground",
                     control
                   )}
                 >
@@ -687,7 +687,7 @@ export function PromptBar({
               className={cn(
                 tall
                   ? "min-h-[68px] px-2 py-2 text-sm leading-5"
-                  : "min-h-7 px-1 py-[5px] text-[13px] leading-[18px]",
+                  : "min-h-7 px-1 py-[5px] text-[calc(13px*var(--text-scale))] leading-[18px]",
                 "w-full min-w-0 resize-none bg-transparent [overflow-wrap:anywhere] text-foreground outline-none placeholder:text-muted-foreground/70",
                 wide
                   ? "col-span-full col-start-1 row-start-1"

@@ -77,7 +77,7 @@ export function SearchList({
             onChange={(event) => setQuery(event.target.value)}
             placeholder={l.placeholder}
             aria-label={l.ariaLabel}
-            className="min-w-0 flex-1 bg-transparent text-[13px] text-foreground outline-none placeholder:text-muted-foreground/70"
+            className="min-w-0 flex-1 bg-transparent text-[calc(13px*var(--text-scale))] text-foreground outline-none placeholder:text-muted-foreground/70"
           />
           {query && (
             <button
@@ -100,7 +100,7 @@ export function SearchList({
             <span className="mb-1.5 flex size-8 items-center justify-center rounded-md border bg-muted text-muted-foreground/70">
               <Search className="size-4" strokeWidth={1.8} />
             </span>
-            <span className="text-[13px] font-medium text-foreground">
+            <span className="text-[calc(13px*var(--text-scale))] font-medium text-foreground">
               {l.emptyTitle}
             </span>
             <span className="text-xs text-muted-foreground/70">
@@ -122,7 +122,7 @@ export function SearchList({
                     setQuery(item)
                     onSelect?.(item)
                   }}
-                  className="relative z-10 flex h-8 w-full animate-fade-in items-center rounded-md px-2 text-left text-[13px] text-foreground outline-none"
+                  className="relative z-10 flex h-8 w-full animate-fade-in items-center rounded-md px-2 text-left text-[calc(13px*var(--text-scale))] text-foreground outline-none"
                 >
                   {item}
                 </button>

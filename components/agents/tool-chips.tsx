@@ -221,7 +221,7 @@ export function ToolChips({
         data-slot="tool-chips-header"
         aria-expanded={open}
         onClick={toggleOpen}
-        className="-mx-1.5 flex w-fit items-center gap-1.5 rounded-md px-1.5 py-1 text-[12.5px] text-muted-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring"
+        className="-mx-1.5 flex w-fit items-center gap-1.5 rounded-md px-1.5 py-1 text-[calc(12.5px*var(--text-scale))] text-muted-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring"
       >
         <ChevronDown
           aria-hidden
@@ -285,13 +285,13 @@ export function ToolChips({
                         }}
                       />
                     </span>
-                    <span className="shrink-0 text-[12.5px] font-medium text-foreground">
+                    <span className="shrink-0 text-[calc(12.5px*var(--text-scale))] font-medium text-foreground">
                       {row.label}
                     </span>
                     <span
                       data-slot="tool-chips-chip"
                       className={cn(
-                        "flex h-5.5 min-w-0 flex-1 items-center rounded-sm border bg-muted px-1.5 text-[11.5px] text-muted-foreground transition-colors duration-100 hover:bg-accent",
+                        "flex h-5.5 min-w-0 flex-1 items-center rounded-sm border bg-muted px-1.5 text-[calc(11.5px*var(--text-scale))] text-muted-foreground transition-colors duration-100 hover:bg-accent",
                         row.mono && "font-mono"
                       )}
                     >
@@ -313,7 +313,7 @@ export function ToolChips({
                           <span
                             key={line.text}
                             className={cn(
-                              "truncate text-[11.5px] leading-[1.6]",
+                              "truncate text-[calc(11.5px*var(--text-scale))] leading-[1.6]",
                               row.detailMono && "font-mono",
                               line.tone === "add"
                                 ? "text-success"
@@ -351,7 +351,7 @@ export function ToolChips({
                     aria-label={`Show diff for ${d.file}`}
                     onFocus={openPreview(d.file)}
                     onBlur={closePreview(d.file)}
-                    className="inline-flex h-7 max-w-full animate-pop-in items-center gap-2 rounded-md border bg-card px-2 font-mono text-[11.5px] text-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring"
+                    className="inline-flex h-7 max-w-full animate-pop-in items-center gap-2 rounded-md border bg-card px-2 font-mono text-[calc(11.5px*var(--text-scale))] text-foreground transition-colors duration-100 outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring"
                     style={{
                       animationDuration: "250ms",
                       animationDelay: `${i * 80}ms`,
@@ -373,7 +373,7 @@ export function ToolChips({
               <button
                 type="button"
                 onClick={onMore}
-                className="inline-flex h-7 animate-fade-in items-center rounded-md px-1.5 font-mono text-[11.5px] text-muted-foreground/70 underline decoration-transparent underline-offset-2 transition-colors duration-100 outline-none hover:text-muted-foreground hover:decoration-current focus-visible:ring-[3px] focus-visible:ring-ring"
+                className="inline-flex h-7 animate-fade-in items-center rounded-md px-1.5 font-mono text-[calc(11.5px*var(--text-scale))] text-muted-foreground/70 underline decoration-transparent underline-offset-2 transition-colors duration-100 outline-none hover:text-muted-foreground hover:decoration-current focus-visible:ring-[3px] focus-visible:ring-ring"
                 style={{ animationDelay: `${diffs.length * 80}ms` }}
               >
                 {copy.more}
@@ -396,7 +396,7 @@ export function ToolChips({
                 preview.top === undefined ? "bottom left" : "top left",
             }}
           >
-            <div className="flex items-center justify-between border-b px-2.5 py-1.5 font-mono text-[11px]">
+            <div className="flex items-center justify-between border-b px-2.5 py-1.5 font-mono text-[calc(11px*var(--text-scale))]">
               <span className="min-w-0 truncate text-muted-foreground">
                 {preview.file}
               </span>
@@ -412,7 +412,7 @@ export function ToolChips({
                 </span>
               )}
             </div>
-            <div className="py-1 font-mono text-[11px] leading-[1.8]">
+            <div className="py-1 font-mono text-[calc(11px*var(--text-scale))] leading-[1.8]">
               {(diffLines[preview.file] ?? []).map((line, index) => (
                 <div
                   key={index}

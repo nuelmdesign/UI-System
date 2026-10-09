@@ -146,7 +146,7 @@ export function FilterTable({
               {f.label}
               <span
                 className={cn(
-                  "rounded-sm px-1 font-mono text-[10.5px] tabular-nums",
+                  "rounded-sm px-1 font-mono text-[calc(10.5px*var(--text-scale))] tabular-nums",
                   active
                     ? "bg-muted text-muted-foreground"
                     : "text-muted-foreground/70"
@@ -170,7 +170,7 @@ export function FilterTable({
           <div
             className={cn(
               GRID,
-              "border-b text-[12.5px] font-medium text-muted-foreground"
+              "border-b text-[calc(12.5px*var(--text-scale))] font-medium text-muted-foreground"
             )}
           >
             <span className="border-r px-3 py-2">{l.columns.task}</span>
@@ -197,7 +197,7 @@ export function FilterTable({
                   <div
                     className={cn(
                       GRID,
-                      "border-b text-[13px] transition-colors duration-100 hover:bg-accent"
+                      "border-b text-[calc(13px*var(--text-scale))] transition-colors duration-100 hover:bg-accent"
                     )}
                   >
                     <span className="flex min-w-0 items-center border-r px-3 py-2">

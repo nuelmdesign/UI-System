@@ -221,7 +221,7 @@ function InsightChart({
           />
           <span
             data-slot="insight-chart-tooltip"
-            className="pointer-events-none absolute top-2 flex -translate-x-1/2 items-center gap-2 rounded-md bg-ink px-2 py-1 font-mono text-[11px] whitespace-nowrap text-ink-foreground tabular-nums"
+            className="pointer-events-none absolute top-2 flex -translate-x-1/2 items-center gap-2 rounded-md bg-ink px-2 py-1 font-mono text-[calc(11px*var(--text-scale))] whitespace-nowrap text-ink-foreground tabular-nums"
             style={{ left: `${Math.min(Math.max(cursorX, 28), 72)}%` }}
           >
             {tooltip(index).map((row) => (
@@ -269,7 +269,7 @@ function Mono({
   return (
     <code
       className={cn(
-        "font-mono text-[11.5px] tabular-nums",
+        "font-mono text-[calc(11.5px*var(--text-scale))] tabular-nums",
         tone === "destructive" ? "text-destructive" : "text-success"
       )}
     >
@@ -280,7 +280,7 @@ function Mono({
 
 function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground">
+    <span className="rounded-md bg-muted px-1.5 py-0.5 text-[calc(10.5px*var(--text-scale))] font-medium text-muted-foreground">
       {children}
     </span>
   )
@@ -333,13 +333,13 @@ function CompareCard({
       <div className="flex items-center gap-4">
         {series.map((s) => (
           <div key={s.name} className="flex-1">
-            <span className="flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+            <span className="flex items-center gap-1.5 text-[calc(11.5px*var(--text-scale))] text-muted-foreground">
               <span className={cn("size-2 rounded-full", TONE_BG[s.color])} />
               {s.name}
             </span>
             <span
               className={cn(
-                "block text-[17px] font-semibold tracking-[-0.01em] tabular-nums",
+                "block text-[calc(17px*var(--text-scale))] font-semibold tracking-[-0.01em] tabular-nums",
                 s.tone === "destructive" ? "text-destructive" : "text-success"
               )}
             >
@@ -351,7 +351,7 @@ function CompareCard({
       </div>
       <div className={insetClass}>
         <div className={insetBarClass}>
-          <span className="text-[11px] text-muted-foreground/70 tabular-nums">
+          <span className="text-[calc(11px*var(--text-scale))] text-muted-foreground/70 tabular-nums">
             Trend snapshot
           </span>
           <Tag>Snapshot</Tag>
@@ -406,7 +406,7 @@ function AnomalyCard({ data = ANOMALY_DATA }: { data?: AnomalyData }) {
   return (
     <div data-slot="insight-card" className={cardClass}>
       <div className="flex items-center justify-between">
-        <span className="flex items-center gap-1.5 text-[12px] font-medium text-foreground">
+        <span className="flex items-center gap-1.5 text-[calc(12px*var(--text-scale))] font-medium text-foreground">
           <ArrowUp aria-hidden className="size-3 text-destructive" />
           High freezer spend
         </span>
@@ -414,7 +414,7 @@ function AnomalyCard({ data = ANOMALY_DATA }: { data?: AnomalyData }) {
       </div>
       <div className={insetClass}>
         <div className={insetBarClass}>
-          <span className="font-mono text-[11px] text-muted-foreground/70 tabular-nums">
+          <span className="font-mono text-[calc(11px*var(--text-scale))] text-muted-foreground/70 tabular-nums">
             {hoverIndex !== null
               ? format(values[hoverIndex])
               : `${format(threshold)} threshold`}
@@ -427,7 +427,7 @@ function AnomalyCard({ data = ANOMALY_DATA }: { data?: AnomalyData }) {
                 aria-pressed={metric === item}
                 onClick={() => setMetric(item)}
                 className={cn(
-                  "rounded-sm px-2 py-0.5 text-[10.5px] font-medium transition-[background-color,color,box-shadow,transform] duration-150 ease-out active:scale-[0.96]",
+                  "rounded-sm px-2 py-0.5 text-[calc(10.5px*var(--text-scale))] font-medium transition-[background-color,color,box-shadow,transform] duration-150 ease-out active:scale-[0.96]",
                   metric === item
                     ? "bg-card text-foreground ring-1 ring-border"
                     : "text-muted-foreground/70 hover:text-muted-foreground"
@@ -456,11 +456,11 @@ function AnomalyCard({ data = ANOMALY_DATA }: { data?: AnomalyData }) {
         />
       </div>
       <div className="mt-1.5 flex items-baseline gap-2">
-        <span className="text-[17px] font-semibold tracking-[-0.01em] text-foreground tabular-nums">
+        <span className="text-[calc(17px*var(--text-scale))] font-semibold tracking-[-0.01em] text-foreground tabular-nums">
           {formatMoney(data.spend.at(-1) ?? 0)} spent
         </span>
         <Mono tone="destructive">+$1,834.66</Mono>
-        <span className="text-[11px] text-muted-foreground/70">
+        <span className="text-[calc(11px*var(--text-scale))] text-muted-foreground/70">
           vs 3 months
         </span>
       </div>
@@ -520,13 +520,13 @@ function AllocationCard({
 
   return (
     <div data-slot="insight-card" className={cardClass}>
-      <span className="flex items-center gap-1.5 text-[12px] font-medium text-foreground">
-        <span className="flex size-3.5 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-primary-foreground">
+      <span className="flex items-center gap-1.5 text-[calc(12px*var(--text-scale))] font-medium text-foreground">
+        <span className="flex size-3.5 items-center justify-center rounded-full bg-primary text-[calc(8px*var(--text-scale))] font-bold text-primary-foreground">
           V
         </span>
         Vanilla allocation
       </span>
-      <span className="mt-1 block text-[20px] font-semibold tracking-[-0.01em] text-foreground tabular-nums">
+      <span className="mt-1 block text-[calc(20px*var(--text-scale))] font-semibold tracking-[-0.01em] text-foreground tabular-nums">
         {active.amount}
       </span>
       <div
@@ -569,7 +569,7 @@ function AllocationCard({
             aria-pressed={selected === s.name}
             onClick={() => setSelected(s.name)}
             className={cn(
-              "flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[11px] transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.96]",
+              "flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[calc(11px*var(--text-scale))] transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.96]",
               selected === s.name
                 ? "bg-muted text-foreground"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -581,10 +581,15 @@ function AllocationCard({
         ))}
       </div>
       <div className="mt-3 min-h-16 rounded-md border bg-muted/50 px-2.5 py-2">
-        <span className={cn("block text-[11.5px] font-medium", active.tone)}>
+        <span
+          className={cn(
+            "block text-[calc(11.5px*var(--text-scale))] font-medium",
+            active.tone
+          )}
+        >
           {active.label}
         </span>
-        <span className="mt-1 block text-[11px] leading-relaxed text-muted-foreground/70">
+        <span className="mt-1 block text-[calc(11px*var(--text-scale))] leading-relaxed text-muted-foreground/70">
           Contribution snapshot across current inventory value. Segment
           selection changes the inspected group without moving the card.
         </span>
@@ -690,10 +695,10 @@ function InsightCards({
       {/* pager header */}
       <div className="flex items-center justify-between">
         <span className="flex items-baseline gap-1.5">
-          <span className="text-[13px] font-semibold text-foreground">
+          <span className="text-[calc(13px*var(--text-scale))] font-semibold text-foreground">
             {l.title}
           </span>
-          <span className="font-mono text-[12px] text-muted-foreground/70 tabular-nums">
+          <span className="font-mono text-[calc(12px*var(--text-scale))] text-muted-foreground/70 tabular-nums">
             {pages.length}
           </span>
         </span>
@@ -730,7 +735,7 @@ function InsightCards({
           exit="hidden"
           transition={transition.base}
         >
-          <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground">
+          <p className="mt-1.5 text-[calc(12.5px*var(--text-scale))] leading-relaxed text-muted-foreground">
             {current.prose}
           </p>
           <div className="mt-2">
@@ -740,7 +745,7 @@ function InsightCards({
             variant="outline"
             size="xs"
             onClick={() => onAsk?.(current.pill, current)}
-            className="mt-2 h-auto py-1.5 text-left text-[12px] font-normal whitespace-normal"
+            className="mt-2 h-auto py-1.5 text-left text-[calc(12px*var(--text-scale))] font-normal whitespace-normal"
           >
             {current.pill}
           </Button>
