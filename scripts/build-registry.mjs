@@ -931,6 +931,40 @@ const items = [
     description:
       "Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.",
   }),
+  screen("order-confirmation", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/empty-state",
+      "@opendraft/stat",
+      "@opendraft/stepper",
+      "@opendraft/ticket-pass",
+    ],
+    description:
+      "Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.",
+  }),
+  ui("page-header", {
+    deps: ["class-variance-authority"],
+    description:
+      "Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.",
+  }),
+  ui("field", {
+    reg: ["@opendraft/label"],
+    description:
+      "Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset.",
+  }),
+  ui("date-picker", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/input", "@opendraft/popover"],
+    description:
+      "Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.",
+  }),
+  ui("repeater-field", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/motion"],
+    description:
+      "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.

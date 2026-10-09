@@ -748,6 +748,46 @@ export const ENTRIES: DocEntry[] = [
       "Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.",
     isNew: true,
   },
+  {
+    slug: "order-confirmation",
+    title: "Order Confirmation",
+    category: "Blocks",
+    description:
+      "Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.",
+    isNew: true,
+  },
+  {
+    slug: "page-header",
+    title: "Page Header",
+    category: "Components",
+    description:
+      "Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.",
+    isNew: true,
+  },
+  {
+    slug: "field",
+    title: "Field",
+    category: "Components",
+    description:
+      "Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset.",
+    isNew: true,
+  },
+  {
+    slug: "date-picker",
+    title: "Date Picker",
+    category: "Components",
+    description:
+      "Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.",
+    isNew: true,
+  },
+  {
+    slug: "repeater-field",
+    title: "Repeater Field",
+    category: "Components",
+    description:
+      "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
+    isNew: true,
+  },
 ]
 
 export const ENTRY_BY_SLUG = Object.fromEntries(ENTRIES.map((e) => [e.slug, e]))

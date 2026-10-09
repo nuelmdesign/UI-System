@@ -69,7 +69,21 @@ npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 ```
 
 6. Load three fonts and expose them as CSS variables: Geist as `--font-geist`, Geist Mono as `--font-geist-mono`, Newsreader as `--font-newsreader`. In Next.js use `next/font/google` (the starter's `--font-geist-sans` is not the same variable; rename it).
-7. Dark mode is the `dark` class on `<html>`. To follow the visitor's system setting, toggle that class with a small script, or use `next-themes` with `attribute="class"`.
+7. Dark mode is the `dark` class on `<html>`. The `theme-toggle` component (`npx shadcn@latest add @opendraft/theme-toggle`) handles it: it switches system, light and dark and remembers the choice. To avoid a flash of the wrong theme on load, also run its exported `themeScript` before the page paints, and add `suppressHydrationWarning` to `<html>` because the script changes its class:
+
+```tsx
+import { themeScript } from "@/components/ui/theme-toggle"
+
+// app/layout.tsx
+;<html lang="en" suppressHydrationWarning>
+  <head>
+    <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+  </head>
+  <body>{children}</body>
+</html>
+```
+
+   Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead.
 8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
 
 ```tsx
@@ -87,7 +101,7 @@ On Next.js 16 with Cache Components (the new `create-next-app` default), a compo
 
 ### 2. Use components before writing your own
 
-- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for.
+- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for. Blocks fill the space they're given and lay out from their own width, so put one in a container that has a width and a height (for example a `w-full` parent with `h-screen` or a fixed height); in a shrink-to-fit parent it collapses. Give every page the same width with `PageContainer`, and head it with `PageHeader`. Build forms with `Field`, with `FieldGroup` for rows, and use `DatePicker` for single dates and `RepeaterField` for add-and-remove rows.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.
@@ -327,6 +341,8 @@ export type AnalyticsRow = {
   conversion: number
   /** Seconds. */
   duration: number
+  /** Custom number for the optional `valueColumn` (revenue, orders, ...). Used for sorting and as the default display. */
+  value?: number
 }
 
 export type AnalyticsChannel = {
@@ -349,8 +365,8 @@ export type AnalyticsRangeData = {
 
 /** Every fixed piece of text, so the screen can describe any product. */
 export type AnalyticsLabels = {
-  /** Small line above the title. */
-  eyebrow: string
+  /** Small line above the title. A string is static; a function receives the selected range. */
+  eyebrow: string | ((range: AnalyticsRange) => string)
   export: string
   channels: string
   channelsAria: string
@@ -377,6 +393,8 @@ export type AnalyticsDashboardProps = {
   labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
     columns?: Partial<AnalyticsLabels["columns"]>
   }
+  /** Replaces the "Avg. time" column with a custom one (money, orders, ...). Reads `row.value` unless `format` is given. */
+  valueColumn?: { label: string; format?: (row: AnalyticsRow) => string }
   className?: string
 }
 ```
@@ -390,7 +408,7 @@ import { AnalyticsDashboard } from "@/components/blocks/analytics-dashboard"
 
 export default function AnalyticsDashboardDemo() {
   return (
-    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <AnalyticsDashboard />
     </div>
   )
@@ -518,7 +536,7 @@ import { SettingsPage } from "@/components/blocks/settings-page"
 
 export default function SettingsPageDemo() {
   return (
-    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <SettingsPage />
     </div>
   )
@@ -796,13 +814,53 @@ export type CheckoutResult = {
   orderNumber?: string
 }
 
+export type CheckoutLabels = {
+  eyebrow: string
+  title: string
+  detailsTitle: string
+  detailsDescription: string
+  paymentTitle: string
+  paymentDescription: string
+  confirmationTitle: string
+  /** Receives the contact email and the order number. */
+  confirmationDescription: (email: string, orderNumber: string) => string
+  emptyTitle: string
+  emptyDescription: string
+  continue: string
+  back: string
+  pay: string
+  reserve: string
+  done: string
+  summary: string
+  subtotal: string
+  discount: string
+  total: string
+  discountCode: string
+  discountPlaceholder: string
+  discountApply: string
+  discountRemove: string
+  /** Receives the percentage off. */
+  discountApplied: (percent: number) => string
+  /** Eyebrow of each ticket on the confirmation step. */
+  ticketEyebrow: (item: CheckoutItem) => string
+}
+
+export type CheckoutTicketField = {
+  label: string
+  value: React.ReactNode
+}
+
 export type CheckoutProps = {
-  /** Cart lines. Controlled when passed together with `onChange`. */
+  /**
+   * Cart lines. Controlled when passed together with `onChange`. When omitted,
+   * the block starts with `SAMPLE_CHECKOUT_ITEMS` (generic placeholder tickets).
+   */
   items?: CheckoutItem[]
+  /** Extra charges added to the total. Defaults to none. */
   fees?: CheckoutFee[]
   /** ISO 4217 currency code. */
   currency?: string
-  /** Valid discount codes mapped to a percentage off the subtotal. */
+  /** Valid discount codes mapped to a percentage off the subtotal. Defaults to none. */
   discountCodes?: Record<string, number>
   onChange?: (items: CheckoutItem[]) => void
   /**
@@ -819,6 +877,16 @@ export type CheckoutProps = {
   steps?: [string, string, string]
   /** Shown in the empty-cart state. */
   emptyAction?: React.ReactNode
+  /** Override any fixed copy. Merged over the defaults. */
+  labels?: Partial<CheckoutLabels>
+  /**
+   * Fields shown on each confirmation ticket. Defaults to Attendee, Quantity
+   * and Order.
+   */
+  ticketFields?: (
+    item: CheckoutItem,
+    order: { orderNumber: string; values: CheckoutValues }
+  ) => CheckoutTicketField[]
   className?: string
 }
 ```
@@ -826,12 +894,18 @@ export type CheckoutProps = {
 ## Example
 
 ```tsx
-import { Checkout } from "@/components/blocks/checkout"
+import {
+  Checkout,
+  SAMPLE_CHECKOUT_DISCOUNTS,
+  SAMPLE_CHECKOUT_FEES,
+} from "@/components/blocks/checkout"
 
 export default function CheckoutDemo() {
   return (
     <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <Checkout
+        fees={SAMPLE_CHECKOUT_FEES}
+        discountCodes={SAMPLE_CHECKOUT_DISCOUNTS}
         onPay={async ({ payment }) => {
           await new Promise((r) => setTimeout(r, 1200))
           if (payment.last4 === "0002")
@@ -879,10 +953,12 @@ export type CatalogItem = {
   id: string
   title: string
   host: string
+  /** Venue or city, shown on cards and the featured band. */
+  location?: string
   category: string
   /** ISO date (YYYY-MM-DD). Used for sorting and the date block. */
   date: string
-  /** Price in whole currency units. 0 renders as "Free". */
+  /** Price in whole units of the catalog `currency`. 0 renders as the free label. */
   price: number
   capacity: number
   /** Places left. 0 means sold out. */
@@ -901,7 +977,49 @@ export type CatalogProps = {
   loading?: boolean
   title?: string
   eyebrow?: string
+  /** ISO 4217 code used for every price and the default price filter. */
+  currency?: string
+  /** Price filter buckets (min and max both inclusive). Defaults are computed in `currency`. */
+  priceRanges?: CatalogPriceRange[]
+  /** "cards" is a grid; "compact" is a list-style row per item. */
+  layout?: "cards" | "compact"
+  /** Override any fixed copy. */
+  labels?: Partial<CatalogLabels>
   className?: string
+}
+
+export type CatalogPriceRange = { label: string; min?: number; max?: number }
+
+export type CatalogLabels = {
+  /** Prefix before the host on the featured band. Empty string for none. */
+  hostLabel: string
+  placesLeft: string
+  placesValue: (remaining: number, capacity: number) => string
+  soldOut: string
+  sellingFast: string
+  free: string
+  all: string
+  featured: string
+  viewDetails: string
+  searchLabel: string
+  searchPlaceholder: string
+  categoryGroup: string
+  sortBy: string
+  sortRelevance: string
+  sortPriceAsc: string
+  sortPriceDesc: string
+  sortDate: string
+  price: string
+  anyPrice: string
+  hideSoldOut: string
+  hidingSoldOut: string
+  active: string
+  clear: string
+  loading: string
+  results: (shown: number, total: number) => string
+  emptyTitle: string
+  emptyDescription: string
+  clearFilters: string
 }
 ```
 
@@ -981,8 +1099,10 @@ export type DetailItem = {
   image?: string
   imageAlt?: string
   category?: string
+  /** Free-form date/time text, e.g. "Sat 14 Nov, 09:30 to 17:00". */
   date: string
-  location: string
+  /** Venue or place; shown in the meta row when provided. */
+  location?: string
   host: DetailHost
   currency?: string
   facts: DetailFact[]
@@ -996,6 +1116,38 @@ export type DetailItem = {
 
 export type DetailCheckout = { tierId: string; quantity: number }
 
+export type DetailPageLabels = {
+  /** Heading of the purchase panel. */
+  reserveTitle: string
+  /** aria-label of the option radio group. */
+  chooseOption: string
+  quantity: string
+  total: string
+  checkout: string
+  save: string
+  unsave: string
+  showOptions: string
+  hideOptions: string
+  soldOut: string
+  joinWaitlist: string
+  onWaitlist: string
+  available: string
+  /** Receives the tier name. */
+  availability: (name: string) => string
+  /** Receives remaining and capacity. */
+  left: (remaining: number, capacity: number) => string
+  tabsLabel: string
+  tabAbout: string
+  tabSchedule: string
+  tabFaq: string
+  keyFacts: string
+  purchase: string
+  breadcrumb: string
+  date: string
+  location: string
+  host: string
+}
+
 export type DetailPageProps = {
   item?: DetailItem
   onCheckout?: (selection: DetailCheckout) => void
@@ -1004,6 +1156,10 @@ export type DetailPageProps = {
   /** Label for the back link. */
   backLabel?: string
   onBack?: () => void
+  /** Makes the breadcrumb category a button instead of plain text. */
+  onCategoryClick?: (category: string) => void
+  /** Override any fixed copy (for localisation or other domains). */
+  labels?: Partial<DetailPageLabels>
   className?: string
 }
 ```
@@ -1023,6 +1179,123 @@ export default function DetailPageDemo() {
 ```
 
 Live docs: https://ui-system-virid.vercel.app/docs/detail-page. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Order Confirmation
+
+Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/order-confirmation
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { OrderConfirmation } from "@/components/blocks/order-confirmation"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/empty-state`, `@opendraft/stat`, `@opendraft/stepper`, `@opendraft/ticket-pass`
+
+## Props and types
+
+```ts
+export type OrderLine = {
+  id: string
+  title: string
+  detail?: string
+  quantity: number
+  /** Unit price in major currency units. */
+  price: number
+}
+
+export type OrderTicket = {
+  id: string
+  title: string
+  fields: TicketPassField[]
+  code: string
+  status?: TicketPassStatus
+}
+
+export type Order = {
+  number: string
+  email: string
+  /** Pre-formatted date string. */
+  date: string
+  currency: string
+  lines: OrderLine[]
+  /** Total in major currency units. */
+  total: number
+  tickets: OrderTicket[]
+}
+
+export type OrderConfirmationLabels = {
+  steps: [string, string, string]
+  progress: string
+  title: string
+  orderNumber: string
+  emailSent: string
+  date: string
+  tickets: string
+  total: string
+  ticketsHeading: string
+  admitOne: string
+  summaryHeading: string
+  quantity: string
+  download: string
+  addToCalendar: string
+  viewTickets: string
+  continue: string
+  emptyTitle: string
+  emptyDescription: string
+}
+
+export type OrderConfirmationProps = {
+  /** Omit or pass null to show the empty state. Defaults to sample data. */
+  order?: Order | null
+  labels?: Partial<OrderConfirmationLabels>
+  onDownload?: () => void
+  onAddToCalendar?: () => void
+  onViewTickets?: () => void
+  onContinue?: () => void
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { OrderConfirmation } from "@/components/blocks/order-confirmation"
+
+export default function OrderConfirmationDemo() {
+  return (
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
+      <OrderConfirmation
+        onDownload={() => {}}
+        onAddToCalendar={() => {}}
+        onViewTickets={() => {}}
+        onContinue={() => {}}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/order-confirmation. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
@@ -9032,6 +9305,11 @@ type StepperProps = Omit<React.ComponentProps<"nav">, "children"> & {
   /** Called when a completed step is clicked. Only completed steps are interactive. */
   onStepClick?: (step: StepperStep, index: number) => void
   orientation?: "horizontal" | "vertical"
+  /**
+   * Every step is done: all show a check and none is current. Also implied when
+   * `current` is a number >= steps.length.
+   */
+  complete?: boolean
 }
 ```
 
@@ -9073,10 +9351,10 @@ export default function StepperDemo() {
         </Button>
         <Button
           size="sm"
-          disabled={current === steps.length - 1}
-          onClick={() => setCurrent((c) => Math.min(steps.length - 1, c + 1))}
+          disabled={current >= steps.length}
+          onClick={() => setCurrent((c) => Math.min(steps.length, c + 1))}
         >
-          Continue
+          {current === steps.length - 1 ? "Finish" : "Continue"}
         </Button>
       </div>
       <div className="border-t pt-6">
@@ -9421,6 +9699,8 @@ type TicketPassProps = Omit<React.ComponentProps<"div">, "title"> & {
   status?: TicketPassStatus
   /** Render the header band dark in either theme. */
   dark?: boolean
+  /** Header band colour: "brand" uses the primary colour. */
+  tone?: "default" | "brand"
   /** Buttons or links rendered below the stub. */
   actions?: React.ReactNode
 }
@@ -9429,6 +9709,7 @@ type TicketPassProps = Omit<React.ComponentProps<"div">, "title"> & {
 ## Variants
 
 - `dark`: `true`, `false` (default)
+- `tone`: `default` (default), `brand`
 
 ## Example
 
@@ -9490,6 +9771,565 @@ export default function TicketPassDemo() {
 ```
 
 Live docs: https://ui-system-virid.vercel.app/docs/ticket-pass. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Page Header
+
+Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/page-header
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { PageHeader, PageContainer } from "@/components/ui/page-header"
+```
+
+## Dependencies
+
+- npm: `class-variance-authority`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type PageContainerProps = React.ComponentProps<"div"> &
+  VariantProps<typeof pageContainerVariants>
+
+type PageHeaderProps = Omit<React.ComponentProps<"header">, "title"> & {
+  eyebrow?: React.ReactNode
+  title: React.ReactNode
+  description?: React.ReactNode
+  /** Buttons or menus aligned to the right (stacked below on narrow screens). */
+  actions?: React.ReactNode
+  /** Breadcrumb or back link rendered above the eyebrow. */
+  breadcrumb?: React.ReactNode
+  /** Draw a hairline under the header. */
+  bordered?: boolean
+  /** Heading level for the title. Defaults to h1. */
+  as?: "h1" | "h2" | "h3"
+}
+```
+
+## Variants
+
+- `size`: `sm`, `default` (default), `lg`, `full`
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { ChevronRight, Plus } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { PageContainer, PageHeader } from "@/components/ui/page-header"
+
+function Crumbs() {
+  return (
+    <nav aria-label="Breadcrumb">
+      <ol className="flex items-center gap-1.5 text-muted-foreground">
+        <li>
+          <a href="#" className="hover:text-foreground">
+            Workspace
+          </a>
+        </li>
+        <ChevronRight aria-hidden className="size-3.5" />
+        <li aria-current="page" className="text-foreground">
+          Projects
+        </li>
+      </ol>
+    </nav>
+  )
+}
+
+export default function PageHeaderDemo() {
+  return (
+    <div className="w-full max-w-[640px] overflow-hidden rounded-lg border bg-background">
+      <PageContainer size="full">
+        <PageHeader
+          bordered
+          breadcrumb={<Crumbs />}
+          eyebrow="Overview"
+          title="Projects"
+          description="Everything your team is building, in one place."
+          actions={
+            <>
+              <Button variant="outline">Export</Button>
+              <Button>
+                <Plus /> New project
+              </Button>
+            </>
+          }
+        />
+        <PageHeader
+          as="h2"
+          eyebrow="Settings"
+          title="Notifications"
+          description="Choose what you hear about and where."
+        />
+      </PageContainer>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/page-header. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Field
+
+Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/field
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Field, FieldControl, FieldGroup, FieldSet } from "@/components/ui/field"
+```
+
+## Dependencies
+
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/label`
+
+## Props and types
+
+```ts
+type FieldControlProps = {
+  id: string
+  "aria-describedby"?: string
+  "aria-invalid"?: true
+  "aria-required"?: true
+}
+
+type FieldProps = Omit<React.ComponentProps<"div">, "children"> & {
+  label?: React.ReactNode
+  hint?: React.ReactNode
+  /** Error message. Marks the control invalid and replaces the hint. */
+  error?: React.ReactNode
+  required?: boolean
+  /** Visually hide the label but keep it for screen readers. */
+  hideLabel?: boolean
+  /** Override the generated control id. */
+  controlId?: string
+  /**
+   * A render function receiving the control props to spread, or plain nodes
+   * containing a `FieldControl` / any component using `useFieldControl`.
+   */
+  children: React.ReactNode | ((props: FieldControlProps) => React.ReactNode)
+}
+
+type FieldGroupProps = React.ComponentProps<"div"> & {
+  /** Max columns when the container is wide enough. */
+  columns?: 1 | 2
+}
+
+type FieldSetProps = Omit<React.ComponentProps<"fieldset">, "title"> & {
+  legend: React.ReactNode
+  description?: React.ReactNode
+}
+
+function FieldControl(props: React.ComponentProps<typeof Slot.Root>)
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  Field,
+  FieldControl,
+  FieldGroup,
+  FieldSet,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+export default function FieldDemo() {
+  const [email, setEmail] = React.useState("name@")
+  const emailError = /^\S+@\S+\.\S+$/.test(email)
+    ? undefined
+    : "Enter a valid email address."
+
+  return (
+    <form
+      className="w-full max-w-[640px]"
+      onSubmit={(e) => e.preventDefault()}
+      noValidate
+    >
+      <FieldSet
+        legend="Contact details"
+        description="We only use these to send your receipt."
+      >
+        <FieldGroup>
+          <Field label="First name" required>
+            {(p) => <Input {...p} autoComplete="given-name" />}
+          </Field>
+          <Field label="Last name" required>
+            {(p) => <Input {...p} autoComplete="family-name" />}
+          </Field>
+          <Field
+            data-span="full"
+            label="Email"
+            required
+            hint="Receipts are sent here."
+            error={emailError}
+          >
+            {(p) => (
+              <Input
+                {...p}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            )}
+          </Field>
+          <Field label="Country">
+            <Select defaultValue="us">
+              <FieldControl>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+              </FieldControl>
+              <SelectContent>
+                <SelectItem value="us">United States</SelectItem>
+                <SelectItem value="gb">United Kingdom</SelectItem>
+                <SelectItem value="de">Germany</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Company" hint="Optional.">
+            {(p) => <Input {...p} />}
+          </Field>
+          <Field data-span="full" label="Notes" hint="Anything we should know?">
+            <FieldControl>
+              <Textarea rows={3} />
+            </FieldControl>
+          </Field>
+        </FieldGroup>
+      </FieldSet>
+    </form>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/field. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Date Picker
+
+Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/date-picker
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { DatePicker } from "@/components/ui/date-picker"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/input`, `@opendraft/popover`
+
+## Props and types
+
+```ts
+type HourCycle = 12 | 24
+
+type DatePickerProps = Omit<
+  React.ComponentProps<"button">,
+  "value" | "defaultValue" | "onChange" | "type"
+> & {
+  /** Controlled ISO value: `2026-11-21` or `2026-11-21T19:30`. */
+  value?: string
+  /** Initial ISO value when uncontrolled. */
+  defaultValue?: string
+  /** Called with an ISO string, or `undefined` when cleared. */
+  onValueChange?: (value: string | undefined) => void
+  /** Adds an HH:MM field; value becomes `YYYY-MM-DDTHH:MM`. */
+  time?: boolean
+  /** 12 or 24 hour display and entry for the time field. */
+  hourCycle?: HourCycle
+  placeholder?: string
+  /** BCP 47 locale for formatting. Defaults to the runtime locale. */
+  locale?: string
+  /** Earliest selectable day (ISO). */
+  min?: string
+  /** Latest selectable day (ISO). */
+  max?: string
+  /** Extra per-day rule; receives `YYYY-MM-DD`. */
+  isDateDisabled?: (day: string) => boolean
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  disabled?: boolean
+  invalid?: boolean
+  /** Time used when a day is picked and no time is set yet. */
+  defaultTime?: string
+  align?: "start" | "center" | "end"
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { DatePicker } from "@/components/ui/date-picker"
+import { Label } from "@/components/ui/label"
+
+export default function DatePickerDemo() {
+  const [date, setDate] = React.useState<string | undefined>("2026-11-21")
+  const [start, setStart] = React.useState<string | undefined>(
+    "2026-11-21T19:30"
+  )
+
+  return (
+    <div className="grid w-full max-w-xl gap-6 sm:grid-cols-2">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="dp-date">Event date</Label>
+        <DatePicker
+          id="dp-date"
+          value={date}
+          onValueChange={setDate}
+          min="2026-01-01"
+          max="2027-12-31"
+        />
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
+          value = {date ?? "undefined"}
+        </span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="dp-start">Doors open</Label>
+        <DatePicker
+          id="dp-start"
+          time
+          hourCycle={12}
+          value={start}
+          onValueChange={setStart}
+          placeholder="Pick date and time"
+        />
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
+          value = {start ?? "undefined"}
+        </span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="dp-weekdays">Weekdays only (24h)</Label>
+        <DatePicker
+          id="dp-weekdays"
+          time
+          weekStartsOn={1}
+          isDateDisabled={(d) => {
+            const [y, m, day] = d.split("-").map(Number)
+            const dow = new Date(Date.UTC(y, m - 1, day)).getUTCDay()
+            return dow === 0 || dow === 6
+          }}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="dp-invalid">Invalid</Label>
+        <DatePicker id="dp-invalid" invalid placeholder="Required" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="dp-disabled">Disabled</Label>
+        <DatePicker id="dp-disabled" disabled defaultValue="2026-12-01" />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/date-picker. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Repeater Field
+
+Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/repeater-field
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { RepeaterField } from "@/components/ui/repeater-field"
+```
+
+## Dependencies
+
+- npm: `motion`, `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+type RepeaterRowContext<T> = {
+  item: T
+  index: number
+  /** Merge a partial change into this row. */
+  update: (patch: Partial<T>) => void
+  remove: () => void
+}
+
+type RepeaterFieldProps<T extends object> = Omit<
+  React.ComponentProps<"div">,
+  "children" | "onChange" | "defaultValue"
+> & {
+  value: T[]
+  onValueChange: (value: T[]) => void
+  renderRow: (ctx: RepeaterRowContext<T>) => React.ReactNode
+  createItem: () => T
+  /** Group heading, also the accessible name. */
+  label?: string
+  addLabel?: string
+  /** Rows that cannot be removed below. Defaults to 0. */
+  min?: number
+  /** Add is disabled at this many rows. */
+  max?: number
+  emptyLabel?: string
+  /** Show move up / move down buttons. */
+  reorderable?: boolean
+  /** Stable key per row. Defaults to an internal id map. */
+  getKey?: (item: T, index: number) => React.Key
+  /** Noun used in screen reader announcements and button names. */
+  itemLabel?: string
+}
+
+function RepeaterField(props: RepeaterFieldProps<T>)
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { RepeaterField } from "@/components/ui/repeater-field"
+
+type Tier = { id: string; name: string; price: string; capacity: string }
+
+let seq = 0
+const createTier = (): Tier => ({
+  id: `tier-${++seq}`,
+  name: "",
+  price: "",
+  capacity: "",
+})
+
+export default function RepeaterFieldDemo() {
+  const [tiers, setTiers] = React.useState<Tier[]>(() => [
+    { id: "tier-a", name: "General admission", price: "25", capacity: "200" },
+    { id: "tier-b", name: "VIP", price: "80", capacity: "40" },
+  ])
+
+  return (
+    <div className="w-full max-w-xl">
+      <RepeaterField
+        label="Ticket tiers"
+        itemLabel="Tier"
+        addLabel="Add tier"
+        emptyLabel="No tiers yet. Add one to start selling."
+        value={tiers}
+        onValueChange={setTiers}
+        createItem={createTier}
+        getKey={(t) => t.id}
+        min={1}
+        max={5}
+        reorderable
+        renderRow={({ item, update }) => (
+          <div className="grid gap-3 sm:grid-cols-[1fr_5.5rem_5.5rem]">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor={`${item.id}-name`}>Name</Label>
+              <Input
+                id={`${item.id}-name`}
+                value={item.name}
+                placeholder="Tier name"
+                onChange={(e) => update({ name: e.target.value })}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor={`${item.id}-price`}>Price</Label>
+              <Input
+                id={`${item.id}-price`}
+                inputMode="decimal"
+                className="font-mono tabular-nums"
+                value={item.price}
+                placeholder="0"
+                onChange={(e) => update({ price: e.target.value })}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor={`${item.id}-cap`}>Capacity</Label>
+              <Input
+                id={`${item.id}-cap`}
+                inputMode="numeric"
+                className="font-mono tabular-nums"
+                value={item.capacity}
+                placeholder="0"
+                onChange={(e) => update({ capacity: e.target.value })}
+              />
+            </div>
+          </div>
+        )}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/repeater-field. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 

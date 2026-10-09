@@ -117,7 +117,12 @@
     "@opendraft/ticket-pass",
     "@opendraft/checkout",
     "@opendraft/catalog",
-    "@opendraft/detail-page"
+    "@opendraft/detail-page",
+    "@opendraft/order-confirmation",
+    "@opendraft/page-header",
+    "@opendraft/field",
+    "@opendraft/date-picker",
+    "@opendraft/repeater-field"
   ],
   "type": "registry:item"
 }

@@ -69,7 +69,21 @@ npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 ```
 
 6. Load three fonts and expose them as CSS variables: Geist as `--font-geist`, Geist Mono as `--font-geist-mono`, Newsreader as `--font-newsreader`. In Next.js use `next/font/google` (the starter's `--font-geist-sans` is not the same variable; rename it).
-7. Dark mode is the `dark` class on `<html>`. To follow the visitor's system setting, toggle that class with a small script, or use `next-themes` with `attribute="class"`.
+7. Dark mode is the `dark` class on `<html>`. The `theme-toggle` component (`npx shadcn@latest add @opendraft/theme-toggle`) handles it: it switches system, light and dark and remembers the choice. To avoid a flash of the wrong theme on load, also run its exported `themeScript` before the page paints, and add `suppressHydrationWarning` to `<html>` because the script changes its class:
+
+```tsx
+import { themeScript } from "@/components/ui/theme-toggle"
+
+// app/layout.tsx
+;<html lang="en" suppressHydrationWarning>
+  <head>
+    <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+  </head>
+  <body>{children}</body>
+</html>
+```
+
+   Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead.
 8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
 
 ```tsx
@@ -87,7 +101,7 @@ On Next.js 16 with Cache Components (the new `create-next-app` default), a compo
 
 ### 2. Use components before writing your own
 
-- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for.
+- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for. Blocks fill the space they're given and lay out from their own width, so put one in a container that has a width and a height (for example a `w-full` parent with `h-screen` or a fixed height); in a shrink-to-fit parent it collapses. Give every page the same width with `PageContainer`, and head it with `PageHeader`. Build forms with `Field`, with `FieldGroup` for rows, and use `DatePicker` for single dates and `RepeaterField` for add-and-remove rows.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.
@@ -194,6 +208,7 @@ Components use Radix primitives and come with keyboard and screen-reader support
 - [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md): Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code. Install: `npx shadcn@latest add @opendraft/checkout`
 - [Catalog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md): Browse and discovery screen: featured band, search, category chips, sort, price filter, availability switch, card grid, active filters, empty state and loading skeleton. Install: `npx shadcn@latest add @opendraft/catalog`
 - [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md): Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist. Install: `npx shadcn@latest add @opendraft/detail-page`
+- [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md): Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions. Install: `npx shadcn@latest add @opendraft/order-confirmation`
 
 ### AI Agents
 
@@ -277,6 +292,10 @@ Components use Radix primitives and come with keyboard and screen-reader support
 - [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md): Sticky top bar with a brand slot, nav links, an actions slot and a mobile menu. Install: `npx shadcn@latest add @opendraft/site-header`
 - [QR Code](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md): A real, scannable QR code drawn as an inline SVG, readable in light and dark themes. Install: `npx shadcn@latest add @opendraft/qr-code`
 - [Ticket Pass](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/ticket-pass.md): Digital ticket card with a title band, details grid, tear line, QR stub and a status badge. Install: `npx shadcn@latest add @opendraft/ticket-pass`
+- [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md): Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters. Install: `npx shadcn@latest add @opendraft/page-header`
+- [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md): Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset. Install: `npx shadcn@latest add @opendraft/field`
+- [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md): Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values. Install: `npx shadcn@latest add @opendraft/date-picker`
+- [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md): Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows. Install: `npx shadcn@latest add @opendraft/repeater-field`
 
 ### Motion
 

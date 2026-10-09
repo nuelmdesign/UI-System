@@ -48,6 +48,8 @@ export type AnalyticsRow = {
   conversion: number
   /** Seconds. */
   duration: number
+  /** Custom number for the optional `valueColumn` (revenue, orders, ...). Used for sorting and as the default display. */
+  value?: number
 }
 
 export type AnalyticsChannel = {
@@ -70,8 +72,8 @@ export type AnalyticsRangeData = {
 
 /** Every fixed piece of text, so the screen can describe any product. */
 export type AnalyticsLabels = {
-  /** Small line above the title. */
-  eyebrow: string
+  /** Small line above the title. A string is static; a function receives the selected range. */
+  eyebrow: string | ((range: AnalyticsRange) => string)
   export: string
   channels: string
   channelsAria: string
@@ -98,6 +100,8 @@ export type AnalyticsDashboardProps = {
   labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
     columns?: Partial<AnalyticsLabels["columns"]>
   }
+  /** Replaces the "Avg. time" column with a custom one (money, orders, ...). Reads `row.value` unless `format` is given. */
+  valueColumn?: { label: string; format?: (row: AnalyticsRow) => string }
   className?: string
 }
 ```
@@ -111,7 +115,7 @@ import { AnalyticsDashboard } from "@/components/blocks/analytics-dashboard"
 
 export default function AnalyticsDashboardDemo() {
   return (
-    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <AnalyticsDashboard />
     </div>
   )

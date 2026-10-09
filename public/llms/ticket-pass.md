@@ -45,6 +45,8 @@ type TicketPassProps = Omit<React.ComponentProps<"div">, "title"> & {
   status?: TicketPassStatus
   /** Render the header band dark in either theme. */
   dark?: boolean
+  /** Header band colour: "brand" uses the primary colour. */
+  tone?: "default" | "brand"
   /** Buttons or links rendered below the stub. */
   actions?: React.ReactNode
 }
@@ -53,6 +55,7 @@ type TicketPassProps = Omit<React.ComponentProps<"div">, "title"> & {
 ## Variants
 
 - `dark`: `true`, `false` (default)
+- `tone`: `default` (default), `brand`
 
 ## Example
 

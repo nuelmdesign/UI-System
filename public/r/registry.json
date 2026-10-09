@@ -2618,6 +2618,106 @@
       ]
     },
     {
+      "name": "order-confirmation",
+      "type": "registry:block",
+      "title": "Order Confirmation",
+      "description": "Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/empty-state",
+        "@opendraft/stat",
+        "@opendraft/stepper",
+        "@opendraft/ticket-pass"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/order-confirmation.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/order-confirmation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:ui",
+      "title": "Page Header",
+      "description": "Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/page-header.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/label"
+      ],
+      "files": [
+        {
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/input",
+        "@opendraft/popover"
+      ],
+      "files": [
+        {
+          "path": "components/ui/date-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "repeater-field",
+      "type": "registry:ui",
+      "title": "Repeater Field",
+      "description": "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/repeater-field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -2736,7 +2836,12 @@
         "@opendraft/ticket-pass",
         "@opendraft/checkout",
         "@opendraft/catalog",
-        "@opendraft/detail-page"
+        "@opendraft/detail-page",
+        "@opendraft/order-confirmation",
+        "@opendraft/page-header",
+        "@opendraft/field",
+        "@opendraft/date-picker",
+        "@opendraft/repeater-field"
       ]
     }
   ]

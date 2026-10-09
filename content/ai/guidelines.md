@@ -97,7 +97,7 @@ On Next.js 16 with Cache Components (the new `create-next-app` default), a compo
 
 ### 2. Use components before writing your own
 
-- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for.
+- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for. Blocks fill the space they're given and lay out from their own width, so put one in a container that has a width and a height (for example a `w-full` parent with `h-screen` or a fixed height); in a shrink-to-fit parent it collapses. Give every page the same width with `PageContainer`, and head it with `PageHeader`. Build forms with `Field`, with `FieldGroup` for rows, and use `DatePicker` for single dates and `RepeaterField` for add-and-remove rows.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.

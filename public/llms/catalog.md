@@ -30,10 +30,12 @@ export type CatalogItem = {
   id: string
   title: string
   host: string
+  /** Venue or city, shown on cards and the featured band. */
+  location?: string
   category: string
   /** ISO date (YYYY-MM-DD). Used for sorting and the date block. */
   date: string
-  /** Price in whole currency units. 0 renders as "Free". */
+  /** Price in whole units of the catalog `currency`. 0 renders as the free label. */
   price: number
   capacity: number
   /** Places left. 0 means sold out. */
@@ -52,7 +54,49 @@ export type CatalogProps = {
   loading?: boolean
   title?: string
   eyebrow?: string
+  /** ISO 4217 code used for every price and the default price filter. */
+  currency?: string
+  /** Price filter buckets (min and max both inclusive). Defaults are computed in `currency`. */
+  priceRanges?: CatalogPriceRange[]
+  /** "cards" is a grid; "compact" is a list-style row per item. */
+  layout?: "cards" | "compact"
+  /** Override any fixed copy. */
+  labels?: Partial<CatalogLabels>
   className?: string
+}
+
+export type CatalogPriceRange = { label: string; min?: number; max?: number }
+
+export type CatalogLabels = {
+  /** Prefix before the host on the featured band. Empty string for none. */
+  hostLabel: string
+  placesLeft: string
+  placesValue: (remaining: number, capacity: number) => string
+  soldOut: string
+  sellingFast: string
+  free: string
+  all: string
+  featured: string
+  viewDetails: string
+  searchLabel: string
+  searchPlaceholder: string
+  categoryGroup: string
+  sortBy: string
+  sortRelevance: string
+  sortPriceAsc: string
+  sortPriceDesc: string
+  sortDate: string
+  price: string
+  anyPrice: string
+  hideSoldOut: string
+  hidingSoldOut: string
+  active: string
+  clear: string
+  loading: string
+  results: (shown: number, total: number) => string
+  emptyTitle: string
+  emptyDescription: string
+  clearFilters: string
 }
 ```
 

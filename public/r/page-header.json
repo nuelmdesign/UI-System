@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header",
+  "title": "Page Header",
+  "description": "Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.",
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "@opendraft/utils"
+  ],
+  "files": [
+    {
+      "path": "components/ui/page-header.tsx",
+      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst pageContainerVariants = cva(\"mx-auto w-full px-4 sm:px-6\", {\n  variants: {\n    size: {\n      sm: \"max-w-3xl\",\n      default: \"max-w-5xl\",\n      lg: \"max-w-6xl\",\n      full: \"max-w-none\",\n    },\n  },\n  defaultVariants: { size: \"default\" },\n})\n\ntype PageContainerProps = React.ComponentProps<\"div\"> &\n  VariantProps<typeof pageContainerVariants>\n\n/** Shared max-width and gutters so every route lines up on the same left edge. */\nfunction PageContainer({ className, size, ...props }: PageContainerProps) {\n  return (\n    <div\n      data-slot=\"page-container\"\n      className={cn(pageContainerVariants({ size }), className)}\n      {...props}\n    />\n  )\n}\n\ntype PageHeaderProps = Omit<React.ComponentProps<\"header\">, \"title\"> & {\n  eyebrow?: React.ReactNode\n  title: React.ReactNode\n  description?: React.ReactNode\n  /** Buttons or menus aligned to the right (stacked below on narrow screens). */\n  actions?: React.ReactNode\n  /** Breadcrumb or back link rendered above the eyebrow. */\n  breadcrumb?: React.ReactNode\n  /** Draw a hairline under the header. */\n  bordered?: boolean\n  /** Heading level for the title. Defaults to h1. */\n  as?: \"h1\" | \"h2\" | \"h3\"\n}\n\nfunction PageHeader({\n  eyebrow,\n  title,\n  description,\n  actions,\n  breadcrumb,\n  bordered = false,\n  as: Title = \"h1\",\n  className,\n  ...props\n}: PageHeaderProps) {\n  return (\n    <header\n      data-slot=\"page-header\"\n      className={cn(\n        \"flex flex-col gap-4 py-6 sm:py-8\",\n        bordered && \"border-b\",\n        className\n      )}\n      {...props}\n    >\n      {breadcrumb && (\n        <div data-slot=\"page-header-breadcrumb\" className=\"text-sm\">\n          {breadcrumb}\n        </div>\n      )}\n      <div className=\"flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6\">\n        <div className=\"flex min-w-0 flex-col gap-2\">\n          {eyebrow && (\n            <span\n              data-slot=\"page-header-eyebrow\"\n              className=\"eyebrow text-muted-foreground\"\n            >\n              {eyebrow}\n            </span>\n          )}\n          <Title\n            data-slot=\"page-header-title\"\n            className=\"heading text-3xl text-balance sm:text-4xl\"\n          >\n            {title}\n          </Title>\n          {description && (\n            <p\n              data-slot=\"page-header-description\"\n              className=\"max-w-2xl text-sm text-pretty text-muted-foreground sm:text-base\"\n            >\n              {description}\n            </p>\n          )}\n        </div>\n        {actions && (\n          <div\n            data-slot=\"page-header-actions\"\n            className=\"flex shrink-0 flex-wrap items-center gap-2\"\n          >\n            {actions}\n          </div>\n        )}\n      </div>\n    </header>\n  )\n}\n\nexport { PageHeader, PageContainer, pageContainerVariants }\nexport type { PageHeaderProps, PageContainerProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
