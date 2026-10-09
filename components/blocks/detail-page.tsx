@@ -56,8 +56,10 @@ export type DetailItem = {
   image?: string
   imageAlt?: string
   category?: string
+  /** Free-form date/time text, e.g. "Sat 14 Nov, 09:30 to 17:00". */
   date: string
-  location: string
+  /** Venue or place; shown in the meta row when provided. */
+  location?: string
   host: DetailHost
   currency?: string
   facts: DetailFact[]
@@ -71,6 +73,66 @@ export type DetailItem = {
 
 export type DetailCheckout = { tierId: string; quantity: number }
 
+export type DetailPageLabels = {
+  /** Heading of the purchase panel. */
+  reserveTitle: string
+  /** aria-label of the option radio group. */
+  chooseOption: string
+  quantity: string
+  total: string
+  checkout: string
+  save: string
+  unsave: string
+  showOptions: string
+  hideOptions: string
+  soldOut: string
+  joinWaitlist: string
+  onWaitlist: string
+  available: string
+  /** Receives the tier name. */
+  availability: (name: string) => string
+  /** Receives remaining and capacity. */
+  left: (remaining: number, capacity: number) => string
+  tabsLabel: string
+  tabAbout: string
+  tabSchedule: string
+  tabFaq: string
+  keyFacts: string
+  purchase: string
+  breadcrumb: string
+  date: string
+  location: string
+  host: string
+}
+
+export const DEFAULT_DETAIL_LABELS: DetailPageLabels = {
+  reserveTitle: "Reserve your seat",
+  chooseOption: "Choose an option",
+  quantity: "Quantity",
+  total: "Total",
+  checkout: "Check out",
+  save: "Save",
+  unsave: "Remove from saved",
+  showOptions: "Show options",
+  hideOptions: "Hide options",
+  soldOut: "Sold out",
+  joinWaitlist: "Join waitlist",
+  onWaitlist: "On the waitlist",
+  available: "Available",
+  availability: (name) => `${name} availability`,
+  left: (remaining, capacity) => `${remaining} of ${capacity} left`,
+  tabsLabel: "Details",
+  tabAbout: "About",
+  tabSchedule: "Schedule",
+  tabFaq: "FAQ",
+  keyFacts: "Key facts",
+  purchase: "Purchase",
+  breadcrumb: "Breadcrumb",
+  date: "Date",
+  location: "Location",
+  host: "Host",
+}
+
 export type DetailPageProps = {
   item?: DetailItem
   onCheckout?: (selection: DetailCheckout) => void
@@ -79,6 +141,10 @@ export type DetailPageProps = {
   /** Label for the back link. */
   backLabel?: string
   onBack?: () => void
+  /** Makes the breadcrumb category a button instead of plain text. */
+  onCategoryClick?: (category: string) => void
+  /** Override any fixed copy (for localisation or other domains). */
+  labels?: Partial<DetailPageLabels>
   className?: string
 }
 
@@ -191,10 +257,13 @@ function DetailPage({
   onCheckout,
   onWaitlist,
   onSaveChange,
-  backLabel = "All workshops",
+  backLabel = "Back",
   onBack,
+  onCategoryClick,
+  labels: labelsProp,
   className,
 }: DetailPageProps) {
+  const labels = { ...DEFAULT_DETAIL_LABELS, ...labelsProp }
   const uid = React.useId()
   const money = useMoney(item.currency ?? "USD")
   const firstOpen = item.tiers.find((t) => t.remaining > 0)
@@ -233,7 +302,7 @@ function DetailPage({
       )}
     >
       <RadioGroup
-        aria-label="Choose an option"
+        aria-label={labels.chooseOption}
         value={tierId}
         onValueChange={setTierId}
         className="gap-2"
@@ -288,7 +357,7 @@ function DetailPage({
               </label>
               {soldOut ? (
                 <div className="flex items-center justify-between gap-3 pl-7">
-                  <Badge variant="secondary">Sold out</Badge>
+                  <Badge variant="secondary">{labels.soldOut}</Badge>
                   <Button
                     type="button"
                     size="xs"
@@ -296,7 +365,7 @@ function DetailPage({
                     disabled={onList}
                     onClick={() => waitlist(t.id)}
                   >
-                    {onList ? "On the waitlist" : "Join waitlist"}
+                    {onList ? labels.onWaitlist : labels.joinWaitlist}
                   </Button>
                 </div>
               ) : (
@@ -308,9 +377,9 @@ function DetailPage({
                     lowThreshold={0.35}
                     value={t.remaining}
                     max={t.capacity}
-                    aria-label={`${t.name} availability`}
-                    label="Available"
-                    valueLabel={`${t.remaining} of ${t.capacity} left`}
+                    aria-label={labels.availability(t.name)}
+                    label={labels.available}
+                    valueLabel={labels.left(t.remaining, t.capacity)}
                   />
                 </div>
               )}
@@ -320,14 +389,14 @@ function DetailPage({
       </RadioGroup>
 
       <div className="flex items-center justify-between gap-3">
-        <span className="eyebrow text-muted-foreground">Quantity</span>
+        <span className="eyebrow text-muted-foreground">{labels.quantity}</span>
         <QuantityStepper
           value={qty}
           min={1}
           max={Math.max(maxQty, 1)}
           disabled={!tier}
           onValueChange={setQuantity}
-          aria-label="Quantity"
+          aria-label={labels.quantity}
         />
       </div>
     </div>
@@ -343,7 +412,10 @@ function DetailPage({
     >
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-x-8 px-4 pt-4 @3xl/detail:grid-cols-[minmax(0,1fr)_20rem] @3xl/detail:px-8 @3xl/detail:pt-6">
         <div className="flex min-w-0 flex-col gap-6 pb-8">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2">
+          <nav
+            aria-label={labels.breadcrumb}
+            className="flex items-center gap-2"
+          >
             <Button
               type="button"
               variant="link"
@@ -359,9 +431,21 @@ function DetailPage({
                 <span aria-hidden className="text-muted-foreground">
                   /
                 </span>
-                <span className="eyebrow" aria-current="page">
-                  {item.category}
-                </span>
+                {onCategoryClick ? (
+                  <Button
+                    type="button"
+                    variant="link"
+                    size="xs"
+                    className="px-0 eyebrow"
+                    onClick={() => onCategoryClick(item.category!)}
+                  >
+                    {item.category}
+                  </Button>
+                ) : (
+                  <span className="eyebrow" aria-current="page">
+                    {item.category}
+                  </span>
+                )}
               </>
             )}
           </nav>
@@ -385,20 +469,25 @@ function DetailPage({
             </h1>
             <dl className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
               <div className="flex items-center gap-2">
-                <dt className="sr-only">Date</dt>
+                <dt className="sr-only">{labels.date}</dt>
                 <CalendarDays
                   aria-hidden
                   className="size-4 text-muted-foreground"
                 />
                 <dd>{item.date}</dd>
               </div>
+              {item.location && (
+                <div className="flex items-center gap-2">
+                  <dt className="sr-only">{labels.location}</dt>
+                  <MapPin
+                    aria-hidden
+                    className="size-4 text-muted-foreground"
+                  />
+                  <dd>{item.location}</dd>
+                </div>
+              )}
               <div className="flex items-center gap-2">
-                <dt className="sr-only">Location</dt>
-                <MapPin aria-hidden className="size-4 text-muted-foreground" />
-                <dd>{item.location}</dd>
-              </div>
-              <div className="flex items-center gap-2">
-                <dt className="sr-only">Host</dt>
+                <dt className="sr-only">{labels.host}</dt>
                 <dd className="flex items-center gap-2">
                   <Avatar className="size-6">
                     {item.host.avatar && (
@@ -422,7 +511,7 @@ function DetailPage({
             </dl>
           </header>
 
-          <StatGroup columns={4} aria-label="Key facts">
+          <StatGroup columns={4} aria-label={labels.keyFacts}>
             {item.facts.map((f) => (
               <Stat
                 key={f.label}
@@ -434,10 +523,10 @@ function DetailPage({
           </StatGroup>
 
           <Tabs defaultValue="about" variant="underline">
-            <TabsList aria-label="Details">
-              <TabsTrigger value="about">About</TabsTrigger>
-              <TabsTrigger value="schedule">Schedule</TabsTrigger>
-              <TabsTrigger value="faq">FAQ</TabsTrigger>
+            <TabsList aria-label={labels.tabsLabel}>
+              <TabsTrigger value="about">{labels.tabAbout}</TabsTrigger>
+              <TabsTrigger value="schedule">{labels.tabSchedule}</TabsTrigger>
+              <TabsTrigger value="faq">{labels.tabFaq}</TabsTrigger>
             </TabsList>
             <TabsContent value="about" className="flex flex-col gap-3 pt-2">
               {item.sections.about.map((p, i) => (
@@ -486,7 +575,7 @@ function DetailPage({
         </div>
 
         <aside
-          aria-label="Purchase"
+          aria-label={labels.purchase}
           data-slot="detail-purchase"
           className={cn(
             "sticky bottom-0 z-10 -mx-4 flex flex-col gap-4 border-t bg-background p-4",
@@ -494,7 +583,7 @@ function DetailPage({
           )}
         >
           <div className="hidden items-baseline justify-between @3xl/detail:flex">
-            <h2 className="heading text-xl">Reserve your seat</h2>
+            <h2 className="heading text-xl">{labels.reserveTitle}</h2>
           </div>
 
           {panelBody}
@@ -503,12 +592,12 @@ function DetailPage({
             <button
               type="button"
               aria-expanded={open}
-              aria-label={open ? "Hide options" : "Show options"}
+              aria-label={open ? labels.hideOptions : labels.showOptions}
               onClick={() => setOpen((o) => !o)}
               className="flex min-w-0 flex-1 flex-col items-start rounded-md text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring @3xl/detail:pointer-events-none"
             >
               <span className="flex items-center gap-1 eyebrow text-muted-foreground">
-                Total
+                {labels.total}
                 <ChevronUp
                   aria-hidden
                   className={cn(
@@ -529,7 +618,7 @@ function DetailPage({
               variant="outline"
               size="icon"
               aria-pressed={saved}
-              aria-label={saved ? "Remove from saved" : "Save"}
+              aria-label={saved ? labels.unsave : labels.save}
               onClick={toggleSave}
             >
               <Bookmark aria-hidden className={cn(saved && "fill-current")} />
@@ -540,7 +629,7 @@ function DetailPage({
               onClick={checkout}
               className="flex-1 @3xl/detail:flex-none @3xl/detail:px-6"
             >
-              Check out
+              {labels.checkout}
             </Button>
           </div>
         </aside>

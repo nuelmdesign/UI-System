@@ -221,14 +221,31 @@ export function Table<T>({
   useEffect(() => {
     if (!loading) endReachedRef.current = false
   }, [loading])
+  // Whether more columns sit to the right of the visible area.
+  const [moreRight, setMoreRight] = useState(false)
+  const measureOverflow = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    setMoreRight(el.scrollWidth - el.scrollLeft - el.clientWidth > 1)
+  }, [])
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el || typeof ResizeObserver === "undefined") return
+    // Observing fires once on start, which provides the initial measurement.
+    const ro = new ResizeObserver(measureOverflow)
+    ro.observe(el)
+    if (el.firstElementChild) ro.observe(el.firstElementChild)
+    return () => ro.disconnect()
+  }, [measureOverflow])
   const handleScroll = useCallback(() => {
+    measureOverflow()
     const el = scrollRef.current
     if (!el || !onEndReached || loading || endReachedRef.current) return
     if (el.scrollHeight - el.scrollTop - el.clientHeight < rowHeight * 4) {
       endReachedRef.current = true
       onEndReached()
     }
-  }, [onEndReached, loading, rowHeight])
+  }, [measureOverflow, onEndReached, loading, rowHeight])
   const [activeColumn, setActiveColumn] = useState<string | null>(null)
   // Small delay on leave so the pointer can cross the gap from the header cell
   // to the portal handle without the column deactivating.
@@ -265,7 +282,7 @@ export function Table<T>({
   return (
     <div
       className={cn(
-        "w-full overflow-hidden border border-border bg-background text-sm",
+        "relative w-full overflow-hidden border border-border bg-background text-sm",
         className
       )}
     >
@@ -430,6 +447,22 @@ export function Table<T>({
           </tbody>
         </table>
       </div>
+      {moreRight ? (
+        <>
+          <span
+            aria-hidden
+            data-slot="table-scroll-edge"
+            className="pointer-events-none absolute inset-y-0 right-0 border-r border-foreground/30"
+          />
+          <div
+            aria-hidden
+            data-slot="table-scroll-hint"
+            className="flex justify-end border-t border-border px-3 py-1.5 font-mono text-xs text-muted-foreground uppercase"
+          >
+            Scroll →
+          </div>
+        </>
+      ) : null}
       {hasRowMenu && activeRow ? (
         <RowHandle
           rowEl={activeRowEl}

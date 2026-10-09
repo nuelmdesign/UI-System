@@ -16,6 +16,11 @@ type StepperProps = Omit<React.ComponentProps<"nav">, "children"> & {
   /** Called when a completed step is clicked. Only completed steps are interactive. */
   onStepClick?: (step: StepperStep, index: number) => void
   orientation?: "horizontal" | "vertical"
+  /**
+   * Every step is done: all show a check and none is current. Also implied when
+   * `current` is a number >= steps.length.
+   */
+  complete?: boolean
 }
 
 function Stepper({
@@ -23,6 +28,7 @@ function Stepper({
   current,
   onStepClick,
   orientation = "horizontal",
+  complete: completeProp = false,
   className,
   "aria-label": ariaLabel = "Progress",
   ...props
@@ -31,7 +37,11 @@ function Stepper({
     typeof current === "number"
       ? current
       : steps.findIndex((s) => s.id === current)
-  const currentIndex = Math.min(Math.max(found, 0), steps.length - 1)
+  const complete =
+    completeProp || (typeof current === "number" && current >= steps.length)
+  const currentIndex = complete
+    ? steps.length
+    : Math.min(Math.max(found, 0), steps.length - 1)
   const currentStep = steps[currentIndex]
   const vertical = orientation === "vertical"
 
@@ -166,16 +176,23 @@ function Stepper({
           )
         })}
       </ol>
-      {!vertical && currentStep && (
+      {complete && <span className="sr-only">All steps complete</span>}
+      {!vertical && (complete || currentStep) && (
         <p
           data-slot="stepper-summary"
           aria-live="polite"
           className="mt-3 text-sm sm:hidden"
         >
           <span className="eyebrow text-muted-foreground">
-            Step {currentIndex + 1} of {steps.length}
+            {complete
+              ? "All steps complete"
+              : `Step ${currentIndex + 1} of ${steps.length}`}
           </span>
-          <span className="mt-0.5 block font-medium">{currentStep.label}</span>
+          {!complete && (
+            <span className="mt-0.5 block font-medium">
+              {currentStep.label}
+            </span>
+          )}
         </p>
       )}
     </nav>
