@@ -57,6 +57,27 @@ import RevealExample from "./reveal"
 import ShimmerTextExample from "./shimmer-text"
 import SpotlightCardExample from "./spotlight-card"
 import TextScrambleExample from "./text-scramble"
+import QuestionCardExample from "./question-card"
+import ChatPanelExample from "./chat-panel"
+import RecommendationCardExample from "./recommendation-card"
+import ContextCardsExample from "./context-cards"
+import SearchListExample from "./search-list"
+import FilterTableExample from "./filter-table"
+import FlowchartExample from "./flowchart"
+import InsightCardsExample from "./insight-cards"
+import PromptBarExample from "./prompt-bar"
+import SelectionActionsExample from "./selection-actions"
+import PixelLoaderExample from "./pixel-loader"
+import ThinkingTraceExample from "./thinking-trace"
+import StreamingAnswerExample from "./streaming-answer"
+import TaskRowsExample from "./task-rows"
+import ToolChipsExample from "./tool-chips"
+import AgentScreenExample from "./agent-screen"
+import CodePanelExample from "./code-panel"
+import FineTuneCardExample from "./fine-tune-card"
+import SidebarNavExample from "./sidebar-nav"
+import RecordsTableExample from "./records-table"
+import DiffTableExample from "./diff-table"
 
 /** Live example for each component page, keyed by slug. */
 export const EXAMPLES: Record<string, ComponentType> = {
@@ -117,4 +138,25 @@ export const EXAMPLES: Record<string, ComponentType> = {
   "shimmer-text": ShimmerTextExample,
   "spotlight-card": SpotlightCardExample,
   "text-scramble": TextScrambleExample,
+  "question-card": QuestionCardExample,
+  "chat-panel": ChatPanelExample,
+  "recommendation-card": RecommendationCardExample,
+  "context-cards": ContextCardsExample,
+  "search-list": SearchListExample,
+  "filter-table": FilterTableExample,
+  flowchart: FlowchartExample,
+  "insight-cards": InsightCardsExample,
+  "prompt-bar": PromptBarExample,
+  "selection-actions": SelectionActionsExample,
+  "pixel-loader": PixelLoaderExample,
+  "thinking-trace": ThinkingTraceExample,
+  "streaming-answer": StreamingAnswerExample,
+  "task-rows": TaskRowsExample,
+  "tool-chips": ToolChipsExample,
+  "agent-screen": AgentScreenExample,
+  "code-panel": CodePanelExample,
+  "fine-tune-card": FineTuneCardExample,
+  "sidebar-nav": SidebarNavExample,
+  "records-table": RecordsTableExample,
+  "diff-table": DiffTableExample,
 }

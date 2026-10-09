@@ -394,6 +394,102 @@ const items = [
     reg: ["@opendraft/motion", "@opendraft/citations", "@opendraft/agent-disclosure"],
     description: "Streamed answer with copy, retry, feedback and a sources footer.",
   }),
+  agent("question-card", {
+    deps: ["lucide-react", "motion"],
+    reg: ["@opendraft/button", "@opendraft/glide-menu", "@opendraft/motion"],
+    description: "One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice.",
+  }),
+  agent("chat-panel", {
+    deps: ["lucide-react"],
+    description: "Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer.",
+  }),
+  agent("recommendation-card", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button"],
+    description: "Recommendation with a confidence meter, an alternatives drawer that swaps the pick, and a confirm action.",
+  }),
+  agent("context-cards", {
+    deps: ["lucide-react"],
+    description: "Retrieved context chunks that stagger in, then reveal their source file chips.",
+  }),
+  agent("search-list", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/glide-menu"],
+    description: "Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state.",
+  }),
+  agent("filter-table", {
+    description: "Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning.",
+  }),
+  agent("flowchart", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/glide-menu"],
+    description: "Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector.",
+  }),
+  agent("insight-cards", {
+    deps: ["lucide-react", "motion"],
+    reg: ["@opendraft/button", "@opendraft/motion"],
+    description: "Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade.",
+  }),
+  agent("prompt-bar", {
+    deps: ["lucide-react", "motion"],
+    reg: ["@opendraft/glide-menu", "@opendraft/motion"],
+    description: "A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo.",
+  }),
+  agent("selection-actions", {
+    deps: ["lucide-react", "motion"],
+    reg: ["@opendraft/button", "@opendraft/shimmer-text", "@opendraft/motion"],
+    description: "A contextual AI bar under selected text that animates its width between modes and streams in a rewrite.",
+  }),
+  agent("pixel-loader", {
+    reg: ["@opendraft/shimmer-text"],
+    description: "A 3×3 pixel-grid loader with a shimmering status label and a live elapsed timer, in four motion variants.",
+  }),
+  agent("thinking-trace", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/shimmer-text"],
+    description: "An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants.",
+  }),
+  agent("streaming-answer", {
+    deps: ["lucide-react"],
+    description: "An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups.",
+  }),
+  agent("task-rows", {
+    deps: ["lucide-react"],
+    description: "Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence.",
+  }),
+  agent("tool-chips", {
+    deps: ["lucide-react"],
+    description: "An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover.",
+  }),
+  agent("agent-screen", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button"],
+    description: "Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording.",
+  }),
+  agent("code-panel", {
+    deps: ["lucide-react"],
+    description: "Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights.",
+  }),
+  agent("fine-tune-card", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/glide-menu", "@opendraft/shimmer-text"],
+    description: "Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu.",
+  }),
+  agent("sidebar-nav", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/glide-menu", "@opendraft/motion"],
+    description: "Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail.",
+  }),
+  agent("records-table", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/glide-menu", "@opendraft/checkbox", "@opendraft/switch"],
+    description: "AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting.",
+  }),
+  agent("diff-table", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button"],
+    description: "A proposed table edit that plays once; click each changed row to keep or drop it before applying.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.

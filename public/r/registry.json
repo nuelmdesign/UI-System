@@ -172,6 +172,38 @@
             "background-position": "-200% 0"
           }
         },
+        "@keyframes fade-in": {
+          "from": {
+            "opacity": "0"
+          }
+        },
+        "@keyframes fade-up": {
+          "from": {
+            "opacity": "0",
+            "transform": "translateY(6px)"
+          }
+        },
+        "@keyframes pixel-on": {
+          "0%,\n    100%": {
+            "opacity": "0.15"
+          },
+          "40%": {
+            "opacity": "1"
+          }
+        },
+        "@keyframes eq": {
+          "0%,\n    100%": {
+            "transform": "scaleY(0.35)"
+          },
+          "50%": {
+            "transform": "scaleY(1)"
+          }
+        },
+        "@keyframes blink": {
+          "50%": {
+            "opacity": "0.3"
+          }
+        },
         "@keyframes marquee": {
           "to": {
             "transform": "translateX(calc(-50% - var(--marquee-gap, 1rem) / 2))"
@@ -788,6 +820,23 @@
           "path": "components/motion/shimmer-text.tsx",
           "type": "registry:component",
           "target": "components/motion/shimmer-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "glide-menu",
+      "type": "registry:component",
+      "title": "Glide Menu",
+      "description": "List whose hover highlight glides between rows.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/motion/glide-menu.tsx",
+          "type": "registry:component",
+          "target": "components/motion/glide-menu.tsx"
         }
       ]
     },
@@ -1671,6 +1720,430 @@
       ]
     },
     {
+      "name": "question-card",
+      "type": "registry:component",
+      "title": "Question Card",
+      "description": "One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/glide-menu",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/question-card.tsx",
+          "type": "registry:component",
+          "target": "components/agents/question-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chat-panel",
+      "type": "registry:component",
+      "title": "Chat Panel",
+      "description": "Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/chat-panel.tsx",
+          "type": "registry:component",
+          "target": "components/agents/chat-panel.tsx"
+        }
+      ]
+    },
+    {
+      "name": "recommendation-card",
+      "type": "registry:component",
+      "title": "Recommendation Card",
+      "description": "Recommendation with a confidence meter, an alternatives drawer that swaps the pick, and a confirm action.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/agents/recommendation-card.tsx",
+          "type": "registry:component",
+          "target": "components/agents/recommendation-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "context-cards",
+      "type": "registry:component",
+      "title": "Context Cards",
+      "description": "Retrieved context chunks that stagger in, then reveal their source file chips.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/context-cards.tsx",
+          "type": "registry:component",
+          "target": "components/agents/context-cards.tsx"
+        }
+      ]
+    },
+    {
+      "name": "search-list",
+      "type": "registry:component",
+      "title": "Search List",
+      "description": "Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu"
+      ],
+      "files": [
+        {
+          "path": "components/agents/search-list.tsx",
+          "type": "registry:component",
+          "target": "components/agents/search-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "filter-table",
+      "type": "registry:component",
+      "title": "Filter Table",
+      "description": "Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/filter-table.tsx",
+          "type": "registry:component",
+          "target": "components/agents/filter-table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "flowchart",
+      "type": "registry:component",
+      "title": "Flowchart",
+      "description": "Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu"
+      ],
+      "files": [
+        {
+          "path": "components/agents/flowchart.tsx",
+          "type": "registry:component",
+          "target": "components/agents/flowchart.tsx"
+        }
+      ]
+    },
+    {
+      "name": "insight-cards",
+      "type": "registry:component",
+      "title": "Insight Cards",
+      "description": "Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/insight-cards.tsx",
+          "type": "registry:component",
+          "target": "components/agents/insight-cards.tsx"
+        }
+      ]
+    },
+    {
+      "name": "prompt-bar",
+      "type": "registry:component",
+      "title": "Prompt Bar",
+      "description": "A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/prompt-bar.tsx",
+          "type": "registry:component",
+          "target": "components/agents/prompt-bar.tsx"
+        }
+      ]
+    },
+    {
+      "name": "selection-actions",
+      "type": "registry:component",
+      "title": "Selection Actions",
+      "description": "A contextual AI bar under selected text that animates its width between modes and streams in a rewrite.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/shimmer-text",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/selection-actions.tsx",
+          "type": "registry:component",
+          "target": "components/agents/selection-actions.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pixel-loader",
+      "type": "registry:component",
+      "title": "Pixel Loader",
+      "description": "A 3×3 pixel-grid loader with a shimmering status label and a live elapsed timer, in four motion variants.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/shimmer-text"
+      ],
+      "files": [
+        {
+          "path": "components/agents/pixel-loader.tsx",
+          "type": "registry:component",
+          "target": "components/agents/pixel-loader.tsx"
+        }
+      ]
+    },
+    {
+      "name": "thinking-trace",
+      "type": "registry:component",
+      "title": "Thinking Trace",
+      "description": "An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/shimmer-text"
+      ],
+      "files": [
+        {
+          "path": "components/agents/thinking-trace.tsx",
+          "type": "registry:component",
+          "target": "components/agents/thinking-trace.tsx"
+        }
+      ]
+    },
+    {
+      "name": "streaming-answer",
+      "type": "registry:component",
+      "title": "Streaming Answer",
+      "description": "An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/streaming-answer.tsx",
+          "type": "registry:component",
+          "target": "components/agents/streaming-answer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "task-rows",
+      "type": "registry:component",
+      "title": "Task Rows",
+      "description": "Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/task-rows.tsx",
+          "type": "registry:component",
+          "target": "components/agents/task-rows.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tool-chips",
+      "type": "registry:component",
+      "title": "Tool Chips",
+      "description": "An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/tool-chips.tsx",
+          "type": "registry:component",
+          "target": "components/agents/tool-chips.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-screen",
+      "type": "registry:component",
+      "title": "Agent Screen",
+      "description": "Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/agents/agent-screen.tsx",
+          "type": "registry:component",
+          "target": "components/agents/agent-screen.tsx"
+        }
+      ]
+    },
+    {
+      "name": "code-panel",
+      "type": "registry:component",
+      "title": "Code Panel",
+      "description": "Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/agents/code-panel.tsx",
+          "type": "registry:component",
+          "target": "components/agents/code-panel.tsx"
+        }
+      ]
+    },
+    {
+      "name": "fine-tune-card",
+      "type": "registry:component",
+      "title": "Fine Tune Card",
+      "description": "Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu",
+        "@opendraft/shimmer-text"
+      ],
+      "files": [
+        {
+          "path": "components/agents/fine-tune-card.tsx",
+          "type": "registry:component",
+          "target": "components/agents/fine-tune-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sidebar-nav",
+      "type": "registry:component",
+      "title": "Sidebar Nav",
+      "description": "Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/glide-menu",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/agents/sidebar-nav.tsx",
+          "type": "registry:component",
+          "target": "components/agents/sidebar-nav.tsx"
+        }
+      ]
+    },
+    {
+      "name": "records-table",
+      "type": "registry:component",
+      "title": "Records Table",
+      "description": "AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/glide-menu",
+        "@opendraft/checkbox",
+        "@opendraft/switch"
+      ],
+      "files": [
+        {
+          "path": "components/agents/records-table.tsx",
+          "type": "registry:component",
+          "target": "components/agents/records-table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "diff-table",
+      "type": "registry:component",
+      "title": "Diff Table",
+      "description": "A proposed table edit that plays once; click each changed row to keep or drop it before applying.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/agents/diff-table.tsx",
+          "type": "registry:component",
+          "target": "components/agents/diff-table.tsx"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -1716,6 +2189,7 @@
         "@opendraft/animated-number",
         "@opendraft/blur-text",
         "@opendraft/shimmer-text",
+        "@opendraft/glide-menu",
         "@opendraft/spotlight-card",
         "@opendraft/marquee",
         "@opendraft/reveal",
@@ -1750,7 +2224,28 @@
         "@opendraft/image-generation",
         "@opendraft/ai-sidebar",
         "@opendraft/chat-app",
-        "@opendraft/streaming-response"
+        "@opendraft/streaming-response",
+        "@opendraft/question-card",
+        "@opendraft/chat-panel",
+        "@opendraft/recommendation-card",
+        "@opendraft/context-cards",
+        "@opendraft/search-list",
+        "@opendraft/filter-table",
+        "@opendraft/flowchart",
+        "@opendraft/insight-cards",
+        "@opendraft/prompt-bar",
+        "@opendraft/selection-actions",
+        "@opendraft/pixel-loader",
+        "@opendraft/thinking-trace",
+        "@opendraft/streaming-answer",
+        "@opendraft/task-rows",
+        "@opendraft/tool-chips",
+        "@opendraft/agent-screen",
+        "@opendraft/code-panel",
+        "@opendraft/fine-tune-card",
+        "@opendraft/sidebar-nav",
+        "@opendraft/records-table",
+        "@opendraft/diff-table"
       ]
     }
   ]

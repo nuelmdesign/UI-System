@@ -436,6 +436,174 @@ export const ENTRIES: DocEntry[] = [
     category: "Motion",
     description: "Characters scramble, then resolve to the new text.",
   },
+  {
+    slug: "question-card",
+    title: "Question Card",
+    category: "Agents",
+    description:
+      "One question at a time in a sliding stack with an odometer step counter and auto-advance on single choice.",
+    isNew: true,
+  },
+  {
+    slug: "chat-panel",
+    title: "Chat Panel",
+    category: "Agents",
+    description:
+      "Chat panel with context tabs, a scripted reply sequence that starts on send, and a composer.",
+    isNew: true,
+  },
+  {
+    slug: "recommendation-card",
+    title: "Recommendation Card",
+    category: "Agents",
+    description:
+      "Recommendation with a confidence meter, an alternatives drawer that swaps the pick, and a confirm action.",
+    isNew: true,
+  },
+  {
+    slug: "context-cards",
+    title: "Context Cards",
+    category: "Agents",
+    description:
+      "Retrieved context chunks that stagger in, then reveal their source file chips.",
+    isNew: true,
+  },
+  {
+    slug: "search-list",
+    title: "Search List",
+    category: "Components",
+    description:
+      "Command-style search with live filtering, a clear action, a gliding hover highlight and an empty state.",
+    isNew: true,
+  },
+  {
+    slug: "filter-table",
+    title: "Filter Table",
+    category: "Data",
+    description:
+      "Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning.",
+    isNew: true,
+  },
+  {
+    slug: "flowchart",
+    title: "Flowchart",
+    category: "Data",
+    description:
+      "Workflow canvas with draggable Trigger and If/Else cards joined by a live bezier connector.",
+    isNew: true,
+  },
+  {
+    slug: "insight-cards",
+    title: "Insight Cards",
+    category: "Data",
+    description:
+      "Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade.",
+    isNew: true,
+  },
+  {
+    slug: "prompt-bar",
+    title: "Prompt Bar",
+    category: "Agents",
+    description:
+      "A composer with @ sources, / commands, a model picker, dictation and attachments, plus a self-running demo.",
+    isNew: true,
+  },
+  {
+    slug: "selection-actions",
+    title: "Selection Actions",
+    category: "Agents",
+    description:
+      "A contextual AI bar under selected text that animates its width between modes and streams in a rewrite.",
+    isNew: true,
+  },
+  {
+    slug: "pixel-loader",
+    title: "Pixel Loader",
+    category: "Agents",
+    description:
+      "A 3×3 pixel-grid loader with a shimmering status label and a live elapsed timer, in four motion variants.",
+    isNew: true,
+  },
+  {
+    slug: "thinking-trace",
+    title: "Thinking Trace",
+    category: "Agents",
+    description:
+      "An expandable agent trace that shimmers while working, then settles. Steps, reasoning, search and coding variants.",
+    isNew: true,
+  },
+  {
+    slug: "streaming-answer",
+    title: "Streaming Answer",
+    category: "Agents",
+    description:
+      "An answer that streams in word by word with an inline citation, then shows actions, sources and follow-ups.",
+    isNew: true,
+  },
+  {
+    slug: "task-rows",
+    title: "Task Rows",
+    category: "Agents",
+    description:
+      "Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence.",
+    isNew: true,
+  },
+  {
+    slug: "tool-chips",
+    title: "Tool Chips",
+    category: "Agents",
+    description:
+      "An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover.",
+    isNew: true,
+  },
+  {
+    slug: "agent-screen",
+    title: "Agent Screen",
+    category: "Agents",
+    description:
+      "Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording.",
+    isNew: true,
+  },
+  {
+    slug: "code-panel",
+    title: "Code Panel",
+    category: "Agents",
+    description:
+      "Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights.",
+    isNew: true,
+  },
+  {
+    slug: "fine-tune-card",
+    title: "Fine-tune Card",
+    category: "Data",
+    description:
+      "Compact inspector with scrub-able number fields, a sliding segmented control and a Type menu.",
+    isNew: true,
+  },
+  {
+    slug: "sidebar-nav",
+    title: "Sidebar Nav",
+    category: "Components",
+    description:
+      "Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail.",
+    isNew: true,
+  },
+  {
+    slug: "records-table",
+    title: "Records Table",
+    category: "Data",
+    description:
+      "AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting.",
+    isNew: true,
+  },
+  {
+    slug: "diff-table",
+    title: "Diff Table",
+    category: "Data",
+    description:
+      "A proposed table edit that plays once; click each changed row to keep or drop it before applying.",
+    isNew: true,
+  },
 ]
 
 export const ENTRY_BY_SLUG = Object.fromEntries(ENTRIES.map((e) => [e.slug, e]))
