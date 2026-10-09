@@ -9,7 +9,11 @@ import {
   type PromptBarModel,
   type PromptBarSource,
 } from "@/components/agents/prompt-bar"
-import { SidebarNav, type SidebarRecent } from "@/components/agents/sidebar-nav"
+import {
+  SidebarNav,
+  type SidebarRecent,
+  type SidebarWorkspace,
+} from "@/components/agents/sidebar-nav"
 import {
   StreamingAnswer,
   type StreamingSource,
@@ -87,6 +91,8 @@ export type AgentWorkspaceProps = {
   /** Title shown above the thread. */
   title?: string
   placeholder?: string
+  /** Workspace shown at the top of the history rail. */
+  workspace?: SidebarWorkspace
   className?: string
 }
 
@@ -343,6 +349,12 @@ function Header({ title, aside }: { title: string; aside?: ReactNode }) {
   )
 }
 
+export const SAMPLE_WORKSPACE: SidebarWorkspace = {
+  key: "acme",
+  name: "Acme Inc",
+  monogram: "A",
+}
+
 export function AgentWorkspace({
   conversations = SAMPLE_CONVERSATIONS,
   messages: initialMessages = SAMPLE_MESSAGES,
@@ -350,6 +362,7 @@ export function AgentWorkspace({
   onSend,
   title = "Q3 revenue report",
   placeholder = "Ask the agent to do something…",
+  workspace = SAMPLE_WORKSPACE,
   className,
 }: AgentWorkspaceProps) {
   const [messages, setMessages] = useState<AgentMessage[]>(initialMessages)
@@ -451,101 +464,102 @@ export function AgentWorkspace({
   const empty = messages.length === 0 && !pending
 
   return (
-    <div
-      data-slot="agent-workspace"
-      className={cn(
-        "flex h-full min-h-0 w-full overflow-hidden bg-background text-foreground",
-        className
-      )}
-    >
-      <div className="hidden h-full shrink-0 border-r md:block">
-        <SidebarNav
-          fill
-          recents={conversations}
-          activeTitle={heading}
-          onNewChat={reset}
-          onPick={(_, label) => setHeading(label)}
-        />
-      </div>
-
-      <section
-        aria-label="Conversation"
-        className="flex min-w-0 flex-1 flex-col"
+    <div className={cn("@container/ws h-full min-h-0 w-full", className)}>
+      <div
+        data-slot="agent-workspace"
+        className="flex h-full min-h-0 w-full overflow-hidden bg-background text-foreground"
       >
-        <Header title={heading} />
-        <div
-          ref={scrollRef}
-          className="min-h-0 flex-1 overflow-y-auto"
-          role="log"
-          aria-live="polite"
-          aria-label="Messages"
+        <div className="hidden h-full shrink-0 border-r @3xl/ws:block">
+          <SidebarNav
+            fill
+            workspace={workspace}
+            navItems={[]}
+            recents={conversations}
+            activeTitle={heading}
+            onNewChat={reset}
+            onPick={(_, label) => setHeading(label)}
+          />
+        </div>
+
+        <section
+          aria-label="Conversation"
+          className="flex min-w-0 flex-1 flex-col"
         >
+          <Header title={heading} />
           <div
-            ref={contentRef}
-            className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-6 md:px-6"
+            ref={scrollRef}
+            className="min-h-0 flex-1 overflow-y-auto"
+            role="log"
+            aria-live="polite"
+            aria-label="Messages"
           >
-            {empty && (
-              <div className="flex flex-col items-start gap-1 py-10">
-                <h3 className="heading text-2xl">What should we work on?</h3>
-                <p className="text-sm text-muted-foreground">
-                  Ask the agent to read, analyze or write something. Progress
-                  shows up in the task panel.
-                </p>
-              </div>
-            )}
-            {messages.map((message) =>
-              message.role === "user" ? (
-                <div
-                  key={message.id}
-                  data-slot="agent-workspace-user"
-                  className="ml-auto max-w-[85%] animate-fade-up rounded-lg border bg-muted px-3.5 py-2.5 text-sm leading-relaxed"
-                >
-                  {message.text}
+            <div
+              ref={contentRef}
+              className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-6 md:px-6"
+            >
+              {empty && (
+                <div className="flex flex-col items-start gap-1 py-10">
+                  <h3 className="heading text-2xl">What should we work on?</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Ask the agent to read, analyze or write something. Progress
+                    shows up in the task panel.
+                  </p>
                 </div>
-              ) : (
-                <AssistantTurn
-                  key={message.id}
-                  message={message}
-                  onDone={completeTask}
-                  onAsk={handleSend}
-                />
-              )
-            )}
-            {pending && (
-              <ShimmerText className="text-[13px] font-medium">
-                Thinking
-              </ShimmerText>
-            )}
+              )}
+              {messages.map((message) =>
+                message.role === "user" ? (
+                  <div
+                    key={message.id}
+                    data-slot="agent-workspace-user"
+                    className="ml-auto max-w-[85%] animate-fade-up rounded-lg border bg-muted px-3.5 py-2.5 text-sm leading-relaxed"
+                  >
+                    {message.text}
+                  </div>
+                ) : (
+                  <AssistantTurn
+                    key={message.id}
+                    message={message}
+                    onDone={completeTask}
+                    onAsk={handleSend}
+                  />
+                )
+              )}
+              {pending && (
+                <ShimmerText className="text-[13px] font-medium">
+                  Thinking
+                </ShimmerText>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="shrink-0 px-4 pt-2 pb-4 md:px-6">
-          <div className="mx-auto w-full max-w-2xl">
-            <PromptBar
-              demo={false}
-              placeholder={placeholder}
-              sources={SOURCES}
-              commands={COMMANDS}
-              models={MODELS}
-              onSend={handleSend}
-            />
+          <div className="shrink-0 px-4 pt-2 pb-4 md:px-6">
+            <div className="mx-auto w-full max-w-2xl">
+              <PromptBar
+                demo={false}
+                placeholder={placeholder}
+                sources={SOURCES}
+                commands={COMMANDS}
+                models={MODELS}
+                onSend={handleSend}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <aside
-        aria-label="Tasks"
-        className="hidden h-full w-72 shrink-0 flex-col gap-3 overflow-y-auto border-l p-4 xl:flex"
-      >
-        <span className="eyebrow">Tasks</span>
-        {tasks.length > 0 ? (
-          <TodoList items={tasks} title="Plan" maxHeight={420} />
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            Tasks appear here as the agent works.
-          </p>
-        )}
-      </aside>
+        <aside
+          aria-label="Tasks"
+          className="hidden h-full w-72 shrink-0 flex-col gap-3 overflow-y-auto border-l p-4 @5xl/ws:flex"
+        >
+          <span className="eyebrow">Tasks</span>
+          {tasks.length > 0 ? (
+            <TodoList items={tasks} title="Plan" maxHeight={420} />
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Tasks appear here as the agent works.
+            </p>
+          )}
+        </aside>
+      </div>
     </div>
   )
 }

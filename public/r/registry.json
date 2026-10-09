@@ -2222,6 +2222,143 @@
       ]
     },
     {
+      "name": "crm-pipeline",
+      "type": "registry:block",
+      "title": "Crm Pipeline",
+      "description": "Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/badge",
+        "@opendraft/avatar",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/dropdown-menu",
+        "@opendraft/tabs",
+        "@opendraft/animated-number"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/crm-pipeline.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/crm-pipeline.tsx"
+        }
+      ]
+    },
+    {
+      "name": "analytics-dashboard",
+      "type": "registry:block",
+      "title": "Analytics Dashboard",
+      "description": "Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/insight-cards",
+        "@opendraft/animated-number",
+        "@opendraft/badge",
+        "@opendraft/button",
+        "@opendraft/tabs"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/analytics-dashboard.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/analytics-dashboard.tsx"
+        }
+      ]
+    },
+    {
+      "name": "settings-page",
+      "type": "registry:block",
+      "title": "Settings Page",
+      "description": "Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/avatar",
+        "@opendraft/badge",
+        "@opendraft/button",
+        "@opendraft/dialog",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/switch",
+        "@opendraft/textarea"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/settings-page.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/settings-page.tsx"
+        }
+      ]
+    },
+    {
+      "name": "auth-screen",
+      "type": "registry:block",
+      "title": "Auth Screen",
+      "description": "Split sign-in and sign-up screen with validation, social providers, loading and error states, and a brand panel.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/checkbox",
+        "@opendraft/tabs",
+        "@opendraft/pixel-field"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/auth-screen.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/auth-screen.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-workspace",
+      "type": "registry:block",
+      "title": "Agent Workspace",
+      "description": "AI agent chat workspace: conversation rail, thread with thinking, tool calls and streamed answers, prompt bar and a live task panel.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/sidebar-nav",
+        "@opendraft/prompt-bar",
+        "@opendraft/thinking-trace",
+        "@opendraft/tool-chips",
+        "@opendraft/streaming-answer",
+        "@opendraft/todo-list",
+        "@opendraft/shimmer-text"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/agent-workspace.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/agent-workspace.tsx"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -2323,7 +2460,12 @@
         "@opendraft/fine-tune-card",
         "@opendraft/sidebar-nav",
         "@opendraft/records-table",
-        "@opendraft/diff-table"
+        "@opendraft/diff-table",
+        "@opendraft/crm-pipeline",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/settings-page",
+        "@opendraft/auth-screen",
+        "@opendraft/agent-workspace"
       ]
     }
   ]

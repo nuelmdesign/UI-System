@@ -46,11 +46,12 @@ npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 ```tsx
 import { MotionConfig } from "motion/react"
 
-<MotionConfig reducedMotion="user">{children}</MotionConfig>
+;<MotionConfig reducedMotion="user">{children}</MotionConfig>
 ```
 
 ### 2. Use components before writing your own
 
+- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.
@@ -62,22 +63,22 @@ import { MotionConfig } from "motion/react"
 
 Never hard-code colors, shadows, radii, easings or spring values. Use these Tailwind classes, which read the theme tokens:
 
-| Purpose | Use |
-|---|---|
-| Page background / text | `bg-background`, `text-foreground` |
-| Cards and panels | `bg-card`, `border` (a hairline) |
-| Quiet areas, inputs, wells | `bg-muted`, `bg-surface` |
-| Secondary text | `text-muted-foreground` |
-| Hover background | `bg-accent` |
-| Primary action | `bg-primary text-primary-foreground` (blue by default) |
-| Accent text, links, focus strokes | `text-brand`, `border-brand` |
-| Solid black buttons and bands | `bg-ink text-ink-foreground` (inverts in dark mode) |
-| Status | `text-success`, `text-warning`, `text-destructive` (tints: `bg-success/10`, etc.) |
-| Lines | `border-border`, `border-input` |
-| Floating layers only (menus, popovers, dialogs) | `bg-popover shadow-md` |
-| Extra blues for charts and textures | `bg-blue-50` … `bg-blue-950` |
-| Headings | `heading` (the heading font at its weight and tracking) |
-| Corners | `rounded-md` / `rounded-control` for controls, `rounded-lg` / `rounded-surface` for cards and menus |
+| Purpose                                         | Use                                                                                                 |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Page background / text                          | `bg-background`, `text-foreground`                                                                  |
+| Cards and panels                                | `bg-card`, `border` (a hairline)                                                                    |
+| Quiet areas, inputs, wells                      | `bg-muted`, `bg-surface`                                                                            |
+| Secondary text                                  | `text-muted-foreground`                                                                             |
+| Hover background                                | `bg-accent`                                                                                         |
+| Primary action                                  | `bg-primary text-primary-foreground` (blue by default)                                              |
+| Accent text, links, focus strokes               | `text-brand`, `border-brand`                                                                        |
+| Solid black buttons and bands                   | `bg-ink text-ink-foreground` (inverts in dark mode)                                                 |
+| Status                                          | `text-success`, `text-warning`, `text-destructive` (tints: `bg-success/10`, etc.)                   |
+| Lines                                           | `border-border`, `border-input`                                                                     |
+| Floating layers only (menus, popovers, dialogs) | `bg-popover shadow-md`                                                                              |
+| Extra blues for charts and textures             | `bg-blue-50` … `bg-blue-950`                                                                        |
+| Headings                                        | `heading` (the heading font at its weight and tracking)                                             |
+| Corners                                         | `rounded-md` / `rounded-control` for controls, `rounded-lg` / `rounded-surface` for cards and menus |
 
 Don't use Tailwind's palette colors (`bg-gray-100`, `text-emerald-600`, …) and don't add `dark:` color twins. The tokens already switch between light and dark.
 
@@ -85,22 +86,25 @@ Don't use Tailwind's palette colors (`bg-gray-100`, `text-emerald-600`, …) and
 
 opendraft ships with a look: editorial headings, square corners, hairline borders, a blue primary. Treat it as the default. If the person asks for something different, their request wins, and you apply it by changing the brand tokens at the top of `:root` in the global stylesheet. Never restyle individual components to get a new look; change the token and every component follows.
 
-| They ask for | Change |
-|---|---|
-| A heading font (any Google Font, e.g. Inter) | `--font-heading`, plus `--heading-weight` (about 300 for light serifs like the default Newsreader, 500 to 600 for sans faces like Inter) and `--heading-tracking` |
-| A body / interface font (any Google Font, e.g. IBM Plex Sans) | `--font-body` |
-| A code font | `--font-code` |
-| A primary color (e.g. black) | `--primary` and `--brand` in `:root` and in `.dark`. Set `--primary-foreground` to a color that reads on it (white on dark colors, near-black on light ones). For black, use `var(--ink)` and `var(--ink-foreground)`: they invert in dark mode. |
-| Rounder buttons and inputs (e.g. 12px) | `--control-radius` |
-| Rounder cards, menus and dialogs | `--surface-radius` (usually the same as or a little larger than `--control-radius`) |
-| Larger or smaller text | `--text-scale` (1 is the default; 1.1 makes every text size 10% larger, 0.9 10% smaller). Spacing stays the same. |
+| They ask for                                                  | Change                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A heading font (any Google Font, e.g. Inter)                  | `--font-heading`, plus `--heading-weight` (about 300 for light serifs like the default Newsreader, 500 to 600 for sans faces like Inter) and `--heading-tracking`                                                                                |
+| A body / interface font (any Google Font, e.g. IBM Plex Sans) | `--font-body`                                                                                                                                                                                                                                    |
+| A code font                                                   | `--font-code`                                                                                                                                                                                                                                    |
+| A primary color (e.g. black)                                  | `--primary` and `--brand` in `:root` and in `.dark`. Set `--primary-foreground` to a color that reads on it (white on dark colors, near-black on light ones). For black, use `var(--ink)` and `var(--ink-foreground)`: they invert in dark mode. |
+| Rounder buttons and inputs (e.g. 12px)                        | `--control-radius`                                                                                                                                                                                                                               |
+| Rounder cards, menus and dialogs                              | `--surface-radius` (usually the same as or a little larger than `--control-radius`)                                                                                                                                                              |
+| Larger or smaller text                                        | `--text-scale` (1 is the default; 1.1 makes every text size 10% larger, 0.9 10% smaller). Spacing stays the same.                                                                                                                                |
 
 Any of the roughly 1,900 Google Fonts works. Load it with `next/font/google` (the export name replaces spaces with underscores, e.g. `IBM_Plex_Sans`; pass `variable: "--font-ibm-plex-sans"`, and `weight` for fonts that aren't variable), or with a `<link>` from fonts.google.com outside Next.js. Point the token at the variable, falling back to the family name and a generic stack so it works either way:
 
 ```css
 :root {
-  --font-heading: var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-ibm-plex-sans, "IBM Plex Sans"), ui-sans-serif, system-ui, sans-serif;
+  --font-heading:
+    var(--font-inter, "Inter"), ui-sans-serif, system-ui, sans-serif;
+  --font-body:
+    var(--font-ibm-plex-sans, "IBM Plex Sans"), ui-sans-serif, system-ui,
+    sans-serif;
   --heading-weight: 600;
   --heading-tracking: -0.03em;
   --primary: var(--ink);
@@ -140,6 +144,14 @@ Components use Radix primitives and come with keyboard and screen-reader support
 - Headings use the `heading` utility; nothing else does.
 
 ## Components
+
+### Blocks
+
+- [CRM Pipeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/crm-pipeline.md): Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline. Install: `npx shadcn@latest add @opendraft/crm-pipeline`
+- [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md): Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown. Install: `npx shadcn@latest add @opendraft/analytics-dashboard`
+- [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md): Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone. Install: `npx shadcn@latest add @opendraft/settings-page`
+- [Auth Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/auth-screen.md): Split sign-in and sign-up screen with validation, social providers, loading and error states, and a brand panel. Install: `npx shadcn@latest add @opendraft/auth-screen`
+- [Agent Workspace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-workspace.md): AI agent chat workspace: conversation rail, thread with thinking, tool calls and streamed answers, prompt bar and a live task panel. Install: `npx shadcn@latest add @opendraft/agent-workspace`
 
 ### AI Agents
 

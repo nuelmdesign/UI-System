@@ -760,6 +760,78 @@ const items = [
     description:
       "A proposed table edit that plays once; click each changed row to keep or drop it before applying.",
   }),
+  screen("crm-pipeline", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/badge",
+      "@opendraft/avatar",
+      "@opendraft/input",
+      "@opendraft/label",
+      "@opendraft/select",
+      "@opendraft/dialog",
+      "@opendraft/dropdown-menu",
+      "@opendraft/tabs",
+      "@opendraft/animated-number",
+    ],
+    description:
+      "Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline.",
+  }),
+  screen("analytics-dashboard", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/insight-cards",
+      "@opendraft/animated-number",
+      "@opendraft/badge",
+      "@opendraft/button",
+      "@opendraft/tabs",
+    ],
+    description:
+      "Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown.",
+  }),
+  screen("settings-page", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/avatar",
+      "@opendraft/badge",
+      "@opendraft/button",
+      "@opendraft/dialog",
+      "@opendraft/input",
+      "@opendraft/label",
+      "@opendraft/select",
+      "@opendraft/switch",
+      "@opendraft/textarea",
+    ],
+    description:
+      "Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone.",
+  }),
+  screen("auth-screen", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/input",
+      "@opendraft/label",
+      "@opendraft/checkbox",
+      "@opendraft/tabs",
+      "@opendraft/pixel-field",
+    ],
+    description:
+      "Split sign-in and sign-up screen with validation, social providers, loading and error states, and a brand panel.",
+  }),
+  screen("agent-workspace", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/sidebar-nav",
+      "@opendraft/prompt-bar",
+      "@opendraft/thinking-trace",
+      "@opendraft/tool-chips",
+      "@opendraft/streaming-answer",
+      "@opendraft/todo-list",
+      "@opendraft/shimmer-text",
+    ],
+    description:
+      "AI agent chat workspace: conversation rail, thread with thinking, tool calls and streamed answers, prompt bar and a live task panel.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.

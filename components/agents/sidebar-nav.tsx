@@ -30,9 +30,13 @@ import { cn } from "@/lib/utils"
  * chat history, and a collapse that preserves icon alignment.
  * ───────────────────────────────────────────────────────── */
 
-const WORKSPACE = { key: "creamery", name: "Creamery Ops", monogram: "C" }
+const DEFAULT_WORKSPACE = {
+  key: "creamery",
+  name: "Creamery Ops",
+  monogram: "C",
+}
 
-const NAV_ITEMS = [
+const DEFAULT_NAV_ITEMS = [
   { key: "home", label: "Home", icon: <House className="size-[18px]" /> },
   {
     key: "invite",
@@ -59,7 +63,20 @@ const DEFAULT_RECENTS: SidebarRecent[] = [
   { id: "subway", label: "Subway surfing" },
 ]
 
+export type SidebarWorkspace = { key: string; name: string; monogram: string }
+
+export type SidebarNavItem = {
+  key: string
+  label: string
+  icon: React.ReactNode
+  count?: string
+}
+
 export type SidebarNavProps = {
+  /** Workspace shown in the switcher. Defaults to a demo workspace. */
+  workspace?: SidebarWorkspace
+  /** Primary navigation items. Defaults to demo items. */
+  navItems?: SidebarNavItem[]
   activeTitle?: string | null
   className?: string
   /** Fill the parent's height instead of the fixed 600px demo height. */
@@ -184,9 +201,11 @@ function RailButton({
 
 function WorkspaceMenu({
   position,
+  workspace,
   onClose,
 }: {
   position: { top: number; left: number }
+  workspace: SidebarWorkspace
   onClose: () => void
 }) {
   const items = [
@@ -217,10 +236,10 @@ function WorkspaceMenu({
           className={cn(row, "h-10")}
         >
           <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-ink text-[calc(11px*var(--text-scale))] font-semibold text-ink-foreground">
-            {WORKSPACE.monogram}
+            {workspace.monogram}
           </span>
           <span className="min-w-0 flex-1 truncate text-[calc(13.5px*var(--text-scale))] font-medium text-foreground">
-            {WORKSPACE.name}
+            {workspace.name}
           </span>
           <Check className="size-4 shrink-0 text-brand" />
         </button>
@@ -275,6 +294,8 @@ function SidebarNav({
   footerIcon,
   onFooterClick,
   recents = DEFAULT_RECENTS,
+  workspace = DEFAULT_WORKSPACE,
+  navItems = DEFAULT_NAV_ITEMS,
 }: SidebarNavProps) {
   const [collapsed, setCollapsed] = React.useState(false)
   const [internalNav, setInternalNav] = React.useState("chats")
@@ -405,7 +426,7 @@ function SidebarNav({
                 "ml-1.5 min-w-0 flex-1 truncate text-sm font-medium text-muted-foreground"
               )}
             >
-              {WORKSPACE.name}
+              {workspace.name}
             </span>
             <span
               className={cn(
@@ -419,6 +440,7 @@ function SidebarNav({
 
           {workspaceOpen && (
             <WorkspaceMenu
+              workspace={workspace}
               position={workspacePosition}
               onClose={() => setWorkspaceOpen(false)}
             />
@@ -468,7 +490,7 @@ function SidebarNav({
                 onNewChat?.()
               }}
             />
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <RailButton
                 key={item.key}
                 icon={item.icon}

@@ -186,225 +186,238 @@ function AuthScreen({
 
   return (
     <div
-      data-slot="auth-screen"
-      className={cn(
-        "grid h-full min-h-[600px] w-full bg-background text-foreground lg:grid-cols-2",
-        className
-      )}
+      className={cn("@container/auth h-full min-h-[600px] w-full", className)}
     >
-      <div className="flex min-h-0 flex-col overflow-y-auto px-5 py-8 sm:px-10">
-        <div className="flex items-center gap-2 text-sm font-medium">
-          {logo ?? (
-            <span
-              aria-hidden
-              className="grid size-6 place-items-center rounded-sm bg-ink font-mono text-xs text-ink-foreground"
-            >
-              {brand.name.charAt(0)}
-            </span>
-          )}
-          <span>{brand.name}</span>
-        </div>
-
-        <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 py-8">
-          <div className="flex flex-col gap-1.5">
-            <h1 className="heading text-3xl">
-              {isSignUp ? "Create your account" : "Welcome back"}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              {isSignUp
-                ? "Start in a minute. No credit card needed."
-                : "Sign in to pick up where you left off."}
-            </p>
+      <div
+        data-slot="auth-screen"
+        className="grid h-full min-h-[600px] w-full bg-background text-foreground @3xl/auth:grid-cols-2"
+      >
+        <div className="flex min-h-0 flex-col overflow-y-auto px-5 py-8 @md/auth:px-10">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            {logo ?? (
+              <span
+                aria-hidden
+                className="grid size-6 place-items-center rounded-sm bg-ink font-mono text-xs text-ink-foreground"
+              >
+                {brand.name.charAt(0)}
+              </span>
+            )}
+            <span>{brand.name}</span>
           </div>
 
-          <Tabs value={mode} onValueChange={changeMode}>
-            <TabsList className="w-full">
-              <TabsTrigger value="sign-in">Sign in</TabsTrigger>
-              <TabsTrigger value="sign-up">Sign up</TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          {providers.length > 0 && (
-            <>
-              <div
-                className={cn(
-                  "grid gap-2",
-                  providers.length > 1 && "sm:grid-cols-2"
-                )}
-              >
-                {providers.map((p) => (
-                  <Button
-                    key={p.id}
-                    type="button"
-                    variant="outline"
-                    onClick={() => onProvider?.(p.id)}
-                    disabled={loading}
-                  >
-                    {p.icon}
-                    <span className="truncate">Continue with {p.label}</span>
-                  </Button>
-                ))}
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="h-px flex-1 bg-border" />
-                <span className="eyebrow">or with email</span>
-                <span className="h-px flex-1 bg-border" />
-              </div>
-            </>
-          )}
-
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            className="flex flex-col gap-4"
-          >
+          <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 py-8">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor={`${uid}-email`}>Email</Label>
-              <Input
-                id={`${uid}-email`}
-                type="email"
-                autoComplete="email"
-                placeholder="you@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => touch("email")}
-                aria-invalid={!!show.email}
-                aria-describedby={show.email ? `${uid}-email-err` : undefined}
-              />
-              <FieldError id={`${uid}-email-err`} message={show.email} />
+              <h1 className="heading text-3xl">
+                {isSignUp ? "Create your account" : "Welcome back"}
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                {isSignUp
+                  ? "Start in a minute. No credit card needed."
+                  : "Sign in to pick up where you left off."}
+              </p>
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <Label htmlFor={`${uid}-password`}>Password</Label>
-                {!isSignUp && (
-                  <Button
-                    type="button"
-                    variant="link"
-                    size="xs"
-                    className="h-auto p-0"
-                    onClick={onForgotPassword}
-                  >
-                    Forgot password?
-                  </Button>
-                )}
-              </div>
-              <div className="relative">
-                <Input
-                  id={`${uid}-password`}
-                  type={showPassword ? "text" : "password"}
-                  autoComplete={isSignUp ? "new-password" : "current-password"}
-                  placeholder={isSignUp ? "At least 8 characters" : "Password"}
-                  className="pr-10"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onBlur={() => touch("password")}
-                  aria-invalid={!!show.password}
-                  aria-describedby={
-                    show.password ? `${uid}-password-err` : undefined
-                  }
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon-xs"
-                  className="absolute top-1 right-1"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  aria-pressed={showPassword}
-                  onClick={() => setShowPassword((v) => !v)}
+            <Tabs value={mode} onValueChange={changeMode}>
+              <TabsList className="w-full">
+                <TabsTrigger value="sign-in">Sign in</TabsTrigger>
+                <TabsTrigger value="sign-up">Sign up</TabsTrigger>
+              </TabsList>
+            </Tabs>
+
+            {providers.length > 0 && (
+              <>
+                <div
+                  className={cn(
+                    "grid gap-2",
+                    providers.length > 1 && "@md/auth:grid-cols-2"
+                  )}
                 >
-                  {showPassword ? <EyeOff /> : <Eye />}
-                </Button>
-              </div>
-              <FieldError id={`${uid}-password-err`} message={show.password} />
-            </div>
-
-            {isSignUp && (
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor={`${uid}-confirm`}>Confirm password</Label>
-                <Input
-                  id={`${uid}-confirm`}
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="new-password"
-                  placeholder="Repeat your password"
-                  value={confirm}
-                  onChange={(e) => setConfirm(e.target.value)}
-                  onBlur={() => touch("confirm")}
-                  aria-invalid={!!show.confirm}
-                  aria-describedby={
-                    show.confirm ? `${uid}-confirm-err` : undefined
-                  }
-                />
-                <FieldError id={`${uid}-confirm-err`} message={show.confirm} />
-              </div>
+                  {providers.map((p) => (
+                    <Button
+                      key={p.id}
+                      type="button"
+                      variant="outline"
+                      onClick={() => onProvider?.(p.id)}
+                      disabled={loading}
+                    >
+                      {p.icon}
+                      <span className="truncate">Continue with {p.label}</span>
+                    </Button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="h-px flex-1 bg-border" />
+                  <span className="eyebrow">or with email</span>
+                  <span className="h-px flex-1 bg-border" />
+                </div>
+              </>
             )}
 
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id={`${uid}-remember`}
-                checked={remember}
-                onCheckedChange={(c) => setRemember(c === true)}
-              />
-              <Label htmlFor={`${uid}-remember`} className="font-normal">
-                Remember me
-              </Label>
-            </div>
-
-            <AnimatePresence initial={false}>
-              {error && (
-                <motion.div
-                  role="alert"
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: duration.fast, ease: ease.out }}
-                  className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-                >
-                  <TriangleAlert className="mt-0.5 size-4 shrink-0" />
-                  <span>{error}</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <Button type="submit" size="lg" loading={loading}>
-              {isSignUp ? "Create account" : "Sign in"}
-            </Button>
-          </form>
-
-          <p className="text-center text-sm text-muted-foreground">
-            {isSignUp ? "Already have an account?" : "New here?"}{" "}
-            <Button
-              type="button"
-              variant="link"
-              className="h-auto p-0"
-              onClick={() => changeMode(isSignUp ? "sign-in" : "sign-up")}
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col gap-4"
             >
-              {isSignUp ? "Sign in" : "Create an account"}
-            </Button>
-          </p>
-        </div>
-      </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor={`${uid}-email`}>Email</Label>
+                <Input
+                  id={`${uid}-email`}
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onBlur={() => touch("email")}
+                  aria-invalid={!!show.email}
+                  aria-describedby={show.email ? `${uid}-email-err` : undefined}
+                />
+                <FieldError id={`${uid}-email-err`} message={show.email} />
+              </div>
 
-      <aside className="dark relative hidden overflow-hidden border-l bg-background text-foreground lg:flex">
-        <PixelField
-          variant="matrix"
-          className="pointer-events-none absolute inset-0"
-        />
-        <div className="relative flex w-full flex-col justify-between p-10">
-          <span className="eyebrow">{brand.name}</span>
-          <figure className="flex max-w-md flex-col gap-5">
-            <blockquote className="heading text-2xl leading-snug">
-              &ldquo;{brand.quote}&rdquo;
-            </blockquote>
-            <figcaption className="flex flex-col gap-0.5 text-sm">
-              <span className="font-medium">{brand.author}</span>
-              {brand.role && (
-                <span className="text-muted-foreground">{brand.role}</span>
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor={`${uid}-password`}>Password</Label>
+                  {!isSignUp && (
+                    <Button
+                      type="button"
+                      variant="link"
+                      size="xs"
+                      className="h-auto p-0"
+                      onClick={onForgotPassword}
+                    >
+                      Forgot password?
+                    </Button>
+                  )}
+                </div>
+                <div className="relative">
+                  <Input
+                    id={`${uid}-password`}
+                    type={showPassword ? "text" : "password"}
+                    autoComplete={
+                      isSignUp ? "new-password" : "current-password"
+                    }
+                    placeholder={
+                      isSignUp ? "At least 8 characters" : "Password"
+                    }
+                    className="pr-10"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onBlur={() => touch("password")}
+                    aria-invalid={!!show.password}
+                    aria-describedby={
+                      show.password ? `${uid}-password-err` : undefined
+                    }
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-xs"
+                    className="absolute top-1 right-1"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                    aria-pressed={showPassword}
+                    onClick={() => setShowPassword((v) => !v)}
+                  >
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </Button>
+                </div>
+                <FieldError
+                  id={`${uid}-password-err`}
+                  message={show.password}
+                />
+              </div>
+
+              {isSignUp && (
+                <div className="flex flex-col gap-1.5">
+                  <Label htmlFor={`${uid}-confirm`}>Confirm password</Label>
+                  <Input
+                    id={`${uid}-confirm`}
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    placeholder="Repeat your password"
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                    onBlur={() => touch("confirm")}
+                    aria-invalid={!!show.confirm}
+                    aria-describedby={
+                      show.confirm ? `${uid}-confirm-err` : undefined
+                    }
+                  />
+                  <FieldError
+                    id={`${uid}-confirm-err`}
+                    message={show.confirm}
+                  />
+                </div>
               )}
-            </figcaption>
-          </figure>
+
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id={`${uid}-remember`}
+                  checked={remember}
+                  onCheckedChange={(c) => setRemember(c === true)}
+                />
+                <Label htmlFor={`${uid}-remember`} className="font-normal">
+                  Remember me
+                </Label>
+              </div>
+
+              <AnimatePresence initial={false}>
+                {error && (
+                  <motion.div
+                    role="alert"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: duration.fast, ease: ease.out }}
+                    className="flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                  >
+                    <TriangleAlert className="mt-0.5 size-4 shrink-0" />
+                    <span>{error}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <Button type="submit" size="lg" loading={loading}>
+                {isSignUp ? "Create account" : "Sign in"}
+              </Button>
+            </form>
+
+            <p className="text-center text-sm text-muted-foreground">
+              {isSignUp ? "Already have an account?" : "New here?"}{" "}
+              <Button
+                type="button"
+                variant="link"
+                className="h-auto p-0"
+                onClick={() => changeMode(isSignUp ? "sign-in" : "sign-up")}
+              >
+                {isSignUp ? "Sign in" : "Create an account"}
+              </Button>
+            </p>
+          </div>
         </div>
-      </aside>
+
+        <aside className="dark relative hidden overflow-hidden border-l bg-background text-foreground @3xl/auth:flex">
+          <PixelField
+            variant="matrix"
+            className="pointer-events-none absolute inset-0"
+          />
+          <div className="relative flex w-full flex-col justify-between p-10">
+            <span className="eyebrow">{brand.name}</span>
+            <figure className="flex max-w-md flex-col gap-5">
+              <blockquote className="heading text-2xl leading-snug">
+                &ldquo;{brand.quote}&rdquo;
+              </blockquote>
+              <figcaption className="flex flex-col gap-0.5 text-sm">
+                <span className="font-medium">{brand.author}</span>
+                {brand.role && (
+                  <span className="text-muted-foreground">{brand.role}</span>
+                )}
+              </figcaption>
+            </figure>
+          </div>
+        </aside>
+      </div>
     </div>
   )
 }

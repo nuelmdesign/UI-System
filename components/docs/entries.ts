@@ -612,6 +612,46 @@ export const ENTRIES: DocEntry[] = [
       "A proposed table edit that plays once; click each changed row to keep or drop it before applying.",
     isNew: true,
   },
+  {
+    slug: "crm-pipeline",
+    title: "CRM Pipeline",
+    category: "Blocks",
+    description:
+      "Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline.",
+    isNew: true,
+  },
+  {
+    slug: "analytics-dashboard",
+    title: "Analytics Dashboard",
+    category: "Blocks",
+    description:
+      "Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown.",
+    isNew: true,
+  },
+  {
+    slug: "settings-page",
+    title: "Settings Page",
+    category: "Blocks",
+    description:
+      "Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone.",
+    isNew: true,
+  },
+  {
+    slug: "auth-screen",
+    title: "Auth Screen",
+    category: "Blocks",
+    description:
+      "Split sign-in and sign-up screen with validation, social providers, loading and error states, and a brand panel.",
+    isNew: true,
+  },
+  {
+    slug: "agent-workspace",
+    title: "Agent Workspace",
+    category: "Blocks",
+    description:
+      "AI agent chat workspace: conversation rail, thread with thinking, tool calls and streamed answers, prompt bar and a live task panel.",
+    isNew: true,
+  },
 ]
 
 export const ENTRY_BY_SLUG = Object.fromEntries(ENTRIES.map((e) => [e.slug, e]))
