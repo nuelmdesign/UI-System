@@ -83,6 +83,15 @@ import AnalyticsDashboardExample from "./analytics-dashboard"
 import SettingsPageExample from "./settings-page"
 import AuthScreenExample from "./auth-screen"
 import AgentWorkspaceExample from "./agent-workspace"
+import QuantityStepperExample from "./quantity-stepper"
+import ProgressExample from "./progress"
+import StatExample from "./stat"
+import EmptyStateExample from "./empty-state"
+import StepperExample from "./stepper"
+import ThemeToggleExample from "./theme-toggle"
+import SiteHeaderExample from "./site-header"
+import QrCodeExample from "./qr-code"
+import TicketPassExample from "./ticket-pass"
 
 /** Live example for each component page, keyed by slug. */
 export const EXAMPLES: Record<string, ComponentType> = {
@@ -169,4 +178,13 @@ export const EXAMPLES: Record<string, ComponentType> = {
   "settings-page": SettingsPageExample,
   "auth-screen": AuthScreenExample,
   "agent-workspace": AgentWorkspaceExample,
+  "quantity-stepper": QuantityStepperExample,
+  progress: ProgressExample,
+  stat: StatExample,
+  "empty-state": EmptyStateExample,
+  stepper: StepperExample,
+  "theme-toggle": ThemeToggleExample,
+  "site-header": SiteHeaderExample,
+  "qr-code": QrCodeExample,
+  "ticket-pass": TicketPassExample,
 }

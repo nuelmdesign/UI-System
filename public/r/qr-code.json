@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "qr-code",
+  "title": "Qr Code",
+  "description": "A real, scannable QR code drawn as an inline SVG, readable in light and dark themes.",
+  "dependencies": [
+    "uqr"
+  ],
+  "registryDependencies": [
+    "@opendraft/utils"
+  ],
+  "files": [
+    {
+      "path": "components/ui/qr-code.tsx",
+      "content": "import * as React from \"react\"\nimport { encode } from \"uqr\"\n\nimport { cn } from \"@/lib/utils\"\n\ntype QrCodeErrorCorrection = \"L\" | \"M\" | \"Q\" | \"H\"\n\ntype QrCodeProps = Omit<React.ComponentProps<\"svg\">, \"children\"> & {\n  /** The text or URL to encode. */\n  value: string\n  /** Rendered width and height in px. */\n  size?: number\n  /** Error correction level: L 7%, M 15%, Q 25%, H 30%. */\n  errorCorrection?: QrCodeErrorCorrection\n  /** Accessible name for the code. */\n  label?: string\n}\n\n/** Quiet zone, in modules. The QR spec asks for 4. */\nconst QUIET_ZONE = 4\n\nfunction QrCode({\n  value,\n  size = 160,\n  errorCorrection = \"M\",\n  label = \"QR code\",\n  className,\n  style,\n  ...props\n}: QrCodeProps) {\n  const { path, count } = React.useMemo(() => {\n    const { data } = encode(value, { ecc: errorCorrection, border: 0 })\n    let d = \"\"\n    data.forEach((row, y) => {\n      let x = 0\n      while (x < row.length) {\n        if (!row[x]) {\n          x++\n          continue\n        }\n        const start = x\n        while (x < row.length && row[x]) x++\n        d += `M${start + QUIET_ZONE} ${y + QUIET_ZONE}h${x - start}v1h${start - x}z`\n      }\n    })\n    return { path: d, count: data.length + QUIET_ZONE * 2 }\n  }, [value, errorCorrection])\n\n  // Scanners need dark modules on a light field in both themes, so the tile\n  // uses `ink` (which inverts) against `ink-foreground` in dark mode.\n  return (\n    <svg\n      data-slot=\"qr-code\"\n      role=\"img\"\n      aria-label={label}\n      viewBox={`0 0 ${count} ${count}`}\n      width={size}\n      height={size}\n      shapeRendering=\"crispEdges\"\n      className={cn(\n        \"block max-w-full shrink-0 rounded-sm bg-card fill-foreground dark:bg-ink dark:fill-ink-foreground\",\n        className\n      )}\n      style={style}\n      {...props}\n    >\n      <path d={path} />\n    </svg>\n  )\n}\n\nexport { QrCode }\nexport type { QrCodeProps, QrCodeErrorCorrection }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

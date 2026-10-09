@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "title": "Empty State",
+  "description": "Centered empty block with an optional icon, title, description and action slots, for tables, lists and cards.",
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "@opendraft/utils"
+  ],
+  "files": [
+    {
+      "path": "components/ui/empty-state.tsx",
+      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst emptyStateVariants = cva(\n  \"mx-auto flex w-full flex-col items-center justify-center text-center text-balance\",\n  {\n    variants: {\n      size: {\n        sm: \"gap-3 px-4 py-8\",\n        default: \"gap-4 px-6 py-12\",\n        lg: \"gap-5 px-6 py-20\",\n      },\n      bordered: {\n        true: \"rounded-lg border border-dashed\",\n        false: \"\",\n      },\n    },\n    defaultVariants: { size: \"default\", bordered: false },\n  }\n)\n\nconst iconBox = {\n  sm: \"size-9 [&>svg]:size-4\",\n  default: \"size-11 [&>svg]:size-5\",\n  lg: \"size-14 [&>svg]:size-6\",\n} as const\n\nconst titleSize = {\n  sm: \"text-lg\",\n  default: \"text-xl\",\n  lg: \"text-3xl\",\n} as const\n\ntype EmptyStateProps = Omit<React.ComponentProps<\"div\">, \"title\"> &\n  VariantProps<typeof emptyStateVariants> & {\n    icon?: React.ReactNode\n    title: React.ReactNode\n    description?: React.ReactNode\n    action?: React.ReactNode\n    secondaryAction?: React.ReactNode\n    /** Announce to assistive tech (role=\"status\"), e.g. for empty search results. */\n    live?: boolean\n  }\n\nfunction EmptyState({\n  icon,\n  title,\n  description,\n  action,\n  secondaryAction,\n  live = false,\n  size,\n  bordered,\n  className,\n  children,\n  ...props\n}: EmptyStateProps) {\n  const s = size ?? \"default\"\n\n  return (\n    <div\n      data-slot=\"empty-state\"\n      role={live ? \"status\" : undefined}\n      className={cn(emptyStateVariants({ size, bordered }), className)}\n      {...props}\n    >\n      {icon && (\n        <div\n          data-slot=\"empty-state-icon\"\n          aria-hidden\n          className={cn(\n            \"flex shrink-0 items-center justify-center rounded-md border bg-surface text-muted-foreground\",\n            iconBox[s]\n          )}\n        >\n          {icon}\n        </div>\n      )}\n      <div className=\"flex max-w-sm flex-col gap-1.5\">\n        <h3\n          data-slot=\"empty-state-title\"\n          className={cn(\"heading\", titleSize[s])}\n        >\n          {title}\n        </h3>\n        {description && (\n          <p\n            data-slot=\"empty-state-description\"\n            className=\"text-sm text-muted-foreground\"\n          >\n            {description}\n          </p>\n        )}\n      </div>\n      {children}\n      {(action || secondaryAction) && (\n        <div\n          data-slot=\"empty-state-actions\"\n          className=\"flex flex-wrap items-center justify-center gap-2\"\n        >\n          {action}\n          {secondaryAction}\n        </div>\n      )}\n    </div>\n  )\n}\n\nexport { EmptyState, emptyStateVariants }\nexport type { EmptyStateProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

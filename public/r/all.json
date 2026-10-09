@@ -105,7 +105,16 @@
     "@opendraft/analytics-dashboard",
     "@opendraft/settings-page",
     "@opendraft/auth-screen",
-    "@opendraft/agent-workspace"
+    "@opendraft/agent-workspace",
+    "@opendraft/quantity-stepper",
+    "@opendraft/progress",
+    "@opendraft/stat",
+    "@opendraft/empty-state",
+    "@opendraft/stepper",
+    "@opendraft/theme-toggle",
+    "@opendraft/site-header",
+    "@opendraft/qr-code",
+    "@opendraft/ticket-pass"
   ],
   "type": "registry:item"
 }

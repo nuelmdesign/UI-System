@@ -2359,6 +2359,178 @@
       ]
     },
     {
+      "name": "quantity-stepper",
+      "type": "registry:ui",
+      "title": "Quantity Stepper",
+      "description": "Minus, value and plus control with min, max and step, controlled or uncontrolled, with optional press-and-hold repeat.",
+      "dependencies": [
+        "lucide-react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/quantity-stepper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Horizontal progress bar with a label row and a tone that follows how full or empty it is, for quotas and stock.",
+      "dependencies": [
+        "motion",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/progress.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stat",
+      "type": "registry:ui",
+      "title": "Stat",
+      "description": "KPI tile with a label, a large value, a change chip and an optional toggle-button mode, plus a grouped grid.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge"
+      ],
+      "files": [
+        {
+          "path": "components/ui/stat.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "Empty State",
+      "description": "Centered empty block with an optional icon, title, description and action slots, for tables, lists and cards.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/empty-state.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Numbered step indicator for multi-step flows like checkout, horizontal or vertical, that never overflows on mobile.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/stepper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:ui",
+      "title": "Theme Toggle",
+      "description": "Icon menu that switches between system, light and dark by toggling the dark class, and remembers the choice.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "components/ui/theme-toggle.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "site-header",
+      "type": "registry:ui",
+      "title": "Site Header",
+      "description": "Sticky top bar with a brand slot, nav links, an actions slot and a mobile menu.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/site-header.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "qr-code",
+      "type": "registry:ui",
+      "title": "Qr Code",
+      "description": "A real, scannable QR code drawn as an inline SVG, readable in light and dark themes.",
+      "dependencies": [
+        "uqr"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/qr-code.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "ticket-pass",
+      "type": "registry:ui",
+      "title": "Ticket Pass",
+      "description": "Digital ticket card with a title band, details grid, tear line, QR stub and a status badge.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/qr-code",
+        "@opendraft/badge"
+      ],
+      "files": [
+        {
+          "path": "components/ui/ticket-pass.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -2465,7 +2637,16 @@
         "@opendraft/analytics-dashboard",
         "@opendraft/settings-page",
         "@opendraft/auth-screen",
-        "@opendraft/agent-workspace"
+        "@opendraft/agent-workspace",
+        "@opendraft/quantity-stepper",
+        "@opendraft/progress",
+        "@opendraft/stat",
+        "@opendraft/empty-state",
+        "@opendraft/stepper",
+        "@opendraft/theme-toggle",
+        "@opendraft/site-header",
+        "@opendraft/qr-code",
+        "@opendraft/ticket-pass"
       ]
     }
   ]

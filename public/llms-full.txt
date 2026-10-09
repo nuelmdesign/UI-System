@@ -8206,6 +8206,981 @@ Live docs: https://ui-system-virid.vercel.app/docs/sidebar-nav. Rules for buildi
 
 ---
 
+# Quantity Stepper
+
+Minus, value and plus control with min, max and step, controlled or uncontrolled, with optional press-and-hold repeat.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/quantity-stepper
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { QuantityStepper } from "@/components/ui/quantity-stepper"
+```
+
+## Dependencies
+
+- npm: `lucide-react`, `class-variance-authority`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`
+
+## Props and types
+
+```ts
+type QuantityStepperProps = Omit<
+  React.ComponentProps<"div">,
+  "defaultValue" | "onChange"
+> & {
+  /** Controlled value. */
+  value?: number
+  /** Initial value when uncontrolled. */
+  defaultValue?: number
+  onValueChange?: (value: number) => void
+  min?: number
+  max?: number
+  step?: number
+  size?: "sm" | "default"
+  disabled?: boolean
+  /** Hold a button to keep stepping. */
+  repeat?: boolean
+  /** Accessible name of the group. */
+  "aria-label"?: string
+  /** Spoken names of the two buttons. */
+  decrementLabel?: string
+  incrementLabel?: string
+}
+```
+
+## Variants
+
+- `size`: `sm`, `default` (default)
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { QuantityStepper } from "@/components/ui/quantity-stepper"
+
+export default function QuantityStepperDemo() {
+  const [qty, setQty] = React.useState(2)
+
+  return (
+    <div className="flex flex-wrap items-end gap-x-8 gap-y-5">
+      <div className="flex flex-col gap-2">
+        <span className="eyebrow">Controlled · 1–10</span>
+        <QuantityStepper
+          aria-label="Quantity"
+          value={qty}
+          onValueChange={setQty}
+          min={1}
+          max={10}
+          repeat
+        />
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
+          value = {qty}
+        </span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="eyebrow">Small · step 5</span>
+        <QuantityStepper
+          aria-label="Seats"
+          size="sm"
+          defaultValue={10}
+          min={0}
+          max={50}
+          step={5}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="eyebrow">Disabled</span>
+        <QuantityStepper
+          aria-label="Locked quantity"
+          defaultValue={3}
+          disabled
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/quantity-stepper. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Progress
+
+Horizontal progress bar with a label row and a tone that follows how full or empty it is, for quotas and stock.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/progress
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Progress } from "@/components/ui/progress"
+```
+
+## Dependencies
+
+- npm: `motion`, `class-variance-authority`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+type ProgressTone = "auto" | "brand" | "success" | "warning" | "destructive"
+
+type ProgressProps = Omit<React.ComponentProps<"div">, "children"> & {
+  /** Current value, clamped to 0..max. */
+  value: number
+  /** Value that represents a full bar. Defaults to 100. */
+  max?: number
+  /** Accessible name. Falls back to `label` when that is a string. */
+  "aria-label"?: string
+  /** Left text of the label row. */
+  label?: React.ReactNode
+  /**
+   * Right text of the label row. Defaults to "n of max" when `label` is set.
+   * Pass `false` to hide it.
+   */
+  valueLabel?: React.ReactNode | false
+  size?: "sm" | "default" | "lg"
+  /**
+   * Fill color. `auto` picks by how much headroom is left: brand normally,
+   * warning once the remaining fraction drops below `lowThreshold`, destructive
+   * below `criticalThreshold`.
+   */
+  tone?: ProgressTone
+  /**
+   * For `tone="auto"`. By default the bar measures consumption (a full bar is
+   * bad, like quota used). Set `invert` when the value is what remains
+   * (stock, availability, battery) so a low value is bad.
+   */
+  invert?: boolean
+  /** Remaining fraction (0..1) below which auto tone turns warning. */
+  lowThreshold?: number
+  /** Remaining fraction (0..1) at or below which auto tone turns destructive. */
+  criticalThreshold?: number
+}
+```
+
+## Variants
+
+- `size`: `sm`, `default` (default), `lg`
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
+
+export default function ProgressDemo() {
+  const [stock, setStock] = React.useState(18)
+
+  return (
+    <div className="flex max-w-xl flex-col gap-6">
+      <Progress aria-label="Upload" value={64} />
+      <Progress
+        label="Storage used"
+        value={6.2}
+        max={10}
+        valueLabel="6.2 / 10 GB"
+      />
+      <div className="flex flex-col gap-3">
+        <Progress
+          label="Remaining"
+          value={stock}
+          max={24}
+          tone="auto"
+          invert
+          lowThreshold={0.25}
+        />
+        <div className="flex gap-2">
+          <Button
+            size="xs"
+            variant="outline"
+            onClick={() => setStock((s) => Math.max(0, s - 4))}
+          >
+            Use 4
+          </Button>
+          <Button size="xs" variant="outline" onClick={() => setStock(24)}>
+            Reset
+          </Button>
+        </div>
+      </div>
+      <Progress
+        label="Quota"
+        value={92}
+        tone="auto"
+        size="lg"
+        valueLabel="92%"
+      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Progress size="sm" tone="success" label="Done" value={100} />
+        <Progress size="sm" tone="warning" label="Slow" value={40} />
+        <Progress size="sm" tone="destructive" label="Failed" value={15} />
+        <Progress size="sm" label="Brand" value={55} />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/progress. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Stat
+
+KPI tile with a label, a large value, a change chip and an optional toggle-button mode, plus a grouped grid.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/stat
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Stat, StatGroup } from "@/components/ui/stat"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/badge`
+
+## Props and types
+
+```ts
+type StatDirection = "up" | "down" | "flat"
+
+type StatDelta = {
+  value: string
+  direction: StatDirection
+  /** Which direction is good news. Defaults to "up". */
+  goodWhen?: "up" | "down"
+}
+
+type StatProps = Omit<React.ComponentProps<"div">, "onClick" | "children"> & {
+  label: React.ReactNode
+  value: React.ReactNode
+  hint?: React.ReactNode
+  delta?: StatDelta
+  icon?: React.ReactNode
+  /** Makes the tile an accessible toggle button. */
+  onClick?: () => void
+  selected?: boolean
+  /** Drop the border and background, e.g. inside a StatGroup. */
+  bare?: boolean
+}
+
+function StatGroup(props: React.ComponentProps<"div"> & { columns?: 2 | 3 | 4 })
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { CreditCard, TrendingUp, Users } from "lucide-react"
+
+import { Stat, StatGroup } from "@/components/ui/stat"
+
+const items = [
+  {
+    id: "revenue",
+    label: "Revenue",
+    value: "$48,210",
+    hint: "vs. previous 30 days",
+    delta: { value: "12.4%", direction: "up" as const },
+    icon: <CreditCard />,
+  },
+  {
+    id: "users",
+    label: "Active users",
+    value: "3,982",
+    hint: "vs. previous 30 days",
+    delta: { value: "0.0%", direction: "flat" as const },
+    icon: <Users />,
+  },
+  {
+    id: "churn",
+    label: "Churn",
+    value: "2.1%",
+    hint: "Lower is better",
+    delta: {
+      value: "0.6%",
+      direction: "down" as const,
+      goodWhen: "down" as const,
+    },
+    icon: <TrendingUp />,
+  },
+]
+
+export default function StatDemo() {
+  const [selected, setSelected] = React.useState("revenue")
+
+  return (
+    <div className="flex w-full max-w-[640px] flex-col gap-6">
+      <div className="grid gap-3 min-[480px]:grid-cols-3">
+        {items.map((s) => (
+          <Stat
+            key={s.id}
+            label={s.label}
+            value={s.value}
+            delta={s.delta}
+            icon={s.icon}
+            selected={selected === s.id}
+            onClick={() => setSelected(s.id)}
+          />
+        ))}
+      </div>
+      <StatGroup columns={3}>
+        {items.map((s) => (
+          <Stat
+            key={s.id}
+            label={s.label}
+            value={s.value}
+            hint={s.hint}
+            delta={s.delta}
+          />
+        ))}
+      </StatGroup>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/stat. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Empty State
+
+Centered empty block with an optional icon, title, description and action slots, for tables, lists and cards.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/empty-state
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { EmptyState } from "@/components/ui/empty-state"
+```
+
+## Dependencies
+
+- npm: `class-variance-authority`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type EmptyStateProps = Omit<React.ComponentProps<"div">, "title"> &
+  VariantProps<typeof emptyStateVariants> & {
+    icon?: React.ReactNode
+    title: React.ReactNode
+    description?: React.ReactNode
+    action?: React.ReactNode
+    secondaryAction?: React.ReactNode
+    /** Announce to assistive tech (role="status"), e.g. for empty search results. */
+    live?: boolean
+  }
+```
+
+## Variants
+
+- `size`: `sm`, `default` (default), `lg`
+- `bordered`: `true`, `false` (default)
+
+## Example
+
+```tsx
+import { Inbox, Plus, Search } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { EmptyState } from "@/components/ui/empty-state"
+
+export default function EmptyStateDemo() {
+  return (
+    <div className="flex w-full max-w-[640px] flex-col gap-6">
+      <EmptyState
+        bordered
+        icon={<Inbox />}
+        title="No items yet"
+        description="Items you create will show up here. Start by adding your first one."
+        action={
+          <Button size="sm">
+            <Plus /> New item
+          </Button>
+        }
+        secondaryAction={
+          <Button size="sm" variant="outline">
+            Import
+          </Button>
+        }
+      />
+      <div className="rounded-lg border">
+        <EmptyState
+          live
+          size="sm"
+          icon={<Search />}
+          title="No results"
+          description="Try a different search term or clear your filters."
+          action={
+            <Button size="sm" variant="outline">
+              Clear filters
+            </Button>
+          }
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/empty-state. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Stepper
+
+Numbered step indicator for multi-step flows like checkout, horizontal or vertical, that never overflows on mobile.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/stepper
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Stepper } from "@/components/ui/stepper"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type StepperStep = {
+  id: string
+  label: string
+  description?: string
+}
+
+type StepperProps = Omit<React.ComponentProps<"nav">, "children"> & {
+  steps: StepperStep[]
+  /** Index or id of the current step. */
+  current: number | string
+  /** Called when a completed step is clicked. Only completed steps are interactive. */
+  onStepClick?: (step: StepperStep, index: number) => void
+  orientation?: "horizontal" | "vertical"
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Button } from "@/components/ui/button"
+import { Stepper } from "@/components/ui/stepper"
+
+const steps = [
+  { id: "cart", label: "Cart", description: "Review items" },
+  { id: "shipping", label: "Shipping", description: "Address and method" },
+  { id: "payment", label: "Payment", description: "Card details" },
+  { id: "confirm", label: "Confirm", description: "Place order" },
+]
+
+export default function StepperDemo() {
+  const [current, setCurrent] = React.useState(1)
+
+  return (
+    <div className="flex w-full max-w-[640px] flex-col gap-8">
+      <Stepper
+        steps={steps}
+        current={current}
+        onStepClick={(_, i) => setCurrent(i)}
+      />
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={current === 0}
+          onClick={() => setCurrent((c) => Math.max(0, c - 1))}
+        >
+          Back
+        </Button>
+        <Button
+          size="sm"
+          disabled={current === steps.length - 1}
+          onClick={() => setCurrent((c) => Math.min(steps.length - 1, c + 1))}
+        >
+          Continue
+        </Button>
+      </div>
+      <div className="border-t pt-6">
+        <p className="mb-4 eyebrow text-muted-foreground">Vertical</p>
+        <Stepper steps={steps} current="payment" orientation="vertical" />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/stepper. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Theme Toggle
+
+Icon menu that switches between system, light and dark by toggling the dark class, and remembers the choice.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/theme-toggle
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/dropdown-menu`
+
+## Props and types
+
+```ts
+type ThemePreference = "system" | "light" | "dark"
+
+type ThemeToggleProps = Omit<
+  React.ComponentProps<typeof Button>,
+  "children" | "onClick"
+>
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { ThemeToggle, useThemePreference } from "@/components/ui/theme-toggle"
+
+export default function ThemeToggleDemo() {
+  const [preference] = useThemePreference()
+
+  return (
+    <div className="flex w-full max-w-[640px] items-center justify-between gap-4 border p-4">
+      <div className="min-w-0">
+        <p className="eyebrow text-muted-foreground">Appearance</p>
+        <p className="mt-1 text-sm">
+          Preference: <span className="font-mono">{preference}</span>
+        </p>
+      </div>
+      <ThemeToggle />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/theme-toggle. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Site Header
+
+Sticky top bar with a brand slot, nav links, an actions slot and a mobile menu.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/site-header
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { SiteHeader } from "@/components/ui/site-header"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`
+
+## Props and types
+
+```ts
+type SiteHeaderLink = {
+  label: string
+  href: string
+  active?: boolean
+}
+
+type RenderLinkProps = {
+  href: string
+  className?: string
+  children: React.ReactNode
+  onClick?: () => void
+  "aria-current"?: "page"
+}
+
+type SiteHeaderProps = Omit<React.ComponentProps<"header">, "children"> & {
+  /** Logo / wordmark, usually wrapped in a link. */
+  brand: React.ReactNode
+  nav?: SiteHeaderLink[]
+  /** Inject a router link (e.g. Next's `Link`). Defaults to a plain `<a>`. */
+  renderLink?: (props: RenderLinkProps) => React.ReactNode
+  /** Right-hand slot: theme toggle, buttons, avatar. */
+  actions?: React.ReactNode
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Button } from "@/components/ui/button"
+import { SiteHeader } from "@/components/ui/site-header"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+
+const links = ["Product", "Pricing", "Docs", "Changelog"]
+
+export default function SiteHeaderDemo() {
+  const [active, setActive] = React.useState("Product")
+
+  return (
+    <div className="w-full max-w-[640px] overflow-hidden border">
+      <SiteHeader
+        className="static"
+        brand={
+          <a href="#" className="font-display text-lg">
+            Acme
+          </a>
+        }
+        nav={links.map((label) => ({
+          label,
+          href: `#${label.toLowerCase()}`,
+          active: label === active,
+        }))}
+        renderLink={({ children, onClick, ...props }) => (
+          <a
+            {...props}
+            onClick={(e) => {
+              e.preventDefault()
+              setActive(String(children))
+              onClick?.()
+            }}
+          >
+            {children}
+          </a>
+        )}
+        actions={
+          <>
+            <ThemeToggle />
+            <Button size="sm" className="hidden sm:inline-flex">
+              Sign in
+            </Button>
+          </>
+        }
+      />
+      <div className="h-32 bg-dots" />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/site-header. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# QR Code
+
+A real, scannable QR code drawn as an inline SVG, readable in light and dark themes.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/qr-code
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { QrCode } from "@/components/ui/qr-code"
+```
+
+## Dependencies
+
+- npm: `uqr`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type QrCodeErrorCorrection = "L" | "M" | "Q" | "H"
+
+type QrCodeProps = Omit<React.ComponentProps<"svg">, "children"> & {
+  /** The text or URL to encode. */
+  value: string
+  /** Rendered width and height in px. */
+  size?: number
+  /** Error correction level: L 7%, M 15%, Q 25%, H 30%. */
+  errorCorrection?: QrCodeErrorCorrection
+  /** Accessible name for the code. */
+  label?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Input } from "@/components/ui/input"
+import { QrCode, type QrCodeErrorCorrection } from "@/components/ui/qr-code"
+
+const LEVELS: QrCodeErrorCorrection[] = ["L", "M", "Q", "H"]
+
+export default function QrCodeDemo() {
+  const [value, setValue] = React.useState("https://example.com/invite/4F7K")
+  const [level, setLevel] = React.useState<QrCodeErrorCorrection>("M")
+
+  return (
+    <div className="flex w-full max-w-xl flex-col items-center gap-6 sm:flex-row sm:items-start">
+      <QrCode
+        value={value || " "}
+        errorCorrection={level}
+        size={176}
+        className="border"
+      />
+      <div className="flex w-full min-w-0 flex-1 flex-col gap-4">
+        <label className="flex flex-col gap-1.5">
+          <span className="eyebrow text-muted-foreground">Value</span>
+          <Input value={value} onChange={(e) => setValue(e.target.value)} />
+        </label>
+        <div
+          role="radiogroup"
+          aria-label="Error correction"
+          className="flex flex-col gap-1.5"
+        >
+          <span className="eyebrow text-muted-foreground">
+            Error correction
+          </span>
+          <div className="flex gap-1">
+            {LEVELS.map((l) => (
+              <button
+                key={l}
+                type="button"
+                role="radio"
+                aria-checked={level === l}
+                onClick={() => setLevel(l)}
+                className="h-8 w-10 rounded-md border font-mono text-xs transition-colors outline-none hover:bg-muted focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-checked:border-transparent aria-checked:bg-ink aria-checked:text-ink-foreground"
+              >
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/qr-code. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Ticket Pass
+
+Digital ticket card with a title band, details grid, tear line, QR stub and a status badge.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/ticket-pass
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { TicketPass } from "@/components/ui/ticket-pass"
+```
+
+## Dependencies
+
+- npm: `class-variance-authority`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/qr-code`, `@opendraft/badge`
+
+## Props and types
+
+```ts
+type TicketPassStatus = "valid" | "used" | "expired" | "void"
+
+type TicketPassField = {
+  label: string
+  value: React.ReactNode
+}
+
+type TicketPassProps = Omit<React.ComponentProps<"div">, "title"> & {
+  /** Event or trip title. */
+  title: React.ReactNode
+  /** Small label above the title, e.g. "Admit one". */
+  eyebrow?: React.ReactNode
+  /** Label/value pairs shown in the meta grid. */
+  fields: TicketPassField[]
+  /** The string encoded in the QR code and shown under it. */
+  code: string
+  status?: TicketPassStatus
+  /** Render the header band dark in either theme. */
+  dark?: boolean
+  /** Buttons or links rendered below the stub. */
+  actions?: React.ReactNode
+}
+```
+
+## Variants
+
+- `dark`: `true`, `false` (default)
+
+## Example
+
+```tsx
+import { Button } from "@/components/ui/button"
+import { TicketPass } from "@/components/ui/ticket-pass"
+
+const fields = [
+  { label: "Date", value: <span className="font-mono">12 Nov 2026</span> },
+  { label: "Doors", value: <span className="font-mono">19:00</span> },
+  { label: "Venue", value: "Harbour Hall" },
+  { label: "Section", value: "Floor A" },
+  { label: "Seat", value: <span className="font-mono">14 / 22</span> },
+  { label: "Tier", value: "General" },
+]
+
+export default function TicketPassDemo() {
+  return (
+    <div className="flex w-full max-w-2xl flex-col gap-6">
+      <TicketPass
+        eyebrow="Admit one"
+        title="Autumn Sessions: Live"
+        fields={fields}
+        code="TKT-8F2K-41Q9"
+        actions={
+          <>
+            <Button size="sm">Add to wallet</Button>
+            <Button size="sm" variant="outline">
+              Share
+            </Button>
+          </>
+        }
+      />
+      <TicketPass
+        dark
+        eyebrow="Boarding pass"
+        title="Lisbon to Berlin"
+        fields={fields.slice(0, 4)}
+        code="BRD-20X7-93LM"
+        status="used"
+      />
+      <div className="grid gap-6 sm:grid-cols-2">
+        <TicketPass
+          title="Workshop day"
+          fields={fields.slice(0, 2)}
+          code="WSD-1102"
+          status="expired"
+        />
+        <TicketPass
+          title="Workshop day"
+          fields={fields.slice(0, 2)}
+          code="WSD-1103"
+          status="void"
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/ticket-pass. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
 # Action Swap
 
 Buttons whose label and icon roll, blur or cascade between states.
