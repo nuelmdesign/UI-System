@@ -44,8 +44,17 @@ export type AuthScreenProps = {
   providers?: AuthProvider[]
   brand?: AuthBrand
   defaultMode?: AuthMode
+  /** Replaces the default monogram mark. */
   logo?: React.ReactNode
+  /** Show `brand.name` next to the logo. Set false when `logo` already contains the name. Default true. */
+  showBrandName?: boolean
+  /** Text before the provider label on each button. Default "Continue with". */
+  providerPrefix?: string
+  /** Full control of the provider button text (overrides `providerPrefix`), e.g. to shorten long labels. */
+  providerLabel?: (provider: AuthProvider) => string
   className?: string
+  /** Extra classes for inner parts. `providers` targets the provider button grid. */
+  classNames?: { providers?: string }
 }
 
 function GithubIcon() {
@@ -70,11 +79,11 @@ export const SAMPLE_AUTH_PROVIDERS: AuthProvider[] = [
 ]
 
 export const SAMPLE_AUTH_BRAND: AuthBrand = {
-  name: "Northwind",
+  name: "Your product",
   quote:
-    "We moved our whole planning workflow over in an afternoon. Everything finally lives in one calm, fast place.",
-  author: "Maya Okafor",
-  role: "Head of Operations, Lumen Labs",
+    "Setting up took an afternoon. Everything finally lives in one calm, fast place.",
+  author: "Alex Morgan",
+  role: "Head of Operations",
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -120,7 +129,11 @@ function AuthScreen({
   brand = SAMPLE_AUTH_BRAND,
   defaultMode = "sign-in",
   logo,
+  showBrandName = true,
+  providerPrefix = "Continue with",
+  providerLabel,
   className,
+  classNames,
 }: AuthScreenProps) {
   const uid = React.useId()
   const [mode, setMode] = React.useState<AuthMode>(defaultMode)
@@ -202,7 +215,7 @@ function AuthScreen({
                 {brand.name.charAt(0)}
               </span>
             )}
-            <span>{brand.name}</span>
+            {showBrandName && <span>{brand.name}</span>}
           </div>
 
           <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 py-8">
@@ -229,7 +242,8 @@ function AuthScreen({
                 <div
                   className={cn(
                     "grid gap-2",
-                    providers.length > 1 && "@md/auth:grid-cols-2"
+                    providers.length > 1 && "@md/auth:grid-cols-2",
+                    classNames?.providers
                   )}
                 >
                   {providers.map((p) => (
@@ -241,7 +255,11 @@ function AuthScreen({
                       disabled={loading}
                     >
                       {p.icon}
-                      <span className="truncate">Continue with {p.label}</span>
+                      <span className="truncate">
+                        {providerLabel
+                          ? providerLabel(p)
+                          : `${providerPrefix} ${p.label}`.trim()}
+                      </span>
                     </Button>
                   ))}
                 </div>

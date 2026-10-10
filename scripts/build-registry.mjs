@@ -4,6 +4,8 @@
 
 import { readFileSync, writeFileSync } from "node:fs"
 
+import { loadUseCases } from "./use-cases.mjs"
+
 const css = readFileSync(
   new URL("../app/globals.css", import.meta.url),
   "utf8"
@@ -965,6 +967,36 @@ const items = [
     description:
       "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
   }),
+  ui("timeline", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/skeleton"],
+    description:
+      "Vertical event timeline with status markers that never rely on color alone, mono timestamps, a side time column on wide containers, expandable detail, collapsible long lists, and loading and empty states.",
+  }),
+  ui("alert", {
+    deps: ["class-variance-authority", "lucide-react"],
+    description:
+      "Callout with a per-variant icon, optional dismiss, an actions slot and a full-bleed banner mode for system, weather and policy notices.",
+  }),
+  ui("status-indicator", {
+    description:
+      "Shape plus word status (operational, degraded, down, maintenance) and an uptime bar of segments with an accessible summary.",
+  }),
+  ui("slider", {
+    deps: ["radix-ui"],
+    description:
+      "Single or range slider on Radix with a label row, formatted value and marks.",
+  }),
+  ui("dropzone", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/progress"],
+    description:
+      "Drag-and-drop or click-to-browse file area with size, type and count validation, camera capture and a file list with progress. No upload logic.",
+  }),
+  ui("otp-input", {
+    description:
+      "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.
@@ -987,12 +1019,7 @@ items.push({
 // One-command kits per domain, from content/ai/use-cases.json. They install
 // the theme plus the components that playbook recommends.
 {
-  const useCases = JSON.parse(
-    readFileSync(
-      new URL("../content/ai/use-cases.json", import.meta.url),
-      "utf8"
-    )
-  )
+  const useCases = loadUseCases(new URL("../", import.meta.url))
   const names = new Set(items.map((i) => i.name))
   for (const d of useCases.domains) {
     const missing = d.kit.filter((n) => !names.has(n))

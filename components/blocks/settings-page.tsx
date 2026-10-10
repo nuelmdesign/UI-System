@@ -110,6 +110,17 @@ export type SettingsPageProps = {
   members?: TeamMember[]
   billing?: BillingValues
   workspaceName?: string
+  /** Which sections render, in order. Default: all four. */
+  sections?: SettingsSection[]
+  /** Show the danger zone (profile) and the delete dialog. Default true. */
+  showDangerZone?: boolean
+  /** Danger zone copy. `description` replaces the default sentence; `action` is the button label. */
+  dangerLabels?: {
+    title?: string
+    description?: string
+    action?: string
+    dialogTitle?: string
+  }
   timezones?: { value: string; label: string }[]
   onSave?: (values: SettingsSaveValues) => void | Promise<void>
   onInvite?: (invite: { email: string; role: TeamRole }) => void
@@ -119,8 +130,8 @@ export type SettingsPageProps = {
 }
 
 export const SAMPLE_PROFILE: ProfileValues = {
-  name: "Maya Okafor",
-  email: "maya@northwind.io",
+  name: "Alex Morgan",
+  email: "alex@example.com",
   bio: "Product designer working on internal tools and data products.",
   timezone: "Europe/London",
 }
@@ -196,29 +207,29 @@ export const SAMPLE_NOTIFICATIONS: NotificationGroup[] = [
 export const SAMPLE_MEMBERS: TeamMember[] = [
   {
     id: "m1",
-    name: "Maya Okafor",
-    email: "maya@northwind.io",
+    name: "Alex Morgan",
+    email: "alex@example.com",
     role: "owner",
     status: "active",
   },
   {
     id: "m2",
     name: "Daniel Reyes",
-    email: "daniel@northwind.io",
+    email: "daniel@example.com",
     role: "admin",
     status: "active",
   },
   {
     id: "m3",
     name: "Priya Nair",
-    email: "priya@northwind.io",
+    email: "priya@example.com",
     role: "member",
     status: "active",
   },
   {
     id: "m4",
     name: "Tomas Berg",
-    email: "tomas@northwind.io",
+    email: "tomas@example.com",
     role: "viewer",
     status: "pending",
   },
@@ -358,7 +369,10 @@ function SettingsPage({
   notifications = SAMPLE_NOTIFICATIONS,
   members = SAMPLE_MEMBERS,
   billing = SAMPLE_BILLING,
-  workspaceName = "Northwind",
+  workspaceName = "Workspace",
+  sections,
+  showDangerZone = true,
+  dangerLabels,
   timezones = SAMPLE_TIMEZONES,
   onSave,
   onInvite,
@@ -367,7 +381,20 @@ function SettingsPage({
   className,
 }: SettingsPageProps) {
   const uid = React.useId()
-  const [section, setSection] = React.useState<SettingsSection>("profile")
+  const visibleSections = React.useMemo(() => {
+    const picked = sections
+      ? sections
+          .map((id) => SECTIONS.find((s) => s.id === id))
+          .filter((s): s is (typeof SECTIONS)[number] => !!s)
+      : SECTIONS
+    return picked.length > 0 ? picked : SECTIONS
+  }, [sections])
+  const [chosenSection, setSection] = React.useState<SettingsSection>(
+    () => visibleSections[0].id
+  )
+  const section = visibleSections.some((s) => s.id === chosenSection)
+    ? chosenSection
+    : visibleSections[0].id
 
   const [saved, setSaved] = React.useState<SettingsSaveValues>(() => ({
     profile,
@@ -499,7 +526,7 @@ function SettingsPage({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {SECTIONS.map((s) => (
+              {visibleSections.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.label}
                 </SelectItem>
@@ -509,7 +536,7 @@ function SettingsPage({
         </div>
         <p className="mb-3 hidden px-2 eyebrow md:block">{workspaceName}</p>
         <ul className="hidden flex-col gap-0.5 md:flex">
-          {SECTIONS.map((s) => {
+          {visibleSections.map((s) => {
             const active = s.id === section
             return (
               <li key={s.id}>
@@ -672,33 +699,35 @@ function SettingsPage({
                   </Field>
 
                   {/* Danger zone */}
-                  <section
-                    aria-labelledby={`${uid}-danger`}
-                    className="mt-4 border border-destructive/30"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-3 p-4">
-                      <div className="min-w-0">
-                        <h3
-                          id={`${uid}-danger`}
-                          className="eyebrow text-destructive"
+                  {showDangerZone && (
+                    <section
+                      aria-labelledby={`${uid}-danger`}
+                      className="mt-4 border border-destructive/30"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+                        <div className="min-w-0">
+                          <h3
+                            id={`${uid}-danger`}
+                            className="eyebrow text-destructive"
+                          >
+                            {dangerLabels?.title ?? "Danger zone"}
+                          </h3>
+                          <p className="mt-1.5 text-sm text-muted-foreground">
+                            {dangerLabels?.description ??
+                              `Permanently delete ${workspaceName} and all of its data. This cannot be undone.`}
+                          </p>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => setDeleteOpen(true)}
                         >
-                          Danger zone
-                        </h3>
-                        <p className="mt-1.5 text-sm text-muted-foreground">
-                          Permanently delete {workspaceName} and all of its
-                          data. This cannot be undone.
-                        </p>
+                          <Trash2 />
+                          {dangerLabels?.action ?? "Delete workspace"}
+                        </Button>
                       </div>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => setDeleteOpen(true)}
-                      >
-                        <Trash2 />
-                        Delete workspace
-                      </Button>
-                    </div>
-                  </section>
+                    </section>
+                  )}
                 </>
               )}
 
@@ -1059,51 +1088,57 @@ function SettingsPage({
       </Dialog>
 
       {/* Delete dialog */}
-      <Dialog
-        open={deleteOpen}
-        onOpenChange={(o) => {
-          setDeleteOpen(o)
-          if (!o) setConfirmText("")
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete {workspaceName}?</DialogTitle>
-            <DialogDescription>
-              This permanently removes the workspace, its projects and every
-              member&apos;s access. Type{" "}
-              <span className="font-mono text-foreground">{workspaceName}</span>{" "}
-              to confirm.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-1.5">
-            <Label htmlFor={`${uid}-confirm`}>Workspace name</Label>
-            <Input
-              id={`${uid}-confirm`}
-              value={confirmText}
-              onChange={(e) => setConfirmText(e.target.value)}
-              autoComplete="off"
-              placeholder={workspaceName}
-            />
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button
-              variant="destructive"
-              disabled={!canDelete}
-              onClick={() => {
-                onDelete?.()
-                setDeleteOpen(false)
-                setConfirmText("")
-              }}
-            >
-              Delete workspace
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {showDangerZone && (
+        <Dialog
+          open={deleteOpen}
+          onOpenChange={(o) => {
+            setDeleteOpen(o)
+            if (!o) setConfirmText("")
+          }}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {dangerLabels?.dialogTitle ?? `Delete ${workspaceName}?`}
+              </DialogTitle>
+              <DialogDescription>
+                This permanently removes the workspace, its projects and every
+                member&apos;s access. Type{" "}
+                <span className="font-mono text-foreground">
+                  {workspaceName}
+                </span>{" "}
+                to confirm.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-1.5">
+              <Label htmlFor={`${uid}-confirm`}>Workspace name</Label>
+              <Input
+                id={`${uid}-confirm`}
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                autoComplete="off"
+                placeholder={workspaceName}
+              />
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button
+                variant="destructive"
+                disabled={!canDelete}
+                onClick={() => {
+                  onDelete?.()
+                  setDeleteOpen(false)
+                  setConfirmText("")
+                }}
+              >
+                {dangerLabels?.action ?? "Delete workspace"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   )
 }

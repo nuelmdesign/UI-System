@@ -794,6 +794,54 @@ export const ENTRIES: DocEntry[] = [
       "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
     isNew: true,
   },
+  {
+    slug: "timeline",
+    title: "Timeline",
+    category: "Components",
+    description:
+      "Vertical event timeline with status markers that never rely on color alone, mono timestamps, a side time column on wide containers, expandable detail, collapsible long lists, and loading and empty states.",
+    isNew: true,
+  },
+  {
+    slug: "alert",
+    title: "Alert",
+    category: "Components",
+    description:
+      "Callout with a per-variant icon, optional dismiss, an actions slot and a full-bleed banner mode for system, weather and policy notices.",
+    isNew: true,
+  },
+  {
+    slug: "status-indicator",
+    title: "Status Indicator",
+    category: "Components",
+    description:
+      "Shape plus word status (operational, degraded, down, maintenance) and an uptime bar of segments with an accessible summary.",
+    isNew: true,
+  },
+  {
+    slug: "slider",
+    title: "Slider",
+    category: "Components",
+    description:
+      "Single or range slider on Radix with a label row, formatted value and marks.",
+    isNew: true,
+  },
+  {
+    slug: "dropzone",
+    title: "Dropzone",
+    category: "Components",
+    description:
+      "Drag-and-drop or click-to-browse file area with size, type and count validation, camera capture and a file list with progress. No upload logic.",
+    isNew: true,
+  },
+  {
+    slug: "otp-input",
+    title: "OTP Input",
+    category: "Components",
+    description:
+      "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
+    isNew: true,
+  },
 ]
 
 export const ENTRY_BY_SLUG = Object.fromEntries(ENTRIES.map((e) => [e.slug, e]))

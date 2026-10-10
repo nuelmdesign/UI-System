@@ -8,6 +8,8 @@
 
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 
+import { loadUseCases } from "./use-cases.mjs"
+
 /** Components that render ice-cream-shop demo content until given real data. */
 const SAMPLE_CONTENT = new Set([
   "agent-screen",
@@ -465,7 +467,7 @@ function componentPage(entry) {
 
 /* -------------------------------- Use cases -------------------------------- */
 
-const useCases = JSON.parse(read("content/ai/use-cases.json"))
+const useCases = loadUseCases(root)
 const slugTitle = Object.fromEntries(ENTRIES.map((e) => [e.slug, e.title]))
 const FIT = { ready: "Ready", adapt: "Adapt", gap: "Gap" }
 

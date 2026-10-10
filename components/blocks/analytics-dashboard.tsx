@@ -68,6 +68,18 @@ export type AnalyticsLabels = {
   channelsAria: string
   /** Heading and accessible name of the table. */
   table: string
+  /** aria-label of the KPI section. */
+  keyMetrics: string
+  /** aria-label of the chart section. */
+  trend: string
+  /** aria-label of the range tabs. */
+  dateRange: string
+  /** aria-label of the chart metric tabs. */
+  chartMetric: string
+  /** Chart heading for the selected metric label. */
+  overTime: (metricLabel: string) => string
+  /** Range tab text: `short` below the container breakpoint, `long` above it. */
+  ranges: Record<AnalyticsRange, { short: string; long: string }>
   /** Table column headings. The row fields stay name / visitors / conversion / duration. */
   columns: {
     name: string
@@ -85,6 +97,16 @@ const RANGE_LONG: Record<AnalyticsRange, string> = {
 
 export const DEFAULT_ANALYTICS_LABELS: AnalyticsLabels = {
   eyebrow: (range) => RANGE_LONG[range],
+  keyMetrics: "Key metrics",
+  trend: "Trend",
+  dateRange: "Date range",
+  chartMetric: "Chart metric",
+  overTime: (metricLabel) => `${metricLabel} over time`,
+  ranges: {
+    "7d": { short: "7d", long: "7 days" },
+    "30d": { short: "30d", long: "30 days" },
+    "90d": { short: "90d", long: "90 days" },
+  },
   export: "Export",
   channels: "Channels",
   channelsAria: "Traffic by channel",
@@ -106,9 +128,20 @@ export type AnalyticsDashboardProps = {
   onExport?: (range: AnalyticsRange) => void
   title?: string
   /** Override any fixed text, for example to relabel the table for events. */
-  labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
+  labels?: Partial<Omit<AnalyticsLabels, "columns" | "ranges">> & {
     columns?: Partial<AnalyticsLabels["columns"]>
+    ranges?: Partial<
+      Record<AnalyticsRange, Partial<{ short: string; long: string }>>
+    >
   }
+  /** Fill the parent's height and scroll inside (default). Set false to size to content inside a scrolling page. */
+  fill?: boolean
+  /** Format the visitors column. Default: en-US grouped integer. */
+  formatVisitors?: (value: number, row: AnalyticsRow) => string
+  /** Format the conversion column. `value` is the raw 0-1 field. Default: percent with one decimal. */
+  formatConversion?: (value: number, row: AnalyticsRow) => string
+  /** Format the duration column (seconds). Default: m:ss. */
+  formatDuration?: (seconds: number, row: AnalyticsRow) => string
   /** Replaces the "Avg. time" column with a custom one (money, orders, ...). Reads `row.value` unless `format` is given. */
   valueColumn?: { label: string; format?: (row: AnalyticsRow) => string }
   className?: string
@@ -266,11 +299,7 @@ export const SAMPLE_ANALYTICS: Record<AnalyticsRange, AnalyticsRangeData> = {
   "90d": makeRange(90, 1.1, [31.5, 22.4, 3.9, 27.1], "90d"),
 }
 
-const RANGES: { value: AnalyticsRange; label: string }[] = [
-  { value: "7d", label: "7 days" },
-  { value: "30d", label: "30 days" },
-  { value: "90d", label: "90 days" },
-]
+const RANGES: AnalyticsRange[] = ["7d", "30d", "90d"]
 
 /* ── helpers ── */
 
@@ -285,7 +314,7 @@ const TONE_BG: Record<InsightTone, string> = {
   success: "bg-success",
 }
 
-function formatDuration(seconds: number) {
+function defaultFormatDuration(seconds: number) {
   const m = Math.floor(seconds / 60)
   const s = Math.round(seconds % 60)
   return `${m}:${String(s).padStart(2, "0")}`
@@ -313,12 +342,22 @@ function AnalyticsDashboard({
   title = "Analytics",
   valueColumn,
   labels: labelsProp,
+  fill = true,
+  formatVisitors,
+  formatConversion,
+  formatDuration = defaultFormatDuration,
   className,
 }: AnalyticsDashboardProps) {
+  const defaults = DEFAULT_ANALYTICS_LABELS
   const labels: AnalyticsLabels = {
-    ...DEFAULT_ANALYTICS_LABELS,
+    ...defaults,
     ...labelsProp,
-    columns: { ...DEFAULT_ANALYTICS_LABELS.columns, ...labelsProp?.columns },
+    columns: { ...defaults.columns, ...labelsProp?.columns },
+    ranges: {
+      "7d": { ...defaults.ranges["7d"], ...labelsProp?.ranges?.["7d"] },
+      "30d": { ...defaults.ranges["30d"], ...labelsProp?.ranges?.["30d"] },
+      "90d": { ...defaults.ranges["90d"], ...labelsProp?.ranges?.["90d"] },
+    },
   }
   const [internalRange, setInternalRange] =
     React.useState<AnalyticsRange>(defaultRange)
@@ -390,7 +429,8 @@ function AnalyticsDashboard({
     <div
       data-slot="analytics-dashboard"
       className={cn(
-        "@container/analytics h-full min-h-0 w-full overflow-auto bg-background text-foreground",
+        "@container/analytics w-full bg-background text-foreground",
+        fill ? "h-full min-h-0 overflow-auto" : "h-auto overflow-visible",
         className
       )}
     >
@@ -403,12 +443,14 @@ function AnalyticsDashboard({
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Tabs value={range} onValueChange={handleRange}>
-              <TabsList aria-label="Date range" className="w-fit">
+              <TabsList aria-label={labels.dateRange} className="w-fit">
                 {RANGES.map((r) => (
-                  <TabsTrigger key={r.value} value={r.value} className="px-3">
-                    <span className="@lg/analytics:hidden">{r.value}</span>
+                  <TabsTrigger key={r} value={r} className="px-3">
+                    <span className="@lg/analytics:hidden">
+                      {labels.ranges[r].short}
+                    </span>
                     <span className="hidden @lg/analytics:inline">
-                      {r.label}
+                      {labels.ranges[r].long}
                     </span>
                   </TabsTrigger>
                 ))}
@@ -423,7 +465,7 @@ function AnalyticsDashboard({
 
         {/* KPIs */}
         <section
-          aria-label="Key metrics"
+          aria-label={labels.keyMetrics}
           className="grid grid-cols-1 gap-3 @md/analytics:grid-cols-2 @3xl/analytics:grid-cols-4"
         >
           {current.metrics.map((m) => (
@@ -454,19 +496,19 @@ function AnalyticsDashboard({
         {/* chart + breakdown */}
         <div className="grid min-w-0 gap-3 @3xl/analytics:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <section
-            aria-label="Trend"
+            aria-label={labels.trend}
             className="flex min-w-0 flex-col gap-3 rounded-lg border bg-card p-4"
           >
             <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
               <h3 className="min-w-0 heading text-lg">
-                {metric?.label} over time
+                {labels.overTime(metric?.label ?? "")}
               </h3>
               <Tabs
                 value={metric?.id}
                 onValueChange={setMetricId}
                 className="scrollbar-hide max-w-full min-w-0 overflow-x-auto"
               >
-                <TabsList aria-label="Chart metric" className="h-8 w-max">
+                <TabsList aria-label={labels.chartMetric} className="h-8 w-max">
                   {current.metrics.map((m) => (
                     <TabsTrigger
                       key={m.id}
@@ -607,16 +649,20 @@ function AnalyticsDashboard({
                       {r.name}
                     </td>
                     <td className="px-4 py-2.5 text-right tabular-nums">
-                      {r.visitors.toLocaleString("en-US")}
+                      {formatVisitors
+                        ? formatVisitors(r.visitors, r)
+                        : r.visitors.toLocaleString("en-US")}
                     </td>
                     <td className="px-4 py-2.5 text-right tabular-nums">
-                      {(r.conversion * 100).toFixed(1)}%
+                      {formatConversion
+                        ? formatConversion(r.conversion, r)
+                        : `${(r.conversion * 100).toFixed(1)}%`}
                     </td>
                     <td className="px-4 py-2.5 text-right text-muted-foreground tabular-nums">
                       {valueColumn
                         ? (valueColumn.format?.(r) ??
                           (r.value ?? 0).toLocaleString("en-US"))
-                        : formatDuration(r.duration)}
+                        : formatDuration(r.duration, r)}
                     </td>
                   </tr>
                 ))}
