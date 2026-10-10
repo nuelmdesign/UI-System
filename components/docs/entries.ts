@@ -28,6 +28,12 @@ export const GUIDES: GuideEntry[] = [
       "Give an AI assistant one link so it builds with opendraft's components and tokens.",
   },
   {
+    slug: "use-cases",
+    title: "Use cases",
+    description:
+      "Playbooks that tell you, and your AI assistant, which components suit security, IT, aviation and logistics products.",
+  },
+  {
     slug: "installation",
     title: "Installation",
     description: "Add the registry to a project and install components.",

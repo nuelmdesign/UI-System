@@ -1,0 +1,1847 @@
+{
+  "version": 1,
+  "intro": "Pick components by what the product has to do, not by what looks nice. Each playbook lists the usual needs of a domain, the opendraft components and blocks that serve each one, and how well they fit: ready (use as is), adapt (works with the caveat given) or gap (nothing fits yet; build it from primitives and follow the domain principles).",
+  "fit": {
+    "ready": "Use as is.",
+    "adapt": "Works with the caveat in `gap`.",
+    "gap": "Nothing fits yet; build from primitives and follow the principles."
+  },
+  "domains": [
+    {
+      "id": "security",
+      "title": "Security and compliance",
+      "summary": "Security operations, threat detection, access control and audit products. Used by analysts under pressure: dense data, fast triage, irreversible actions.",
+      "signals": [
+        "security",
+        "soc",
+        "siem",
+        "threat",
+        "incident response",
+        "vulnerability",
+        "edr",
+        "iam",
+        "access control",
+        "audit log",
+        "compliance",
+        "soc 2",
+        "firewall",
+        "fraud",
+        "zero trust",
+        "pentest"
+      ],
+      "principles": [
+        "Never show severity by color alone. Pair every severity color with a text label (Critical, High, Medium, Low) and use the same scale everywhere.",
+        "Show times as absolute UTC in `font-mono` with a relative hint (for example `14:02:09Z · 3 min ago`). Analysts compare timestamps across systems.",
+        "Make destructive or far-reaching actions (isolate a host, revoke a session, delete a key) require confirmation that names the consequence, and show who did it and when afterward.",
+        "Mask secrets by default (tokens, keys, hashes) with an explicit reveal and a `copy-button`. Never log or echo them.",
+        "Favor dense, keyboard-first tables and a `command-palette` for jumping to an entity. Default these products to the dark theme, but keep both themes working.",
+        "Every state change should leave an audit trail the user can see. Plan for an audit-log screen from the start."
+      ],
+      "playbook": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/security.md",
+      "kit": {
+        "name": "kit-security",
+        "install": "npx shadcn@latest add @opendraft/kit-security",
+        "components": [
+          "button",
+          "badge",
+          "table",
+          "filter-table",
+          "tabs",
+          "dialog",
+          "approval-card",
+          "tool-approval",
+          "command-palette",
+          "date-range-picker",
+          "stat",
+          "progress",
+          "analytics-dashboard",
+          "settings-page",
+          "auth-screen",
+          "file-diff",
+          "diff-table",
+          "copy-button",
+          "sonner",
+          "theme-toggle",
+          "page-header",
+          "field",
+          "repeater-field",
+          "selection-actions"
+        ]
+      },
+      "needs": [
+        {
+          "need": "Triage a stream of alerts",
+          "fit": "adapt",
+          "notes": "Use `badge` variants for severity and status; `table` for large live queues, `filter-table` for filtered lists, `selection-actions` for bulk acknowledge or close.",
+          "gap": "No four-level severity scale component; map Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with text.",
+          "components": [
+            {
+              "slug": "filter-table",
+              "title": "Filter Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md",
+              "install": "npx shadcn@latest add @opendraft/filter-table"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "tabs",
+              "title": "Tabs",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
+              "install": "npx shadcn@latest add @opendraft/tabs"
+            },
+            {
+              "slug": "selection-actions",
+              "title": "Selection Actions",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md",
+              "install": "npx shadcn@latest add @opendraft/selection-actions"
+            }
+          ]
+        },
+        {
+          "need": "Investigate an incident: timeline of events and evidence",
+          "fit": "gap",
+          "notes": "A vertical `stepper` covers response stages; `code-block` shows raw events.",
+          "gap": "No timeline or activity-feed component for a chronological event stream.",
+          "components": [
+            {
+              "slug": "stepper",
+              "title": "Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md",
+              "install": "npx shadcn@latest add @opendraft/stepper"
+            },
+            {
+              "slug": "agent-activity",
+              "title": "Agent Activity",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-activity.md",
+              "install": "npx shadcn@latest add @opendraft/agent-activity"
+            },
+            {
+              "slug": "code-block",
+              "title": "Code Block",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-block.md",
+              "install": "npx shadcn@latest add @opendraft/code-block"
+            },
+            {
+              "slug": "file-diff",
+              "title": "File Diff",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md",
+              "install": "npx shadcn@latest add @opendraft/file-diff"
+            },
+            {
+              "slug": "tabs",
+              "title": "Tabs",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
+              "install": "npx shadcn@latest add @opendraft/tabs"
+            }
+          ]
+        },
+        {
+          "need": "Confirm and run response actions",
+          "fit": "ready",
+          "notes": "`approval-card` for an action that needs sign-off, `dialog` with a typed confirmation for the dangerous ones (the settings-page danger zone is the pattern), `sonner` to report the result.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "approval-card",
+              "title": "Approval Card",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md",
+              "install": "npx shadcn@latest add @opendraft/approval-card"
+            },
+            {
+              "slug": "tool-approval",
+              "title": "Tool Approval",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-approval.md",
+              "install": "npx shadcn@latest add @opendraft/tool-approval"
+            },
+            {
+              "slug": "dialog",
+              "title": "Dialog",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md",
+              "install": "npx shadcn@latest add @opendraft/dialog"
+            },
+            {
+              "slug": "sonner",
+              "title": "Toast",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md",
+              "install": "npx shadcn@latest add @opendraft/sonner"
+            }
+          ]
+        },
+        {
+          "need": "Manage users, roles and permissions",
+          "fit": "adapt",
+          "notes": "The `settings-page` team section covers invite and role change; `repeater-field` edits rule lists.",
+          "gap": "No permission-matrix (roles by permissions grid) component.",
+          "components": [
+            {
+              "slug": "settings-page",
+              "title": "Settings Page",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md",
+              "install": "npx shadcn@latest add @opendraft/settings-page"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "select",
+              "title": "Select",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md",
+              "install": "npx shadcn@latest add @opendraft/select"
+            },
+            {
+              "slug": "switch",
+              "title": "Switch",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md",
+              "install": "npx shadcn@latest add @opendraft/switch"
+            },
+            {
+              "slug": "checkbox",
+              "title": "Checkbox",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md",
+              "install": "npx shadcn@latest add @opendraft/checkbox"
+            },
+            {
+              "slug": "repeater-field",
+              "title": "Repeater Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md",
+              "install": "npx shadcn@latest add @opendraft/repeater-field"
+            }
+          ]
+        },
+        {
+          "need": "Search and review an audit log",
+          "fit": "ready",
+          "notes": "Filters plus `date-range-picker`; show what changed with `diff-table` or `file-diff`.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "filter-table",
+              "title": "Filter Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md",
+              "install": "npx shadcn@latest add @opendraft/filter-table"
+            },
+            {
+              "slug": "date-range-picker",
+              "title": "Date Range Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-range-picker"
+            },
+            {
+              "slug": "file-diff",
+              "title": "File Diff",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md",
+              "install": "npx shadcn@latest add @opendraft/file-diff"
+            },
+            {
+              "slug": "diff-table",
+              "title": "Diff Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/diff-table.md",
+              "install": "npx shadcn@latest add @opendraft/diff-table"
+            },
+            {
+              "slug": "records-table",
+              "title": "Records Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md",
+              "install": "npx shadcn@latest add @opendraft/records-table"
+            },
+            {
+              "slug": "command-palette",
+              "title": "Command Palette",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md",
+              "install": "npx shadcn@latest add @opendraft/command-palette"
+            }
+          ]
+        },
+        {
+          "need": "Show security posture and compliance coverage",
+          "fit": "adapt",
+          "notes": "`analytics-dashboard` takes `labels` and `valueColumn` so it can show findings by severity; `progress` for control coverage.",
+          "gap": "No gauge or risk-score ring.",
+          "components": [
+            {
+              "slug": "analytics-dashboard",
+              "title": "Analytics Dashboard",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md",
+              "install": "npx shadcn@latest add @opendraft/analytics-dashboard"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "progress",
+              "title": "Progress",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md",
+              "install": "npx shadcn@latest add @opendraft/progress"
+            },
+            {
+              "slug": "insight-cards",
+              "title": "Insight Cards",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md",
+              "install": "npx shadcn@latest add @opendraft/insight-cards"
+            }
+          ]
+        },
+        {
+          "need": "Sign in with SSO and MFA",
+          "fit": "adapt",
+          "notes": "`auth-screen` handles email, password and provider buttons.",
+          "gap": "No one-time-code (OTP) input for MFA.",
+          "components": [
+            {
+              "slug": "auth-screen",
+              "title": "Auth Screen",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/auth-screen.md",
+              "install": "npx shadcn@latest add @opendraft/auth-screen"
+            },
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            }
+          ]
+        },
+        {
+          "need": "Ask an AI analyst to summarize or investigate",
+          "fit": "ready",
+          "notes": "Pass your own conversations and tasks; have the assistant cite evidence with `citations` and ask before acting with `approval-card`.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "agent-workspace",
+              "title": "Agent Workspace",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-workspace.md",
+              "install": "npx shadcn@latest add @opendraft/agent-workspace"
+            },
+            {
+              "slug": "thinking-trace",
+              "title": "Thinking Trace",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/thinking-trace.md",
+              "install": "npx shadcn@latest add @opendraft/thinking-trace"
+            },
+            {
+              "slug": "tool-chips",
+              "title": "Tool Chips",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md",
+              "install": "npx shadcn@latest add @opendraft/tool-chips"
+            },
+            {
+              "slug": "citations",
+              "title": "Citations",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/citations.md",
+              "install": "npx shadcn@latest add @opendraft/citations"
+            },
+            {
+              "slug": "approval-card",
+              "title": "Approval Card",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md",
+              "install": "npx shadcn@latest add @opendraft/approval-card"
+            }
+          ]
+        },
+        {
+          "need": "Show assets or attack paths on a map or graph",
+          "fit": "gap",
+          "notes": "`flowchart` draws simple flows.",
+          "gap": "No network graph or geographic map component.",
+          "components": [
+            {
+              "slug": "flowchart",
+              "title": "Flowchart",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/flowchart.md",
+              "install": "npx shadcn@latest add @opendraft/flowchart"
+            }
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "name": "Security operations overview",
+          "compose": [
+            "page-header",
+            "stat",
+            "analytics-dashboard",
+            "filter-table"
+          ]
+        },
+        {
+          "name": "Alert queue",
+          "compose": [
+            "page-header",
+            "filter-table",
+            "badge",
+            "selection-actions",
+            "command-palette"
+          ]
+        },
+        {
+          "name": "Incident detail",
+          "compose": [
+            "page-header",
+            "tabs",
+            "stepper",
+            "approval-card",
+            "code-block"
+          ]
+        },
+        {
+          "name": "Access management",
+          "compose": [
+            "settings-page",
+            "table",
+            "repeater-field"
+          ]
+        },
+        {
+          "name": "Audit log",
+          "compose": [
+            "page-header",
+            "date-range-picker",
+            "table",
+            "diff-table"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "it-infrastructure",
+      "title": "IT, DevOps and infrastructure",
+      "summary": "Monitoring, incident management, deployments, logs and internal tools for engineers and IT teams.",
+      "signals": [
+        "devops",
+        "sre",
+        "infrastructure",
+        "monitoring",
+        "observability",
+        "uptime",
+        "status page",
+        "deployment",
+        "ci/cd",
+        "pipeline",
+        "logs",
+        "kubernetes",
+        "cloud",
+        "helpdesk",
+        "it service",
+        "on-call",
+        "incident",
+        "internal tool",
+        "admin panel"
+      ],
+      "principles": [
+        "Status needs a word and a shape, not just a color: Operational, Degraded, Down, Maintenance. Keep one status vocabulary across the product.",
+        "Show times in UTC with `font-mono`, and let the user switch to local time in one place.",
+        "Numbers that change should use `tabular-nums` so columns don't jitter; use `animated-number` sparingly on dashboards, never in tables or logs.",
+        "Long-running work (deploys, migrations) shows progress, current step and a way to cancel. Never leave a spinner with no step.",
+        "Provide a copy button next to every ID, command, hash and URL.",
+        "Treat logs and code as data: monospaced, wrap toggle, selectable, searchable."
+      ],
+      "playbook": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/it-infrastructure.md",
+      "kit": {
+        "name": "kit-it-infrastructure",
+        "install": "npx shadcn@latest add @opendraft/kit-it-infrastructure",
+        "components": [
+          "button",
+          "badge",
+          "table",
+          "filter-table",
+          "records-table",
+          "tabs",
+          "dialog",
+          "stat",
+          "progress",
+          "analytics-dashboard",
+          "insight-cards",
+          "code-block",
+          "code-panel",
+          "copy-button",
+          "flowchart",
+          "stepper",
+          "todo-list",
+          "task-rows",
+          "approval-card",
+          "file-diff",
+          "command-palette",
+          "date-range-picker",
+          "settings-page",
+          "auth-screen",
+          "field",
+          "repeater-field",
+          "theme-toggle",
+          "page-header",
+          "sonner"
+        ]
+      },
+      "needs": [
+        {
+          "need": "Service health overview",
+          "fit": "adapt",
+          "notes": "`stat` tiles with a status `badge` per service; `analytics-dashboard` for the trend.",
+          "gap": "No status-indicator or uptime-bar component (the 90-day colored bars).",
+          "components": [
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "progress",
+              "title": "Progress",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md",
+              "install": "npx shadcn@latest add @opendraft/progress"
+            },
+            {
+              "slug": "analytics-dashboard",
+              "title": "Analytics Dashboard",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md",
+              "install": "npx shadcn@latest add @opendraft/analytics-dashboard"
+            }
+          ]
+        },
+        {
+          "need": "Incident management and on-call",
+          "fit": "adapt",
+          "notes": "Incident list in a `table`; response steps in `todo-list`.",
+          "gap": "No timeline component for incident updates.",
+          "components": [
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "tabs",
+              "title": "Tabs",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
+              "install": "npx shadcn@latest add @opendraft/tabs"
+            },
+            {
+              "slug": "approval-card",
+              "title": "Approval Card",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md",
+              "install": "npx shadcn@latest add @opendraft/approval-card"
+            },
+            {
+              "slug": "todo-list",
+              "title": "Todo List",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md",
+              "install": "npx shadcn@latest add @opendraft/todo-list"
+            },
+            {
+              "slug": "stepper",
+              "title": "Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md",
+              "install": "npx shadcn@latest add @opendraft/stepper"
+            }
+          ]
+        },
+        {
+          "need": "Browse and search logs",
+          "fit": "adapt",
+          "notes": "A virtualized `table` handles very long lists; `code-block` for a single entry.",
+          "gap": "No log viewer with live tail, level filtering and highlight.",
+          "components": [
+            {
+              "slug": "code-panel",
+              "title": "Code Panel",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-panel.md",
+              "install": "npx shadcn@latest add @opendraft/code-panel"
+            },
+            {
+              "slug": "code-block",
+              "title": "Code Block",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-block.md",
+              "install": "npx shadcn@latest add @opendraft/code-block"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "filter-table",
+              "title": "Filter Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md",
+              "install": "npx shadcn@latest add @opendraft/filter-table"
+            },
+            {
+              "slug": "copy-button",
+              "title": "Copy Button",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md",
+              "install": "npx shadcn@latest add @opendraft/copy-button"
+            }
+          ]
+        },
+        {
+          "need": "Metrics dashboards",
+          "fit": "adapt",
+          "notes": "Relabel `analytics-dashboard`; `insight-cards` has chart cards.",
+          "gap": "No general time-series chart with several series, zoom and thresholds.",
+          "components": [
+            {
+              "slug": "analytics-dashboard",
+              "title": "Analytics Dashboard",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md",
+              "install": "npx shadcn@latest add @opendraft/analytics-dashboard"
+            },
+            {
+              "slug": "insight-cards",
+              "title": "Insight Cards",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md",
+              "install": "npx shadcn@latest add @opendraft/insight-cards"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "date-range-picker",
+              "title": "Date Range Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-range-picker"
+            }
+          ]
+        },
+        {
+          "need": "Deployments and pipelines",
+          "fit": "ready",
+          "notes": "Pipeline stages in `flowchart` or a vertical `stepper`; gate a production deploy with `approval-card`; show the change with `file-diff`.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "flowchart",
+              "title": "Flowchart",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/flowchart.md",
+              "install": "npx shadcn@latest add @opendraft/flowchart"
+            },
+            {
+              "slug": "stepper",
+              "title": "Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md",
+              "install": "npx shadcn@latest add @opendraft/stepper"
+            },
+            {
+              "slug": "task-rows",
+              "title": "Task Rows",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/task-rows.md",
+              "install": "npx shadcn@latest add @opendraft/task-rows"
+            },
+            {
+              "slug": "todo-list",
+              "title": "Todo List",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md",
+              "install": "npx shadcn@latest add @opendraft/todo-list"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "file-diff",
+              "title": "File Diff",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md",
+              "install": "npx shadcn@latest add @opendraft/file-diff"
+            },
+            {
+              "slug": "approval-card",
+              "title": "Approval Card",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md",
+              "install": "npx shadcn@latest add @opendraft/approval-card"
+            }
+          ]
+        },
+        {
+          "need": "Configuration, environment variables and secrets",
+          "fit": "adapt",
+          "notes": "`repeater-field` for key and value rows; mask values and reveal on demand.",
+          "gap": "No dedicated masked key-value editor.",
+          "components": [
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            },
+            {
+              "slug": "repeater-field",
+              "title": "Repeater Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md",
+              "install": "npx shadcn@latest add @opendraft/repeater-field"
+            },
+            {
+              "slug": "input",
+              "title": "Input",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md",
+              "install": "npx shadcn@latest add @opendraft/input"
+            },
+            {
+              "slug": "copy-button",
+              "title": "Copy Button",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md",
+              "install": "npx shadcn@latest add @opendraft/copy-button"
+            },
+            {
+              "slug": "switch",
+              "title": "Switch",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md",
+              "install": "npx shadcn@latest add @opendraft/switch"
+            },
+            {
+              "slug": "dialog",
+              "title": "Dialog",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md",
+              "install": "npx shadcn@latest add @opendraft/dialog"
+            }
+          ]
+        },
+        {
+          "need": "Inventory of servers, services or assets",
+          "fit": "ready",
+          "notes": "Virtualized `table` for thousands of rows; `records-table` for editable records.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "records-table",
+              "title": "Records Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md",
+              "install": "npx shadcn@latest add @opendraft/records-table"
+            },
+            {
+              "slug": "tabs",
+              "title": "Tabs",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
+              "install": "npx shadcn@latest add @opendraft/tabs"
+            },
+            {
+              "slug": "command-palette",
+              "title": "Command Palette",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md",
+              "install": "npx shadcn@latest add @opendraft/command-palette"
+            },
+            {
+              "slug": "selection-actions",
+              "title": "Selection Actions",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md",
+              "install": "npx shadcn@latest add @opendraft/selection-actions"
+            }
+          ]
+        },
+        {
+          "need": "Command or terminal-style tools",
+          "fit": "adapt",
+          "notes": "`command-palette` for actions; `code-panel` for output.",
+          "gap": "No real terminal emulator.",
+          "components": [
+            {
+              "slug": "code-panel",
+              "title": "Code Panel",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-panel.md",
+              "install": "npx shadcn@latest add @opendraft/code-panel"
+            },
+            {
+              "slug": "command-palette",
+              "title": "Command Palette",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md",
+              "install": "npx shadcn@latest add @opendraft/command-palette"
+            },
+            {
+              "slug": "agent-screen",
+              "title": "Agent Screen",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-screen.md",
+              "install": "npx shadcn@latest add @opendraft/agent-screen"
+            }
+          ]
+        },
+        {
+          "need": "Team, access and settings",
+          "fit": "ready",
+          "notes": "Pass the real workspace name, members and billing.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "settings-page",
+              "title": "Settings Page",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md",
+              "install": "npx shadcn@latest add @opendraft/settings-page"
+            },
+            {
+              "slug": "auth-screen",
+              "title": "Auth Screen",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/auth-screen.md",
+              "install": "npx shadcn@latest add @opendraft/auth-screen"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            }
+          ]
+        },
+        {
+          "need": "AI assistant for operations",
+          "fit": "ready",
+          "notes": "Ask for approval before any action that changes production.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "agent-workspace",
+              "title": "Agent Workspace",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-workspace.md",
+              "install": "npx shadcn@latest add @opendraft/agent-workspace"
+            },
+            {
+              "slug": "thinking-trace",
+              "title": "Thinking Trace",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/thinking-trace.md",
+              "install": "npx shadcn@latest add @opendraft/thinking-trace"
+            },
+            {
+              "slug": "tool-chips",
+              "title": "Tool Chips",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md",
+              "install": "npx shadcn@latest add @opendraft/tool-chips"
+            },
+            {
+              "slug": "approval-card",
+              "title": "Approval Card",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md",
+              "install": "npx shadcn@latest add @opendraft/approval-card"
+            }
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "name": "Status overview",
+          "compose": [
+            "page-header",
+            "stat",
+            "badge",
+            "analytics-dashboard"
+          ]
+        },
+        {
+          "name": "Incident list and detail",
+          "compose": [
+            "page-header",
+            "table",
+            "tabs",
+            "stepper",
+            "todo-list"
+          ]
+        },
+        {
+          "name": "Deployments",
+          "compose": [
+            "page-header",
+            "flowchart",
+            "task-rows",
+            "approval-card"
+          ]
+        },
+        {
+          "name": "Logs",
+          "compose": [
+            "page-header",
+            "filter-table",
+            "code-panel"
+          ]
+        },
+        {
+          "name": "Settings and access",
+          "compose": [
+            "settings-page"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aviation",
+      "title": "Aviation and travel operations",
+      "summary": "Airline and airport operations, flight information, booking and check-in, crew and maintenance tools. Safety-critical context: clarity and correctness beat flourish.",
+      "signals": [
+        "aviation",
+        "airline",
+        "airport",
+        "flight",
+        "aircraft",
+        "pilot",
+        "crew",
+        "boarding",
+        "check-in",
+        "mro",
+        "maintenance",
+        "notam",
+        "metar",
+        "air traffic",
+        "charter",
+        "fbo",
+        "ground handling"
+      ],
+      "principles": [
+        "State times with an explicit zone. Use 24-hour time, mark UTC as `Z`, and show the airport's local time beside it. Never leave a time ambiguous.",
+        "Flight status is always a word first (On time, Delayed, Boarding, Departed, Cancelled) with a color second. Show the reason and the new time for any delay.",
+        "Use IATA or ICAO codes in `font-mono` with the full name on hover or beneath, for example `LIS` and Lisbon.",
+        "On safety-critical screens (maintenance sign-off, checklists, weather) turn motion off, show who signed and when, and require an explicit confirm. Prefer `approval-card` over a quiet toggle.",
+        "Design for tablets, gloves and bright light: large touch targets, high contrast, no hover-only information.",
+        "A live board updates in place without shifting the layout under a user's cursor. Highlight what changed, then settle."
+      ],
+      "playbook": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/aviation.md",
+      "kit": {
+        "name": "kit-aviation",
+        "install": "npx shadcn@latest add @opendraft/kit-aviation",
+        "components": [
+          "button",
+          "badge",
+          "table",
+          "tabs",
+          "stat",
+          "progress",
+          "stepper",
+          "detail-page",
+          "catalog",
+          "checkout",
+          "order-confirmation",
+          "ticket-pass",
+          "qr-code",
+          "date-picker",
+          "date-range-picker",
+          "quantity-stepper",
+          "field",
+          "todo-list",
+          "approval-card",
+          "records-table",
+          "analytics-dashboard",
+          "text-scramble",
+          "command-palette",
+          "site-header",
+          "page-header",
+          "theme-toggle",
+          "sonner"
+        ]
+      },
+      "needs": [
+        {
+          "need": "Departures and arrivals board",
+          "fit": "adapt",
+          "notes": "A virtualized `table` with a status `badge`; `text-scramble` can animate a changed gate or time.",
+          "gap": "No split-flap display.",
+          "components": [
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "text-scramble",
+              "title": "Text Scramble",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/text-scramble.md",
+              "install": "npx shadcn@latest add @opendraft/text-scramble"
+            },
+            {
+              "slug": "tabs",
+              "title": "Tabs",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
+              "install": "npx shadcn@latest add @opendraft/tabs"
+            },
+            {
+              "slug": "animated-number",
+              "title": "Animated Number",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/animated-number.md",
+              "install": "npx shadcn@latest add @opendraft/animated-number"
+            }
+          ]
+        },
+        {
+          "need": "Flight detail and itinerary",
+          "fit": "adapt",
+          "notes": "A vertical `stepper` for legs and connections; `progress` for the flight's progress.",
+          "gap": "No route or flight-path map.",
+          "components": [
+            {
+              "slug": "detail-page",
+              "title": "Detail Page",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md",
+              "install": "npx shadcn@latest add @opendraft/detail-page"
+            },
+            {
+              "slug": "stepper",
+              "title": "Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md",
+              "install": "npx shadcn@latest add @opendraft/stepper"
+            },
+            {
+              "slug": "progress",
+              "title": "Progress",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md",
+              "install": "npx shadcn@latest add @opendraft/progress"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            }
+          ]
+        },
+        {
+          "need": "Search and book a flight",
+          "fit": "adapt",
+          "notes": "`catalog` can list fares if you relabel it and pass `layout=\"compact\"`; passengers with `quantity-stepper`.",
+          "gap": "No origin and destination airport picker, and no fare comparison grid.",
+          "components": [
+            {
+              "slug": "catalog",
+              "title": "Catalog",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md",
+              "install": "npx shadcn@latest add @opendraft/catalog"
+            },
+            {
+              "slug": "date-picker",
+              "title": "Date Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-picker"
+            },
+            {
+              "slug": "date-range-picker",
+              "title": "Date Range Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-range-picker"
+            },
+            {
+              "slug": "quantity-stepper",
+              "title": "Quantity Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md",
+              "install": "npx shadcn@latest add @opendraft/quantity-stepper"
+            },
+            {
+              "slug": "select",
+              "title": "Select",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md",
+              "install": "npx shadcn@latest add @opendraft/select"
+            },
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            }
+          ]
+        },
+        {
+          "need": "Passenger details, payment and confirmation",
+          "fit": "ready",
+          "notes": "`checkout` is a three-step flow; pass your own labels and `ticketFields`.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "checkout",
+              "title": "Checkout",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md",
+              "install": "npx shadcn@latest add @opendraft/checkout"
+            },
+            {
+              "slug": "order-confirmation",
+              "title": "Order Confirmation",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md",
+              "install": "npx shadcn@latest add @opendraft/order-confirmation"
+            },
+            {
+              "slug": "stepper",
+              "title": "Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md",
+              "install": "npx shadcn@latest add @opendraft/stepper"
+            },
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            }
+          ]
+        },
+        {
+          "need": "Boarding pass",
+          "fit": "ready",
+          "notes": "`ticket-pass` with gate, seat and boarding group as `fields`. The QR is real, but airlines encode a standard barcode (PDF417 or Aztec) that `qr-code` does not produce.",
+          "gap": "No PDF417 or Aztec barcode.",
+          "components": [
+            {
+              "slug": "ticket-pass",
+              "title": "Ticket Pass",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/ticket-pass.md",
+              "install": "npx shadcn@latest add @opendraft/ticket-pass"
+            },
+            {
+              "slug": "qr-code",
+              "title": "QR Code",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md",
+              "install": "npx shadcn@latest add @opendraft/qr-code"
+            }
+          ]
+        },
+        {
+          "need": "Seat selection",
+          "fit": "gap",
+          "notes": "Nothing fits.",
+          "gap": "No seat map.",
+          "components": [
+            {
+              "slug": "radio-group",
+              "title": "Radio Group",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md",
+              "install": "npx shadcn@latest add @opendraft/radio-group"
+            },
+            {
+              "slug": "checkbox",
+              "title": "Checkbox",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md",
+              "install": "npx shadcn@latest add @opendraft/checkbox"
+            }
+          ]
+        },
+        {
+          "need": "Crew and roster scheduling",
+          "fit": "gap",
+          "notes": "A table works for lists of duties.",
+          "gap": "No scheduler, Gantt or calendar timeline.",
+          "components": [
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "date-range-picker",
+              "title": "Date Range Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-range-picker"
+            },
+            {
+              "slug": "tabs",
+              "title": "Tabs",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
+              "install": "npx shadcn@latest add @opendraft/tabs"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            }
+          ]
+        },
+        {
+          "need": "Maintenance logs and pre-flight checklists",
+          "fit": "ready",
+          "notes": "Each item signed with `approval-card`; keep the record in `records-table` with who and when.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "todo-list",
+              "title": "Todo List",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md",
+              "install": "npx shadcn@latest add @opendraft/todo-list"
+            },
+            {
+              "slug": "checkbox",
+              "title": "Checkbox",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md",
+              "install": "npx shadcn@latest add @opendraft/checkbox"
+            },
+            {
+              "slug": "approval-card",
+              "title": "Approval Card",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md",
+              "install": "npx shadcn@latest add @opendraft/approval-card"
+            },
+            {
+              "slug": "records-table",
+              "title": "Records Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md",
+              "install": "npx shadcn@latest add @opendraft/records-table"
+            },
+            {
+              "slug": "file-diff",
+              "title": "File Diff",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md",
+              "install": "npx shadcn@latest add @opendraft/file-diff"
+            },
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            }
+          ]
+        },
+        {
+          "need": "Operations control overview",
+          "fit": "adapt",
+          "notes": "On-time performance and disruption counts in `stat` tiles.",
+          "gap": "No map and no alert banner for weather or NOTAM bulletins.",
+          "components": [
+            {
+              "slug": "analytics-dashboard",
+              "title": "Analytics Dashboard",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md",
+              "install": "npx shadcn@latest add @opendraft/analytics-dashboard"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "command-palette",
+              "title": "Command Palette",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md",
+              "install": "npx shadcn@latest add @opendraft/command-palette"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            }
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "name": "Departures board",
+          "compose": [
+            "site-header",
+            "tabs",
+            "table",
+            "badge"
+          ]
+        },
+        {
+          "name": "Flight detail",
+          "compose": [
+            "detail-page",
+            "stepper",
+            "progress"
+          ]
+        },
+        {
+          "name": "Booking and check-in",
+          "compose": [
+            "checkout",
+            "order-confirmation",
+            "ticket-pass"
+          ]
+        },
+        {
+          "name": "Maintenance sign-off",
+          "compose": [
+            "page-header",
+            "todo-list",
+            "approval-card",
+            "records-table"
+          ]
+        },
+        {
+          "name": "Operations overview",
+          "compose": [
+            "page-header",
+            "stat",
+            "analytics-dashboard",
+            "table"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "logistics",
+      "title": "Logistics, supply chain and fleet",
+      "summary": "Shipment tracking, dispatch, warehouse and fleet products for operators, drivers and customers who need to know where things are and when they'll arrive.",
+      "signals": [
+        "logistics",
+        "shipping",
+        "shipment",
+        "freight",
+        "carrier",
+        "courier",
+        "delivery",
+        "last mile",
+        "fleet",
+        "driver",
+        "dispatch",
+        "warehouse",
+        "inventory",
+        "supply chain",
+        "tracking",
+        "3pl",
+        "customs",
+        "proof of delivery"
+      ],
+      "principles": [
+        "Every shipment shows three things at a glance: status (as a word), where it is, and when it will arrive (an ETA with a confidence or a delay reason).",
+        "Tracking IDs, container numbers and SKUs go in `font-mono` with a `copy-button`.",
+        "Exceptions come first: delayed, held and failed deliveries sort to the top and carry the reason and the next action.",
+        "Show dates and times in the location's own time zone, and say which zone.",
+        "Operators work in bulk: every list needs multi-select with bulk actions (`selection-actions`), saved filters and keyboard navigation.",
+        "Driver and warehouse screens are used one-handed on a phone: large targets, one primary action per screen, works on a poor connection."
+      ],
+      "playbook": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/logistics.md",
+      "kit": {
+        "name": "kit-logistics",
+        "install": "npx shadcn@latest add @opendraft/kit-logistics",
+        "components": [
+          "button",
+          "badge",
+          "table",
+          "filter-table",
+          "records-table",
+          "tabs",
+          "stat",
+          "progress",
+          "stepper",
+          "detail-page",
+          "crm-pipeline",
+          "checkout",
+          "order-confirmation",
+          "analytics-dashboard",
+          "insight-cards",
+          "date-picker",
+          "date-range-picker",
+          "field",
+          "repeater-field",
+          "selection-actions",
+          "qr-code",
+          "copy-button",
+          "avatar",
+          "site-header",
+          "page-header",
+          "theme-toggle",
+          "sonner"
+        ]
+      },
+      "needs": [
+        {
+          "need": "Track one shipment (customer-facing)",
+          "fit": "adapt",
+          "notes": "A vertical `stepper` for milestones; `progress` for the journey; show the tracking ID with `copy-button`.",
+          "gap": "No timeline with timestamps and locations per event, and no route map.",
+          "components": [
+            {
+              "slug": "detail-page",
+              "title": "Detail Page",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md",
+              "install": "npx shadcn@latest add @opendraft/detail-page"
+            },
+            {
+              "slug": "stepper",
+              "title": "Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md",
+              "install": "npx shadcn@latest add @opendraft/stepper"
+            },
+            {
+              "slug": "progress",
+              "title": "Progress",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md",
+              "install": "npx shadcn@latest add @opendraft/progress"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "qr-code",
+              "title": "QR Code",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md",
+              "install": "npx shadcn@latest add @opendraft/qr-code"
+            },
+            {
+              "slug": "copy-button",
+              "title": "Copy Button",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md",
+              "install": "npx shadcn@latest add @opendraft/copy-button"
+            },
+            {
+              "slug": "site-header",
+              "title": "Site Header",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md",
+              "install": "npx shadcn@latest add @opendraft/site-header"
+            }
+          ]
+        },
+        {
+          "need": "Manage a list of shipments or orders",
+          "fit": "ready",
+          "notes": "Tabs for Exceptions, In transit and Delivered; a virtualized `table` when volumes are large.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "filter-table",
+              "title": "Filter Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md",
+              "install": "npx shadcn@latest add @opendraft/filter-table"
+            },
+            {
+              "slug": "tabs",
+              "title": "Tabs",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
+              "install": "npx shadcn@latest add @opendraft/tabs"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "date-range-picker",
+              "title": "Date Range Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-range-picker"
+            },
+            {
+              "slug": "selection-actions",
+              "title": "Selection Actions",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md",
+              "install": "npx shadcn@latest add @opendraft/selection-actions"
+            },
+            {
+              "slug": "records-table",
+              "title": "Records Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md",
+              "install": "npx shadcn@latest add @opendraft/records-table"
+            }
+          ]
+        },
+        {
+          "need": "Dispatch board",
+          "fit": "adapt",
+          "notes": "`crm-pipeline` is a stage board with drag and drop; pass your stages (Unassigned, Assigned, En route, Delivered) and relabel the cards.",
+          "gap": "Its data shape is sales-oriented (company, value, contact); there is no generic board.",
+          "components": [
+            {
+              "slug": "crm-pipeline",
+              "title": "CRM Pipeline",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/crm-pipeline.md",
+              "install": "npx shadcn@latest add @opendraft/crm-pipeline"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            },
+            {
+              "slug": "avatar",
+              "title": "Avatar",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md",
+              "install": "npx shadcn@latest add @opendraft/avatar"
+            }
+          ]
+        },
+        {
+          "need": "Create a shipment or booking",
+          "fit": "ready",
+          "notes": "A wizard with `stepper`; packages as rows in `repeater-field`; finish with `order-confirmation`.",
+          "gap": null,
+          "components": [
+            {
+              "slug": "stepper",
+              "title": "Stepper",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md",
+              "install": "npx shadcn@latest add @opendraft/stepper"
+            },
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            },
+            {
+              "slug": "date-picker",
+              "title": "Date Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-picker"
+            },
+            {
+              "slug": "repeater-field",
+              "title": "Repeater Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md",
+              "install": "npx shadcn@latest add @opendraft/repeater-field"
+            },
+            {
+              "slug": "select",
+              "title": "Select",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md",
+              "install": "npx shadcn@latest add @opendraft/select"
+            },
+            {
+              "slug": "checkout",
+              "title": "Checkout",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md",
+              "install": "npx shadcn@latest add @opendraft/checkout"
+            },
+            {
+              "slug": "order-confirmation",
+              "title": "Order Confirmation",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md",
+              "install": "npx shadcn@latest add @opendraft/order-confirmation"
+            }
+          ]
+        },
+        {
+          "need": "Fleet and driver overview",
+          "fit": "adapt",
+          "notes": "Utilization and on-time rate in `stat`; driver list in `table`.",
+          "gap": "No live map of vehicle positions.",
+          "components": [
+            {
+              "slug": "analytics-dashboard",
+              "title": "Analytics Dashboard",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md",
+              "install": "npx shadcn@latest add @opendraft/analytics-dashboard"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "avatar",
+              "title": "Avatar",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md",
+              "install": "npx shadcn@latest add @opendraft/avatar"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            }
+          ]
+        },
+        {
+          "need": "Warehouse inventory and capacity",
+          "fit": "adapt",
+          "notes": "Zones as `progress` bars with a warning tone when nearly full.",
+          "gap": "No barcode scan input and no heat map of locations.",
+          "components": [
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "progress",
+              "title": "Progress",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md",
+              "install": "npx shadcn@latest add @opendraft/progress"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "records-table",
+              "title": "Records Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md",
+              "install": "npx shadcn@latest add @opendraft/records-table"
+            },
+            {
+              "slug": "repeater-field",
+              "title": "Repeater Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md",
+              "install": "npx shadcn@latest add @opendraft/repeater-field"
+            }
+          ]
+        },
+        {
+          "need": "Proof of delivery",
+          "fit": "gap",
+          "notes": "A confirmation step with `approval-card` and a recipient `field` works.",
+          "gap": "No signature pad and no photo capture or file dropzone.",
+          "components": [
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            },
+            {
+              "slug": "approval-card",
+              "title": "Approval Card",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md",
+              "install": "npx shadcn@latest add @opendraft/approval-card"
+            },
+            {
+              "slug": "qr-code",
+              "title": "QR Code",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md",
+              "install": "npx shadcn@latest add @opendraft/qr-code"
+            },
+            {
+              "slug": "ticket-pass",
+              "title": "Ticket Pass",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/ticket-pass.md",
+              "install": "npx shadcn@latest add @opendraft/ticket-pass"
+            }
+          ]
+        },
+        {
+          "need": "Rates, quotes and invoicing",
+          "fit": "adapt",
+          "notes": "`checkout` summary pattern for a quote; invoices in `table`.",
+          "gap": "No dedicated quote or rate-comparison table.",
+          "components": [
+            {
+              "slug": "checkout",
+              "title": "Checkout",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md",
+              "install": "npx shadcn@latest add @opendraft/checkout"
+            },
+            {
+              "slug": "table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
+              "install": "npx shadcn@latest add @opendraft/table"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "order-confirmation",
+              "title": "Order Confirmation",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md",
+              "install": "npx shadcn@latest add @opendraft/order-confirmation"
+            },
+            {
+              "slug": "field",
+              "title": "Field",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md",
+              "install": "npx shadcn@latest add @opendraft/field"
+            }
+          ]
+        },
+        {
+          "need": "Operations analytics",
+          "fit": "adapt",
+          "notes": "Relabel the dashboard (shipments, on-time rate, cost per delivery) and add a `valueColumn` for cost.",
+          "gap": "The range tabs are fixed at 7, 30 and 90 days, and the table columns are page-analytics shaped.",
+          "components": [
+            {
+              "slug": "analytics-dashboard",
+              "title": "Analytics Dashboard",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md",
+              "install": "npx shadcn@latest add @opendraft/analytics-dashboard"
+            },
+            {
+              "slug": "insight-cards",
+              "title": "Insight Cards",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md",
+              "install": "npx shadcn@latest add @opendraft/insight-cards"
+            },
+            {
+              "slug": "stat",
+              "title": "Stat",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md",
+              "install": "npx shadcn@latest add @opendraft/stat"
+            },
+            {
+              "slug": "date-range-picker",
+              "title": "Date Range Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-range-picker"
+            }
+          ]
+        }
+      ],
+      "screens": [
+        {
+          "name": "Public tracking page",
+          "compose": [
+            "site-header",
+            "detail-page",
+            "stepper",
+            "progress"
+          ]
+        },
+        {
+          "name": "Shipments list",
+          "compose": [
+            "page-header",
+            "tabs",
+            "filter-table",
+            "selection-actions"
+          ]
+        },
+        {
+          "name": "Dispatch board",
+          "compose": [
+            "page-header",
+            "crm-pipeline"
+          ]
+        },
+        {
+          "name": "Create shipment",
+          "compose": [
+            "page-header",
+            "stepper",
+            "field",
+            "repeater-field",
+            "order-confirmation"
+          ]
+        },
+        {
+          "name": "Operations overview",
+          "compose": [
+            "page-header",
+            "stat",
+            "analytics-dashboard"
+          ]
+        }
+      ]
+    }
+  ],
+  "crossDomainGaps": [
+    {
+      "id": "timeline",
+      "title": "Timeline / activity feed",
+      "why": "Needed for incidents, shipment tracking, audit and case history in every domain."
+    },
+    {
+      "id": "alert-banner",
+      "title": "Alert and banner",
+      "why": "System, weather and policy notices need a persistent, dismissible, severity-aware banner."
+    },
+    {
+      "id": "status-indicator",
+      "title": "Status indicator and uptime bar",
+      "why": "Health and availability across IT, logistics and aviation."
+    },
+    {
+      "id": "map",
+      "title": "Map and route view",
+      "why": "Fleet, flights, assets and attack paths all need a location view."
+    },
+    {
+      "id": "scheduler",
+      "title": "Scheduler / Gantt / calendar timeline",
+      "why": "Crew rosters, dispatch, maintenance windows and on-call."
+    },
+    {
+      "id": "time-series-chart",
+      "title": "General time-series chart",
+      "why": "Metrics with several series, zoom and thresholds."
+    },
+    {
+      "id": "otp-input",
+      "title": "One-time-code input",
+      "why": "MFA and delivery verification."
+    },
+    {
+      "id": "dropzone",
+      "title": "File dropzone and photo capture",
+      "why": "Evidence, proof of delivery and imports."
+    },
+    {
+      "id": "slider",
+      "title": "Slider",
+      "why": "Settings and filters in many products."
+    }
+  ]
+}

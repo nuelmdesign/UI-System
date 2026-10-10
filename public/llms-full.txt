@@ -83,8 +83,7 @@ import { themeScript } from "@/components/ui/theme-toggle"
 </html>
 ```
 
-   Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead.
-8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
+Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead. 8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
 
 ```tsx
 import { MotionConfig } from "motion/react"
@@ -101,6 +100,7 @@ On Next.js 16 with Cache Components (the new `create-next-app` default), a compo
 
 ### 2. Use components before writing your own
 
+- If the product is for a specific industry or job (security, IT and infrastructure, aviation, logistics, and so on), read the matching playbook in the Use cases list first, before choosing components. It names the components that serve each need, rates how well they fit, lists the typical screens, and gives one install command for a starter kit. Follow its domain principles (for example how to show severity, status and time). If no playbook matches, pick by need from the component list and apply the same care.
 - If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for. Blocks fill the space they're given and lay out from their own width, so put one in a container that has a width and a height (for example a `w-full` parent with `h-screen` or a fixed height); in a shrink-to-fit parent it collapses. Give every page the same width with `PageContainer`, and head it with `PageHeader`. Build forms with `Field`, with `FieldGroup` for rows, and use `DatePicker` for single dates and `RepeaterField` for add-and-remove rows.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
@@ -195,6 +195,464 @@ Components use Radix primitives and come with keyboard and screen-reader support
 - Every piece of UI that exists in opendraft uses the opendraft component.
 - The screen works in both light and dark mode.
 - Headings use the `heading` utility; nothing else does.
+
+---
+
+# Building Security and compliance products with opendraft
+
+> Security operations, threat detection, access control and audit products. Used by analysts under pressure: dense data, fast triage, irreversible actions.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+security, soc, siem, threat, incident response, vulnerability, edr, iam, access control, audit log, compliance, soc 2, firewall, fraud, zero trust, pentest.
+
+## Principles for this domain
+
+- Never show severity by color alone. Pair every severity color with a text label (Critical, High, Medium, Low) and use the same scale everywhere.
+- Show times as absolute UTC in `font-mono` with a relative hint (for example `14:02:09Z · 3 min ago`). Analysts compare timestamps across systems.
+- Make destructive or far-reaching actions (isolate a host, revoke a session, delete a key) require confirmation that names the consequence, and show who did it and when afterward.
+- Mask secrets by default (tokens, keys, hashes) with an explicit reveal and a `copy-button`. Never log or echo them.
+- Favor dense, keyboard-first tables and a `command-palette` for jumping to an entity. Default these products to the dark theme, but keep both themes working.
+- Every state change should leave an audit trail the user can see. Plan for an audit-log screen from the start.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Triage a stream of alerts
+
+- Fit: **Adapt**
+- Use: [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md)
+- How: Use `badge` variants for severity and status; `table` for large live queues, `filter-table` for filtered lists, `selection-actions` for bulk acknowledge or close.
+- Missing: No four-level severity scale component; map Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with text.
+
+### Investigate an incident: timeline of events and evidence
+
+- Fit: **Gap**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Agent Activity](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-activity.md), [Code Block](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-block.md), [File Diff](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md)
+- How: A vertical `stepper` covers response stages; `code-block` shows raw events.
+- Missing: No timeline or activity-feed component for a chronological event stream.
+
+### Confirm and run response actions
+
+- Fit: **Ready**
+- Use: [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Tool Approval](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-approval.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Toast](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md)
+- How: `approval-card` for an action that needs sign-off, `dialog` with a typed confirmation for the dangerous ones (the settings-page danger zone is the pattern), `sonner` to report the result.
+
+### Manage users, roles and permissions
+
+- Fit: **Adapt**
+- Use: [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md)
+- How: The `settings-page` team section covers invite and role change; `repeater-field` edits rule lists.
+- Missing: No permission-matrix (roles by permissions grid) component.
+
+### Search and review an audit log
+
+- Fit: **Ready**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [File Diff](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md), [Diff Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/diff-table.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md)
+- How: Filters plus `date-range-picker`; show what changed with `diff-table` or `file-diff`.
+
+### Show security posture and compliance coverage
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md)
+- How: `analytics-dashboard` takes `labels` and `valueColumn` so it can show findings by severity; `progress` for control coverage.
+- Missing: No gauge or risk-score ring.
+
+### Sign in with SSO and MFA
+
+- Fit: **Adapt**
+- Use: [Auth Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/auth-screen.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md)
+- How: `auth-screen` handles email, password and provider buttons.
+- Missing: No one-time-code (OTP) input for MFA.
+
+### Ask an AI analyst to summarize or investigate
+
+- Fit: **Ready**
+- Use: [Agent Workspace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-workspace.md), [Thinking Trace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/thinking-trace.md), [Tool Chips](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md), [Citations](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/citations.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- How: Pass your own conversations and tasks; have the assistant cite evidence with `citations` and ask before acting with `approval-card`.
+
+### Show assets or attack paths on a map or graph
+
+- Fit: **Gap**
+- Use: [Flowchart](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/flowchart.md)
+- How: `flowchart` draws simple flows.
+- Missing: No network graph or geographic map component.
+
+## Typical screens
+
+- **Security operations overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md)
+- **Alert queue**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md) + [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md) + [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md)
+- **Incident detail**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md) + [Code Block](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-block.md)
+- **Access management**: [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md)
+- **Audit log**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Diff Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/diff-table.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-security
+```
+
+## Known gaps
+
+- Triage a stream of alerts: No four-level severity scale component; map Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with text.
+- Investigate an incident: timeline of events and evidence: No timeline or activity-feed component for a chronological event stream.
+- Manage users, roles and permissions: No permission-matrix (roles by permissions grid) component.
+- Show security posture and compliance coverage: No gauge or risk-score ring.
+- Sign in with SSO and MFA: No one-time-code (OTP) input for MFA.
+- Show assets or attack paths on a map or graph: No network graph or geographic map component.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building IT, DevOps and infrastructure products with opendraft
+
+> Monitoring, incident management, deployments, logs and internal tools for engineers and IT teams.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+devops, sre, infrastructure, monitoring, observability, uptime, status page, deployment, ci/cd, pipeline, logs, kubernetes, cloud, helpdesk, it service, on-call, incident, internal tool, admin panel.
+
+## Principles for this domain
+
+- Status needs a word and a shape, not just a color: Operational, Degraded, Down, Maintenance. Keep one status vocabulary across the product.
+- Show times in UTC with `font-mono`, and let the user switch to local time in one place.
+- Numbers that change should use `tabular-nums` so columns don't jitter; use `animated-number` sparingly on dashboards, never in tables or logs.
+- Long-running work (deploys, migrations) shows progress, current step and a way to cancel. Never leave a spinner with no step.
+- Provide a copy button next to every ID, command, hash and URL.
+- Treat logs and code as data: monospaced, wrap toggle, selectable, searchable.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Service health overview
+
+- Fit: **Adapt**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md)
+- How: `stat` tiles with a status `badge` per service; `analytics-dashboard` for the trend.
+- Missing: No status-indicator or uptime-bar component (the 90-day colored bars).
+
+### Incident management and on-call
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md)
+- How: Incident list in a `table`; response steps in `todo-list`.
+- Missing: No timeline component for incident updates.
+
+### Browse and search logs
+
+- Fit: **Adapt**
+- Use: [Code Panel](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-panel.md), [Code Block](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-block.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md)
+- How: A virtualized `table` handles very long lists; `code-block` for a single entry.
+- Missing: No log viewer with live tail, level filtering and highlight.
+
+### Metrics dashboards
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+- How: Relabel `analytics-dashboard`; `insight-cards` has chart cards.
+- Missing: No general time-series chart with several series, zoom and thresholds.
+
+### Deployments and pipelines
+
+- Fit: **Ready**
+- Use: [Flowchart](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/flowchart.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Task Rows](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/task-rows.md), [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [File Diff](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- How: Pipeline stages in `flowchart` or a vertical `stepper`; gate a production deploy with `approval-card`; show the change with `file-diff`.
+
+### Configuration, environment variables and secrets
+
+- Fit: **Adapt**
+- Use: [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md)
+- How: `repeater-field` for key and value rows; mask values and reveal on demand.
+- Missing: No dedicated masked key-value editor.
+
+### Inventory of servers, services or assets
+
+- Fit: **Ready**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md)
+- How: Virtualized `table` for thousands of rows; `records-table` for editable records.
+
+### Command or terminal-style tools
+
+- Fit: **Adapt**
+- Use: [Code Panel](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-panel.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Agent Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-screen.md)
+- How: `command-palette` for actions; `code-panel` for output.
+- Missing: No real terminal emulator.
+
+### Team, access and settings
+
+- Fit: **Ready**
+- Use: [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md), [Auth Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/auth-screen.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md)
+- How: Pass the real workspace name, members and billing.
+
+### AI assistant for operations
+
+- Fit: **Ready**
+- Use: [Agent Workspace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-workspace.md), [Thinking Trace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/thinking-trace.md), [Tool Chips](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- How: Ask for approval before any action that changes production.
+
+## Typical screens
+
+- **Status overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md)
+- **Incident list and detail**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md)
+- **Deployments**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Flowchart](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/flowchart.md) + [Task Rows](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/task-rows.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **Logs**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md) + [Code Panel](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-panel.md)
+- **Settings and access**: [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-it-infrastructure
+```
+
+## Known gaps
+
+- Service health overview: No status-indicator or uptime-bar component (the 90-day colored bars).
+- Incident management and on-call: No timeline component for incident updates.
+- Browse and search logs: No log viewer with live tail, level filtering and highlight.
+- Metrics dashboards: No general time-series chart with several series, zoom and thresholds.
+- Configuration, environment variables and secrets: No dedicated masked key-value editor.
+- Command or terminal-style tools: No real terminal emulator.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Aviation and travel operations products with opendraft
+
+> Airline and airport operations, flight information, booking and check-in, crew and maintenance tools. Safety-critical context: clarity and correctness beat flourish.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+aviation, airline, airport, flight, aircraft, pilot, crew, boarding, check-in, mro, maintenance, notam, metar, air traffic, charter, fbo, ground handling.
+
+## Principles for this domain
+
+- State times with an explicit zone. Use 24-hour time, mark UTC as `Z`, and show the airport's local time beside it. Never leave a time ambiguous.
+- Flight status is always a word first (On time, Delayed, Boarding, Departed, Cancelled) with a color second. Show the reason and the new time for any delay.
+- Use IATA or ICAO codes in `font-mono` with the full name on hover or beneath, for example `LIS` and Lisbon.
+- On safety-critical screens (maintenance sign-off, checklists, weather) turn motion off, show who signed and when, and require an explicit confirm. Prefer `approval-card` over a quiet toggle.
+- Design for tablets, gloves and bright light: large touch targets, high contrast, no hover-only information.
+- A live board updates in place without shifting the layout under a user's cursor. Highlight what changed, then settle.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Departures and arrivals board
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Text Scramble](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/text-scramble.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Animated Number](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/animated-number.md)
+- How: A virtualized `table` with a status `badge`; `text-scramble` can animate a changed gate or time.
+- Missing: No split-flap display.
+
+### Flight detail and itinerary
+
+- Fit: **Adapt**
+- Use: [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: A vertical `stepper` for legs and connections; `progress` for the flight's progress.
+- Missing: No route or flight-path map.
+
+### Search and book a flight
+
+- Fit: **Adapt**
+- Use: [Catalog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md), [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md)
+- How: `catalog` can list fares if you relabel it and pass `layout="compact"`; passengers with `quantity-stepper`.
+- Missing: No origin and destination airport picker, and no fare comparison grid.
+
+### Passenger details, payment and confirmation
+
+- Fit: **Ready**
+- Use: [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md)
+- How: `checkout` is a three-step flow; pass your own labels and `ticketFields`.
+
+### Boarding pass
+
+- Fit: **Ready**
+- Use: [Ticket Pass](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/ticket-pass.md), [QR Code](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md)
+- How: `ticket-pass` with gate, seat and boarding group as `fields`. The QR is real, but airlines encode a standard barcode (PDF417 or Aztec) that `qr-code` does not produce.
+- Missing: No PDF417 or Aztec barcode.
+
+### Seat selection
+
+- Fit: **Gap**
+- Use: [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md)
+- How: Nothing fits.
+- Missing: No seat map.
+
+### Crew and roster scheduling
+
+- Fit: **Gap**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: A table works for lists of duties.
+- Missing: No scheduler, Gantt or calendar timeline.
+
+### Maintenance logs and pre-flight checklists
+
+- Fit: **Ready**
+- Use: [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md), [File Diff](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/file-diff.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md)
+- How: Each item signed with `approval-card`; keep the record in `records-table` with who and when.
+
+### Operations control overview
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: On-time performance and disruption counts in `stat` tiles.
+- Missing: No map and no alert banner for weather or NOTAM bulletins.
+
+## Typical screens
+
+- **Departures board**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- **Flight detail**: [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md)
+- **Booking and check-in**: [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md) + [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md) + [Ticket Pass](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/ticket-pass.md)
+- **Maintenance sign-off**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md) + [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md)
+- **Operations overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-aviation
+```
+
+## Known gaps
+
+- Departures and arrivals board: No split-flap display.
+- Flight detail and itinerary: No route or flight-path map.
+- Search and book a flight: No origin and destination airport picker, and no fare comparison grid.
+- Boarding pass: No PDF417 or Aztec barcode.
+- Seat selection: No seat map.
+- Crew and roster scheduling: No scheduler, Gantt or calendar timeline.
+- Operations control overview: No map and no alert banner for weather or NOTAM bulletins.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Logistics, supply chain and fleet products with opendraft
+
+> Shipment tracking, dispatch, warehouse and fleet products for operators, drivers and customers who need to know where things are and when they'll arrive.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+logistics, shipping, shipment, freight, carrier, courier, delivery, last mile, fleet, driver, dispatch, warehouse, inventory, supply chain, tracking, 3pl, customs, proof of delivery.
+
+## Principles for this domain
+
+- Every shipment shows three things at a glance: status (as a word), where it is, and when it will arrive (an ETA with a confidence or a delay reason).
+- Tracking IDs, container numbers and SKUs go in `font-mono` with a `copy-button`.
+- Exceptions come first: delayed, held and failed deliveries sort to the top and carry the reason and the next action.
+- Show dates and times in the location's own time zone, and say which zone.
+- Operators work in bulk: every list needs multi-select with bulk actions (`selection-actions`), saved filters and keyboard navigation.
+- Driver and warehouse screens are used one-handed on a phone: large targets, one primary action per screen, works on a poor connection.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Track one shipment (customer-facing)
+
+- Fit: **Adapt**
+- Use: [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [QR Code](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md), [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md)
+- How: A vertical `stepper` for milestones; `progress` for the journey; show the tracking ID with `copy-button`.
+- Missing: No timeline with timestamps and locations per event, and no route map.
+
+### Manage a list of shipments or orders
+
+- Fit: **Ready**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md)
+- How: Tabs for Exceptions, In transit and Delivered; a virtualized `table` when volumes are large.
+
+### Dispatch board
+
+- Fit: **Adapt**
+- Use: [CRM Pipeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/crm-pipeline.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md)
+- How: `crm-pipeline` is a stage board with drag and drop; pass your stages (Unassigned, Assigned, En route, Delivered) and relabel the cards.
+- Missing: Its data shape is sales-oriented (company, value, contact); there is no generic board.
+
+### Create a shipment or booking
+
+- Fit: **Ready**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- How: A wizard with `stepper`; packages as rows in `repeater-field`; finish with `order-confirmation`.
+
+### Fleet and driver overview
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: Utilization and on-time rate in `stat`; driver list in `table`.
+- Missing: No live map of vehicle positions.
+
+### Warehouse inventory and capacity
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md)
+- How: Zones as `progress` bars with a warning tone when nearly full.
+- Missing: No barcode scan input and no heat map of locations.
+
+### Proof of delivery
+
+- Fit: **Gap**
+- Use: [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [QR Code](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md), [Ticket Pass](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/ticket-pass.md)
+- How: A confirmation step with `approval-card` and a recipient `field` works.
+- Missing: No signature pad and no photo capture or file dropzone.
+
+### Rates, quotes and invoicing
+
+- Fit: **Adapt**
+- Use: [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md)
+- How: `checkout` summary pattern for a quote; invoices in `table`.
+- Missing: No dedicated quote or rate-comparison table.
+
+### Operations analytics
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+- How: Relabel the dashboard (shipments, on-time rate, cost per delivery) and add a `valueColumn` for cost.
+- Missing: The range tabs are fixed at 7, 30 and 90 days, and the table columns are page-analytics shaped.
+
+## Typical screens
+
+- **Public tracking page**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md)
+- **Shipments list**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md) + [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md)
+- **Dispatch board**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [CRM Pipeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/crm-pipeline.md)
+- **Create shipment**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md) + [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md) + [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- **Operations overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-logistics
+```
+
+## Known gaps
+
+- Track one shipment (customer-facing): No timeline with timestamps and locations per event, and no route map.
+- Dispatch board: Its data shape is sales-oriented (company, value, contact); there is no generic board.
+- Fleet and driver overview: No live map of vehicle positions.
+- Warehouse inventory and capacity: No barcode scan input and no heat map of locations.
+- Proof of delivery: No signature pad and no photo capture or file dropzone.
+- Rates, quotes and invoicing: No dedicated quote or rate-comparison table.
+- Operations analytics: The range tabs are fixed at 7, 30 and 90 days, and the table columns are page-analytics shaped.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
 
 ---
 

@@ -1,0 +1,811 @@
+{
+  "version": 1,
+  "intro": "Pick components by what the product has to do, not by what looks nice. Each playbook lists the usual needs of a domain, the opendraft components and blocks that serve each one, and how well they fit: ready (use as is), adapt (works with the caveat given) or gap (nothing fits yet; build it from primitives and follow the domain principles).",
+  "domains": [
+    {
+      "id": "security",
+      "title": "Security and compliance",
+      "short": "Security",
+      "summary": "Security operations, threat detection, access control and audit products. Used by analysts under pressure: dense data, fast triage, irreversible actions.",
+      "signals": [
+        "security",
+        "soc",
+        "siem",
+        "threat",
+        "incident response",
+        "vulnerability",
+        "edr",
+        "iam",
+        "access control",
+        "audit log",
+        "compliance",
+        "soc 2",
+        "firewall",
+        "fraud",
+        "zero trust",
+        "pentest"
+      ],
+      "principles": [
+        "Never show severity by color alone. Pair every severity color with a text label (Critical, High, Medium, Low) and use the same scale everywhere.",
+        "Show times as absolute UTC in `font-mono` with a relative hint (for example `14:02:09Z · 3 min ago`). Analysts compare timestamps across systems.",
+        "Make destructive or far-reaching actions (isolate a host, revoke a session, delete a key) require confirmation that names the consequence, and show who did it and when afterward.",
+        "Mask secrets by default (tokens, keys, hashes) with an explicit reveal and a `copy-button`. Never log or echo them.",
+        "Favor dense, keyboard-first tables and a `command-palette` for jumping to an entity. Default these products to the dark theme, but keep both themes working.",
+        "Every state change should leave an audit trail the user can see. Plan for an audit-log screen from the start."
+      ],
+      "needs": [
+        {
+          "need": "Triage a stream of alerts",
+          "use": [
+            "filter-table",
+            "table",
+            "badge",
+            "tabs",
+            "selection-actions"
+          ],
+          "status": "adapt",
+          "notes": "Use `badge` variants for severity and status; `table` for large live queues, `filter-table` for filtered lists, `selection-actions` for bulk acknowledge or close.",
+          "gap": "No four-level severity scale component; map Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with text."
+        },
+        {
+          "need": "Investigate an incident: timeline of events and evidence",
+          "use": [
+            "stepper",
+            "agent-activity",
+            "code-block",
+            "file-diff",
+            "tabs"
+          ],
+          "status": "gap",
+          "notes": "A vertical `stepper` covers response stages; `code-block` shows raw events.",
+          "gap": "No timeline or activity-feed component for a chronological event stream."
+        },
+        {
+          "need": "Confirm and run response actions",
+          "use": ["approval-card", "tool-approval", "dialog", "sonner"],
+          "status": "ready",
+          "notes": "`approval-card` for an action that needs sign-off, `dialog` with a typed confirmation for the dangerous ones (the settings-page danger zone is the pattern), `sonner` to report the result."
+        },
+        {
+          "need": "Manage users, roles and permissions",
+          "use": [
+            "settings-page",
+            "table",
+            "select",
+            "switch",
+            "checkbox",
+            "repeater-field"
+          ],
+          "status": "adapt",
+          "notes": "The `settings-page` team section covers invite and role change; `repeater-field` edits rule lists.",
+          "gap": "No permission-matrix (roles by permissions grid) component."
+        },
+        {
+          "need": "Search and review an audit log",
+          "use": [
+            "table",
+            "filter-table",
+            "date-range-picker",
+            "file-diff",
+            "diff-table",
+            "records-table",
+            "command-palette"
+          ],
+          "status": "ready",
+          "notes": "Filters plus `date-range-picker`; show what changed with `diff-table` or `file-diff`."
+        },
+        {
+          "need": "Show security posture and compliance coverage",
+          "use": ["analytics-dashboard", "stat", "progress", "insight-cards"],
+          "status": "adapt",
+          "notes": "`analytics-dashboard` takes `labels` and `valueColumn` so it can show findings by severity; `progress` for control coverage.",
+          "gap": "No gauge or risk-score ring."
+        },
+        {
+          "need": "Sign in with SSO and MFA",
+          "use": ["auth-screen", "field"],
+          "status": "adapt",
+          "notes": "`auth-screen` handles email, password and provider buttons.",
+          "gap": "No one-time-code (OTP) input for MFA."
+        },
+        {
+          "need": "Ask an AI analyst to summarize or investigate",
+          "use": [
+            "agent-workspace",
+            "thinking-trace",
+            "tool-chips",
+            "citations",
+            "approval-card"
+          ],
+          "status": "ready",
+          "notes": "Pass your own conversations and tasks; have the assistant cite evidence with `citations` and ask before acting with `approval-card`."
+        },
+        {
+          "need": "Show assets or attack paths on a map or graph",
+          "use": ["flowchart"],
+          "status": "gap",
+          "notes": "`flowchart` draws simple flows.",
+          "gap": "No network graph or geographic map component."
+        }
+      ],
+      "screens": [
+        {
+          "name": "Security operations overview",
+          "compose": [
+            "page-header",
+            "stat",
+            "analytics-dashboard",
+            "filter-table"
+          ]
+        },
+        {
+          "name": "Alert queue",
+          "compose": [
+            "page-header",
+            "filter-table",
+            "badge",
+            "selection-actions",
+            "command-palette"
+          ]
+        },
+        {
+          "name": "Incident detail",
+          "compose": [
+            "page-header",
+            "tabs",
+            "stepper",
+            "approval-card",
+            "code-block"
+          ]
+        },
+        {
+          "name": "Access management",
+          "compose": ["settings-page", "table", "repeater-field"]
+        },
+        {
+          "name": "Audit log",
+          "compose": ["page-header", "date-range-picker", "table", "diff-table"]
+        }
+      ],
+      "kit": [
+        "button",
+        "badge",
+        "table",
+        "filter-table",
+        "tabs",
+        "dialog",
+        "approval-card",
+        "tool-approval",
+        "command-palette",
+        "date-range-picker",
+        "stat",
+        "progress",
+        "analytics-dashboard",
+        "settings-page",
+        "auth-screen",
+        "file-diff",
+        "diff-table",
+        "copy-button",
+        "sonner",
+        "theme-toggle",
+        "page-header",
+        "field",
+        "repeater-field",
+        "selection-actions"
+      ]
+    },
+    {
+      "id": "it-infrastructure",
+      "title": "IT, DevOps and infrastructure",
+      "short": "IT and DevOps",
+      "summary": "Monitoring, incident management, deployments, logs and internal tools for engineers and IT teams.",
+      "signals": [
+        "devops",
+        "sre",
+        "infrastructure",
+        "monitoring",
+        "observability",
+        "uptime",
+        "status page",
+        "deployment",
+        "ci/cd",
+        "pipeline",
+        "logs",
+        "kubernetes",
+        "cloud",
+        "helpdesk",
+        "it service",
+        "on-call",
+        "incident",
+        "internal tool",
+        "admin panel"
+      ],
+      "principles": [
+        "Status needs a word and a shape, not just a color: Operational, Degraded, Down, Maintenance. Keep one status vocabulary across the product.",
+        "Show times in UTC with `font-mono`, and let the user switch to local time in one place.",
+        "Numbers that change should use `tabular-nums` so columns don't jitter; use `animated-number` sparingly on dashboards, never in tables or logs.",
+        "Long-running work (deploys, migrations) shows progress, current step and a way to cancel. Never leave a spinner with no step.",
+        "Provide a copy button next to every ID, command, hash and URL.",
+        "Treat logs and code as data: monospaced, wrap toggle, selectable, searchable."
+      ],
+      "needs": [
+        {
+          "need": "Service health overview",
+          "use": ["stat", "badge", "progress", "analytics-dashboard"],
+          "status": "adapt",
+          "notes": "`stat` tiles with a status `badge` per service; `analytics-dashboard` for the trend.",
+          "gap": "No status-indicator or uptime-bar component (the 90-day colored bars)."
+        },
+        {
+          "need": "Incident management and on-call",
+          "use": [
+            "table",
+            "badge",
+            "tabs",
+            "approval-card",
+            "todo-list",
+            "stepper"
+          ],
+          "status": "adapt",
+          "notes": "Incident list in a `table`; response steps in `todo-list`.",
+          "gap": "No timeline component for incident updates."
+        },
+        {
+          "need": "Browse and search logs",
+          "use": [
+            "code-panel",
+            "code-block",
+            "table",
+            "filter-table",
+            "copy-button"
+          ],
+          "status": "adapt",
+          "notes": "A virtualized `table` handles very long lists; `code-block` for a single entry.",
+          "gap": "No log viewer with live tail, level filtering and highlight."
+        },
+        {
+          "need": "Metrics dashboards",
+          "use": [
+            "analytics-dashboard",
+            "insight-cards",
+            "stat",
+            "date-range-picker"
+          ],
+          "status": "adapt",
+          "notes": "Relabel `analytics-dashboard`; `insight-cards` has chart cards.",
+          "gap": "No general time-series chart with several series, zoom and thresholds."
+        },
+        {
+          "need": "Deployments and pipelines",
+          "use": [
+            "flowchart",
+            "stepper",
+            "task-rows",
+            "todo-list",
+            "badge",
+            "file-diff",
+            "approval-card"
+          ],
+          "status": "ready",
+          "notes": "Pipeline stages in `flowchart` or a vertical `stepper`; gate a production deploy with `approval-card`; show the change with `file-diff`."
+        },
+        {
+          "need": "Configuration, environment variables and secrets",
+          "use": [
+            "field",
+            "repeater-field",
+            "input",
+            "copy-button",
+            "switch",
+            "dialog"
+          ],
+          "status": "adapt",
+          "notes": "`repeater-field` for key and value rows; mask values and reveal on demand.",
+          "gap": "No dedicated masked key-value editor."
+        },
+        {
+          "need": "Inventory of servers, services or assets",
+          "use": [
+            "table",
+            "records-table",
+            "tabs",
+            "command-palette",
+            "selection-actions"
+          ],
+          "status": "ready",
+          "notes": "Virtualized `table` for thousands of rows; `records-table` for editable records."
+        },
+        {
+          "need": "Command or terminal-style tools",
+          "use": ["code-panel", "command-palette", "agent-screen"],
+          "status": "adapt",
+          "notes": "`command-palette` for actions; `code-panel` for output.",
+          "gap": "No real terminal emulator."
+        },
+        {
+          "need": "Team, access and settings",
+          "use": ["settings-page", "auth-screen", "table"],
+          "status": "ready",
+          "notes": "Pass the real workspace name, members and billing."
+        },
+        {
+          "need": "AI assistant for operations",
+          "use": [
+            "agent-workspace",
+            "thinking-trace",
+            "tool-chips",
+            "approval-card"
+          ],
+          "status": "ready",
+          "notes": "Ask for approval before any action that changes production."
+        }
+      ],
+      "screens": [
+        {
+          "name": "Status overview",
+          "compose": ["page-header", "stat", "badge", "analytics-dashboard"]
+        },
+        {
+          "name": "Incident list and detail",
+          "compose": ["page-header", "table", "tabs", "stepper", "todo-list"]
+        },
+        {
+          "name": "Deployments",
+          "compose": ["page-header", "flowchart", "task-rows", "approval-card"]
+        },
+        {
+          "name": "Logs",
+          "compose": ["page-header", "filter-table", "code-panel"]
+        },
+        {
+          "name": "Settings and access",
+          "compose": ["settings-page"]
+        }
+      ],
+      "kit": [
+        "button",
+        "badge",
+        "table",
+        "filter-table",
+        "records-table",
+        "tabs",
+        "dialog",
+        "stat",
+        "progress",
+        "analytics-dashboard",
+        "insight-cards",
+        "code-block",
+        "code-panel",
+        "copy-button",
+        "flowchart",
+        "stepper",
+        "todo-list",
+        "task-rows",
+        "approval-card",
+        "file-diff",
+        "command-palette",
+        "date-range-picker",
+        "settings-page",
+        "auth-screen",
+        "field",
+        "repeater-field",
+        "theme-toggle",
+        "page-header",
+        "sonner"
+      ]
+    },
+    {
+      "id": "aviation",
+      "title": "Aviation and travel operations",
+      "short": "Aviation",
+      "summary": "Airline and airport operations, flight information, booking and check-in, crew and maintenance tools. Safety-critical context: clarity and correctness beat flourish.",
+      "signals": [
+        "aviation",
+        "airline",
+        "airport",
+        "flight",
+        "aircraft",
+        "pilot",
+        "crew",
+        "boarding",
+        "check-in",
+        "mro",
+        "maintenance",
+        "notam",
+        "metar",
+        "air traffic",
+        "charter",
+        "fbo",
+        "ground handling"
+      ],
+      "principles": [
+        "State times with an explicit zone. Use 24-hour time, mark UTC as `Z`, and show the airport's local time beside it. Never leave a time ambiguous.",
+        "Flight status is always a word first (On time, Delayed, Boarding, Departed, Cancelled) with a color second. Show the reason and the new time for any delay.",
+        "Use IATA or ICAO codes in `font-mono` with the full name on hover or beneath, for example `LIS` and Lisbon.",
+        "On safety-critical screens (maintenance sign-off, checklists, weather) turn motion off, show who signed and when, and require an explicit confirm. Prefer `approval-card` over a quiet toggle.",
+        "Design for tablets, gloves and bright light: large touch targets, high contrast, no hover-only information.",
+        "A live board updates in place without shifting the layout under a user's cursor. Highlight what changed, then settle."
+      ],
+      "needs": [
+        {
+          "need": "Departures and arrivals board",
+          "use": ["table", "badge", "text-scramble", "tabs", "animated-number"],
+          "status": "adapt",
+          "notes": "A virtualized `table` with a status `badge`; `text-scramble` can animate a changed gate or time.",
+          "gap": "No split-flap display."
+        },
+        {
+          "need": "Flight detail and itinerary",
+          "use": ["detail-page", "stepper", "progress", "stat", "badge"],
+          "status": "adapt",
+          "notes": "A vertical `stepper` for legs and connections; `progress` for the flight's progress.",
+          "gap": "No route or flight-path map."
+        },
+        {
+          "need": "Search and book a flight",
+          "use": [
+            "catalog",
+            "date-picker",
+            "date-range-picker",
+            "quantity-stepper",
+            "select",
+            "field"
+          ],
+          "status": "adapt",
+          "notes": "`catalog` can list fares if you relabel it and pass `layout=\"compact\"`; passengers with `quantity-stepper`.",
+          "gap": "No origin and destination airport picker, and no fare comparison grid."
+        },
+        {
+          "need": "Passenger details, payment and confirmation",
+          "use": ["checkout", "order-confirmation", "stepper", "field"],
+          "status": "ready",
+          "notes": "`checkout` is a three-step flow; pass your own labels and `ticketFields`."
+        },
+        {
+          "need": "Boarding pass",
+          "use": ["ticket-pass", "qr-code"],
+          "status": "ready",
+          "notes": "`ticket-pass` with gate, seat and boarding group as `fields`. The QR is real, but airlines encode a standard barcode (PDF417 or Aztec) that `qr-code` does not produce.",
+          "gap": "No PDF417 or Aztec barcode."
+        },
+        {
+          "need": "Seat selection",
+          "use": ["radio-group", "checkbox"],
+          "status": "gap",
+          "notes": "Nothing fits.",
+          "gap": "No seat map."
+        },
+        {
+          "need": "Crew and roster scheduling",
+          "use": ["table", "date-range-picker", "tabs", "badge"],
+          "status": "gap",
+          "notes": "A table works for lists of duties.",
+          "gap": "No scheduler, Gantt or calendar timeline."
+        },
+        {
+          "need": "Maintenance logs and pre-flight checklists",
+          "use": [
+            "todo-list",
+            "checkbox",
+            "approval-card",
+            "records-table",
+            "file-diff",
+            "field"
+          ],
+          "status": "ready",
+          "notes": "Each item signed with `approval-card`; keep the record in `records-table` with who and when."
+        },
+        {
+          "need": "Operations control overview",
+          "use": [
+            "analytics-dashboard",
+            "stat",
+            "table",
+            "command-palette",
+            "badge"
+          ],
+          "status": "adapt",
+          "notes": "On-time performance and disruption counts in `stat` tiles.",
+          "gap": "No map and no alert banner for weather or NOTAM bulletins."
+        }
+      ],
+      "screens": [
+        {
+          "name": "Departures board",
+          "compose": ["site-header", "tabs", "table", "badge"]
+        },
+        {
+          "name": "Flight detail",
+          "compose": ["detail-page", "stepper", "progress"]
+        },
+        {
+          "name": "Booking and check-in",
+          "compose": ["checkout", "order-confirmation", "ticket-pass"]
+        },
+        {
+          "name": "Maintenance sign-off",
+          "compose": [
+            "page-header",
+            "todo-list",
+            "approval-card",
+            "records-table"
+          ]
+        },
+        {
+          "name": "Operations overview",
+          "compose": ["page-header", "stat", "analytics-dashboard", "table"]
+        }
+      ],
+      "kit": [
+        "button",
+        "badge",
+        "table",
+        "tabs",
+        "stat",
+        "progress",
+        "stepper",
+        "detail-page",
+        "catalog",
+        "checkout",
+        "order-confirmation",
+        "ticket-pass",
+        "qr-code",
+        "date-picker",
+        "date-range-picker",
+        "quantity-stepper",
+        "field",
+        "todo-list",
+        "approval-card",
+        "records-table",
+        "analytics-dashboard",
+        "text-scramble",
+        "command-palette",
+        "site-header",
+        "page-header",
+        "theme-toggle",
+        "sonner"
+      ]
+    },
+    {
+      "id": "logistics",
+      "title": "Logistics, supply chain and fleet",
+      "short": "Logistics",
+      "summary": "Shipment tracking, dispatch, warehouse and fleet products for operators, drivers and customers who need to know where things are and when they'll arrive.",
+      "signals": [
+        "logistics",
+        "shipping",
+        "shipment",
+        "freight",
+        "carrier",
+        "courier",
+        "delivery",
+        "last mile",
+        "fleet",
+        "driver",
+        "dispatch",
+        "warehouse",
+        "inventory",
+        "supply chain",
+        "tracking",
+        "3pl",
+        "customs",
+        "proof of delivery"
+      ],
+      "principles": [
+        "Every shipment shows three things at a glance: status (as a word), where it is, and when it will arrive (an ETA with a confidence or a delay reason).",
+        "Tracking IDs, container numbers and SKUs go in `font-mono` with a `copy-button`.",
+        "Exceptions come first: delayed, held and failed deliveries sort to the top and carry the reason and the next action.",
+        "Show dates and times in the location's own time zone, and say which zone.",
+        "Operators work in bulk: every list needs multi-select with bulk actions (`selection-actions`), saved filters and keyboard navigation.",
+        "Driver and warehouse screens are used one-handed on a phone: large targets, one primary action per screen, works on a poor connection."
+      ],
+      "needs": [
+        {
+          "need": "Track one shipment (customer-facing)",
+          "use": [
+            "detail-page",
+            "stepper",
+            "progress",
+            "badge",
+            "qr-code",
+            "copy-button",
+            "site-header"
+          ],
+          "status": "adapt",
+          "notes": "A vertical `stepper` for milestones; `progress` for the journey; show the tracking ID with `copy-button`.",
+          "gap": "No timeline with timestamps and locations per event, and no route map."
+        },
+        {
+          "need": "Manage a list of shipments or orders",
+          "use": [
+            "table",
+            "filter-table",
+            "tabs",
+            "badge",
+            "date-range-picker",
+            "selection-actions",
+            "records-table"
+          ],
+          "status": "ready",
+          "notes": "Tabs for Exceptions, In transit and Delivered; a virtualized `table` when volumes are large."
+        },
+        {
+          "need": "Dispatch board",
+          "use": ["crm-pipeline", "table", "badge", "avatar"],
+          "status": "adapt",
+          "notes": "`crm-pipeline` is a stage board with drag and drop; pass your stages (Unassigned, Assigned, En route, Delivered) and relabel the cards.",
+          "gap": "Its data shape is sales-oriented (company, value, contact); there is no generic board."
+        },
+        {
+          "need": "Create a shipment or booking",
+          "use": [
+            "stepper",
+            "field",
+            "date-picker",
+            "repeater-field",
+            "select",
+            "checkout",
+            "order-confirmation"
+          ],
+          "status": "ready",
+          "notes": "A wizard with `stepper`; packages as rows in `repeater-field`; finish with `order-confirmation`."
+        },
+        {
+          "need": "Fleet and driver overview",
+          "use": ["analytics-dashboard", "stat", "table", "avatar", "badge"],
+          "status": "adapt",
+          "notes": "Utilization and on-time rate in `stat`; driver list in `table`.",
+          "gap": "No live map of vehicle positions."
+        },
+        {
+          "need": "Warehouse inventory and capacity",
+          "use": [
+            "table",
+            "progress",
+            "stat",
+            "records-table",
+            "repeater-field"
+          ],
+          "status": "adapt",
+          "notes": "Zones as `progress` bars with a warning tone when nearly full.",
+          "gap": "No barcode scan input and no heat map of locations."
+        },
+        {
+          "need": "Proof of delivery",
+          "use": ["field", "approval-card", "qr-code", "ticket-pass"],
+          "status": "gap",
+          "notes": "A confirmation step with `approval-card` and a recipient `field` works.",
+          "gap": "No signature pad and no photo capture or file dropzone."
+        },
+        {
+          "need": "Rates, quotes and invoicing",
+          "use": ["checkout", "table", "stat", "order-confirmation", "field"],
+          "status": "adapt",
+          "notes": "`checkout` summary pattern for a quote; invoices in `table`.",
+          "gap": "No dedicated quote or rate-comparison table."
+        },
+        {
+          "need": "Operations analytics",
+          "use": [
+            "analytics-dashboard",
+            "insight-cards",
+            "stat",
+            "date-range-picker"
+          ],
+          "status": "adapt",
+          "notes": "Relabel the dashboard (shipments, on-time rate, cost per delivery) and add a `valueColumn` for cost.",
+          "gap": "The range tabs are fixed at 7, 30 and 90 days, and the table columns are page-analytics shaped."
+        }
+      ],
+      "screens": [
+        {
+          "name": "Public tracking page",
+          "compose": ["site-header", "detail-page", "stepper", "progress"]
+        },
+        {
+          "name": "Shipments list",
+          "compose": [
+            "page-header",
+            "tabs",
+            "filter-table",
+            "selection-actions"
+          ]
+        },
+        {
+          "name": "Dispatch board",
+          "compose": ["page-header", "crm-pipeline"]
+        },
+        {
+          "name": "Create shipment",
+          "compose": [
+            "page-header",
+            "stepper",
+            "field",
+            "repeater-field",
+            "order-confirmation"
+          ]
+        },
+        {
+          "name": "Operations overview",
+          "compose": ["page-header", "stat", "analytics-dashboard"]
+        }
+      ],
+      "kit": [
+        "button",
+        "badge",
+        "table",
+        "filter-table",
+        "records-table",
+        "tabs",
+        "stat",
+        "progress",
+        "stepper",
+        "detail-page",
+        "crm-pipeline",
+        "checkout",
+        "order-confirmation",
+        "analytics-dashboard",
+        "insight-cards",
+        "date-picker",
+        "date-range-picker",
+        "field",
+        "repeater-field",
+        "selection-actions",
+        "qr-code",
+        "copy-button",
+        "avatar",
+        "site-header",
+        "page-header",
+        "theme-toggle",
+        "sonner"
+      ]
+    }
+  ],
+  "crossDomainGaps": [
+    {
+      "id": "timeline",
+      "title": "Timeline / activity feed",
+      "why": "Needed for incidents, shipment tracking, audit and case history in every domain."
+    },
+    {
+      "id": "alert-banner",
+      "title": "Alert and banner",
+      "why": "System, weather and policy notices need a persistent, dismissible, severity-aware banner."
+    },
+    {
+      "id": "status-indicator",
+      "title": "Status indicator and uptime bar",
+      "why": "Health and availability across IT, logistics and aviation."
+    },
+    {
+      "id": "map",
+      "title": "Map and route view",
+      "why": "Fleet, flights, assets and attack paths all need a location view."
+    },
+    {
+      "id": "scheduler",
+      "title": "Scheduler / Gantt / calendar timeline",
+      "why": "Crew rosters, dispatch, maintenance windows and on-call."
+    },
+    {
+      "id": "time-series-chart",
+      "title": "General time-series chart",
+      "why": "Metrics with several series, zoom and thresholds."
+    },
+    {
+      "id": "otp-input",
+      "title": "One-time-code input",
+      "why": "MFA and delivery verification."
+    },
+    {
+      "id": "dropzone",
+      "title": "File dropzone and photo capture",
+      "why": "Evidence, proof of delivery and imports."
+    },
+    {
+      "id": "slider",
+      "title": "Slider",
+      "why": "Settings and filters in many products."
+    }
+  ]
+}

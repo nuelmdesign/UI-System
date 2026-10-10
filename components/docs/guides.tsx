@@ -16,6 +16,7 @@ import {
 import {
   CATEGORY_LABEL,
   CATEGORY_ORDER,
+  ENTRY_BY_SLUG,
   GUIDES,
   entriesIn,
 } from "@/components/docs/entries"
@@ -24,7 +25,10 @@ import { CodeBlock } from "@/components/agents/code-block"
 import { ThemeBuilder } from "@/components/site/theme-builder"
 import { CopyButton } from "@/components/motion/copy-button"
 import { PixelField } from "@/components/motion/pixel-field"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import useCases from "@/content/ai/use-cases.json"
 import { toast } from "sonner"
 
 export function GuidePage({ slug }: { slug: string }) {
@@ -600,9 +604,172 @@ function MotionGuide() {
   )
 }
 
+/* -------------------------------- Use cases -------------------------------- */
+
+const FIT_BADGE = {
+  ready: { label: "Ready", variant: "success" },
+  adapt: { label: "Adapt", variant: "warning" },
+  gap: { label: "Gap", variant: "secondary" },
+} as const
+
+function UseCasesGuide() {
+  const nav = useDocsNav()
+  return (
+    <>
+      <Prose>
+        <p>{useCases.intro}</p>
+        <p>
+          Assistants read the same playbooks: the Use cases list in{" "}
+          <code>llms.txt</code> points to one page per domain, and{" "}
+          <a
+            href={`${SITE.files}/use-cases.json`}
+            className="text-brand underline-offset-4 hover:underline"
+          >
+            use-cases.json
+          </a>{" "}
+          has everything as data. Each playbook has a starter kit that installs
+          the theme and the components it recommends in one command.
+        </p>
+      </Prose>
+      <section className="grid gap-4">
+        <H2>Pick a domain</H2>
+        <Tabs defaultValue={useCases.domains[0].id} className="gap-6">
+          <TabsList className="h-auto w-full flex-wrap justify-start">
+            {useCases.domains.map((d) => (
+              <TabsTrigger key={d.id} value={d.id}>
+                {d.short}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {useCases.domains.map((d) => {
+            const kit = `npx shadcn@latest add @opendraft/kit-${d.id}`
+            return (
+              <TabsContent key={d.id} value={d.id} className="grid gap-8">
+                <div className="grid gap-3">
+                  <h3 className="heading text-2xl">{d.title}</h3>
+                  <Prose>
+                    <p>{d.summary}</p>
+                    <p>
+                      <strong>Signals:</strong> {d.signals.join(", ")}.
+                    </p>
+                  </Prose>
+                  <CodeBlock
+                    code={kit}
+                    language="bash"
+                    status="complete"
+                    copyable={false}
+                    showLineNumbers={false}
+                    wrap
+                  />
+                  <div>
+                    <CopyButton value={kit} variant="outline" size="icon-sm" />
+                  </div>
+                </div>
+                <div className="grid gap-3">
+                  <h4 className="eyebrow text-muted-foreground">Principles</h4>
+                  <ul className="grid gap-2 text-[15px] leading-7 text-muted-foreground">
+                    {d.principles.map((p) => (
+                      <li key={p} className="flex gap-3">
+                        <span
+                          aria-hidden
+                          className="mt-2.5 size-1.5 shrink-0 bg-primary"
+                        />
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="grid gap-3">
+                  <h4 className="eyebrow text-muted-foreground">
+                    What it needs, and what to use
+                  </h4>
+                  <div className="grid border-t">
+                    {d.needs.map((n) => {
+                      const fit = FIT_BADGE[n.status as keyof typeof FIT_BADGE]
+                      return (
+                        <div
+                          key={n.need}
+                          className="grid gap-2 border-b py-4 text-[15px]"
+                        >
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-medium">{n.need}</span>
+                            <Badge variant={fit.variant}>{fit.label}</Badge>
+                          </div>
+                          <p className="flex flex-wrap gap-x-3 gap-y-1">
+                            {n.use.map((slug) => (
+                              <nav.Link
+                                key={slug}
+                                href={nav.href(slug)}
+                                className="font-mono text-[13px] text-brand underline-offset-4 hover:underline"
+                              >
+                                {ENTRY_BY_SLUG[slug]?.title ?? slug}
+                              </nav.Link>
+                            ))}
+                          </p>
+                          {n.notes && (
+                            <p className="text-muted-foreground">{n.notes}</p>
+                          )}
+                          {"gap" in n && n.gap && (
+                            <p className="text-muted-foreground">
+                              <strong className="font-medium text-foreground">
+                                Missing:
+                              </strong>{" "}
+                              {n.gap}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+                <div className="grid gap-3">
+                  <h4 className="eyebrow text-muted-foreground">
+                    Typical screens
+                  </h4>
+                  <ul className="grid gap-2 text-[15px] text-muted-foreground">
+                    {d.screens.map((x) => (
+                      <li key={x.name}>
+                        <strong className="font-medium text-foreground">
+                          {x.name}
+                        </strong>
+                        :{" "}
+                        {x.compose
+                          .map((c) => ENTRY_BY_SLUG[c]?.title ?? c)
+                          .join(" + ")}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </TabsContent>
+            )
+          })}
+        </Tabs>
+      </section>
+      <section className="grid gap-4">
+        <H2>Missing across every domain</H2>
+        <Prose>
+          <p>
+            These gaps came up in more than one playbook. They are the next
+            components to build, in rough order of how often they are needed.
+          </p>
+        </Prose>
+        <ul className="grid border-t">
+          {useCases.crossDomainGaps.map((g) => (
+            <li key={g.id} className="grid gap-1 border-b py-3 text-[15px]">
+              <span className="font-medium">{g.title}</span>
+              <span className="text-muted-foreground">{g.why}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
+  )
+}
+
 const BODIES: Record<string, React.ComponentType> = {
   introduction: Introduction,
   ai: UseWithAi,
+  "use-cases": UseCasesGuide,
   installation: Installation,
   theming: Theming,
   motion: MotionGuide,

@@ -83,8 +83,7 @@ import { themeScript } from "@/components/ui/theme-toggle"
 </html>
 ```
 
-   Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead.
-8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
+Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead. 8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
 
 ```tsx
 import { MotionConfig } from "motion/react"
@@ -101,6 +100,7 @@ On Next.js 16 with Cache Components (the new `create-next-app` default), a compo
 
 ### 2. Use components before writing your own
 
+- If the product is for a specific industry or job (security, IT and infrastructure, aviation, logistics, and so on), read the matching playbook in the Use cases list first, before choosing components. It names the components that serve each need, rates how well they fit, lists the typical screens, and gives one install command for a starter kit. Follow its domain principles (for example how to show severity, status and time). If no playbook matches, pick by need from the component list and apply the same care.
 - If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for. Blocks fill the space they're given and lay out from their own width, so put one in a container that has a width and a height (for example a `w-full` parent with `h-screen` or a fixed height); in a shrink-to-fit parent it collapses. Give every page the same width with `PageContainer`, and head it with `PageHeader`. Build forms with `Field`, with `FieldGroup` for rows, and use `DatePicker` for single dates and `RepeaterField` for add-and-remove rows.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
 - Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
@@ -195,6 +195,19 @@ Components use Radix primitives and come with keyboard and screen-reader support
 - Every piece of UI that exists in opendraft uses the opendraft component.
 - The screen works in both light and dark mode.
 - Headings use the `heading` utility; nothing else does.
+
+## Use cases
+
+### Pick by what the product does
+
+If the product is for a specific industry or job, read its playbook before choosing components. A playbook lists the domain's usual needs, the opendraft components that serve each (with a fit rating), the screens to assemble, and one install command for a starter kit. Match the request against each playbook's signals; if none matches, pick by need from the component list below.
+
+- [Security and compliance](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/security.md): Security operations, threat detection, access control and audit products. Used by analysts under pressure: dense data, fast triage, irreversible actions. Signals: security, soc, siem, threat, incident response, vulnerability, edr, iam. Kit: `npx shadcn@latest add @opendraft/kit-security`
+- [IT, DevOps and infrastructure](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/it-infrastructure.md): Monitoring, incident management, deployments, logs and internal tools for engineers and IT teams. Signals: devops, sre, infrastructure, monitoring, observability, uptime, status page, deployment. Kit: `npx shadcn@latest add @opendraft/kit-it-infrastructure`
+- [Aviation and travel operations](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/aviation.md): Airline and airport operations, flight information, booking and check-in, crew and maintenance tools. Safety-critical context: clarity and correctness beat flourish. Signals: aviation, airline, airport, flight, aircraft, pilot, crew, boarding. Kit: `npx shadcn@latest add @opendraft/kit-aviation`
+- [Logistics, supply chain and fleet](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/use-cases/logistics.md): Shipment tracking, dispatch, warehouse and fleet products for operators, drivers and customers who need to know where things are and when they'll arrive. Signals: logistics, shipping, shipment, freight, carrier, courier, delivery, last mile. Kit: `npx shadcn@latest add @opendraft/kit-logistics`
+
+Machine-readable index: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/use-cases.json
 
 ## Components
 
@@ -317,6 +330,7 @@ Components use Radix primitives and come with keyboard and screen-reader support
 
 - [Introduction](https://ui-system-virid.vercel.app/docs/introduction): What opendraft is and how it's put together.
 - [Use with AI](https://ui-system-virid.vercel.app/docs/ai): Give an AI assistant one link so it builds with opendraft's components and tokens.
+- [Use cases](https://ui-system-virid.vercel.app/docs/use-cases): Playbooks that tell you, and your AI assistant, which components suit security, IT, aviation and logistics products.
 - [Installation](https://ui-system-virid.vercel.app/docs/installation): Add the registry to a project and install components.
 - [Theming](https://ui-system-virid.vercel.app/docs/theming): Color, type, shape and texture tokens, in both themes.
 - [Motion](https://ui-system-virid.vercel.app/docs/motion): The shared springs, easings and durations in lib/motion.ts.

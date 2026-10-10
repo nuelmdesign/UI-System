@@ -463,6 +463,143 @@ function componentPage(entry) {
   return lines.join("\n") + "\n"
 }
 
+/* -------------------------------- Use cases -------------------------------- */
+
+const useCases = JSON.parse(read("content/ai/use-cases.json"))
+const slugTitle = Object.fromEntries(ENTRIES.map((e) => [e.slug, e.title]))
+const FIT = { ready: "Ready", adapt: "Adapt", gap: "Gap" }
+
+// A playbook may only name components that exist, so it can't go stale.
+for (const d of useCases.domains) {
+  const named = [
+    ...d.kit,
+    ...d.needs.flatMap((n) => n.use),
+    ...d.screens.flatMap((x) => x.compose),
+  ]
+  const missing = [...new Set(named.filter((n) => !slugTitle[n]))]
+  if (missing.length)
+    throw new Error(
+      `use-cases.json: "${d.id}" names components that don't exist: ${missing.join(", ")}`
+    )
+  for (const n of d.needs) {
+    if (!FIT[n.status])
+      throw new Error(`use-cases.json: bad status "${n.status}" in "${d.id}"`)
+    if (n.status !== "ready" && !n.gap)
+      throw new Error(
+        `use-cases.json: "${n.need}" in "${d.id}" needs a "gap" note`
+      )
+  }
+}
+
+const useCaseUrl = (id) => `${FILES_URL}/llms/use-cases/${id}.md`
+const link = (slug) => `[${slugTitle[slug]}](${pageUrl(slug)})`
+
+function useCasePage(d) {
+  const gaps = d.needs.filter((n) => n.gap)
+  const lines = [
+    `# Building ${d.title} products with opendraft`,
+    "",
+    `> ${d.summary}`,
+    "",
+    "Read this before building for this domain. Follow the rules in " +
+      `${FILES_URL}/llms.txt as well. Names below link to each component's page (props, types, example).`,
+    "",
+    "## Use this playbook when the product involves",
+    "",
+    d.signals.join(", ") + ".",
+    "",
+    "## Principles for this domain",
+    "",
+    ...d.principles.map((p) => `- ${p}`),
+    "",
+    "## What the product needs, and what to use",
+    "",
+    "Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.",
+    "",
+  ]
+  for (const n of d.needs) {
+    lines.push(`### ${n.need}`, "")
+    lines.push(`- Fit: **${FIT[n.status]}**`)
+    lines.push(`- Use: ${n.use.map(link).join(", ")}`)
+    if (n.notes) lines.push(`- How: ${n.notes}`)
+    if (n.gap) lines.push(`- Missing: ${n.gap}`)
+    lines.push("")
+  }
+  lines.push("## Typical screens", "")
+  for (const x of d.screens)
+    lines.push(`- **${x.name}**: ${x.compose.map(link).join(" + ")}`)
+  lines.push(
+    "",
+    "## Install the starter kit",
+    "",
+    "One command installs the theme and the components this playbook uses:",
+    "",
+    "```bash",
+    installCmd(`kit-${d.id}`),
+    "```",
+    ""
+  )
+  if (gaps.length) {
+    lines.push("## Known gaps", "")
+    for (const n of gaps) lines.push(`- ${n.need}: ${n.gap}`)
+    lines.push("")
+  }
+  lines.push(`Docs: ${SITE_URL}/docs/use-cases`)
+  return lines.join("\n") + "\n"
+}
+
+const useCasePages = useCases.domains.map((d) => [d.id, useCasePage(d)])
+
+const useCaseIndex = [
+  "### Pick by what the product does",
+  "",
+  "If the product is for a specific industry or job, read its playbook before choosing components. A playbook lists the domain's usual needs, the opendraft components that serve each (with a fit rating), the screens to assemble, and one install command for a starter kit. Match the request against each playbook's signals; if none matches, pick by need from the component list below.",
+  "",
+  ...useCases.domains.map(
+    (d) =>
+      `- [${d.title}](${useCaseUrl(d.id)}): ${d.summary} Signals: ${d.signals.slice(0, 8).join(", ")}. Kit: \`${installCmd(`kit-${d.id}`)}\``
+  ),
+  "",
+  `Machine-readable index: ${FILES_URL}/use-cases.json`,
+].join("\n")
+
+const useCaseJson = {
+  version: useCases.version,
+  intro: useCases.intro,
+  fit: {
+    ready: "Use as is.",
+    adapt: "Works with the caveat in `gap`.",
+    gap: "Nothing fits yet; build from primitives and follow the principles.",
+  },
+  domains: useCases.domains.map((d) => ({
+    id: d.id,
+    title: d.title,
+    summary: d.summary,
+    signals: d.signals,
+    principles: d.principles,
+    playbook: useCaseUrl(d.id),
+    kit: {
+      name: `kit-${d.id}`,
+      install: installCmd(`kit-${d.id}`),
+      components: d.kit,
+    },
+    needs: d.needs.map((n) => ({
+      need: n.need,
+      fit: n.status,
+      notes: n.notes ?? null,
+      gap: n.gap ?? null,
+      components: n.use.map((slug) => ({
+        slug,
+        title: slugTitle[slug],
+        page: pageUrl(slug),
+        install: installCmd(slug),
+      })),
+    })),
+    screens: d.screens,
+  })),
+  crossDomainGaps: useCases.crossDomainGaps,
+}
+
 /* ---------------------------------- Output --------------------------------- */
 
 const summary =
@@ -488,6 +625,7 @@ const docsIndex = GUIDES.map(
 
 const llms = [
   header,
+  `## Use cases\n\n${useCaseIndex}\n`,
   `## Components\n\n${componentIndex}\n`,
   `## Docs\n\n${docsIndex}\n`,
   `## Optional\n\n- [llms-full.txt](${FILES_URL}/llms-full.txt): these rules plus every component page (props, types, examples) in one file\n- [Registry index](${FILES_URL}/r/registry.json): every installable registry item as JSON\n`,
@@ -501,10 +639,24 @@ mkdirSync(outDir, { recursive: true })
 for (const [slug, body] of pages)
   writeFileSync(new URL(`${slug}.md`, outDir), body)
 
+mkdirSync(new URL("use-cases/", outDir), { recursive: true })
+for (const [id, body] of useCasePages)
+  writeFileSync(new URL(`use-cases/${id}.md`, outDir), body)
+writeFileSync(
+  new URL("public/use-cases.json", root),
+  JSON.stringify(useCaseJson, null, 2) + "\n"
+)
+
 writeFileSync(new URL("public/llms.txt", root), llms)
 writeFileSync(
   new URL("public/llms-full.txt", root),
-  [header, ...pages.map(([, body]) => body)].join("\n---\n\n")
+  [
+    header,
+    ...useCasePages.map(([, body]) => body),
+    ...pages.map(([, body]) => body),
+  ].join("\n---\n\n")
 )
 
-console.log(`llms.txt, llms-full.txt, llms/: ${pages.length} component pages`)
+console.log(
+  `llms.txt, llms-full.txt, llms/: ${pages.length} component pages, ${useCasePages.length} use-case playbooks`
+)

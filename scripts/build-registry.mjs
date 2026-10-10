@@ -984,6 +984,35 @@ items.push({
   registryDependencies: items.map((i) => `@opendraft/${i.name}`),
 })
 
+// One-command kits per domain, from content/ai/use-cases.json. They install
+// the theme plus the components that playbook recommends.
+{
+  const useCases = JSON.parse(
+    readFileSync(
+      new URL("../content/ai/use-cases.json", import.meta.url),
+      "utf8"
+    )
+  )
+  const names = new Set(items.map((i) => i.name))
+  for (const d of useCases.domains) {
+    const missing = d.kit.filter((n) => !names.has(n))
+    if (missing.length)
+      throw new Error(
+        `use-cases.json: kit for "${d.id}" names unknown items: ${missing.join(", ")}`
+      )
+    items.push({
+      name: `kit-${d.id}`,
+      type: "registry:item",
+      title: `${d.title} kit`,
+      description: `The theme and the opendraft components that suit ${d.title.toLowerCase()} products. See the use-case playbook.`,
+      registryDependencies: [
+        "@opendraft/theme",
+        ...d.kit.map((n) => `@opendraft/${n}`),
+      ],
+    })
+  }
+}
+
 const registry = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
   name: "opendraft",
