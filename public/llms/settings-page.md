@@ -1,6 +1,6 @@
 # Settings Page
 
-Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone.
+Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone. Data shape: SaaS-shaped sections (profile, notifications, team, billing); the billing Change plan button needs your handler.
 
 Category: Blocks
 

@@ -1,6 +1,6 @@
 # Detail Page
 
-Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.
+Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist. Data shape: An event-ticket purchase page (date, host, tiers, waitlist). Not a generic record or product page.
 
 Category: Blocks
 

@@ -1,6 +1,6 @@
 # Order Confirmation
 
-Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.
+Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions. Data shape: Ticket-shaped: always shows tickets and a QR pass, with a fixed three-step stepper.
 
 Category: Blocks
 

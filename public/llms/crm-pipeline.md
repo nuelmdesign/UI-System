@@ -1,6 +1,6 @@
 # CRM Pipeline
 
-Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline.
+Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline. Data shape: A sales board: company, USD value and 'deal' wording are fixed and there is no `labels` prop. Not a general stage board.
 
 Category: Blocks
 

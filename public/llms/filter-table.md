@@ -1,6 +1,6 @@
 # Filter Table
 
-Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning. Shows sample content (an ice cream shop) until you pass your own data through its props.
+Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning. Data shape: Rows are task rows (task, date, status todo, progress or done, owner), not a general data table. For other data use `table`. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Data & Workflows
 

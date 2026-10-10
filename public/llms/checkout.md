@@ -1,6 +1,6 @@
 # Checkout
 
-Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code.
+Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code. Data shape: Booking-shaped: contact, attendee, digital or front-desk delivery, card or pay later, ticket confirmation. No shipping address.
 
 Category: Blocks
 

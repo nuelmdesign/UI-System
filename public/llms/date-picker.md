@@ -1,6 +1,6 @@
 # Date Picker
 
-Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.
+Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values. Data shape: A single date with an optional HH:MM field; no time zone.
 
 Category: Components
 

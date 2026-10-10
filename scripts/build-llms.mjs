@@ -31,11 +31,56 @@ const SAMPLE_CONTENT = new Set([
   "tool-chips",
 ])
 
+/** Components whose names read as generic but whose data is shaped by one demo domain. */
+const SHAPE_NOTES = {
+  "filter-table":
+    "Rows are task rows (task, date, status todo, progress or done, owner), not a general data table. For other data use `table`.",
+  "records-table":
+    "An AI spreadsheet demo with fixed columns (name, tags, last, strength, website). For general records use `table`.",
+  "diff-table":
+    "A demo of an AI edit to a people table (id, dept, email). Not a general diff viewer; use `file-diff` for text changes.",
+  "selection-actions":
+    "An AI text-rewrite bar over selected text, not a bulk-action bar for table rows. For bulk actions use `table` with `selectable` plus Buttons.",
+  "insight-cards":
+    "An AI insight carousel. Only its exported `InsightChart` (a multi-line chart with one threshold line) is reusable on its own.",
+  "task-rows":
+    "A payment-shaped animated demo (label, amount; fixed failed, retry and done states), not an interactive task list.",
+  "todo-list":
+    "A read-only view of an agent's plan: items expand but can't be ticked. For a tickable checklist use `checkbox` rows with `progress`.",
+  "sidebar-nav":
+    "An AI-chat sidebar (chats, new chat, collapse rail). For general app navigation use `animated-sidebar`.",
+  flowchart:
+    "An editable trigger and if/else canvas, not a pipeline or status graph.",
+  "crm-pipeline":
+    "A sales board: company, USD value and 'deal' wording are fixed and there is no `labels` prop. Not a general stage board.",
+  "detail-page":
+    "An event-ticket purchase page (date, host, tiers, waitlist). Not a generic record or product page.",
+  catalog:
+    "Event-shaped items (host, date, capacity, remaining). Not a retail product grid.",
+  checkout:
+    "Booking-shaped: contact, attendee, digital or front-desk delivery, card or pay later, ticket confirmation. No shipping address.",
+  "order-confirmation":
+    "Ticket-shaped: always shows tickets and a QR pass, with a fixed three-step stepper.",
+  "approval-card":
+    "One decision (Approve, Request changes, Reject) with no approver or timestamp, and fixed resolved wording.",
+  "question-card":
+    "Survey-shaped: skip and free text are always shown and there is no scoring.",
+  "analytics-dashboard":
+    "Web-analytics shaped: ranges are fixed 7d, 30d and 90d and table columns are name, visitors, conversion and duration (relabel with `labels`, `valueColumn` and the format props).",
+  "settings-page":
+    "SaaS-shaped sections (profile, notifications, team, billing); the billing Change plan button needs your handler.",
+  "date-picker": "A single date with an optional HH:MM field; no time zone.",
+}
+
 /** Description plus a warning when the component ships demo content. */
-const describe = (entry) =>
-  SAMPLE_CONTENT.has(entry.slug)
-    ? `${entry.description} Shows sample content (an ice cream shop) until you pass your own data through its props.`
-    : entry.description
+const describe = (entry) => {
+  let text = entry.description
+  if (SHAPE_NOTES[entry.slug]) text += ` Data shape: ${SHAPE_NOTES[entry.slug]}`
+  if (SAMPLE_CONTENT.has(entry.slug))
+    text +=
+      " Shows sample content (an ice cream shop) until you pass your own data through its props."
+  return text
+}
 
 const root = new URL("../", import.meta.url)
 const read = (path) => readFileSync(new URL(path, root), "utf8")

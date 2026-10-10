@@ -1,6 +1,6 @@
 # Records Table
 
-AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting. Shows sample content (an ice cream shop) until you pass your own data through its props.
+AI spreadsheet grid with property popovers, row-by-row calculation, resizable sticky columns and sorting. Data shape: An AI spreadsheet demo with fixed columns (name, tags, last, strength, website). For general records use `table`. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Data & Workflows
 

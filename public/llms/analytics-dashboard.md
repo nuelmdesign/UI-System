@@ -1,6 +1,6 @@
 # Analytics Dashboard
 
-Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown.
+Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown. Data shape: Web-analytics shaped: ranges are fixed 7d, 30d and 90d and table columns are name, visitors, conversion and duration (relabel with `labels`, `valueColumn` and the format props).
 
 Category: Blocks
 

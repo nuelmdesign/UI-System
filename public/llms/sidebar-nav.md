@@ -1,6 +1,6 @@
 # Sidebar Nav
 
-Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail. Shows sample content (an ice cream shop) until you pass your own data through its props.
+Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail. Data shape: An AI-chat sidebar (chats, new chat, collapse rail). For general app navigation use `animated-sidebar`. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Components
 

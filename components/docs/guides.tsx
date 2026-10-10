@@ -47,7 +47,7 @@ export function GuidePage({ slug }: { slug: string }) {
       <p className="mt-3 text-pretty text-muted-foreground">
         {guide.description}
       </p>
-      <div className="mt-10 grid gap-10">
+      <div className="mt-10 grid gap-10 [&>*]:min-w-0">
         <Body />
       </div>
     </div>
@@ -671,10 +671,10 @@ function ToolsGuide() {
             const url = `${SITE.files}/agent-rules/${t.file}`
             const cmd = "save" in t ? `curl -o ${t.save} ${url}` : url
             return (
-              <div key={t.name} className="grid gap-2 border-b py-4">
+              <div key={t.name} className="grid min-w-0 gap-2 border-b py-4">
                 <span className="font-medium">{t.name}</span>
                 <p className="text-[15px] text-muted-foreground">{t.where}</p>
-                <div className="flex items-center gap-2">
+                <div className="flex min-w-0 items-center gap-2">
                   <code className="min-w-0 flex-1 overflow-x-auto bg-muted px-3 py-2 font-mono text-[13px] whitespace-nowrap">
                     {cmd}
                   </code>

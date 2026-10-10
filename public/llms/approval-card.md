@@ -1,6 +1,6 @@
 # Approval Card
 
-Human-in-the-loop card: stepped questions, or approve / request changes / reject.
+Human-in-the-loop card: stepped questions, or approve / request changes / reject. Data shape: One decision (Approve, Request changes, Reject) with no approver or timestamp, and fixed resolved wording.
 
 Category: AI Agents
 

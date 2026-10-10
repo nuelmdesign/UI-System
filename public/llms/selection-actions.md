@@ -1,6 +1,6 @@
 # Selection Actions
 
-A contextual AI bar under selected text that animates its width between modes and streams in a rewrite.
+A contextual AI bar under selected text that animates its width between modes and streams in a rewrite. Data shape: An AI text-rewrite bar over selected text, not a bulk-action bar for table rows. For bulk actions use `table` with `selectable` plus Buttons.
 
 Category: AI Agents
 

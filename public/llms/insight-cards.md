@@ -1,6 +1,6 @@
 # Insight Cards
 
-Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade. Shows sample content (an ice cream shop) until you pass your own data through its props.
+Insights carousel with comparison, anomaly and allocation mini-charts and a blurred page crossfade. Data shape: An AI insight carousel. Only its exported `InsightChart` (a multi-line chart with one threshold line) is reusable on its own. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Data & Workflows
 

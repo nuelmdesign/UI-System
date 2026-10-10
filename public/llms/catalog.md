@@ -1,6 +1,6 @@
 # Catalog
 
-Browse and discovery screen: featured band, search, category chips, sort, price filter, availability switch, card grid, active filters, empty state and loading skeleton.
+Browse and discovery screen: featured band, search, category chips, sort, price filter, availability switch, card grid, active filters, empty state and loading skeleton. Data shape: Event-shaped items (host, date, capacity, remaining). Not a retail product grid.
 
 Category: Blocks
 
