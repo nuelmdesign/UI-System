@@ -656,6 +656,33 @@ const useCaseJson = {
   crossDomainGaps: useCases.crossDomainGaps,
 }
 
+/* ------------------------------- Integrations ------------------------------ */
+
+const integrations = JSON.parse(read("content/ai/integrations.json"))
+const LICENSE_STATUS = new Set(["verified", "reported", "unverified"])
+for (const l of integrations.libraries) {
+  if (!integrations.tiers[l.tier])
+    throw new Error(`integrations.json: bad tier "${l.tier}" for ${l.id}`)
+  if (!LICENSE_STATUS.has(l.licenseStatus))
+    throw new Error(`integrations.json: bad licenseStatus for ${l.id}`)
+}
+const integrationsIndex = [
+  "Libraries opendraft is built on, has ported from, or recommends alongside it, with license status (verified, reported or unverified). Prefer the recipes; do not bundle anything marked avoid.",
+  "",
+  ...["recipe", "avoid"].flatMap((tier) => [
+    `### ${tier === "recipe" ? "Recommended alongside (not installed by opendraft)" : "Not bundled (license terms)"}`,
+    "",
+    ...integrations.libraries
+      .filter((l) => l.tier === tier)
+      .map(
+        (l) =>
+          `- [${l.name}](${l.url}) (${l.license}, ${l.licenseStatus}): ${l.note}`
+      ),
+    "",
+  ]),
+  `Full list as data: ${FILES_URL}/integrations.json`,
+].join("\n")
+
 /* ------------------------- Tool adapters and theme.css ------------------------ */
 
 // One rules source (content/ai/core-rules.md), published in the shapes each AI
@@ -729,6 +756,7 @@ const docsIndex = GUIDES.map(
 const llms = [
   header,
   `## Use cases\n\n${useCaseIndex}\n`,
+  `## Integrations\n\n${integrationsIndex}\n`,
   `## Components\n\n${componentIndex}\n`,
   `## Docs\n\n${docsIndex}\n`,
   `## Optional\n\n- [llms-full.txt](${FILES_URL}/llms-full.txt): these rules plus every component page (props, types, examples) in one file\n- [Registry index](${FILES_URL}/r/registry.json): every installable registry item as JSON\n`,
@@ -757,6 +785,10 @@ for (const [name, body] of Object.entries(adapterDefs))
   writeFileSync(new URL(name, rulesDir), body)
 writeFileSync(new URL("public/theme.css", root), themeStylesheet())
 
+writeFileSync(
+  new URL("public/integrations.json", root),
+  JSON.stringify(integrations, null, 2) + "\n"
+)
 writeFileSync(new URL("public/llms.txt", root), llms)
 writeFileSync(
   new URL("public/llms-full.txt", root),

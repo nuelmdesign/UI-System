@@ -40,6 +40,12 @@ export const GUIDES: GuideEntry[] = [
       "Playbooks that tell you, and your AI assistant, which components suit twelve kinds of product, from security and logistics to healthcare, fintech and government.",
   },
   {
+    slug: "integrations",
+    title: "Integrations",
+    description:
+      "The open-source libraries opendraft is built on, has ported from or recommends, with honest license status.",
+  },
+  {
     slug: "installation",
     title: "Installation",
     description: "Add the registry to a project and install components.",
