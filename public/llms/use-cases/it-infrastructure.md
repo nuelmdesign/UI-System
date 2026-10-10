@@ -87,6 +87,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - Use: [Agent Workspace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-workspace.md), [Thinking Trace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/thinking-trace.md), [Tool Chips](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
 - How: Ask for approval before any action that changes production.
 
+## Libraries and services that pair well
+
+- Metrics and time-series dashboards: Recharts, uPlot, Apache ECharts. Wrap the chart so colors come from CSS variables, and show a table fallback for accessibility.
+- Log search at scale: TanStack Virtual, OpenSearch, Loki. The Table is already virtualized; for millions of lines the work belongs server-side.
+- Pipeline and dependency graphs: React Flow, Dagre layout. Use flowchart for simple flows and a graph library when users must pan, zoom and edit.
+- Live updates: Server-sent events, WebSockets, Ably. Update rows in place and highlight what changed without moving the layout under the cursor.
+
 ## Typical screens
 
 - **Status overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md)

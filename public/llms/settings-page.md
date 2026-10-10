@@ -97,6 +97,17 @@ export type SettingsPageProps = {
   members?: TeamMember[]
   billing?: BillingValues
   workspaceName?: string
+  /** Which sections render, in order. Default: all four. */
+  sections?: SettingsSection[]
+  /** Show the danger zone (profile) and the delete dialog. Default true. */
+  showDangerZone?: boolean
+  /** Danger zone copy. `description` replaces the default sentence; `action` is the button label. */
+  dangerLabels?: {
+    title?: string
+    description?: string
+    action?: string
+    dialogTitle?: string
+  }
   timezones?: { value: string; label: string }[]
   onSave?: (values: SettingsSaveValues) => void | Promise<void>
   onInvite?: (invite: { email: string; role: TeamRole }) => void

@@ -28,10 +28,16 @@ export const GUIDES: GuideEntry[] = [
       "Give an AI assistant one link so it builds with opendraft's components and tokens.",
   },
   {
+    slug: "tools",
+    title: "Use with other AI tools",
+    description:
+      "Rules files and setup for Cursor, Copilot, Codex, Lovable, ChatGPT and any assistant that reads a rules file.",
+  },
+  {
     slug: "use-cases",
     title: "Use cases",
     description:
-      "Playbooks that tell you, and your AI assistant, which components suit security, IT, aviation and logistics products.",
+      "Playbooks that tell you, and your AI assistant, which components suit twelve kinds of product, from security and logistics to healthcare, fintech and government.",
   },
   {
     slug: "installation",

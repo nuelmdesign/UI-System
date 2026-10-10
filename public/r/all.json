@@ -122,7 +122,13 @@
     "@opendraft/page-header",
     "@opendraft/field",
     "@opendraft/date-picker",
-    "@opendraft/repeater-field"
+    "@opendraft/repeater-field",
+    "@opendraft/timeline",
+    "@opendraft/alert",
+    "@opendraft/status-indicator",
+    "@opendraft/slider",
+    "@opendraft/dropzone",
+    "@opendraft/otp-input"
   ],
   "type": "registry:item"
 }

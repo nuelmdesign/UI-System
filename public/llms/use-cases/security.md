@@ -81,6 +81,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - How: `flowchart` draws simple flows.
 - Missing: No network graph or geographic map component.
 
+## Libraries and services that pair well
+
+- Network or attack-path graph: React Flow, Cytoscape.js. Draw nodes and edges with our tokens for color and type; keep the severity text labels.
+- Geographic threat or asset map: MapLibre GL JS, deck.gl. Style markers with status tokens and always give each marker a text label for assistive technology.
+- Event volume and trend charts: Recharts, uPlot. uPlot copes with very large series; Recharts is quicker to theme.
+- Single sign-on and MFA: Clerk, Auth0, WorkOS. Put the provider's flow behind the auth-screen block and use otp-input for codes.
+
 ## Typical screens
 
 - **Security operations overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md)

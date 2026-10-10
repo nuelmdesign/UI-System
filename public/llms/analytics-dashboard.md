@@ -79,6 +79,18 @@ export type AnalyticsLabels = {
   channelsAria: string
   /** Heading and accessible name of the table. */
   table: string
+  /** aria-label of the KPI section. */
+  keyMetrics: string
+  /** aria-label of the chart section. */
+  trend: string
+  /** aria-label of the range tabs. */
+  dateRange: string
+  /** aria-label of the chart metric tabs. */
+  chartMetric: string
+  /** Chart heading for the selected metric label. */
+  overTime: (metricLabel: string) => string
+  /** Range tab text: `short` below the container breakpoint, `long` above it. */
+  ranges: Record<AnalyticsRange, { short: string; long: string }>
   /** Table column headings. The row fields stay name / visitors / conversion / duration. */
   columns: {
     name: string
@@ -97,9 +109,20 @@ export type AnalyticsDashboardProps = {
   onExport?: (range: AnalyticsRange) => void
   title?: string
   /** Override any fixed text, for example to relabel the table for events. */
-  labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
+  labels?: Partial<Omit<AnalyticsLabels, "columns" | "ranges">> & {
     columns?: Partial<AnalyticsLabels["columns"]>
+    ranges?: Partial<
+      Record<AnalyticsRange, Partial<{ short: string; long: string }>>
+    >
   }
+  /** Fill the parent's height and scroll inside (default). Set false to size to content inside a scrolling page. */
+  fill?: boolean
+  /** Format the visitors column. Default: en-US grouped integer. */
+  formatVisitors?: (value: number, row: AnalyticsRow) => string
+  /** Format the conversion column. `value` is the raw 0-1 field. Default: percent with one decimal. */
+  formatConversion?: (value: number, row: AnalyticsRow) => string
+  /** Format the duration column (seconds). Default: m:ss. */
+  formatDuration?: (seconds: number, row: AnalyticsRow) => string
   /** Replaces the "Avg. time" column with a custom one (money, orders, ...). Reads `row.value` unless `format` is given. */
   valueColumn?: { label: string; format?: (row: AnalyticsRow) => string }
   className?: string

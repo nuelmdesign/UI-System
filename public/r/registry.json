@@ -2718,6 +2718,113 @@
       ]
     },
     {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Vertical event timeline with status markers that never rely on color alone, mono timestamps, a side time column on wide containers, expandable detail, collapsible long lists, and loading and empty states.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/skeleton"
+      ],
+      "files": [
+        {
+          "path": "components/ui/timeline.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Callout with a per-variant icon, optional dismiss, an actions slot and a full-bleed banner mode for system, weather and policy notices.",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/alert.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "status-indicator",
+      "type": "registry:ui",
+      "title": "Status Indicator",
+      "description": "Shape plus word status (operational, degraded, down, maintenance) and an uptime bar of segments with an accessible summary.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/status-indicator.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Single or range slider on Radix with a label row, formatted value and marks.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/slider.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropzone",
+      "type": "registry:ui",
+      "title": "Dropzone",
+      "description": "Drag-and-drop or click-to-browse file area with size, type and count validation, camera capture and a file list with progress. No upload logic.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/progress"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dropzone.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:ui",
+      "title": "Otp Input",
+      "description": "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/otp-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -2841,7 +2948,13 @@
         "@opendraft/page-header",
         "@opendraft/field",
         "@opendraft/date-picker",
-        "@opendraft/repeater-field"
+        "@opendraft/repeater-field",
+        "@opendraft/timeline",
+        "@opendraft/alert",
+        "@opendraft/status-indicator",
+        "@opendraft/slider",
+        "@opendraft/dropzone",
+        "@opendraft/otp-input"
       ]
     },
     {
@@ -2852,29 +2965,44 @@
       "registryDependencies": [
         "@opendraft/theme",
         "@opendraft/button",
-        "@opendraft/badge",
-        "@opendraft/table",
-        "@opendraft/filter-table",
-        "@opendraft/tabs",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
         "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/filter-table",
+        "@opendraft/table",
+        "@opendraft/selection-actions",
+        "@opendraft/stepper",
+        "@opendraft/agent-activity",
+        "@opendraft/code-block",
+        "@opendraft/file-diff",
         "@opendraft/approval-card",
         "@opendraft/tool-approval",
-        "@opendraft/command-palette",
+        "@opendraft/settings-page",
+        "@opendraft/switch",
+        "@opendraft/checkbox",
+        "@opendraft/repeater-field",
         "@opendraft/date-range-picker",
+        "@opendraft/diff-table",
+        "@opendraft/records-table",
+        "@opendraft/command-palette",
+        "@opendraft/analytics-dashboard",
         "@opendraft/stat",
         "@opendraft/progress",
-        "@opendraft/analytics-dashboard",
-        "@opendraft/settings-page",
+        "@opendraft/insight-cards",
         "@opendraft/auth-screen",
-        "@opendraft/file-diff",
-        "@opendraft/diff-table",
-        "@opendraft/copy-button",
-        "@opendraft/sonner",
-        "@opendraft/theme-toggle",
-        "@opendraft/page-header",
-        "@opendraft/field",
-        "@opendraft/repeater-field",
-        "@opendraft/selection-actions"
+        "@opendraft/agent-workspace",
+        "@opendraft/thinking-trace",
+        "@opendraft/tool-chips",
+        "@opendraft/citations",
+        "@opendraft/flowchart"
       ]
     },
     {
@@ -2885,34 +3013,44 @@
       "registryDependencies": [
         "@opendraft/theme",
         "@opendraft/button",
-        "@opendraft/badge",
-        "@opendraft/table",
-        "@opendraft/filter-table",
-        "@opendraft/records-table",
-        "@opendraft/tabs",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
         "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
         "@opendraft/stat",
         "@opendraft/progress",
         "@opendraft/analytics-dashboard",
-        "@opendraft/insight-cards",
-        "@opendraft/code-block",
-        "@opendraft/code-panel",
-        "@opendraft/copy-button",
-        "@opendraft/flowchart",
-        "@opendraft/stepper",
-        "@opendraft/todo-list",
-        "@opendraft/task-rows",
+        "@opendraft/table",
         "@opendraft/approval-card",
-        "@opendraft/file-diff",
-        "@opendraft/command-palette",
+        "@opendraft/todo-list",
+        "@opendraft/stepper",
+        "@opendraft/code-panel",
+        "@opendraft/code-block",
+        "@opendraft/filter-table",
+        "@opendraft/copy-button",
+        "@opendraft/insight-cards",
         "@opendraft/date-range-picker",
+        "@opendraft/flowchart",
+        "@opendraft/task-rows",
+        "@opendraft/file-diff",
+        "@opendraft/repeater-field",
+        "@opendraft/switch",
+        "@opendraft/records-table",
+        "@opendraft/command-palette",
+        "@opendraft/selection-actions",
+        "@opendraft/agent-screen",
         "@opendraft/settings-page",
         "@opendraft/auth-screen",
-        "@opendraft/field",
-        "@opendraft/repeater-field",
-        "@opendraft/theme-toggle",
-        "@opendraft/page-header",
-        "@opendraft/sonner"
+        "@opendraft/agent-workspace",
+        "@opendraft/thinking-trace",
+        "@opendraft/tool-chips"
       ]
     },
     {
@@ -2923,32 +3061,41 @@
       "registryDependencies": [
         "@opendraft/theme",
         "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
         "@opendraft/badge",
-        "@opendraft/table",
         "@opendraft/tabs",
-        "@opendraft/stat",
-        "@opendraft/progress",
-        "@opendraft/stepper",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/table",
+        "@opendraft/text-scramble",
+        "@opendraft/animated-number",
         "@opendraft/detail-page",
+        "@opendraft/stepper",
+        "@opendraft/progress",
+        "@opendraft/stat",
         "@opendraft/catalog",
+        "@opendraft/date-picker",
+        "@opendraft/date-range-picker",
+        "@opendraft/quantity-stepper",
         "@opendraft/checkout",
         "@opendraft/order-confirmation",
         "@opendraft/ticket-pass",
         "@opendraft/qr-code",
-        "@opendraft/date-picker",
-        "@opendraft/date-range-picker",
-        "@opendraft/quantity-stepper",
-        "@opendraft/field",
+        "@opendraft/radio-group",
+        "@opendraft/checkbox",
         "@opendraft/todo-list",
         "@opendraft/approval-card",
         "@opendraft/records-table",
+        "@opendraft/file-diff",
         "@opendraft/analytics-dashboard",
-        "@opendraft/text-scramble",
         "@opendraft/command-palette",
-        "@opendraft/site-header",
-        "@opendraft/page-header",
-        "@opendraft/theme-toggle",
-        "@opendraft/sonner"
+        "@opendraft/site-header"
       ]
     },
     {
@@ -2959,32 +3106,39 @@
       "registryDependencies": [
         "@opendraft/theme",
         "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
         "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/detail-page",
+        "@opendraft/stepper",
+        "@opendraft/progress",
+        "@opendraft/qr-code",
+        "@opendraft/copy-button",
+        "@opendraft/site-header",
         "@opendraft/table",
         "@opendraft/filter-table",
+        "@opendraft/date-range-picker",
+        "@opendraft/selection-actions",
         "@opendraft/records-table",
-        "@opendraft/tabs",
-        "@opendraft/stat",
-        "@opendraft/progress",
-        "@opendraft/stepper",
-        "@opendraft/detail-page",
         "@opendraft/crm-pipeline",
+        "@opendraft/avatar",
+        "@opendraft/date-picker",
+        "@opendraft/repeater-field",
         "@opendraft/checkout",
         "@opendraft/order-confirmation",
         "@opendraft/analytics-dashboard",
-        "@opendraft/insight-cards",
-        "@opendraft/date-picker",
-        "@opendraft/date-range-picker",
-        "@opendraft/field",
-        "@opendraft/repeater-field",
-        "@opendraft/selection-actions",
-        "@opendraft/qr-code",
-        "@opendraft/copy-button",
-        "@opendraft/avatar",
-        "@opendraft/site-header",
-        "@opendraft/page-header",
-        "@opendraft/theme-toggle",
-        "@opendraft/sonner"
+        "@opendraft/stat",
+        "@opendraft/approval-card",
+        "@opendraft/ticket-pass",
+        "@opendraft/insight-cards"
       ]
     }
   ]

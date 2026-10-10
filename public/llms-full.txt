@@ -281,6 +281,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - How: `flowchart` draws simple flows.
 - Missing: No network graph or geographic map component.
 
+## Libraries and services that pair well
+
+- Network or attack-path graph: React Flow, Cytoscape.js. Draw nodes and edges with our tokens for color and type; keep the severity text labels.
+- Geographic threat or asset map: MapLibre GL JS, deck.gl. Style markers with status tokens and always give each marker a text label for assistive technology.
+- Event volume and trend charts: Recharts, uPlot. uPlot copes with very large series; Recharts is quicker to theme.
+- Single sign-on and MFA: Clerk, Auth0, WorkOS. Put the provider's flow behind the auth-screen block and use otp-input for codes.
+
 ## Typical screens
 
 - **Security operations overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md)
@@ -399,6 +406,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - Use: [Agent Workspace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-workspace.md), [Thinking Trace](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/thinking-trace.md), [Tool Chips](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
 - How: Ask for approval before any action that changes production.
 
+## Libraries and services that pair well
+
+- Metrics and time-series dashboards: Recharts, uPlot, Apache ECharts. Wrap the chart so colors come from CSS variables, and show a table fallback for accessibility.
+- Log search at scale: TanStack Virtual, OpenSearch, Loki. The Table is already virtualized; for millions of lines the work belongs server-side.
+- Pipeline and dependency graphs: React Flow, Dagre layout. Use flowchart for simple flows and a graph library when users must pan, zoom and edit.
+- Live updates: Server-sent events, WebSockets, Ably. Update rows in place and highlight what changed without moving the layout under the cursor.
+
 ## Typical screens
 
 - **Status overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md)
@@ -511,6 +525,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
 - How: On-time performance and disruption counts in `stat` tiles.
 - Missing: No map and no alert banner for weather or NOTAM bulletins.
+
+## Libraries and services that pair well
+
+- Flight path and airport maps: MapLibre GL JS, deck.gl, Mapbox GL JS. Great-circle arcs and tracks are a map-library job; keep times and codes in the table beside it.
+- Flight data: FlightAware AeroAPI, OpenSky Network, AviationStack. Normalize to UTC and show local airport time beside it.
+- Barcode boarding passes: bwip-js, zxing-js. qr-code only draws QR; airlines use PDF417 or Aztec, which these libraries can render.
+- Crew and maintenance scheduling: FullCalendar, DHTMLX Gantt, Bryntum. Until a scheduler exists in opendraft, embed one and theme it with the CSS variables.
 
 ## Typical screens
 
@@ -626,6 +647,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - How: Relabel the dashboard (shipments, on-time rate, cost per delivery) and add a `valueColumn` for cost.
 - Missing: The range tabs are fixed at 7, 30 and 90 days, and the table columns are page-analytics shaped.
 
+## Libraries and services that pair well
+
+- Live fleet and route map: MapLibre GL JS, Google Maps Platform, HERE. Use a map library for positions and routes; keep ETA and status in opendraft components.
+- Carrier and tracking data: Shippo, EasyPost, project44. Map each carrier's status codes to one status vocabulary before it reaches the UI.
+- Barcode scanning: zxing-js, Dynamsoft, Scandit. Scanning is a device capability; opendraft's qr-code only generates codes.
+- Signature capture: signature_pad, react-signature-canvas. Pair with dropzone for photos to make proof of delivery.
+
 ## Typical screens
 
 - **Public tracking page**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md)
@@ -651,6 +679,1034 @@ npx shadcn@latest add @opendraft/kit-logistics
 - Proof of delivery: No signature pad and no photo capture or file dropzone.
 - Rates, quotes and invoicing: No dedicated quote or rate-comparison table.
 - Operations analytics: The range tabs are fixed at 7, 30 and 90 days, and the table columns are page-analytics shaped.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Healthcare and patient care products with opendraft
+
+> Clinical and patient-facing health products: EHR views, scheduling, telehealth and patient portals. Clinicians work under time pressure with safety-critical data; patients need calm, plain-language screens.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+healthcare, health, clinical, ehr, emr, patient, patient portal, telehealth, telemedicine, appointment, clinic, hospital, medication, prescription, lab results, care plan, pharmacy, triage.
+
+## Principles for this domain
+
+- Show patient identity on every clinical screen: full name, date of birth and an identifier in `font-mono`, pinned in a header that never scrolls away. Wrong-patient errors are the failure to design against.
+- Always print units and reference ranges beside a measurement (`5.4 mmol/L, ref 3.9 to 5.6`), and never round or reformat a value without saying so. Do not rely on color alone to mark an abnormal or critical value; pair it with a text flag such as High, Low or Critical.
+- Critical values and allergy warnings stay visible until a named user acknowledges them. Never auto-dismiss a clinical alert or put one in a toast; use a persistent `alert` and record who acknowledged it and when.
+- Privacy by default: mask identifiers and sensitive fields until revealed, keep reveals logged, and avoid showing patient names in browser titles, notifications and URLs.
+- Write patient-facing copy in plain language at a low reading level, explain medical terms in place, and say what happens next. Lead with the answer (`Your results are normal`), not the data.
+- Confirm irreversible or high-risk actions (sign an order, discharge, cancel a procedure) in a `dialog` that names the patient and the consequence. Where regulation applies, keep an audit trail of who viewed or changed a record.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Patient banner and chart overview
+
+- Fit: **Adapt**
+- Use: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md), [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: `page-header` plus `avatar` and `badge` for name, age and flags; `stat` tiles for latest vitals; `tabs` for Summary, Orders, Notes and Results; a persistent `alert` for allergies.
+- Missing: No dedicated pinned patient-banner component; build it from page-header and badge and keep it sticky.
+
+### Lab results and vitals with abnormal flags
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+- How: `table` with a value, unit, range and a text-labelled `badge` per row; `stat` for the latest reading.
+- Missing: No time-series chart for trends of a vital or lab value over time (with reference-range band) and no sparkline.
+
+### Critical-value and safety alerts
+
+- Fit: **Ready**
+- Use: [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md)
+- How: `alert` is persistent and severity-aware; require acknowledgement with `approval-card` or a `dialog` and keep who and when. Do not use `sonner` for clinical alerts.
+
+### Appointment booking and scheduling
+
+- Fit: **Adapt**
+- Use: [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- How: `stepper` for reason, clinician, time and confirm; `radio-group` for time slots; `order-confirmation` can confirm the booking if relabelled.
+- Missing: No calendar or day/week schedule view and no slot-grid component; clinic staff schedules need a scheduler.
+
+### Medication list and orders
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md)
+- How: Active medications in a `table` with dose, route and frequency columns; sign orders with `approval-card`; `repeater-field` edits multi-line prescriptions.
+- Missing: No drug-interaction or dose-check UI; this comes from your clinical decision support service and needs a custom alert.
+
+### Telehealth visit
+
+- Fit: **Gap**
+- Use: [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Prompt Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/prompt-input.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: Controls (mute, camera, leave) can be buttons and a waiting-room status can be a `badge`.
+- Missing: No video call surface or device check; embed a video SDK and build the tile grid yourself.
+
+### Patient intake forms and consent
+
+- Fit: **Adapt**
+- Use: [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md)
+- How: `stepper` splits a long form into short steps; `dropzone` accepts insurance card and ID photos.
+- Missing: No signature pad for consent and no rich text editor for notes.
+
+### Care plan and visit history
+
+- Fit: **Ready**
+- Use: [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: `timeline` for encounters and events, `todo-list` for care-plan tasks, `progress` for goal tracking.
+
+### Secure messaging with the care team
+
+- Fit: **Adapt**
+- Use: [Chat App](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/chat-app.md), [Message Bubble](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/message-bubble.md), [Prompt Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/prompt-input.md), [Message Scroller](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/message-scroller.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: The chat components give threads, bubbles and an input; show a clear note that messages are not for emergencies.
+- Missing: No attachment preview, read receipts or clinician-routing; add them and keep the thread data on your own secure backend.
+
+### Sign in with MFA and a proxy or caregiver
+
+- Fit: **Ready**
+- Use: [Auth Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/auth-screen.md), [OTP Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/otp-input.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md)
+- How: `auth-screen` for sign in, `otp-input` for the verification code; caregiver access can sit in the `settings-page` team section relabelled.
+
+## Libraries and services that pair well
+
+- Clinical data exchange (patients, observations, medications): HL7 FHIR (SMART on FHIR), Epic FHIR APIs, Medplum. opendraft is presentation only; map FHIR resources to the props of `table`, `stat` and `timeline` in a thin adapter and keep PHI out of client logs.
+- Telehealth video: Twilio Video, Daily, Zoom Video SDK. The SDK renders the video; use opendraft buttons, badges and `alert` for controls, waiting-room state and connection warnings around it.
+- Vitals and lab trend charts: Recharts, visx, Apache ECharts. No time-series chart ships yet; style the chart with the `--blue-*` and semantic tokens and draw the reference range as a shaded band with a text legend.
+- Scheduling and calendar: FullCalendar, react-big-calendar, Cal.com. Use for clinician schedules; keep opendraft `date-picker` and `radio-group` for the patient-facing booking path.
+- Consent signatures and identity verification: react-signature-canvas, DocuSign, Persona. No signature pad is included; capture the signature as an image and store it with a timestamp and the consent text version.
+
+## Typical screens
+
+- **Patient chart**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md)
+- **Results review**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **Book an appointment**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md) + [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md) + [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md) + [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- **Patient portal home**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md) + [Empty State](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/empty-state.md) + [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md)
+- **Intake and consent**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md) + [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md) + [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-healthcare
+```
+
+## Known gaps
+
+- Patient banner and chart overview: No dedicated pinned patient-banner component; build it from page-header and badge and keep it sticky.
+- Lab results and vitals with abnormal flags: No time-series chart for trends of a vital or lab value over time (with reference-range band) and no sparkline.
+- Appointment booking and scheduling: No calendar or day/week schedule view and no slot-grid component; clinic staff schedules need a scheduler.
+- Medication list and orders: No drug-interaction or dose-check UI; this comes from your clinical decision support service and needs a custom alert.
+- Telehealth visit: No video call surface or device check; embed a video SDK and build the tile grid yourself.
+- Patient intake forms and consent: No signature pad for consent and no rich text editor for notes.
+- Secure messaging with the care team: No attachment preview, read receipts or clinician-routing; add them and keep the thread data on your own secure backend.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Fintech and banking products with opendraft
+
+> Banking, payments, trading, personal finance and lending products. Money moves, so precision, clear fees and honest balances matter more than delight; many actions cannot be undone.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+fintech, banking, bank, payments, payment, transfer, card, neobank, trading, brokerage, portfolio, personal finance, budget, lending, loan, mortgage, invoice, crypto.
+
+## Principles for this domain
+
+- Format money with the locale and ISO 4217 currency (`Intl.NumberFormat`), show the currency on every amount that might be ambiguous, align figures right in `tabular-nums` and keep minor units. Never compute with floating point; use integer minor units or a decimal library.
+- Treat transfers, payouts and trades as irreversible: show a review step with payee, amount, fee, rate and arrival time, then confirm. Require step-up authentication (a one-time code or biometric) before a high-risk action.
+- Show every fee, rate and the final total before the user commits, not after. If the amount can change (FX, market orders), say so and show when the quote expires.
+- Be honest about balance: label Available versus Pending versus Current, show `as of` time, and mark data that is delayed. Never show an optimistic balance as if it had settled.
+- Never use red and green alone for gain and loss; add a sign and an arrow or word (`+2.4%`, `Down`). Do not use red for a number that is merely negative in an accounting sense when it is not an error.
+- Keep an audit trail the user can see (activity, statements, who approved what) and mask account and card numbers by default, showing only the last four digits with an explicit reveal and `copy-button`.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Account overview and balances
+
+- Fit: **Ready**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Animated Number](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/animated-number.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md)
+- How: `stat` tiles for each account with an `as of` hint; use `animated-number` only on a hero balance, never inside tables. Pass formatted strings so the currency is exact.
+
+### Transaction history and search
+
+- Fit: **Ready**
+- Use: [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md)
+- How: Status `badge` for Pending, Posted and Failed; virtualized `table` for long histories; export through `selection-actions`.
+
+### Send money / transfer with review and step-up auth
+
+- Fit: **Ready**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [OTP Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/otp-input.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- How: A `stepper` flow: payee, amount, review, `otp-input` for step-up, then `order-confirmation` as the receipt. Use `approval-card` to show the full fee and amount summary.
+
+### Card checkout and payment methods
+
+- Fit: **Adapt**
+- Use: [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: `checkout` has a masked card form and a summary, and it never sends full card data to your code; mount your provider's hosted fields in its place.
+- Missing: Its details step is shaped for ticket purchases (attendee, delivery); relabel or build a plain payment form from `field` for bank products.
+
+### Portfolio, positions and market data
+
+- Fit: **Adapt**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md)
+- How: Holdings in a `table` with signed change values; relabel `analytics-dashboard` for portfolio performance.
+- Missing: No price chart (candlestick or line with ranges and crosshair), no order book and no live ticker; use a charting library and keep numbers in tabular figures.
+
+### Place a trade or order
+
+- Fit: **Adapt**
+- Use: [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Slider](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/slider.md), [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md)
+- How: `tabs` for Buy and Sell, `quantity-stepper` for units, an `approval-card` for the order preview with estimated cost and fees.
+- Missing: No market-depth or order-ticket component; the estimated price must come from your pricing service and show when it was quoted.
+
+### Spending insights and budgets
+
+- Fit: **Adapt**
+- Use: [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+- How: `progress` with a warning tone for category budgets; `insight-cards` for monthly trends.
+- Missing: No donut or category-breakdown chart and no cash-flow (Sankey) chart.
+
+### Loan or credit application
+
+- Fit: **Adapt**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Slider](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/slider.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- How: `slider` for amount and term, a live repayment summary in `stat`, `dropzone` for income documents.
+- Missing: No amortization schedule table with built-in calculations; compute it server-side and render it with `table`.
+
+### KYC and identity verification
+
+- Fit: **Adapt**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [OTP Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/otp-input.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: `stepper` with a clear status for each check (Pending, Verified, Needs attention) and `dropzone` for ID upload.
+- Missing: No camera capture or liveness-check UI; use your identity provider's SDK.
+
+### Security, limits and audit trail
+
+- Fit: **Ready**
+- Use: [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: Card freeze and limits as `switch` and `field`, device and login history in a `table` or `timeline`, a type-to-confirm `dialog` for closing an account.
+
+## Libraries and services that pair well
+
+- Payments and card acceptance: Stripe Elements, Adyen Drop-in, Braintree. Mount the provider's hosted fields in place of the `checkout` card inputs so card data never touches your app; opendraft's `onPay` should receive a token only.
+- Bank account linking and open banking data: Plaid Link, TrueLayer, MX. These open their own modal; surround it with an opendraft `dialog` that explains what is shared and wait for the result before updating balances.
+- Money math and currency formatting: Intl.NumberFormat, dinero.js, decimal.js. Pass already formatted strings to `stat` and `table`; keep amounts in integer minor units in your data layer.
+- Price and performance charts: TradingView Lightweight Charts, Recharts, visx. No price chart ships in opendraft; theme the chart with design tokens and add a text value readout so gain and loss do not rely on color.
+- Identity verification and fraud signals: Persona, Onfido, Sumsub. Use their SDK for document and liveness capture and show the outcome with `status-indicator` and `alert`.
+
+## Typical screens
+
+- **Accounts overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- **Transactions**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md) + [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md)
+- **Send money**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md) + [OTP Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/otp-input.md) + [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- **Portfolio**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md)
+- **Security and limits**: [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-fintech
+```
+
+## Known gaps
+
+- Card checkout and payment methods: Its details step is shaped for ticket purchases (attendee, delivery); relabel or build a plain payment form from `field` for bank products.
+- Portfolio, positions and market data: No price chart (candlestick or line with ranges and crosshair), no order book and no live ticker; use a charting library and keep numbers in tabular figures.
+- Place a trade or order: No market-depth or order-ticket component; the estimated price must come from your pricing service and show when it was quoted.
+- Spending insights and budgets: No donut or category-breakdown chart and no cash-flow (Sankey) chart.
+- Loan or credit application: No amortization schedule table with built-in calculations; compute it server-side and render it with `table`.
+- KYC and identity verification: No camera capture or liveness-check UI; use your identity provider's SDK.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building E-commerce and marketplaces products with opendraft
+
+> Storefronts, marketplaces and seller dashboards. Shoppers need honest prices and stock and a fast path to pay; sellers need to manage orders and inventory in bulk.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+ecommerce, e-commerce, store, storefront, shop, marketplace, cart, checkout, product, catalog, inventory, orders, seller, merchant, retail, returns, wishlist, discount.
+
+## Principles for this domain
+
+- Be honest about price and availability: show the total with tax, shipping and fees before checkout, strike through a compare-at price only when it is real, and show stock states in words (In stock, Only 3 left, Sold out) from live data.
+- Persist the cart across sessions and devices, never silently change a quantity or price, and if something changed since the user added it, say what changed and let them decide.
+- Show trust signals where the decision happens: delivery date, return window, secure payment note, ratings with the review count and who can leave a review. Do not invent urgency such as fake countdowns.
+- Offer guest checkout and fast payment options; ask for the fewest fields, validate inline and keep the order summary visible while the user fills the form.
+- State returns, refunds and shipping costs in plain words before purchase, and give the order status and the next step on every order screen.
+- Make sold-out and error states useful: offer a back-in-stock notification or similar items, keep filters on a no-results page and keep the user's progress when a payment fails.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Browse, search and filter products
+
+- Fit: **Adapt**
+- Use: [Catalog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Empty State](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/empty-state.md), [Skeleton](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/skeleton.md)
+- How: `catalog` already has search, category chips, sort, price filter, availability switch, card grid, empty state and loading skeleton, with an ISO `currency` prop.
+- Missing: Its item shape is event-oriented (host, date, capacity, remaining) so product fields like brand, variants and ratings need relabelling or a custom card; there are no faceted multi-filters such as size or color.
+
+### Product detail with variants and purchase panel
+
+- Fit: **Adapt**
+- Use: [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md), [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md)
+- How: `detail-page` has media, key facts, tabs, FAQ, a sticky purchase panel with tiers, quantity and a running total; map tiers to variants or sizes.
+- Missing: No image gallery or zoom, no color swatches and no star rating or review list.
+
+### Shopping cart and mini-cart
+
+- Fit: **Adapt**
+- Use: [Drawer](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/drawer.md), [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Empty State](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/empty-state.md), [Toast](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md)
+- How: A cart in a `drawer` with `quantity-stepper` lines and a subtotal; the `checkout` summary has the same pattern.
+- Missing: No standalone cart component; build the line list yourself and keep it in persistent storage on your backend.
+
+### Checkout (guest or account) and payment
+
+- Fit: **Adapt**
+- Use: [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md)
+- How: `checkout` is a three-step flow with a sticky order summary, quantity steppers, discount codes and a masked card form; pass `items`, `fees`, `currency` and `discountCodes`.
+- Missing: Its details step is ticket-shaped (attendee, email or desk delivery); there is no shipping address form, shipping-method picker or wallet-button slot, so add those with `field` and `radio-group`.
+
+### Order confirmation and tracking
+
+- Fit: **Ready**
+- Use: [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: `order-confirmation` for the receipt (relabel for physical goods); `stepper` or `timeline` for Placed, Packed, Shipped and Delivered with a tracking number and `copy-button`.
+
+### Returns and refunds
+
+- Fit: **Adapt**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: A `stepper` flow: select items, reason, photos with `dropzone`, then choose refund or exchange and confirm; show the return deadline in an `alert`.
+- Missing: No printable return-label view; render it from your carrier's PDF.
+
+### Seller dashboard: sales and performance
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md)
+- How: Relabel `analytics-dashboard` for revenue, orders and conversion, with `valueColumn` for revenue.
+- Missing: The range tabs are fixed at 7, 30 and 90 days and the table columns are page-analytics shaped; no time-series chart with comparison.
+
+### Seller order and inventory management
+
+- Fit: **Ready**
+- Use: [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md)
+- How: Tabs for New, To ship and Returns, bulk label and fulfil via `selection-actions`, `progress` with `invert` for stock levels.
+
+### Create and edit a product listing
+
+- Fit: **Adapt**
+- Use: [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md)
+- How: `repeater-field` for variants and prices, `dropzone` for photos.
+- Missing: No rich text editor for descriptions and no image reordering or cropping.
+
+### Promotions and discount codes
+
+- Fit: **Ready**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: A `table` of codes with a status `badge`, a `dialog` to create one, and `date-range-picker` for the validity window.
+
+## Libraries and services that pair well
+
+- Commerce backend and product data: Shopify Storefront API, Medusa, commercetools. Map the product, cart and order objects to the props of `catalog`, `detail-page` and `checkout` in an adapter; keep the cart on the server so it persists across devices.
+- Payments, wallets and tax: Stripe, Adyen, PayPal. Mount hosted card fields in place of the `checkout` card inputs; `onPay` should receive a token, and tax should come from the provider so the total shown is the total charged.
+- Product search and filtering: Algolia, Typesense, Meilisearch. Feed results into `catalog` through its items prop; faceted filters beyond price and category are not built in and need your own controls.
+- Shipping rates and tracking: Shippo, EasyPost, AfterShip. Use their rates in the checkout `fees` and their tracking events in a `timeline`.
+- Reviews and ratings: Yotpo, Judge.me, Trustpilot. No rating component ships in opendraft; show the average and count as plain text next to the stars, and avoid displaying reviews you cannot verify.
+
+## Typical screens
+
+- **Shop and category**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Catalog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md)
+- **Product page**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- **Cart and checkout**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md) + [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- **Seller orders**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md) + [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- **Seller overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-ecommerce
+```
+
+## Known gaps
+
+- Browse, search and filter products: Its item shape is event-oriented (host, date, capacity, remaining) so product fields like brand, variants and ratings need relabelling or a custom card; there are no faceted multi-filters such as size or color.
+- Product detail with variants and purchase panel: No image gallery or zoom, no color swatches and no star rating or review list.
+- Shopping cart and mini-cart: No standalone cart component; build the line list yourself and keep it in persistent storage on your backend.
+- Checkout (guest or account) and payment: Its details step is ticket-shaped (attendee, email or desk delivery); there is no shipping address form, shipping-method picker or wallet-button slot, so add those with `field` and `radio-group`.
+- Returns and refunds: No printable return-label view; render it from your carrier's PDF.
+- Seller dashboard: sales and performance: The range tabs are fixed at 7, 30 and 90 days and the table columns are page-analytics shaped; no time-series chart with comparison.
+- Create and edit a product listing: No rich text editor for descriptions and no image reordering or cropping.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Education and learning products with opendraft
+
+> Learning platforms, courses, classrooms and student information systems. Learners need to know where they are and what is next; instructors need to see a whole class at a glance and act in bulk.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+education, learning, lms, course, courses, classroom, student, teacher, instructor, school, university, lesson, quiz, assignment, grades, gradebook, enrollment, edtech.
+
+## Principles for this domain
+
+- Make progress visible everywhere: where the learner is in the course, what is done, what is next and how long it takes. Use `progress` and `stepper` with text (`3 of 8 lessons`), and always offer a clear Continue action.
+- Accessibility first: sufficient contrast, full keyboard use, captions and transcripts for media, readable text sizes, no time limits that cannot be extended, and no meaning by color alone. Learners often use shared, older or assistive devices.
+- Give low-pressure feedback: say what was right and what to try next, avoid red-X shaming, let learners retry, and show a grade only when the instructor chooses to release it. Celebrate completion without confetti that cannot be turned off.
+- Separate instructor and learner views: the same course shows authoring, grading and class analytics to instructors, and only the learner's own work and progress to students. Never expose other students' names or grades.
+- Be offline-tolerant: save drafts and answers locally as the learner types, show a visible Saved or Not saved state, and queue submissions with a clear status when the connection drops.
+- Protect minors' data: avoid public profiles by default, show only what a guardian or teacher needs, and put sensitive records behind explicit access. Where regulation applies, keep consent and access records.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Course catalog and enrollment
+
+- Fit: **Adapt**
+- Use: [Catalog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md), [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md)
+- How: `catalog` for browsing with search, categories and sort; `detail-page` has schedule, FAQ, tiers and seats left, which maps to course sessions and cohorts.
+- Missing: Item fields are event-shaped (host, date, capacity) so relabel them for instructor, start date and seats; no prerequisite or level filters.
+
+### Learner dashboard: courses in progress
+
+- Fit: **Ready**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Empty State](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/empty-state.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md)
+- How: `progress` per course with a Continue button, `stat` for streak or time spent, `empty-state` for a new learner.
+
+### Lesson and module navigation
+
+- Fit: **Ready**
+- Use: [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Sidebar Nav](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sidebar-nav.md), [Sidebar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/animated-sidebar.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: Modules in an `accordion` or `sidebar-nav`, a vertical `stepper` for the lesson path, with a done or locked state per item.
+
+### Video and reading lesson content
+
+- Fit: **Gap**
+- Use: [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md), [Code Block](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-block.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md), [Skeleton](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/skeleton.md)
+- How: Transcript, notes and resources can sit in `tabs`; `code-block` for programming lessons.
+- Missing: No video player with captions, speed control and resume, and no PDF or slide viewer; embed one and keep the transcript beside it.
+
+### Quizzes and assessments
+
+- Fit: **Adapt**
+- Use: [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Question Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/question-card.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md)
+- How: `question-card` presents a question with options; `radio-group` and `checkbox` for answers; `progress` shows question count; a `dialog` confirms submit and names unanswered questions.
+- Missing: No timer with accessibility extensions, no question-bank authoring and no automatic scoring or explanations view.
+
+### Assignment submission and files
+
+- Fit: **Ready**
+- Use: [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md)
+- How: `dropzone` for uploads, a status `badge` (Not started, Submitted, Late, Graded), `timeline` for submission history; an `alert` for the deadline.
+
+### Gradebook and feedback (instructor)
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Slider](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/slider.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md)
+- How: A class-by-assignment `table` with bulk actions; `records-table` for editable rows; `textarea` for feedback and `slider` for a rubric score.
+- Missing: No sticky-header spreadsheet grid with inline editing, and no rubric component.
+
+### Class and cohort analytics
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+- How: Relabel `analytics-dashboard` for completion and engagement; `progress` for each assignment's completion.
+- Missing: No time-series or distribution chart (grade histogram) and no per-student drill-down chart.
+
+### Timetable, deadlines and events
+
+- Fit: **Gap**
+- Use: [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+- How: A `timeline` or `table` can list upcoming deadlines in order.
+- Missing: No calendar or week-view timetable.
+
+### Discussion and AI tutor
+
+- Fit: **Adapt**
+- Use: [Chat App](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/chat-app.md), [Message Bubble](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/message-bubble.md), [Prompt Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/prompt-input.md), [Citations](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/citations.md), [Streaming Response](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/streaming-response.md), [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md)
+- How: The chat and agent components give threads and an input; `citations` lets a tutor point to course material.
+- Missing: No threaded forum with replies and moderation; label AI answers clearly and let the instructor review them.
+
+## Libraries and services that pair well
+
+- Video lessons with captions: Mux Player, Video.js, Vimeo Player API. No video player ships in opendraft; embed one with captions and playback speed, report progress back to update `progress`, and place the transcript in `tabs` beside it.
+- LMS interoperability and content standards: LTI 1.3, xAPI, SCORM Cloud. These sit in your backend; opendraft only renders the resulting course, grade and progress data, so map them into the props of `progress`, `table` and `stepper`.
+- Rostering and sign-in with school accounts: Clever, ClassLink, Google Workspace for Education. Use `auth-screen` with their provider buttons; keep the roles (student, teacher, guardian) in your own data so views can differ.
+- Offline sync and draft saving: Dexie (IndexedDB), TanStack Query persistence, RxDB. Save answers and drafts locally and show a Saved or Queued state with `badge`; flush the queue on reconnect.
+- Calendar and timetable: FullCalendar, react-big-calendar, Schedule-X. No calendar component ships yet; use it for the week view and keep the opendraft `timeline` for a simple upcoming-deadlines list.
+
+## Typical screens
+
+- **Learner home**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Empty State](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/empty-state.md)
+- **Course catalog**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Catalog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md)
+- **Lesson player**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Sidebar Nav](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sidebar-nav.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md)
+- **Quiz**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Question Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/question-card.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md) + [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md)
+- **Instructor gradebook**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md) + [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-education
+```
+
+## Known gaps
+
+- Course catalog and enrollment: Item fields are event-shaped (host, date, capacity) so relabel them for instructor, start date and seats; no prerequisite or level filters.
+- Video and reading lesson content: No video player with captions, speed control and resume, and no PDF or slide viewer; embed one and keep the transcript beside it.
+- Quizzes and assessments: No timer with accessibility extensions, no question-bank authoring and no automatic scoring or explanations view.
+- Gradebook and feedback (instructor): No sticky-header spreadsheet grid with inline editing, and no rubric component.
+- Class and cohort analytics: No time-series or distribution chart (grade histogram) and no per-student drill-down chart.
+- Timetable, deadlines and events: No calendar or week-view timetable.
+- Discussion and AI tutor: No threaded forum with replies and moderation; label AI answers clearly and let the instructor review them.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Energy, utilities and EV charging products with opendraft
+
+> Grid operations, smart metering, solar and storage, EV charging networks, field service and customer billing for electricity, gas and water providers. Numbers carry units, time carries a zone, and some actions can hurt people or equipment.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+energy, utility, utilities, grid, smart meter, metering, scada, outage, solar, battery storage, ev charging, ocpp, kwh, tariff, demand response, field service, billing.
+
+## Principles for this domain
+
+- Always show the unit and the magnitude together, in `font-mono` with `tabular-nums`: `4.2 kW`, `18.6 MWh`, `230 V`. Do not auto-switch between W, kW and MW inside one column; pick one unit per column and say it in the header.
+- Be honest about time series. Label the interval and aggregation (15-min average, hourly sum, daily peak), mark gaps and estimated reads as such instead of drawing a line through them, and never smooth data without saying so.
+- Outage and alarm severity uses a fixed scale with a word and an icon, not color alone (for example Critical, Major, Minor, Advisory). Show start time, affected customers or assets, and estimated restoration time with its source.
+- Switching, isolating or energizing equipment is guarded by interlocks: show the current state, the precondition that blocks the action, and require a confirmation that names the asset and consequence. Show who did it and when, and never allow a one-click remote switch.
+- Show every timestamp with its zone, and show the asset's own local time beside the operator's. Grids span regions, and daylight saving shifts create 23- and 25-hour days; billing periods and tariffs must follow the meter's zone.
+- Separate measured, estimated and forecast values visually and in text (solid, dashed, labeled). A billing or settlement figure always shows its status: actual, estimated or disputed.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Grid and asset status overview
+
+- Fit: **Adapt**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md)
+- How: `stat` tiles for load, generation and frequency with the unit inside `value`; `status-indicator` plus a text `badge` per substation or feeder; `alert` for active network notices.
+- Missing: `stat` has a change chip but no threshold or limit marking, and there is no single-line diagram or network topology view.
+
+### Live and historical load, generation and consumption charts
+
+- Fit: **Gap**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md)
+- How: `analytics-dashboard` and `insight-cards` can show a trend and totals for a coarse range.
+- Missing: No general time-series chart with several series, units on two axes, zoom, thresholds, gap rendering and forecast overlays.
+
+### Smart meter list and reads
+
+- Fit: **Ready**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md)
+- How: Virtualized `table` with sortable columns, a meter ID in `font-mono` with `copy-button`, read quality shown as a text `badge` (Actual, Estimated, Missing), and `selection-actions` for bulk reads or commands.
+
+### Outage management and restoration tracking
+
+- Fit: **Adapt**
+- Use: [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md)
+- How: Outage list in `table` with severity `badge`; each outage's updates in `timeline`; restoration stages (reported, crew dispatched, repair, restored) in a vertical `stepper`.
+- Missing: No outage map and no affected-area polygon view.
+
+### EV charging network and charge point status
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md)
+- How: Charge points in `table` with connector status words (Available, Charging, Faulted, Offline); `progress` with `invert` for session state of charge; `stat` for uptime and energy delivered.
+- Missing: No station map, and `filter-table` is task shaped (todo, progress, done) so use `table` with your own filter controls for charger statuses.
+
+### Start and monitor a charging session (driver)
+
+- Fit: **Adapt**
+- Use: [QR Code](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md), [OTP Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/otp-input.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Toast](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md)
+- How: Scan or enter a charger code, show `progress` for charge level, `stat` for kWh, cost and time remaining, and a clear stop `button`. Use `alert` for a faulted connector.
+- Missing: No QR scanner (`qr-code` only renders codes) and no payment-method selector built for tap-to-pay.
+
+### Solar and battery site dashboard
+
+- Fit: **Adapt**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Slider](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/slider.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md)
+- How: Production, consumption, export and battery level in `stat` and `progress` (use `invert` so a low battery warns); `slider` and `switch` for reserve level and backup mode.
+- Missing: No energy-flow diagram (solar to home to battery to grid) and no multi-series time-series chart.
+
+### Field service work orders and technician dispatch
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md)
+- How: Work orders in `table`; job detail in `detail-page`; safety and completion checklist in `todo-list` with sign-off through `approval-card`; photo evidence through `dropzone`.
+- Missing: No scheduler or map-based dispatch board, no signature pad, and offline sync of work orders is your app's job.
+
+### Customer billing, usage and tariffs
+
+- Fit: **Adapt**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: Bill summary in `stat`, line items in `table`, budget used in `progress` (consumption tone), payment through `checkout`, receipts through `order-confirmation`.
+- Missing: No usage-versus-tariff-band chart (time-of-use bands) and no bill document viewer; render the PDF with an external viewer.
+
+### Demand response, switching and control actions
+
+- Fit: **Ready**
+- Use: [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Tool Approval](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-approval.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md), [Toast](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md)
+- How: Use `dialog` with a typed asset name for switching or load shedding, `approval-card` for two-person sign-off, `sonner` for the result, and `timeline` for who did what and when. Interlock rules and permissions still come from your control system.
+
+## Libraries and services that pair well
+
+- Time-series charts for load, generation and meter data: Recharts, Apache ECharts, uPlot. opendraft has no general time-series chart yet; theme the library with opendraft's color tokens, and use uPlot or ECharts when you plot tens of thousands of interval reads.
+- Maps of outages, substations, feeders and charge points: MapLibre GL JS, Mapbox GL JS, Leaflet. Put the map beside a `table` or `drawer` from opendraft and encode severity with shape and label as well as color, since map tiles change the contrast.
+- Live telemetry and charger status: MQTT over WebSockets, OCPP gateway (for example SteVe), Server-Sent Events. Stream into `table` and `stat` and keep the last-update time visible; show a stale state when the feed drops rather than the last value as if it were current.
+- Time zones, daylight saving and interval math: Temporal API, date-fns-tz, Luxon. Do billing and interval aggregation in the meter's zone, and format with the zone abbreviation next to `font-mono` timestamps.
+- Payments for charging sessions and bills: Stripe, Adyen. Pair with `checkout` for the form layout and let the provider's hosted fields handle card data.
+- Barcode and QR scanning for meters, chargers and assets: html5-qrcode, zxing-js, Barcode Detection API. opendraft's `qr-code` only draws codes; add a scanner component and show a manual-entry `field` as the fallback.
+
+## Typical screens
+
+- **Network operations overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md)
+- **Outage detail**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **Charge point network**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md)
+- **Work order and field checklist**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md) + [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **Customer usage and bill**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md) + [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-energy-utilities
+```
+
+## Known gaps
+
+- Grid and asset status overview: `stat` has a change chip but no threshold or limit marking, and there is no single-line diagram or network topology view.
+- Live and historical load, generation and consumption charts: No general time-series chart with several series, units on two axes, zoom, thresholds, gap rendering and forecast overlays.
+- Outage management and restoration tracking: No outage map and no affected-area polygon view.
+- EV charging network and charge point status: No station map, and `filter-table` is task shaped (todo, progress, done) so use `table` with your own filter controls for charger statuses.
+- Start and monitor a charging session (driver): No QR scanner (`qr-code` only renders codes) and no payment-method selector built for tap-to-pay.
+- Solar and battery site dashboard: No energy-flow diagram (solar to home to battery to grid) and no multi-series time-series chart.
+- Field service work orders and technician dispatch: No scheduler or map-based dispatch board, no signature pad, and offline sync of work orders is your app's job.
+- Customer billing, usage and tariffs: No usage-versus-tariff-band chart (time-of-use bands) and no bill document viewer; render the PDF with an external viewer.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Government and civic services products with opendraft
+
+> Public-sector portals for permits, licences, benefits, tax, records requests, case management and civic engagement. Used by everyone, including people in stress, on old phones and with assistive technology, so clarity and access come before polish.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+government, public sector, civic, citizen, permit, licence, benefits, welfare, tax, council, municipal, case management, foi, records request, immigration, public service.
+
+## Principles for this domain
+
+- Write in plain language: short sentences, common words, one idea per paragraph, the action in the button label (`Apply for a parking permit`, not `Submit`). Explain any term of art the first time it appears.
+- Design to a high accessibility bar (aim for WCAG 2.2 AA or better, where regulation applies it is often required): visible focus, 4.5:1 text contrast, full keyboard use, errors announced and linked to their fields, no information by color alone, and a tested screen reader path for every form.
+- Long forms must be save-and-resume: ask one thing per step, show the steps with a `stepper`, let people leave and return with a reference number, never lose entered data on an error, and offer a final review page before submission.
+- Be transparent about status: every application shows its reference number in `font-mono` with a `copy-button`, the current stage in words, what happens next, the expected time, and who to contact. Never leave a person guessing.
+- Support many languages and reading directions from the start: text can grow 30 to 40 percent, names and addresses are not a US shape, dates and numbers follow the locale, and the language switcher is always visible and labeled in its own language.
+- No dark patterns: no pre-ticked consent, no countdown pressure on benefits, equal prominence for decline and accept. Ask only for data you need and explain why. Assume a poor connection and an old device: keep pages light, show upload progress, retry safely, and always offer a phone, paper or in-person alternative.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Apply for a permit, licence or benefit (multi-step form)
+
+- Fit: **Adapt**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md)
+- How: `stepper` for stages, `field` for label, hint and linked error, `repeater-field` for household members or prior addresses.
+- Missing: No built-in save-and-resume or draft persistence (store drafts server side), no address lookup, and no check-your-answers summary page; build the review page from `table` or a definition list.
+
+### Upload supporting documents
+
+- Fit: **Adapt**
+- Use: [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md)
+- How: `dropzone` with per-file `progress`, accepted types and size shown in the hint, and a `badge` for Uploaded or Needs attention. Always keep a plain file-input path working.
+- Missing: No camera or document scan capture and no virus-scan or upload retry logic; those belong to your backend.
+
+### Application status and history tracking
+
+- Fit: **Ready**
+- Use: [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: `stepper` for the stage, `timeline` for dated events (received, in review, more information needed, decided), `badge` with words for status, `alert` when action is needed from the applicant.
+
+### Sign in and verify identity
+
+- Fit: **Adapt**
+- Use: [Auth Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/auth-screen.md), [OTP Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/otp-input.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: `auth-screen` for email and password; `otp-input` for SMS or authenticator codes, with a resend control and a non-SMS route.
+- Missing: No digital identity (eID, login.gov style) hand-off flow or knowledge-based verification; wire your identity provider and show its error states in `alert`.
+
+### Case management for caseworkers
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- How: Case queue in `table`, case file in `detail-page` with `tabs` for documents, notes and history, decisions through `approval-card`, and `timeline` as the case history.
+- Missing: `filter-table` is task shaped (todo, progress, done); use `table` with your own filters for case states. No assignment board with SLA timers.
+
+### Book an appointment or inspection slot
+
+- Fit: **Gap**
+- Use: [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- How: `date-picker` plus a `radio-group` of times can cover a simple booking.
+- Missing: No calendar or availability grid showing open and booked slots, and no reschedule or cancel view.
+
+### Pay a fee, fine or tax
+
+- Fit: **Adapt**
+- Use: [Checkout](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkout.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md)
+- How: `checkout` gives the details, payment and confirmation flow; show amount, due date and what it is for in `stat` and `table`; receipts via `order-confirmation`.
+- Missing: Payment methods and wording are retail shaped; relabel for a fine or fee and add instalment-plan and concession options yourself.
+
+### Service notices, closures and emergency banners
+
+- Fit: **Ready**
+- Use: [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Toast](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md)
+- How: A persistent, dismissible `alert` at the top for service disruption or deadlines; keep the same severity words across services.
+
+### Find a service, office or document (search and directory)
+
+- Fit: **Adapt**
+- Use: [Search List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/search-list.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Catalog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/catalog.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md), [Empty State](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/empty-state.md)
+- How: `search-list` for live results, `accordion` for FAQs, `empty-state` for no results with a next step.
+- Missing: No map or location finder, and `catalog` is card shaped and retail oriented so use `search-list` for text-first service lists.
+
+### Civic data and public dashboards (budgets, performance, open data)
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md)
+- How: Relabel `analytics-dashboard` for service volumes or spending, and always put a `table` next to each chart as the accessible alternative.
+- Missing: No general time-series, bar or map chart with text alternatives built in.
+
+## Libraries and services that pair well
+
+- Translations and locale-aware formatting: next-intl, react-i18next, FormatJS (react-intl). Keep all copy in message files, test with long German and Finnish strings, and set `dir` for right-to-left languages; check each opendraft component in RTL, since some spacing uses left and right classes.
+- Digital identity and sign-in: OpenID Connect provider (Keycloak, Auth0), Login.gov, eIDAS-based national eID. Use `auth-screen` for the fallback email path and `otp-input` for codes, and show a clear error and recovery route when identity checks fail.
+- Accessibility testing: axe-core, Pa11y, NVDA and VoiceOver manual checks. Automated tools catch only part of the problems; test each form with a keyboard and a screen reader, and test at 200 percent zoom.
+- Address lookup and validation: Google Places, Loqate, National address register APIs. Offer manual entry in a `field` group as the fallback and never block submission when lookup fails.
+- Document storage and e-signature: S3-compatible storage with virus scanning, DocuSign, Adobe Sign. Pair with `dropzone` for intake; opendraft has no signature pad or PDF viewer, so use the provider's embedded signing and viewing.
+- Notifications by email, SMS and letter: GOV.UK Notify, Twilio, Postmark. Mirror each notification as a dated entry in `timeline` so a person can see what was sent without needing the message.
+
+## Typical screens
+
+- **Service start page**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md) + [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Accordion](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/accordion.md) + [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md)
+- **Multi-step application**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md) + [Repeater Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/repeater-field.md) + [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md) + [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md)
+- **Check your answers and submit**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md) + [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md) + [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md)
+- **Application status**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md) + [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- **Caseworker queue and case file**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md) + [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-government-civic
+```
+
+## Known gaps
+
+- Apply for a permit, licence or benefit (multi-step form): No built-in save-and-resume or draft persistence (store drafts server side), no address lookup, and no check-your-answers summary page; build the review page from `table` or a definition list.
+- Upload supporting documents: No camera or document scan capture and no virus-scan or upload retry logic; those belong to your backend.
+- Sign in and verify identity: No digital identity (eID, login.gov style) hand-off flow or knowledge-based verification; wire your identity provider and show its error states in `alert`.
+- Case management for caseworkers: `filter-table` is task shaped (todo, progress, done); use `table` with your own filters for case states. No assignment board with SLA timers.
+- Book an appointment or inspection slot: No calendar or availability grid showing open and booked slots, and no reschedule or cancel view.
+- Pay a fee, fine or tax: Payment methods and wording are retail shaped; relabel for a fine or fee and add instalment-plan and concession options yourself.
+- Find a service, office or document (search and directory): No map or location finder, and `catalog` is card shaped and retail oriented so use `search-list` for text-first service lists.
+- Civic data and public dashboards (budgets, performance, open data): No general time-series, bar or map chart with text alternatives built in.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building Manufacturing and industrial operations products with opendraft
+
+> Manufacturing execution (MES), shop-floor terminals, quality control, maintenance and industrial IoT dashboards. Used by operators on a feet-and-gloves schedule and by engineers and managers reviewing lines, lots and downtime.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+manufacturing, mes, shop floor, factory, production line, oee, downtime, quality control, inspection, cmms, maintenance, work order, andon, batch, traceability.
+
+## Principles for this domain
+
+- Make state glanceable from across the room. Line, machine and order status uses large type, a word (Running, Idle, Down, Changeover) plus an icon, and high contrast; a wall display needs no reading beyond the status and one number.
+- Design for gloves and noise: touch targets of at least 56 px on shop-floor terminals, generous spacing, no hover-only or drag-only actions, and confirmations that do not rely on sound alone.
+- Every unit of product has traceability: lot, batch, serial, shift, operator and machine appear on the record, in `font-mono` with a `copy-button` and a scannable code, and corrections add a new entry rather than overwrite an old one.
+- Rank alarms by priority, not arrival time: Critical (stop and act), Warning (act this shift), Info. Keep alarm text specific (what, where, what to do), require acknowledgement with a name and time, and avoid alarm floods by grouping repeats.
+- Show shift and time context everywhere: the current shift, shift start, counts since shift start, and timestamps in the plant's local zone. Handovers between shifts need a visible notes and open-issues summary.
+- Tolerate offline and flaky networks: queue entries locally, show an explicit Saved locally, Syncing and Synced state, never lose a count or a quality reading, and show how stale a displayed value is.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Line and machine status wall display (andon)
+
+- Fit: **Adapt**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Animated Number](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/animated-number.md)
+- How: Large `stat` tiles for output, target and OEE with a `status-indicator` and status `badge` per machine; `progress` for output against target; `alert` for stoppages.
+- Missing: No large-format kiosk or full-screen display mode, and no auto-rotating screen layout; build it with a scaled container.
+
+### Production order execution on a terminal
+
+- Fit: **Adapt**
+- Use: [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- How: Work instructions as a vertical `stepper` or `todo-list`, `quantity-stepper` for good and scrap counts, `approval-card` to confirm completion.
+- Missing: Default control sizes are desktop sized; set larger button and stepper sizes through classes and verify 56 px targets. No barcode scan input or numeric keypad.
+
+### Quality inspection and checklists
+
+- Fit: **Adapt**
+- Use: [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: Inspection steps in `todo-list`, pass or fail in `radio-group`, defect photos in `dropzone`, sign-off in `approval-card`, and history in `records-table`.
+- Missing: No statistical process control chart (X-bar, control limits) and no measurement-instrument input.
+
+### Alarm and event management
+
+- Fit: **Adapt**
+- Use: [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Toast](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/sonner.md)
+- How: Alarm list in `table` sorted by priority with a text `badge`, `selection-actions` for bulk acknowledge, `timeline` for the event history, `alert` for the active critical banner.
+- Missing: No alarm-shelving or suppression workflow and no audible alarm control; those are logic you build around `table`.
+
+### Downtime and OEE analysis
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md)
+- How: OEE, availability, performance and quality in `stat` and `progress`; downtime reasons in `table`; `analytics-dashboard` relabeled for machines.
+- Missing: No Pareto chart, no stacked shift-by-shift time-series chart, and the dashboard range tabs are fixed at 7, 30 and 90 days.
+
+### Maintenance work orders and preventive schedules
+
+- Fit: **Gap**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md)
+- How: Work orders in `table` and `detail-page`, checklists in `todo-list`, history in `timeline`.
+- Missing: No scheduler, calendar or Gantt for planned maintenance and no meter-based trigger view.
+
+### Lot, batch and serial traceability
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Records Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/records-table.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md), [QR Code](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/qr-code.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md)
+- How: Search a lot with `command-palette`, show genealogy in `table`, record history in `timeline`, and print a label with `qr-code`.
+- Missing: No tree or graph view for forward and backward genealogy, and no barcode formats other than QR (Code 128, DataMatrix).
+
+### Equipment and sensor live data
+
+- Fit: **Gap**
+- Use: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Slider](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/slider.md), [Switch](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/switch.md)
+- How: Current readings in `stat` and `table` with unit and last-update time.
+- Missing: No live time-series trend chart, no gauge or dial, and no P&ID or floor-plan view. `slider` and `switch` are fine for setpoints, but writes to a PLC need your own interlocks and confirmation.
+
+### Inventory, materials and shift handover
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Empty State](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/empty-state.md)
+- How: Stock levels as `progress` with `invert` so low stock warns; handover notes in `textarea` and `timeline`.
+- Missing: No barcode scan input and no pick list or kanban board for material requests.
+
+## Libraries and services that pair well
+
+- Machine and sensor data over industrial protocols: OPC UA, MQTT with Sparkplug B, Node-RED. Bridge to the browser through a gateway or WebSocket and show the timestamp from the source, not the browser's receive time, so stale data is obvious.
+- Time-series storage and trend charts: InfluxDB or TimescaleDB with Grafana, Apache ECharts, uPlot. Grafana panels can be embedded beside opendraft `stat` tiles; opendraft has no native time-series chart yet, so a library must draw trends.
+- Barcode and QR scanning on the floor: Hardware scanners that act as keyboards, Zebra DataWedge, zxing-js. Most scanners type into a focused field; keep one large focused `input` ready and show the scanned value back clearly. `qr-code` only renders codes.
+- ERP, MES and quality system connections: SAP, Oracle NetSuite, ISA-95 based middleware. Keep the order, lot and BOM data read through your API and write corrections as new records, which matches the audit trail the UI shows.
+- Offline-first data and sync on terminals: PowerSync, RxDB, Workbox with IndexedDB. Surface the Saved locally, Syncing and Synced state with a `badge` and use `sonner` only for failures that need action.
+- Label and document printing: Zebra Browser Print, ZPL over a print server. Render the on-screen label with `qr-code` and `font-mono` text, then send the matching ZPL to the printer.
+
+## Typical screens
+
+- **Line status wall display**: [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Status Indicator](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/status-indicator.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md) + [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md)
+- **Operator work order terminal**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Quantity Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/quantity-stepper.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **Quality inspection**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md) + [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md) + [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **Alarm console**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Alert](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/alert.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Selection Actions](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/selection-actions.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md)
+- **Plant performance overview**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-manufacturing
+```
+
+## Known gaps
+
+- Line and machine status wall display (andon): No large-format kiosk or full-screen display mode, and no auto-rotating screen layout; build it with a scaled container.
+- Production order execution on a terminal: Default control sizes are desktop sized; set larger button and stepper sizes through classes and verify 56 px targets. No barcode scan input or numeric keypad.
+- Quality inspection and checklists: No statistical process control chart (X-bar, control limits) and no measurement-instrument input.
+- Alarm and event management: No alarm-shelving or suppression workflow and no audible alarm control; those are logic you build around `table`.
+- Downtime and OEE analysis: No Pareto chart, no stacked shift-by-shift time-series chart, and the dashboard range tabs are fixed at 7, 30 and 90 days.
+- Maintenance work orders and preventive schedules: No scheduler, calendar or Gantt for planned maintenance and no meter-based trigger view.
+- Lot, batch and serial traceability: No tree or graph view for forward and backward genealogy, and no barcode formats other than QR (Code 128, DataMatrix).
+- Equipment and sensor live data: No live time-series trend chart, no gauge or dial, and no P&ID or floor-plan view. `slider` and `switch` are fine for setpoints, but writes to a PLC need your own interlocks and confirmation.
+- Inventory, materials and shift handover: No barcode scan input and no pick list or kanban board for material requests.
+
+Docs: https://ui-system-virid.vercel.app/docs/use-cases
+
+---
+
+# Building HR and people operations products with opendraft
+
+> HRIS, recruiting, onboarding, payroll, performance and time-off products used by employees, managers and HR teams. The data is personal and sensitive, so who can see what, and who changed what, is part of the design.
+
+Read this before building for this domain. Follow the rules in https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt as well. Names below link to each component's page (props, types, example).
+
+## Use this playbook when the product involves
+
+human resources, hris, people ops, recruiting, applicant, candidate, onboarding, offboarding, payroll, payslip, performance review, time off, leave, timesheet, employee directory.
+
+## Principles for this domain
+
+- Make views permission-aware: show each person only the fields their role allows, and say so (`Visible to HR only`) rather than leaving a blank. Managers see their reports, employees see themselves, and a view-as preview helps admins check it.
+- Mask sensitive data by default (salary, national ID, bank details, health and leave reasons, performance ratings) with an explicit reveal that is logged. Never put such values in URLs, toasts, page titles or exports without a clear warning.
+- Approval flows show the whole chain: who requested, who must approve now, who is next, what was decided and when. Give every request a status word (Pending, Approved, Declined, Withdrawn) and always allow the requester to withdraw or edit before a decision.
+- Use inclusive language and flexible data: do not require a binary gender field, allow preferred and legal names, support names that do not fit first and last, and keep pronouns optional. Dates, currencies and working weeks follow the person's country.
+- Make changes auditable: every edit to pay, title, manager, status or personal data records who, when, old value and new value, visible in a history view. Keep effective dates separate from edit dates so retroactive changes are clear.
+- Treat people-related decisions with care: show the reason and next step on rejections, avoid ranking people by a single score, label AI-generated summaries or suggestions as such, and keep a human decision-maker on hiring, pay and performance outcomes.
+
+## What the product needs, and what to use
+
+Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.
+
+### Employee directory and org chart
+
+- Fit: **Adapt**
+- Use: [Search List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/search-list.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md)
+- How: Searchable list with `avatar`, role and location, a profile in `detail-page`, jump-to-person with `command-palette`.
+- Missing: No org chart tree or reporting-line visualization.
+
+### Employee profile with sensitive fields
+
+- Fit: **Adapt**
+- Use: [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Copy Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Settings Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/settings-page.md)
+- How: Sections as `tabs`, editable details with `field`, a `dialog` to confirm reveal of masked values such as bank details.
+- Missing: No masked-field control with reveal and audit hook; build it from `input`, a toggle button and your permission check.
+
+### Time-off requests and approvals
+
+- Fit: **Adapt**
+- Use: [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md)
+- How: Request with `date-range-picker`, balance in `stat` and `progress`, decision with `approval-card`, approval chain in `timeline`.
+- Missing: No team calendar showing who is away and no public-holiday or half-day awareness; add holidays to the date picker logic.
+
+### Recruiting pipeline and candidate review
+
+- Fit: **Adapt**
+- Use: [CRM Pipeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/crm-pipeline.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md)
+- How: `crm-pipeline` is a stage board with drag and drop; pass your hiring stages and relabel the cards; scorecards in `detail-page` with `tabs`.
+- Missing: Its data shape is sales oriented (company, value, contact), and there is no resume or PDF viewer. For fairness, hide fields (name, photo) you do not want in an early-stage blind review.
+
+### Job application form (candidate-facing)
+
+- Fit: **Ready**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Input](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Select](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Order Confirmation](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/order-confirmation.md), [Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md)
+- How: Steps in `stepper`, resume upload in `dropzone`, optional diversity questions as `radio-group` options that include Prefer not to say, and a confirmation screen via `order-confirmation`.
+
+### Onboarding and offboarding checklists
+
+- Fit: **Ready**
+- Use: [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Checkbox](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Task Rows](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/task-rows.md)
+- How: Tasks per owner (HR, IT, manager, employee) in `todo-list` or `task-rows`, overall `progress`, and sign-offs with `approval-card`.
+
+### Payroll runs and payslips
+
+- Fit: **Adapt**
+- Use: [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md), [Date Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-picker.md), [Dialog](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dialog.md), [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md), [Diff Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/diff-table.md)
+- How: Run stages in `stepper` (draft, review, approved, paid), differences against last run in `diff-table`, final approval via `approval-card`.
+- Missing: No payslip document viewer and no PDF viewer; link to a generated file. Calculation, tax and legal rules come from your payroll provider.
+
+### Performance reviews and goals
+
+- Fit: **Adapt**
+- Use: [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md), [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md), [Textarea](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/textarea.md), [Radio Group](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/radio-group.md), [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md), [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md), [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md), [Slider](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/slider.md), [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- How: Review cycle in `stepper`, rating with `radio-group` that has a text label for each level, goals with `progress`, manager sign-off via `approval-card`.
+- Missing: No rich text editor for long-form feedback (`textarea` is plain) and no 9-box or calibration grid.
+
+### Audit history of changes
+
+- Fit: **Ready**
+- Use: [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md), [Diff Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/diff-table.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Filter Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-table.md), [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)
+- How: `timeline` for who changed what, `diff-table` for old and new values, `date-range-picker` and `table` filters for searching.
+
+### HR analytics (headcount, attrition, time to hire)
+
+- Fit: **Adapt**
+- Use: [Analytics Dashboard](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/analytics-dashboard.md), [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md), [Insight Cards](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/insight-cards.md), [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md), [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md)
+- How: Relabel `analytics-dashboard` for headcount and attrition; apply minimum group sizes so small teams cannot be identified.
+- Missing: No general time-series, funnel or cohort chart, and the dashboard range tabs are fixed at 7, 30 and 90 days.
+
+## Libraries and services that pair well
+
+- Payroll, benefits and tax calculation: Gusto, ADP, Deel. Let the provider own the calculation and show its output in `table` and `stat`; never recompute pay in the browser.
+- Applicant tracking and job boards: Greenhouse, Lever, Ashby. Map their stages onto the `crm-pipeline` stages and keep candidate notes in your own detail view rather than copying them.
+- Single sign-on, provisioning and directory sync: Okta, Microsoft Entra ID, SCIM. Use SCIM to create and remove accounts at hire and exit, and drive the onboarding `todo-list` from the same events.
+- E-signature for contracts and policies: DocuSign, Dropbox Sign, Adobe Sign. opendraft has no signature pad or PDF viewer; embed the provider's signing view and record the result in `timeline`.
+- Calendars, holidays and working-time rules: Nager.Date, Google Calendar API, Microsoft Graph. Feed public holidays into the `date-range-picker` logic and sync approved leave to the team calendar.
+- Permissions and field-level access control: CASL, Oso, OpenFGA. Evaluate on the server and pass the allowed fields to the UI as props, so hidden data is never sent to the browser.
+
+## Typical screens
+
+- **Employee directory**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Search List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/search-list.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Avatar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/avatar.md) + [Command Palette](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/command-palette.md)
+- **Employee profile**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Field](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/field.md) + [Timeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/timeline.md)
+- **Time off and approvals**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Stat](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stat.md) + [Date Range Picker](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-range-picker.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **Hiring pipeline**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [CRM Pipeline](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/crm-pipeline.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Approval Card](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/approval-card.md)
+- **New hire onboarding**: [Page Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/page-header.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md) + [Todo List](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/todo-list.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Dropzone](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/dropzone.md)
+
+## Install the starter kit
+
+One command installs the theme and the components this playbook uses:
+
+```bash
+npx shadcn@latest add @opendraft/kit-hr-people
+```
+
+## Known gaps
+
+- Employee directory and org chart: No org chart tree or reporting-line visualization.
+- Employee profile with sensitive fields: No masked-field control with reveal and audit hook; build it from `input`, a toggle button and your permission check.
+- Time-off requests and approvals: No team calendar showing who is away and no public-holiday or half-day awareness; add holidays to the date picker logic.
+- Recruiting pipeline and candidate review: Its data shape is sales oriented (company, value, contact), and there is no resume or PDF viewer. For fairness, hide fields (name, photo) you do not want in an early-stage blind review.
+- Payroll runs and payslips: No payslip document viewer and no PDF viewer; link to a generated file. Calculation, tax and legal rules come from your payroll provider.
+- Performance reviews and goals: No rich text editor for long-form feedback (`textarea` is plain) and no 9-box or calibration grid.
+- HR analytics (headcount, attrition, time to hire): No general time-series, funnel or cohort chart, and the dashboard range tabs are fixed at 7, 30 and 90 days.
 
 Docs: https://ui-system-virid.vercel.app/docs/use-cases
 
@@ -830,6 +1886,18 @@ export type AnalyticsLabels = {
   channelsAria: string
   /** Heading and accessible name of the table. */
   table: string
+  /** aria-label of the KPI section. */
+  keyMetrics: string
+  /** aria-label of the chart section. */
+  trend: string
+  /** aria-label of the range tabs. */
+  dateRange: string
+  /** aria-label of the chart metric tabs. */
+  chartMetric: string
+  /** Chart heading for the selected metric label. */
+  overTime: (metricLabel: string) => string
+  /** Range tab text: `short` below the container breakpoint, `long` above it. */
+  ranges: Record<AnalyticsRange, { short: string; long: string }>
   /** Table column headings. The row fields stay name / visitors / conversion / duration. */
   columns: {
     name: string
@@ -848,9 +1916,20 @@ export type AnalyticsDashboardProps = {
   onExport?: (range: AnalyticsRange) => void
   title?: string
   /** Override any fixed text, for example to relabel the table for events. */
-  labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
+  labels?: Partial<Omit<AnalyticsLabels, "columns" | "ranges">> & {
     columns?: Partial<AnalyticsLabels["columns"]>
+    ranges?: Partial<
+      Record<AnalyticsRange, Partial<{ short: string; long: string }>>
+    >
   }
+  /** Fill the parent's height and scroll inside (default). Set false to size to content inside a scrolling page. */
+  fill?: boolean
+  /** Format the visitors column. Default: en-US grouped integer. */
+  formatVisitors?: (value: number, row: AnalyticsRow) => string
+  /** Format the conversion column. `value` is the raw 0-1 field. Default: percent with one decimal. */
+  formatConversion?: (value: number, row: AnalyticsRow) => string
+  /** Format the duration column (seconds). Default: m:ss. */
+  formatDuration?: (seconds: number, row: AnalyticsRow) => string
   /** Replaces the "Avg. time" column with a custom one (money, orders, ...). Reads `row.value` unless `format` is given. */
   valueColumn?: { label: string; format?: (row: AnalyticsRow) => string }
   className?: string
@@ -976,6 +2055,17 @@ export type SettingsPageProps = {
   members?: TeamMember[]
   billing?: BillingValues
   workspaceName?: string
+  /** Which sections render, in order. Default: all four. */
+  sections?: SettingsSection[]
+  /** Show the danger zone (profile) and the delete dialog. Default true. */
+  showDangerZone?: boolean
+  /** Danger zone copy. `description` replaces the default sentence; `action` is the button label. */
+  dangerLabels?: {
+    title?: string
+    description?: string
+    action?: string
+    dialogTitle?: string
+  }
   timezones?: { value: string; label: string }[]
   onSave?: (values: SettingsSaveValues) => void | Promise<void>
   onInvite?: (invite: { email: string; role: TeamRole }) => void
@@ -1064,8 +2154,17 @@ export type AuthScreenProps = {
   providers?: AuthProvider[]
   brand?: AuthBrand
   defaultMode?: AuthMode
+  /** Replaces the default monogram mark. */
   logo?: React.ReactNode
+  /** Show `brand.name` next to the logo. Set false when `logo` already contains the name. Default true. */
+  showBrandName?: boolean
+  /** Text before the provider label on each button. Default "Continue with". */
+  providerPrefix?: string
+  /** Full control of the provider button text (overrides `providerPrefix`), e.g. to shorten long labels. */
+  providerLabel?: (provider: AuthProvider) => string
   className?: string
+  /** Extra classes for inner parts. `providers` targets the provider button grid. */
+  classNames?: { providers?: string }
 }
 ```
 
@@ -9199,6 +10298,12 @@ export type SidebarRecent = {
   prompt?: string
 }
 
+export type SidebarWorkspaceMenuItem = {
+  label: string
+  icon?: React.ReactNode
+  onSelect?: () => void
+}
+
 export type SidebarWorkspace = { key: string; name: string; monogram: string }
 
 export type SidebarNavItem = {
@@ -9209,10 +10314,26 @@ export type SidebarNavItem = {
 }
 
 export type SidebarNavProps = {
-  /** Workspace shown in the switcher. Defaults to a demo workspace. */
+  /** Workspace shown in the switcher. Defaults to a neutral "Workspace". */
   workspace?: SidebarWorkspace
-  /** Primary navigation items. Defaults to demo items. */
+  /** Primary navigation items. Defaults to neutral Home / Invite users. */
   navItems?: SidebarNavItem[]
+  /** Mark shown at the left of the workspace switcher. Defaults to a neutral icon. */
+  logo?: React.ReactNode
+  /** Items in the workspace menu (between the workspace row and sign out). */
+  workspaceMenu?: SidebarWorkspaceMenuItem[]
+  /** Called from the sign-out row of the workspace menu. */
+  onSignOut?: () => void
+  signOutLabel?: string
+  newChatLabel?: string
+  chatsLabel?: string
+  searchLabel?: string
+  searchPlaceholder?: string
+  emptyLabel?: string
+  /** aria-label of the aside. */
+  ariaLabel?: string
+  collapseLabel?: string
+  expandLabel?: string
   activeTitle?: string | null
   className?: string
   /** Fill the parent's height instead of the fixed 600px demo height. */
@@ -9233,12 +10354,12 @@ export type SidebarNavProps = {
 ## Example
 
 ```tsx
-import { SidebarNav } from "@/components/agents/sidebar-nav"
+import { SAMPLE_RECENTS, SidebarNav } from "@/components/agents/sidebar-nav"
 
 export default function SidebarNavDemo() {
   return (
     <div className="flex h-[600px] overflow-hidden rounded-lg border bg-background">
-      <SidebarNav fill />
+      <SidebarNav fill recents={SAMPLE_RECENTS} />
       <div className="flex-1 bg-dots" />
     </div>
   )
@@ -10788,6 +11909,816 @@ export default function RepeaterFieldDemo() {
 ```
 
 Live docs: https://ui-system-virid.vercel.app/docs/repeater-field. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Timeline
+
+Vertical event timeline with status markers that never rely on color alone, mono timestamps, a side time column on wide containers, expandable detail, collapsible long lists, and loading and empty states.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/timeline
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Timeline, TimelineItem } from "@/components/ui/timeline"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/skeleton`
+
+## Props and types
+
+```ts
+type TimelineStatus =
+  "default" | "success" | "warning" | "destructive" | "current" | "upcoming"
+
+type TimelineAlign = "left" | "right-time"
+
+type TimelineItemData = {
+  /** Display time. Rendered in mono. */
+  time?: React.ReactNode
+  /** ISO 8601 value; renders the time inside a `<time dateTime>` element. */
+  timestamp?: string
+  title: React.ReactNode
+  description?: React.ReactNode
+  /** Secondary line, e.g. location or actor. */
+  meta?: React.ReactNode
+  /** Replaces the status glyph inside the marker. */
+  icon?: React.ReactNode
+  status?: TimelineStatus
+  /** Screen-reader text for the status. Defaults to a built-in label. */
+  statusLabel?: string
+  /** Expandable detail or attachments, shown in a disclosure. */
+  children?: React.ReactNode
+  /** Label of the disclosure toggle. */
+  detailLabel?: React.ReactNode
+  /** Start with the detail open. */
+  defaultOpen?: boolean
+}
+
+type TimelineItemProps = TimelineItemData &
+  Omit<React.ComponentProps<"li">, "title" | "children">
+
+type TimelineProps = Omit<React.ComponentProps<"ol">, "children"> & {
+  /** Array form. Rendered before any `children`. */
+  items?: TimelineItemData[]
+  /** Composable form: `<TimelineItem />` elements. */
+  children?: React.ReactNode
+  /** `right-time` moves the time to a left column on wide containers. */
+  align?: TimelineAlign
+  /** Marks the list as newest-first in its label. Does not reorder. */
+  newestFirst?: boolean
+  loading?: boolean
+  /** Shown when there are no items. */
+  emptyLabel?: React.ReactNode
+  /** Show only the first `max` items behind a toggle. */
+  collapsible?: boolean
+  max?: number
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { MapPin, Package, Truck } from "lucide-react"
+
+import { Timeline, TimelineItem } from "@/components/ui/timeline"
+
+const incident = [
+  {
+    time: "14:52",
+    timestamp: "2026-03-12T14:52:00Z",
+    title: "Incident resolved",
+    description: "Error rate back under 0.1% for 30 minutes.",
+    meta: "Dana R., on-call",
+    status: "success" as const,
+  },
+  {
+    time: "14:21",
+    timestamp: "2026-03-12T14:21:00Z",
+    title: "Rollback in progress",
+    description: "Reverting release 4.12.0 on all regions.",
+    meta: "Deploy pipeline",
+    status: "current" as const,
+  },
+  {
+    time: "14:05",
+    timestamp: "2026-03-12T14:05:00Z",
+    title: "Checkout latency degraded",
+    description: "p95 above 4s, elevated 5xx from the payments service.",
+    meta: "Monitoring",
+    status: "warning" as const,
+    children: "Alert: payments-api p95 > 2s for 5 minutes. Runbook: RB-204.",
+  },
+  {
+    time: "13:58",
+    timestamp: "2026-03-12T13:58:00Z",
+    title: "Database failover failed",
+    description: "Replica promotion timed out.",
+    meta: "Primary cluster",
+    status: "destructive" as const,
+  },
+  {
+    time: "13:40",
+    timestamp: "2026-03-12T13:40:00Z",
+    title: "Release 4.12.0 deployed",
+    meta: "Alex M.",
+  },
+]
+
+export default function TimelineDemo() {
+  return (
+    <div className="flex w-full max-w-[640px] flex-col gap-10">
+      <section className="flex flex-col gap-4">
+        <h3 className="eyebrow text-muted-foreground">
+          Incident, newest first, collapsible
+        </h3>
+        <Timeline
+          aria-label="Incident timeline"
+          items={incident}
+          newestFirst
+          collapsible
+          max={3}
+          align="right-time"
+        />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h3 className="eyebrow text-muted-foreground">
+          Shipment tracking, composable
+        </h3>
+        <Timeline aria-label="Shipment tracking">
+          <TimelineItem
+            time="Mar 10"
+            timestamp="2026-03-10"
+            title="Order placed"
+            meta="Online"
+            status="success"
+            icon={<Package className="size-3.5" />}
+          />
+          <TimelineItem
+            time="Mar 11"
+            timestamp="2026-03-11"
+            title="Departed facility"
+            meta={
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="size-3" /> Rotterdam, NL
+              </span>
+            }
+            status="success"
+          />
+          <TimelineItem
+            time="Mar 12"
+            timestamp="2026-03-12"
+            title="In transit"
+            description="Arriving at the local depot."
+            meta="Hamburg, DE"
+            status="current"
+            icon={<Truck className="size-3.5" />}
+          />
+          <TimelineItem
+            time="Mar 13"
+            title="Out for delivery"
+            status="upcoming"
+          />
+          <TimelineItem time="Mar 14" title="Delivered" status="upcoming" />
+        </Timeline>
+      </section>
+
+      <section className="grid gap-6 sm:grid-cols-2">
+        <Timeline loading aria-label="Loading history" />
+        <Timeline items={[]} emptyLabel="No history for this case" />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/timeline. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Alert
+
+Callout with a per-variant icon, optional dismiss, an actions slot and a full-bleed banner mode for system, weather and policy notices.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/alert
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Alert, AlertTitle, AlertDescription, AlertAction } from "@/components/ui/alert"
+```
+
+## Dependencies
+
+- npm: `class-variance-authority`, `lucide-react`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type AlertVariant = NonNullable<VariantProps<typeof alertVariants>["variant"]>
+
+type AlertProps = Omit<React.ComponentProps<"div">, "title"> &
+  VariantProps<typeof alertVariants> & {
+    /** Replace the default per-variant icon. */
+    icon?: React.ReactNode
+    /** Show a close button. */
+    dismissible?: boolean
+    onDismiss?: () => void
+    dismissLabel?: string
+  }
+
+function AlertTitle(props: React.ComponentProps<"div">)
+
+function AlertDescription(props: React.ComponentProps<"div">)
+
+function AlertAction(props: React.ComponentProps<"div">)
+```
+
+## Variants
+
+- `variant`: `default` (default), `info`, `success`, `warning`, `destructive`
+- `banner`: `false` (default), `true`
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+
+export default function AlertDemo() {
+  const [open, setOpen] = React.useState(true)
+
+  return (
+    <div className="flex w-full max-w-xl flex-col gap-3">
+      <Alert>
+        <AlertTitle>Shipment SH-20418 updated</AlertTitle>
+        <AlertDescription>
+          Departure rescheduled to 06:40 from the Rotterdam hub.
+        </AlertDescription>
+      </Alert>
+      <Alert variant="info">
+        <AlertTitle>Scheduled maintenance</AlertTitle>
+        <AlertDescription>
+          The tracking API is read-only on Sunday, 02:00 to 04:00 UTC.
+        </AlertDescription>
+      </Alert>
+      <Alert variant="success">
+        <AlertTitle>Customs cleared</AlertTitle>
+        <AlertDescription>
+          Container MSKU-7731905 is released for pickup.
+        </AlertDescription>
+      </Alert>
+      <Alert variant="warning">
+        <AlertTitle>Weather delay at LHR</AlertTitle>
+        <AlertDescription>
+          Crosswinds are causing 45 minute holds on departures.
+        </AlertDescription>
+        <AlertAction>
+          <Button size="sm" variant="outline">
+            View affected flights
+          </Button>
+        </AlertAction>
+      </Alert>
+      {open && (
+        <Alert
+          variant="destructive"
+          dismissible
+          onDismiss={() => setOpen(false)}
+        >
+          <AlertTitle>Webhook delivery failing</AlertTitle>
+          <AlertDescription>
+            Endpoint returned 503 for the last 12 attempts.
+          </AlertDescription>
+          <AlertAction>
+            <Button size="sm" variant="outline">
+              Retry now
+            </Button>
+          </AlertAction>
+        </Alert>
+      )}
+      <Alert variant="warning" banner>
+        <AlertTitle>Policy update</AlertTitle>
+        <AlertDescription>
+          New cargo declaration rules apply from 1 November.
+        </AlertDescription>
+      </Alert>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/alert. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Status Indicator
+
+Shape plus word status (operational, degraded, down, maintenance) and an uptime bar of segments with an accessible summary.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/status-indicator
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { StatusIndicator, UptimeBar } from "@/components/ui/status-indicator"
+```
+
+## Dependencies
+
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type StatusKind =
+  "operational" | "degraded" | "down" | "maintenance" | "unknown"
+
+type StatusTone = "success" | "warning" | "destructive" | "brand" | "muted"
+
+type StatusShape = "dot" | "half" | "ring" | "square" | "dash"
+
+type StatusIndicatorProps = Omit<React.ComponentProps<"span">, "children"> & {
+  status?: StatusKind
+  /** Override the colour tone (for custom statuses). */
+  tone?: StatusTone
+  /** Override the label text. */
+  label?: React.ReactNode
+  /** Shape for custom statuses; defaults to the status shape. */
+  shape?: StatusShape
+  /** Visually hide the label (kept for screen readers). */
+  hideLabel?: boolean
+  /** Animate a soft halo for live states. Respects reduced motion. */
+  pulse?: boolean
+}
+
+type UptimeSegment = { status: StatusKind; label?: string }
+
+type UptimeBarProps = Omit<React.ComponentProps<"div">, "children"> & {
+  segments: UptimeSegment[]
+  /** Percent text, e.g. "99.98%". Shown in mono beside the bar. */
+  uptime?: React.ReactNode
+  /** Name used in the accessible summary, e.g. "API gateway". */
+  name?: string
+  /** Unit for the accessible summary. */
+  unit?: string
+}
+```
+
+## Example
+
+```tsx
+import { StatusIndicator, UptimeBar } from "@/components/ui/status-indicator"
+import type {
+  StatusKind,
+  UptimeSegment,
+} from "@/components/ui/status-indicator"
+
+const pattern: StatusKind[] = ["degraded", "down", "maintenance", "unknown"]
+
+function makeSegments(seed: number): UptimeSegment[] {
+  return Array.from({ length: 90 }, (_, i) => {
+    const day = 90 - i
+    const hit = (i * 7 + seed) % 29 === 0
+    return {
+      status: hit ? pattern[(i + seed) % pattern.length] : "operational",
+      label: `${day} days ago`,
+    }
+  })
+}
+
+const services = [
+  { name: "Tracking API", status: "operational", uptime: "99.98%", seed: 3 },
+  { name: "Booking portal", status: "degraded", uptime: "99.41%", seed: 5 },
+  { name: "Customs gateway", status: "down", uptime: "98.72%", seed: 11 },
+] as const
+
+export default function StatusIndicatorDemo() {
+  return (
+    <div className="flex w-full max-w-xl flex-col gap-8">
+      <div className="flex flex-wrap gap-x-6 gap-y-3">
+        <StatusIndicator status="operational" pulse />
+        <StatusIndicator status="degraded" />
+        <StatusIndicator status="down" />
+        <StatusIndicator status="maintenance" />
+        <StatusIndicator status="unknown" />
+        <StatusIndicator tone="brand" label="In transit" />
+        <StatusIndicator status="operational" hideLabel label="Online" />
+      </div>
+      <div className="flex flex-col gap-5">
+        {services.map((s) => (
+          <div key={s.name} className="flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm font-medium">{s.name}</span>
+              <StatusIndicator status={s.status} />
+            </div>
+            <UptimeBar
+              name={s.name}
+              unit="days"
+              segments={makeSegments(s.seed)}
+              uptime={s.uptime}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/status-indicator. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Slider
+
+Single or range slider on Radix with a label row, formatted value and marks.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/slider
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Slider } from "@/components/ui/slider"
+```
+
+## Dependencies
+
+- npm: `radix-ui`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type SliderMark = { value: number; label?: React.ReactNode }
+
+type SliderProps = Omit<
+  React.ComponentProps<typeof SliderPrimitive.Root>,
+  "value" | "defaultValue" | "onValueChange" | "onValueCommit" | "children"
+> & {
+  /** Controlled value. Two entries make a range slider. */
+  value?: number[]
+  defaultValue?: number[]
+  onValueChange?: (value: number[]) => void
+  onValueCommit?: (value: number[]) => void
+  /** Left text of the label row. */
+  label?: React.ReactNode
+  /** Right text of the label row. Defaults to the formatted value. Pass `false` to hide. */
+  valueLabel?: React.ReactNode | false
+  /** Formats each value for the value label. Range values are joined with an en dash. */
+  formatValue?: (value: number) => React.ReactNode
+  /** Show min and max labels under the track. Pass `marks` for custom ticks. */
+  showRange?: boolean
+  marks?: SliderMark[]
+  "aria-label"?: string
+  "aria-labelledby"?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Slider } from "@/components/ui/slider"
+
+export default function SliderDemo() {
+  const [volume, setVolume] = React.useState([70])
+
+  return (
+    <div className="grid w-full max-w-md gap-8">
+      <Slider
+        label="Playback volume"
+        value={volume}
+        onValueChange={setVolume}
+        formatValue={(v) => `${v}%`}
+        showRange
+      />
+      <Slider
+        label="Speaking rate"
+        defaultValue={[1]}
+        min={0.5}
+        max={2}
+        step={0.1}
+        formatValue={(v) => `${v.toFixed(1)}x`}
+        marks={[
+          { value: 0.5, label: "Slow" },
+          { value: 1.25, label: "Natural" },
+          { value: 2, label: "Fast" },
+        ]}
+      />
+      <Slider
+        label="Pitch range"
+        defaultValue={[20, 65]}
+        formatValue={(v) => `${v}`}
+        showRange
+      />
+      <Slider aria-label="Noise reduction" defaultValue={[40]} disabled />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/slider. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Dropzone
+
+Drag-and-drop or click-to-browse file area with size, type and count validation, camera capture and a file list with progress. No upload logic.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/dropzone
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Dropzone, DropzoneFileList, FileListItem } from "@/components/ui/dropzone"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/progress`
+
+## Props and types
+
+```ts
+type DropzoneRejectionReason =
+  "file-too-large" | "file-invalid-type" | "too-many-files"
+
+type DropzoneRejection = { file: File; reason: DropzoneRejectionReason }
+
+type DropzoneFile = {
+  id: string
+  name: string
+  size: number
+  /** Upload progress, 0-100. Omit to hide the bar. */
+  progress?: number
+  /** Per-file error text. */
+  error?: string
+}
+
+type DropzoneProps = Omit<
+  React.ComponentProps<"div">,
+  "onDrop" | "children"
+> & {
+  /** Same syntax as the input `accept` attribute. */
+  accept?: string
+  multiple?: boolean
+  /** Maximum size per file, in bytes. */
+  maxSize?: number
+  maxFiles?: number
+  /** Passes through to the input for phone camera capture. */
+  capture?: boolean | "user" | "environment"
+  disabled?: boolean
+  onFiles?: (files: File[]) => void
+  onReject?: (rejections: DropzoneRejection[]) => void
+  /** Controlled list of files to render under the area. */
+  files?: DropzoneFile[]
+  onRemove?: (file: DropzoneFile) => void
+  /** Custom prompt. Defaults to a generic drag or browse message. */
+  children?: React.ReactNode
+  /** Accessible name for the file input. */
+  "aria-label"?: string
+}
+
+function FileListItem(props: {
+  file: DropzoneFile
+  onRemove?: (file: DropzoneFile) => void
+  className?: string
+})
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { CameraIcon } from "lucide-react"
+
+import { Dropzone, type DropzoneFile } from "@/components/ui/dropzone"
+
+export default function DropzoneDemo() {
+  const [files, setFiles] = React.useState<DropzoneFile[]>([
+    { id: "seed-1", name: "dock-door-4.jpg", size: 2_400_000, progress: 100 },
+  ])
+  const [counter, setCounter] = React.useState(0)
+
+  return (
+    <div className="grid w-full max-w-xl gap-8">
+      <div className="grid gap-3">
+        <p className="eyebrow">Shipment photos</p>
+        <Dropzone
+          multiple
+          accept="image/png, image/jpeg"
+          maxSize={5 * 1024 * 1024}
+          maxFiles={4}
+          aria-label="Upload shipment photos"
+          files={files}
+          onRemove={(f) => setFiles((p) => p.filter((x) => x.id !== f.id))}
+          onFiles={(added) => {
+            const next = added.map((f, i) => ({
+              id: `file-${counter + i}`,
+              name: f.name,
+              size: f.size,
+              progress: 100,
+            }))
+            setCounter((c) => c + added.length)
+            setFiles((p) => [...p, ...next])
+          }}
+        />
+      </div>
+      <div className="grid gap-3">
+        <p className="eyebrow">Proof of delivery</p>
+        <Dropzone
+          accept="image/*"
+          capture="environment"
+          aria-label="Take a delivery photo"
+        >
+          <CameraIcon aria-hidden className="size-5 text-muted-foreground" />
+          <span className="text-sm font-medium">Take or choose a photo</span>
+          <span className="text-xs text-muted-foreground">
+            Opens the camera on phones.
+          </span>
+        </Dropzone>
+      </div>
+      <div className="grid gap-3">
+        <p className="eyebrow">Disabled</p>
+        <Dropzone disabled aria-label="Upload disabled" />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/dropzone. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# OTP Input
+
+One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/otp-input
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { OtpInput } from "@/components/ui/otp-input"
+```
+
+## Dependencies
+
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type OtpInputProps = Omit<
+  React.ComponentProps<"input">,
+  "value" | "defaultValue" | "onChange" | "maxLength" | "pattern" | "type"
+> & {
+  /** Number of cells. Defaults to 6. */
+  length?: number
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
+  /** Called once when every cell is filled. */
+  onComplete?: (value: string) => void
+  /** Accepted characters. Digits only by default. */
+  pattern?: "numeric" | "alphanumeric"
+  invalid?: boolean
+  /** Render a dash after the middle cell. */
+  separator?: boolean
+  /** Focus the field on mount. */
+  autoFocus?: boolean
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { OtpInput } from "@/components/ui/otp-input"
+
+export default function OtpInputDemo() {
+  const [code, setCode] = React.useState("")
+  const [status, setStatus] = React.useState<"idle" | "error" | "ok">("idle")
+
+  return (
+    <div className="grid w-full max-w-md gap-8">
+      <div className="grid gap-3">
+        <p className="eyebrow">Two-factor authentication</p>
+        <p className="text-sm text-muted-foreground">
+          Enter the 6-digit code from your authenticator app. Try 123456.
+        </p>
+        <OtpInput
+          separator
+          value={code}
+          invalid={status === "error"}
+          onValueChange={(v) => {
+            setCode(v)
+            setStatus("idle")
+          }}
+          onComplete={(v) => setStatus(v === "123456" ? "ok" : "error")}
+          aria-label="Authentication code"
+        />
+        <p
+          role={status === "error" ? "alert" : "status"}
+          className="min-h-5 text-sm"
+        >
+          {status === "error" && (
+            <span className="text-destructive">
+              That code is not valid. Try again.
+            </span>
+          )}
+          {status === "ok" && <span className="text-success">Verified.</span>}
+        </p>
+      </div>
+      <div className="grid gap-3">
+        <p className="eyebrow">Alphanumeric, 4 characters</p>
+        <OtpInput length={4} pattern="alphanumeric" aria-label="Access code" />
+      </div>
+      <div className="grid gap-3">
+        <p className="eyebrow">Disabled</p>
+        <OtpInput defaultValue="1234" disabled aria-label="Locked code" />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/otp-input. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 

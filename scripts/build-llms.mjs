@@ -527,6 +527,12 @@ function useCasePage(d) {
     if (n.gap) lines.push(`- Missing: ${n.gap}`)
     lines.push("")
   }
+  if (d.integrations?.length) {
+    lines.push("## Libraries and services that pair well", "")
+    for (const i of d.integrations)
+      lines.push(`- ${i.for}: ${i.options.join(", ")}. ${i.note}`)
+    lines.push("")
+  }
   lines.push("## Typical screens", "")
   for (const x of d.screens)
     lines.push(`- **${x.name}**: ${x.compose.map(link).join(" + ")}`)
@@ -576,6 +582,7 @@ const useCaseJson = {
   domains: useCases.domains.map((d) => ({
     id: d.id,
     title: d.title,
+    short: d.short,
     summary: d.summary,
     signals: d.signals,
     principles: d.principles,
@@ -598,14 +605,63 @@ const useCaseJson = {
       })),
     })),
     screens: d.screens,
+    integrations: d.integrations ?? [],
   })),
+  integrations: useCases.integrations ?? [],
   crossDomainGaps: useCases.crossDomainGaps,
+}
+
+/* ------------------------- Tool adapters and theme.css ------------------------ */
+
+// One rules source (content/ai/core-rules.md), published in the shapes each AI
+// tool reads. Nothing here is specific to one assistant.
+const core = read("content/ai/core-rules.md")
+  .replaceAll("{{FILES}}", FILES_URL)
+  .trim()
+
+const adapterDefs = {
+  "AGENTS.md": `# opendraft\n\nSave this as AGENTS.md in the project root. Cursor, Codex, Copilot, Windsurf and many other coding agents read it. Claude Code reads CLAUDE.md: add the line @AGENTS.md to it.\n\n${core}\n`,
+  "opendraft.mdc": `---\ndescription: Build UI with the opendraft design system: components, theme tokens and industry playbooks\nglobs: "**/*.{ts,tsx,css}"\nalwaysApply: false\n---\n\nSave this as .cursor/rules/opendraft.mdc.\n\n${core}\n`,
+  "copilot-instructions.md": `Save this as .github/copilot-instructions.md.\n\n${core}\n`,
+  "lovable-knowledge.md": `Paste this into Lovable: Project Settings, Knowledge. Lovable builds React, Vite and Tailwind apps and can't run the shadcn command, so use the by-hand steps: the theme from theme.css and components from the registry JSON.\n\n${core}\n`,
+  "chatgpt-gpt-instructions.md": `Paste this into a custom GPT's Instructions (or the first message of a chat). You can't run commands here: write the code, then end your answer with the list of install commands (npx shadcn@latest add @opendraft/<name>) for every opendraft component you used, so the person can run them in their project. If you can't open links, ask them to paste the rules from ${FILES_URL}/llms.txt or use the "Copy with rules included" button on the docs.\n\n${core}\n`,
+  "chatgpt-custom-instructions.md": `Build UI with the opendraft design system (React + Tailwind v4, shadcn registry at ${FILES_URL}/r/{name}.json). Rules: ${FILES_URL}/llms.txt. Industry playbooks: ${FILES_URL}/use-cases.json. Use its components and blocks, pass real data (never leave sample content), style only with theme tokens (no hard-coded colors, no palette colors, no gradients), \`heading\` for headings, never show status by color alone. End with the \`npx shadcn@latest add @opendraft/<name>\` commands for what you used.\n`,
+}
+const LIMITS = {
+  "chatgpt-custom-instructions.md": 1500,
+  "chatgpt-gpt-instructions.md": 8000,
+}
+for (const [name, body] of Object.entries(adapterDefs)) {
+  const limit = LIMITS[name]
+  if (limit && body.length > limit)
+    throw new Error(`${name} is ${body.length} chars, over its ${limit} limit`)
+}
+
+/** A self-contained global stylesheet for projects that can't run the shadcn CLI (Vite, Lovable). */
+function themeStylesheet() {
+  const t = JSON.parse(read("public/r/theme.json"))
+  const decl = (o, ind = "  ") =>
+    Object.entries(o)
+      .map(([k, v]) => `${ind}--${k}: ${v};`)
+      .join("\n")
+  const rule = (sel, o, ind = "") => {
+    const lines = Object.entries(o).map(([k, v]) =>
+      typeof v === "string" ? `${ind}  ${k}: ${v};` : rule(k, v, ind + "  ")
+    )
+    return `${ind}${sel} {\n${lines.join("\n")}\n${ind}}`
+  }
+  let css = `/* opendraft theme for projects without the shadcn CLI. Save as your global stylesheet (for example src/index.css). */\n`
+  css += `@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&family=Newsreader:opsz,wght@6..72,300;6..72,400&display=swap");\n@import "tailwindcss";\n\n`
+  css += `@custom-variant dark (&:is(.dark, .dark *));\n\n`
+  css += `:root {\n  --font-geist: "Geist";\n  --font-geist-mono: "Geist Mono";\n  --font-newsreader: "Newsreader";\n${decl(t.cssVars.light)}\n}\n\n.dark {\n${decl(t.cssVars.dark)}\n}\n\n@theme inline {\n${decl(t.cssVars.theme)}\n}\n\n`
+  for (const [k, v] of Object.entries(t.css)) css += rule(k, v) + "\n\n"
+  return css
 }
 
 /* ---------------------------------- Output --------------------------------- */
 
 const summary =
-  "> opendraft is a React + Tailwind CSS v4 design system distributed as a shadcn registry and built to be used by AI assistants. Components install as source files into your project with the shadcn CLI, behavior comes from Radix, and every color, radius and timing comes from a small set of theme tokens."
+  "> opendraft is a React + Tailwind CSS v4 design system distributed as a shadcn registry and built to be used by AI assistants. Components install as source files into your project with the shadcn CLI, behavior comes from Radix, and every color, radius and timing comes from a small set of theme tokens. Building for a specific industry (security, logistics, healthcare, fintech and others)? Read the matching playbook in the Use cases section below before choosing components."
 
 const header = `# opendraft\n\n${summary}\n\n${guidelines}\n`
 
@@ -648,6 +704,13 @@ writeFileSync(
   new URL("public/use-cases.json", root),
   JSON.stringify(useCaseJson, null, 2) + "\n"
 )
+
+const rulesDir = new URL("public/agent-rules/", root)
+rmSync(rulesDir, { recursive: true, force: true })
+mkdirSync(rulesDir, { recursive: true })
+for (const [name, body] of Object.entries(adapterDefs))
+  writeFileSync(new URL(name, rulesDir), body)
+writeFileSync(new URL("public/theme.css", root), themeStylesheet())
 
 writeFileSync(new URL("public/llms.txt", root), llms)
 writeFileSync(

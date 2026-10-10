@@ -82,6 +82,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - How: On-time performance and disruption counts in `stat` tiles.
 - Missing: No map and no alert banner for weather or NOTAM bulletins.
 
+## Libraries and services that pair well
+
+- Flight path and airport maps: MapLibre GL JS, deck.gl, Mapbox GL JS. Great-circle arcs and tracks are a map-library job; keep times and codes in the table beside it.
+- Flight data: FlightAware AeroAPI, OpenSky Network, AviationStack. Normalize to UTC and show local airport time beside it.
+- Barcode boarding passes: bwip-js, zxing-js. qr-code only draws QR; airlines use PDF417 or Aztec, which these libraries can render.
+- Crew and maintenance scheduling: FullCalendar, DHTMLX Gantt, Bryntum. Until a scheduler exists in opendraft, embed one and theme it with the CSS variables.
+
 ## Typical screens
 
 - **Departures board**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Tabs](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md) + [Data Table](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md) + [Badge](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md)

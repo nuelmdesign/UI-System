@@ -82,6 +82,13 @@ Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. 
 - How: Relabel the dashboard (shipments, on-time rate, cost per delivery) and add a `valueColumn` for cost.
 - Missing: The range tabs are fixed at 7, 30 and 90 days, and the table columns are page-analytics shaped.
 
+## Libraries and services that pair well
+
+- Live fleet and route map: MapLibre GL JS, Google Maps Platform, HERE. Use a map library for positions and routes; keep ETA and status in opendraft components.
+- Carrier and tracking data: Shippo, EasyPost, project44. Map each carrier's status codes to one status vocabulary before it reaches the UI.
+- Barcode scanning: zxing-js, Dynamsoft, Scandit. Scanning is a device capability; opendraft's qr-code only generates codes.
+- Signature capture: signature_pad, react-signature-canvas. Pair with dropzone for photos to make proof of delivery.
+
 ## Typical screens
 
 - **Public tracking page**: [Site Header](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/site-header.md) + [Detail Page](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/detail-page.md) + [Stepper](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/stepper.md) + [Progress](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md)
