@@ -715,7 +715,7 @@ const TOOLS = [
 ] as const
 
 function ToolsGuide() {
-  const base = useSiteBase()
+  const nav = useDocsNav()
   return (
     <>
       <Prose>
@@ -753,12 +753,12 @@ function ToolsGuide() {
         <Prose>
           <p>
             Use <strong>Copy with rules included</strong> on the{" "}
-            <a
-              href={`${base}docs/ai`}
+            <nav.Link
+              href={nav.href("ai")}
               className="text-brand underline-offset-4 hover:underline"
             >
               Use with AI
-            </a>{" "}
+            </nav.Link>{" "}
             page. It puts the rules in the prompt itself. The assistant writes
             the code and ends with the install commands to run in your project.
           </p>
@@ -805,12 +805,12 @@ function ToolsGuide() {
         <Prose>
           <p>
             Every rules file points assistants at the{" "}
-            <a
-              href={`${base}docs/use-cases`}
+            <nav.Link
+              href={nav.href("use-cases")}
               className="text-brand underline-offset-4 hover:underline"
             >
               use-case playbooks
-            </a>
+            </nav.Link>
             , so a request for a logistics, healthcare or fintech product starts
             from the components that suit it.
           </p>
