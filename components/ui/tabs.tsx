@@ -82,7 +82,7 @@ function TabsTrigger({
       data-slot="tabs-trigger"
       value={value}
       className={cn(
-        "relative inline-flex h-full items-center justify-center gap-1.5 text-sm font-medium whitespace-nowrap outline-none",
+        "relative inline-flex min-h-7 items-center justify-center gap-1.5 self-stretch text-sm font-medium whitespace-nowrap outline-none",
         "transition-colors duration-150 ease-out hover:text-foreground data-[state=active]:text-foreground",
         "focus-visible:ring-[3px] focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",

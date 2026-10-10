@@ -787,7 +787,7 @@ function UseCasesGuide() {
       <section className="grid gap-4">
         <H2>Pick a domain</H2>
         <Tabs defaultValue={useCases.domains[0].id} className="gap-6">
-          <TabsList className="h-auto w-full flex-wrap justify-start">
+          <TabsList className="h-auto w-full flex-wrap justify-start gap-1">
             {useCases.domains.map((d) => (
               <TabsTrigger key={d.id} value={d.id}>
                 {d.short}
