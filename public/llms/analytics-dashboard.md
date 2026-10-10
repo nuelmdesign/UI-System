@@ -1,6 +1,6 @@
 # Analytics Dashboard
 
-Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown.
+Analytics screen with range tabs, KPI cards, a metric chart, a sortable top-pages table and a channel breakdown. Data shape: Web-analytics shaped: ranges are fixed 7d, 30d and 90d and table columns are name, visitors, conversion and duration (relabel with `labels`, `valueColumn` and the format props).
 
 Category: Blocks
 
@@ -48,6 +48,8 @@ export type AnalyticsRow = {
   conversion: number
   /** Seconds. */
   duration: number
+  /** Custom number for the optional `valueColumn` (revenue, orders, ...). Used for sorting and as the default display. */
+  value?: number
 }
 
 export type AnalyticsChannel = {
@@ -70,13 +72,25 @@ export type AnalyticsRangeData = {
 
 /** Every fixed piece of text, so the screen can describe any product. */
 export type AnalyticsLabels = {
-  /** Small line above the title. */
-  eyebrow: string
+  /** Small line above the title. A string is static; a function receives the selected range. */
+  eyebrow: string | ((range: AnalyticsRange) => string)
   export: string
   channels: string
   channelsAria: string
   /** Heading and accessible name of the table. */
   table: string
+  /** aria-label of the KPI section. */
+  keyMetrics: string
+  /** aria-label of the chart section. */
+  trend: string
+  /** aria-label of the range tabs. */
+  dateRange: string
+  /** aria-label of the chart metric tabs. */
+  chartMetric: string
+  /** Chart heading for the selected metric label. */
+  overTime: (metricLabel: string) => string
+  /** Range tab text: `short` below the container breakpoint, `long` above it. */
+  ranges: Record<AnalyticsRange, { short: string; long: string }>
   /** Table column headings. The row fields stay name / visitors / conversion / duration. */
   columns: {
     name: string
@@ -95,9 +109,22 @@ export type AnalyticsDashboardProps = {
   onExport?: (range: AnalyticsRange) => void
   title?: string
   /** Override any fixed text, for example to relabel the table for events. */
-  labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
+  labels?: Partial<Omit<AnalyticsLabels, "columns" | "ranges">> & {
     columns?: Partial<AnalyticsLabels["columns"]>
+    ranges?: Partial<
+      Record<AnalyticsRange, Partial<{ short: string; long: string }>>
+    >
   }
+  /** Fill the parent's height and scroll inside (default). Set false to size to content inside a scrolling page. */
+  fill?: boolean
+  /** Format the visitors column. Default: en-US grouped integer. */
+  formatVisitors?: (value: number, row: AnalyticsRow) => string
+  /** Format the conversion column. `value` is the raw 0-1 field. Default: percent with one decimal. */
+  formatConversion?: (value: number, row: AnalyticsRow) => string
+  /** Format the duration column (seconds). Default: m:ss. */
+  formatDuration?: (seconds: number, row: AnalyticsRow) => string
+  /** Replaces the "Avg. time" column with a custom one (money, orders, ...). Reads `row.value` unless `format` is given. */
+  valueColumn?: { label: string; format?: (row: AnalyticsRow) => string }
   className?: string
 }
 ```
@@ -111,7 +138,7 @@ import { AnalyticsDashboard } from "@/components/blocks/analytics-dashboard"
 
 export default function AnalyticsDashboardDemo() {
   return (
-    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <AnalyticsDashboard />
     </div>
   )

@@ -57,8 +57,17 @@ export type AuthScreenProps = {
   providers?: AuthProvider[]
   brand?: AuthBrand
   defaultMode?: AuthMode
+  /** Replaces the default monogram mark. */
   logo?: React.ReactNode
+  /** Show `brand.name` next to the logo. Set false when `logo` already contains the name. Default true. */
+  showBrandName?: boolean
+  /** Text before the provider label on each button. Default "Continue with". */
+  providerPrefix?: string
+  /** Full control of the provider button text (overrides `providerPrefix`), e.g. to shorten long labels. */
+  providerLabel?: (provider: AuthProvider) => string
   className?: string
+  /** Extra classes for inner parts. `providers` targets the provider button grid. */
+  classNames?: { providers?: string }
 }
 ```
 

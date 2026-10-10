@@ -28,6 +28,18 @@ export const GUIDES: GuideEntry[] = [
       "Give an AI assistant one link so it builds with opendraft's components and tokens.",
   },
   {
+    slug: "tools",
+    title: "Use with other AI tools",
+    description:
+      "Rules files and setup for Cursor, Copilot, Codex, Lovable, ChatGPT and any assistant that reads a rules file.",
+  },
+  {
+    slug: "use-cases",
+    title: "Use cases",
+    description:
+      "Playbooks that tell you, and your AI assistant, which components suit twelve kinds of product, from security and logistics to healthcare, fintech and government.",
+  },
+  {
     slug: "installation",
     title: "Installation",
     description: "Add the registry to a project and install components.",
@@ -746,6 +758,94 @@ export const ENTRIES: DocEntry[] = [
     category: "Blocks",
     description:
       "Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.",
+    isNew: true,
+  },
+  {
+    slug: "order-confirmation",
+    title: "Order Confirmation",
+    category: "Blocks",
+    description:
+      "Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.",
+    isNew: true,
+  },
+  {
+    slug: "page-header",
+    title: "Page Header",
+    category: "Components",
+    description:
+      "Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.",
+    isNew: true,
+  },
+  {
+    slug: "field",
+    title: "Field",
+    category: "Components",
+    description:
+      "Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset.",
+    isNew: true,
+  },
+  {
+    slug: "date-picker",
+    title: "Date Picker",
+    category: "Components",
+    description:
+      "Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.",
+    isNew: true,
+  },
+  {
+    slug: "repeater-field",
+    title: "Repeater Field",
+    category: "Components",
+    description:
+      "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
+    isNew: true,
+  },
+  {
+    slug: "timeline",
+    title: "Timeline",
+    category: "Components",
+    description:
+      "Vertical event timeline with status markers that never rely on color alone, mono timestamps, a side time column on wide containers, expandable detail, collapsible long lists, and loading and empty states.",
+    isNew: true,
+  },
+  {
+    slug: "alert",
+    title: "Alert",
+    category: "Components",
+    description:
+      "Callout with a per-variant icon, optional dismiss, an actions slot and a full-bleed banner mode for system, weather and policy notices.",
+    isNew: true,
+  },
+  {
+    slug: "status-indicator",
+    title: "Status Indicator",
+    category: "Components",
+    description:
+      "Shape plus word status (operational, degraded, down, maintenance) and an uptime bar of segments with an accessible summary.",
+    isNew: true,
+  },
+  {
+    slug: "slider",
+    title: "Slider",
+    category: "Components",
+    description:
+      "Single or range slider on Radix with a label row, formatted value and marks.",
+    isNew: true,
+  },
+  {
+    slug: "dropzone",
+    title: "Dropzone",
+    category: "Components",
+    description:
+      "Drag-and-drop or click-to-browse file area with size, type and count validation, camera capture and a file list with progress. No upload logic.",
+    isNew: true,
+  },
+  {
+    slug: "otp-input",
+    title: "OTP Input",
+    category: "Components",
+    description:
+      "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
     isNew: true,
   },
 ]

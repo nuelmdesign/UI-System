@@ -1,6 +1,6 @@
 # Settings Page
 
-Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone.
+Settings with profile, notifications, team and billing sections, an unsaved-changes bar and a type-to-confirm danger zone. Data shape: SaaS-shaped sections (profile, notifications, team, billing); the billing Change plan button needs your handler.
 
 Category: Blocks
 
@@ -97,6 +97,17 @@ export type SettingsPageProps = {
   members?: TeamMember[]
   billing?: BillingValues
   workspaceName?: string
+  /** Which sections render, in order. Default: all four. */
+  sections?: SettingsSection[]
+  /** Show the danger zone (profile) and the delete dialog. Default true. */
+  showDangerZone?: boolean
+  /** Danger zone copy. `description` replaces the default sentence; `action` is the button label. */
+  dangerLabels?: {
+    title?: string
+    description?: string
+    action?: string
+    dialogTitle?: string
+  }
   timezones?: { value: string; label: string }[]
   onSave?: (values: SettingsSaveValues) => void | Promise<void>
   onInvite?: (invite: { email: string; role: TeamRole }) => void
@@ -115,7 +126,7 @@ import { SettingsPage } from "@/components/blocks/settings-page"
 
 export default function SettingsPageDemo() {
   return (
-    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <SettingsPage />
     </div>
   )

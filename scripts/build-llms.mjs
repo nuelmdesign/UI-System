@@ -8,6 +8,8 @@
 
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 
+import { loadUseCases } from "./use-cases.mjs"
+
 /** Components that render ice-cream-shop demo content until given real data. */
 const SAMPLE_CONTENT = new Set([
   "agent-screen",
@@ -29,11 +31,56 @@ const SAMPLE_CONTENT = new Set([
   "tool-chips",
 ])
 
+/** Components whose names read as generic but whose data is shaped by one demo domain. */
+const SHAPE_NOTES = {
+  "filter-table":
+    "Rows are task rows (task, date, status todo, progress or done, owner), not a general data table. For other data use `table`.",
+  "records-table":
+    "An AI spreadsheet demo with fixed columns (name, tags, last, strength, website). For general records use `table`.",
+  "diff-table":
+    "A demo of an AI edit to a people table (id, dept, email). Not a general diff viewer; use `file-diff` for text changes.",
+  "selection-actions":
+    "An AI text-rewrite bar over selected text, not a bulk-action bar for table rows. For bulk actions use `table` with `selectable` plus Buttons.",
+  "insight-cards":
+    "An AI insight carousel. Only its exported `InsightChart` (a multi-line chart with one threshold line) is reusable on its own.",
+  "task-rows":
+    "A payment-shaped animated demo (label, amount; fixed failed, retry and done states), not an interactive task list.",
+  "todo-list":
+    "A read-only view of an agent's plan: items expand but can't be ticked. For a tickable checklist use `checkbox` rows with `progress`.",
+  "sidebar-nav":
+    "An AI-chat sidebar (chats, new chat, collapse rail). For general app navigation use `animated-sidebar`.",
+  flowchart:
+    "An editable trigger and if/else canvas, not a pipeline or status graph.",
+  "crm-pipeline":
+    "A sales board: company, USD value and 'deal' wording are fixed and there is no `labels` prop. Not a general stage board.",
+  "detail-page":
+    "An event-ticket purchase page (date, host, tiers, waitlist). Not a generic record or product page.",
+  catalog:
+    "Event-shaped items (host, date, capacity, remaining). Not a retail product grid.",
+  checkout:
+    "Booking-shaped: contact, attendee, digital or front-desk delivery, card or pay later, ticket confirmation. No shipping address.",
+  "order-confirmation":
+    "Ticket-shaped: always shows tickets and a QR pass, with a fixed three-step stepper.",
+  "approval-card":
+    "One decision (Approve, Request changes, Reject) with no approver or timestamp, and fixed resolved wording.",
+  "question-card":
+    "Survey-shaped: skip and free text are always shown and there is no scoring.",
+  "analytics-dashboard":
+    "Web-analytics shaped: ranges are fixed 7d, 30d and 90d and table columns are name, visitors, conversion and duration (relabel with `labels`, `valueColumn` and the format props).",
+  "settings-page":
+    "SaaS-shaped sections (profile, notifications, team, billing); the billing Change plan button needs your handler.",
+  "date-picker": "A single date with an optional HH:MM field; no time zone.",
+}
+
 /** Description plus a warning when the component ships demo content. */
-const describe = (entry) =>
-  SAMPLE_CONTENT.has(entry.slug)
-    ? `${entry.description} Shows sample content (an ice cream shop) until you pass your own data through its props.`
-    : entry.description
+const describe = (entry) => {
+  let text = entry.description
+  if (SHAPE_NOTES[entry.slug]) text += ` Data shape: ${SHAPE_NOTES[entry.slug]}`
+  if (SAMPLE_CONTENT.has(entry.slug))
+    text +=
+      " Shows sample content (an ice cream shop) until you pass your own data through its props."
+  return text
+}
 
 const root = new URL("../", import.meta.url)
 const read = (path) => readFileSync(new URL(path, root), "utf8")
@@ -463,10 +510,203 @@ function componentPage(entry) {
   return lines.join("\n") + "\n"
 }
 
+/* -------------------------------- Use cases -------------------------------- */
+
+const useCases = loadUseCases(root)
+const slugTitle = Object.fromEntries(ENTRIES.map((e) => [e.slug, e.title]))
+const FIT = { ready: "Ready", adapt: "Adapt", gap: "Gap" }
+
+// A playbook may only name components that exist, so it can't go stale.
+for (const d of useCases.domains) {
+  const named = [
+    ...d.kit,
+    ...d.needs.flatMap((n) => n.use),
+    ...d.screens.flatMap((x) => x.compose),
+  ]
+  const missing = [...new Set(named.filter((n) => !slugTitle[n]))]
+  if (missing.length)
+    throw new Error(
+      `use-cases.json: "${d.id}" names components that don't exist: ${missing.join(", ")}`
+    )
+  for (const n of d.needs) {
+    if (!FIT[n.status])
+      throw new Error(`use-cases.json: bad status "${n.status}" in "${d.id}"`)
+    if (n.status !== "ready" && !n.gap)
+      throw new Error(
+        `use-cases.json: "${n.need}" in "${d.id}" needs a "gap" note`
+      )
+  }
+}
+
+const useCaseUrl = (id) => `${FILES_URL}/llms/use-cases/${id}.md`
+const link = (slug) => `[${slugTitle[slug]}](${pageUrl(slug)})`
+
+function useCasePage(d) {
+  const gaps = d.needs.filter((n) => n.gap)
+  const lines = [
+    `# Building ${d.title} products with opendraft`,
+    "",
+    `> ${d.summary}`,
+    "",
+    "Read this before building for this domain. Follow the rules in " +
+      `${FILES_URL}/llms.txt as well. Names below link to each component's page (props, types, example).`,
+    "",
+    "## Use this playbook when the product involves",
+    "",
+    d.signals.join(", ") + ".",
+    "",
+    "## Principles for this domain",
+    "",
+    ...d.principles.map((p) => `- ${p}`),
+    "",
+    "## What the product needs, and what to use",
+    "",
+    "Fit: **Ready** means use as is. **Adapt** means it works with the caveat given. **Gap** means nothing fits yet: build it from primitives and follow the principles above.",
+    "",
+  ]
+  for (const n of d.needs) {
+    lines.push(`### ${n.need}`, "")
+    lines.push(`- Fit: **${FIT[n.status]}**`)
+    lines.push(`- Use: ${n.use.map(link).join(", ")}`)
+    if (n.notes) lines.push(`- How: ${n.notes}`)
+    if (n.gap) lines.push(`- Missing: ${n.gap}`)
+    lines.push("")
+  }
+  if (d.integrations?.length) {
+    lines.push("## Libraries and services that pair well", "")
+    for (const i of d.integrations)
+      lines.push(`- ${i.for}: ${i.options.join(", ")}. ${i.note}`)
+    lines.push("")
+  }
+  lines.push("## Typical screens", "")
+  for (const x of d.screens)
+    lines.push(`- **${x.name}**: ${x.compose.map(link).join(" + ")}`)
+  lines.push(
+    "",
+    "## Install the starter kit",
+    "",
+    "One command installs the theme and the components this playbook uses:",
+    "",
+    "```bash",
+    installCmd(`kit-${d.id}`),
+    "```",
+    ""
+  )
+  if (gaps.length) {
+    lines.push("## Known gaps", "")
+    for (const n of gaps) lines.push(`- ${n.need}: ${n.gap}`)
+    lines.push("")
+  }
+  lines.push(`Docs: ${SITE_URL}/docs/use-cases`)
+  return lines.join("\n") + "\n"
+}
+
+const useCasePages = useCases.domains.map((d) => [d.id, useCasePage(d)])
+
+const useCaseIndex = [
+  "### Pick by what the product does",
+  "",
+  "If the product is for a specific industry or job, read its playbook before choosing components. A playbook lists the domain's usual needs, the opendraft components that serve each (with a fit rating), the screens to assemble, and one install command for a starter kit. Match the request against each playbook's signals; if none matches, pick by need from the component list below.",
+  "",
+  ...useCases.domains.map(
+    (d) =>
+      `- [${d.title}](${useCaseUrl(d.id)}): ${d.summary} Signals: ${d.signals.slice(0, 8).join(", ")}. Kit: \`${installCmd(`kit-${d.id}`)}\``
+  ),
+  "",
+  `Machine-readable index: ${FILES_URL}/use-cases.json`,
+].join("\n")
+
+const useCaseJson = {
+  version: useCases.version,
+  intro: useCases.intro,
+  fit: {
+    ready: "Use as is.",
+    adapt: "Works with the caveat in `gap`.",
+    gap: "Nothing fits yet; build from primitives and follow the principles.",
+  },
+  domains: useCases.domains.map((d) => ({
+    id: d.id,
+    title: d.title,
+    short: d.short,
+    summary: d.summary,
+    signals: d.signals,
+    principles: d.principles,
+    playbook: useCaseUrl(d.id),
+    kit: {
+      name: `kit-${d.id}`,
+      install: installCmd(`kit-${d.id}`),
+      components: d.kit,
+    },
+    needs: d.needs.map((n) => ({
+      need: n.need,
+      fit: n.status,
+      notes: n.notes ?? null,
+      gap: n.gap ?? null,
+      components: n.use.map((slug) => ({
+        slug,
+        title: slugTitle[slug],
+        page: pageUrl(slug),
+        install: installCmd(slug),
+      })),
+    })),
+    screens: d.screens,
+    integrations: d.integrations ?? [],
+  })),
+  integrations: useCases.integrations ?? [],
+  crossDomainGaps: useCases.crossDomainGaps,
+}
+
+/* ------------------------- Tool adapters and theme.css ------------------------ */
+
+// One rules source (content/ai/core-rules.md), published in the shapes each AI
+// tool reads. Nothing here is specific to one assistant.
+const core = read("content/ai/core-rules.md")
+  .replaceAll("{{FILES}}", FILES_URL)
+  .trim()
+
+const adapterDefs = {
+  "AGENTS.md": `# opendraft\n\nSave this as AGENTS.md in the project root. Cursor, Codex, Copilot, Windsurf and many other coding agents read it. Claude Code reads CLAUDE.md: add the line @AGENTS.md to it.\n\n${core}\n`,
+  "opendraft.mdc": `---\ndescription: Build UI with the opendraft design system: components, theme tokens and industry playbooks\nglobs: "**/*.{ts,tsx,css}"\nalwaysApply: false\n---\n\nSave this as .cursor/rules/opendraft.mdc.\n\n${core}\n`,
+  "copilot-instructions.md": `Save this as .github/copilot-instructions.md.\n\n${core}\n`,
+  "lovable-knowledge.md": `Paste this into Lovable: Project Settings, Knowledge. Lovable builds React, Vite and Tailwind apps and can't run the shadcn command, so use the by-hand steps: the theme from theme.css and components from the registry JSON.\n\n${core}\n`,
+  "chatgpt-gpt-instructions.md": `Paste this into a custom GPT's Instructions (or the first message of a chat). You can't run commands here: write the code, then end your answer with the list of install commands (npx shadcn@latest add @opendraft/<name>) for every opendraft component you used, so the person can run them in their project. If you can't open links, ask them to paste the rules from ${FILES_URL}/llms.txt or use the "Copy with rules included" button on the docs.\n\n${core}\n`,
+  "chatgpt-custom-instructions.md": `Build UI with the opendraft design system (React + Tailwind v4, shadcn registry at ${FILES_URL}/r/{name}.json). Rules: ${FILES_URL}/llms.txt. Industry playbooks: ${FILES_URL}/use-cases.json. Use its components and blocks, pass real data (never leave sample content), style only with theme tokens (no hard-coded colors, no palette colors, no gradients), \`heading\` for headings, never show status by color alone. End with the \`npx shadcn@latest add @opendraft/<name>\` commands for what you used.\n`,
+}
+const LIMITS = {
+  "chatgpt-custom-instructions.md": 1500,
+  "chatgpt-gpt-instructions.md": 8000,
+}
+for (const [name, body] of Object.entries(adapterDefs)) {
+  const limit = LIMITS[name]
+  if (limit && body.length > limit)
+    throw new Error(`${name} is ${body.length} chars, over its ${limit} limit`)
+}
+
+/** A self-contained global stylesheet for projects that can't run the shadcn CLI (Vite, Lovable). */
+function themeStylesheet() {
+  const t = JSON.parse(read("public/r/theme.json"))
+  const decl = (o, ind = "  ") =>
+    Object.entries(o)
+      .map(([k, v]) => `${ind}--${k}: ${v};`)
+      .join("\n")
+  const rule = (sel, o, ind = "") => {
+    const lines = Object.entries(o).map(([k, v]) =>
+      typeof v === "string" ? `${ind}  ${k}: ${v};` : rule(k, v, ind + "  ")
+    )
+    return `${ind}${sel} {\n${lines.join("\n")}\n${ind}}`
+  }
+  let css = `/* opendraft theme for projects without the shadcn CLI. Save as your global stylesheet (for example src/index.css). */\n`
+  css += `@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&family=Newsreader:opsz,wght@6..72,300;6..72,400&display=swap");\n@import "tailwindcss";\n\n`
+  css += `@custom-variant dark (&:is(.dark, .dark *));\n\n`
+  css += `:root {\n  --font-geist: "Geist";\n  --font-geist-mono: "Geist Mono";\n  --font-newsreader: "Newsreader";\n${decl(t.cssVars.light)}\n}\n\n.dark {\n${decl(t.cssVars.dark)}\n}\n\n@theme inline {\n${decl(t.cssVars.theme)}\n}\n\n`
+  for (const [k, v] of Object.entries(t.css)) css += rule(k, v) + "\n\n"
+  return css
+}
+
 /* ---------------------------------- Output --------------------------------- */
 
 const summary =
-  "> opendraft is a React + Tailwind CSS v4 design system distributed as a shadcn registry and built to be used by AI assistants. Components install as source files into your project with the shadcn CLI, behavior comes from Radix, and every color, radius and timing comes from a small set of theme tokens."
+  "> opendraft is a React + Tailwind CSS v4 design system distributed as a shadcn registry and built to be used by AI assistants. Components install as source files into your project with the shadcn CLI, behavior comes from Radix, and every color, radius and timing comes from a small set of theme tokens. Building for a specific industry (security, logistics, healthcare, fintech and others)? Read the matching playbook in the Use cases section below before choosing components."
 
 const header = `# opendraft\n\n${summary}\n\n${guidelines}\n`
 
@@ -488,6 +728,7 @@ const docsIndex = GUIDES.map(
 
 const llms = [
   header,
+  `## Use cases\n\n${useCaseIndex}\n`,
   `## Components\n\n${componentIndex}\n`,
   `## Docs\n\n${docsIndex}\n`,
   `## Optional\n\n- [llms-full.txt](${FILES_URL}/llms-full.txt): these rules plus every component page (props, types, examples) in one file\n- [Registry index](${FILES_URL}/r/registry.json): every installable registry item as JSON\n`,
@@ -501,10 +742,31 @@ mkdirSync(outDir, { recursive: true })
 for (const [slug, body] of pages)
   writeFileSync(new URL(`${slug}.md`, outDir), body)
 
+mkdirSync(new URL("use-cases/", outDir), { recursive: true })
+for (const [id, body] of useCasePages)
+  writeFileSync(new URL(`use-cases/${id}.md`, outDir), body)
+writeFileSync(
+  new URL("public/use-cases.json", root),
+  JSON.stringify(useCaseJson, null, 2) + "\n"
+)
+
+const rulesDir = new URL("public/agent-rules/", root)
+rmSync(rulesDir, { recursive: true, force: true })
+mkdirSync(rulesDir, { recursive: true })
+for (const [name, body] of Object.entries(adapterDefs))
+  writeFileSync(new URL(name, rulesDir), body)
+writeFileSync(new URL("public/theme.css", root), themeStylesheet())
+
 writeFileSync(new URL("public/llms.txt", root), llms)
 writeFileSync(
   new URL("public/llms-full.txt", root),
-  [header, ...pages.map(([, body]) => body)].join("\n---\n\n")
+  [
+    header,
+    ...useCasePages.map(([, body]) => body),
+    ...pages.map(([, body]) => body),
+  ].join("\n---\n\n")
 )
 
-console.log(`llms.txt, llms-full.txt, llms/: ${pages.length} component pages`)
+console.log(
+  `llms.txt, llms-full.txt, llms/: ${pages.length} component pages, ${useCasePages.length} use-case playbooks`
+)

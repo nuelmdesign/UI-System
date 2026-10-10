@@ -33,10 +33,10 @@ export default function StepperDemo() {
         </Button>
         <Button
           size="sm"
-          disabled={current === steps.length - 1}
-          onClick={() => setCurrent((c) => Math.min(steps.length - 1, c + 1))}
+          disabled={current >= steps.length}
+          onClick={() => setCurrent((c) => Math.min(steps.length, c + 1))}
         >
-          Continue
+          {current === steps.length - 1 ? "Finish" : "Continue"}
         </Button>
       </div>
       <div className="border-t pt-6">

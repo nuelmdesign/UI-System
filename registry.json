@@ -2618,6 +2618,213 @@
       ]
     },
     {
+      "name": "order-confirmation",
+      "type": "registry:block",
+      "title": "Order Confirmation",
+      "description": "Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/empty-state",
+        "@opendraft/stat",
+        "@opendraft/stepper",
+        "@opendraft/ticket-pass"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/order-confirmation.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/order-confirmation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:ui",
+      "title": "Page Header",
+      "description": "Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/page-header.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/label"
+      ],
+      "files": [
+        {
+          "path": "components/ui/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/input",
+        "@opendraft/popover"
+      ],
+      "files": [
+        {
+          "path": "components/ui/date-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "repeater-field",
+      "type": "registry:ui",
+      "title": "Repeater Field",
+      "description": "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/repeater-field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Vertical event timeline with status markers that never rely on color alone, mono timestamps, a side time column on wide containers, expandable detail, collapsible long lists, and loading and empty states.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/skeleton"
+      ],
+      "files": [
+        {
+          "path": "components/ui/timeline.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Callout with a per-variant icon, optional dismiss, an actions slot and a full-bleed banner mode for system, weather and policy notices.",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/alert.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "status-indicator",
+      "type": "registry:ui",
+      "title": "Status Indicator",
+      "description": "Shape plus word status (operational, degraded, down, maintenance) and an uptime bar of segments with an accessible summary.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/status-indicator.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Single or range slider on Radix with a label row, formatted value and marks.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/slider.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropzone",
+      "type": "registry:ui",
+      "title": "Dropzone",
+      "description": "Drag-and-drop or click-to-browse file area with size, type and count validation, camera capture and a file list with progress. No upload logic.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/progress"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dropzone.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:ui",
+      "title": "Otp Input",
+      "description": "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/otp-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "all",
       "type": "registry:item",
       "title": "Everything",
@@ -2736,7 +2943,570 @@
         "@opendraft/ticket-pass",
         "@opendraft/checkout",
         "@opendraft/catalog",
-        "@opendraft/detail-page"
+        "@opendraft/detail-page",
+        "@opendraft/order-confirmation",
+        "@opendraft/page-header",
+        "@opendraft/field",
+        "@opendraft/date-picker",
+        "@opendraft/repeater-field",
+        "@opendraft/timeline",
+        "@opendraft/alert",
+        "@opendraft/status-indicator",
+        "@opendraft/slider",
+        "@opendraft/dropzone",
+        "@opendraft/otp-input"
+      ]
+    },
+    {
+      "name": "kit-security",
+      "type": "registry:item",
+      "title": "Security and compliance kit",
+      "description": "The theme and the opendraft components that suit security and compliance products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/table",
+        "@opendraft/timeline",
+        "@opendraft/code-block",
+        "@opendraft/file-diff",
+        "@opendraft/stepper",
+        "@opendraft/copy-button",
+        "@opendraft/approval-card",
+        "@opendraft/tool-approval",
+        "@opendraft/alert",
+        "@opendraft/settings-page",
+        "@opendraft/checkbox",
+        "@opendraft/switch",
+        "@opendraft/repeater-field",
+        "@opendraft/date-range-picker",
+        "@opendraft/command-palette",
+        "@opendraft/stat",
+        "@opendraft/progress",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/auth-screen",
+        "@opendraft/otp-input",
+        "@opendraft/agent-workspace",
+        "@opendraft/citations"
+      ]
+    },
+    {
+      "name": "kit-it-infrastructure",
+      "type": "registry:item",
+      "title": "IT, DevOps and infrastructure kit",
+      "description": "The theme and the opendraft components that suit it, devops and infrastructure products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/status-indicator",
+        "@opendraft/stat",
+        "@opendraft/progress",
+        "@opendraft/alert",
+        "@opendraft/site-header",
+        "@opendraft/timeline",
+        "@opendraft/table",
+        "@opendraft/stepper",
+        "@opendraft/checkbox",
+        "@opendraft/avatar",
+        "@opendraft/code-block",
+        "@opendraft/copy-button",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/insight-cards",
+        "@opendraft/date-range-picker",
+        "@opendraft/todo-list",
+        "@opendraft/file-diff",
+        "@opendraft/approval-card",
+        "@opendraft/repeater-field",
+        "@opendraft/switch",
+        "@opendraft/command-palette",
+        "@opendraft/kbd",
+        "@opendraft/settings-page",
+        "@opendraft/auth-screen",
+        "@opendraft/agent-workspace",
+        "@opendraft/tool-approval",
+        "@opendraft/citations"
+      ]
+    },
+    {
+      "name": "kit-aviation",
+      "type": "registry:item",
+      "title": "Aviation and travel operations kit",
+      "description": "The theme and the opendraft components that suit aviation and travel operations products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/table",
+        "@opendraft/alert",
+        "@opendraft/text-scramble",
+        "@opendraft/timeline",
+        "@opendraft/stepper",
+        "@opendraft/stat",
+        "@opendraft/progress",
+        "@opendraft/copy-button",
+        "@opendraft/date-picker",
+        "@opendraft/date-range-picker",
+        "@opendraft/quantity-stepper",
+        "@opendraft/radio-group",
+        "@opendraft/command-palette",
+        "@opendraft/repeater-field",
+        "@opendraft/checkbox",
+        "@opendraft/order-confirmation",
+        "@opendraft/ticket-pass",
+        "@opendraft/qr-code",
+        "@opendraft/tooltip",
+        "@opendraft/avatar",
+        "@opendraft/textarea",
+        "@opendraft/approval-card",
+        "@opendraft/dropzone",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/status-indicator",
+        "@opendraft/site-header"
+      ]
+    },
+    {
+      "name": "kit-logistics",
+      "type": "registry:item",
+      "title": "Logistics, supply chain and fleet kit",
+      "description": "The theme and the opendraft components that suit logistics, supply chain and fleet products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/site-header",
+        "@opendraft/stepper",
+        "@opendraft/timeline",
+        "@opendraft/progress",
+        "@opendraft/copy-button",
+        "@opendraft/stat",
+        "@opendraft/alert",
+        "@opendraft/table",
+        "@opendraft/date-range-picker",
+        "@opendraft/avatar",
+        "@opendraft/date-picker",
+        "@opendraft/repeater-field",
+        "@opendraft/quantity-stepper",
+        "@opendraft/switch",
+        "@opendraft/order-confirmation",
+        "@opendraft/status-indicator",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/dropzone",
+        "@opendraft/checkbox",
+        "@opendraft/qr-code",
+        "@opendraft/radio-group",
+        "@opendraft/tooltip",
+        "@opendraft/insight-cards"
+      ]
+    },
+    {
+      "name": "kit-healthcare",
+      "type": "registry:item",
+      "title": "Healthcare and patient care kit",
+      "description": "The theme and the opendraft components that suit healthcare and patient care products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/avatar",
+        "@opendraft/stat",
+        "@opendraft/alert",
+        "@opendraft/copy-button",
+        "@opendraft/table",
+        "@opendraft/status-indicator",
+        "@opendraft/date-range-picker",
+        "@opendraft/insight-cards",
+        "@opendraft/stepper",
+        "@opendraft/date-picker",
+        "@opendraft/radio-group",
+        "@opendraft/order-confirmation",
+        "@opendraft/ticket-pass",
+        "@opendraft/repeater-field",
+        "@opendraft/approval-card",
+        "@opendraft/tooltip",
+        "@opendraft/textarea",
+        "@opendraft/checkbox",
+        "@opendraft/dropzone",
+        "@opendraft/question-card",
+        "@opendraft/timeline",
+        "@opendraft/todo-list",
+        "@opendraft/progress",
+        "@opendraft/accordion",
+        "@opendraft/chat-app",
+        "@opendraft/message",
+        "@opendraft/message-bubble",
+        "@opendraft/message-scroller",
+        "@opendraft/prompt-input",
+        "@opendraft/animated-sidebar",
+        "@opendraft/auth-screen",
+        "@opendraft/otp-input",
+        "@opendraft/settings-page",
+        "@opendraft/site-header",
+        "@opendraft/empty-state"
+      ]
+    },
+    {
+      "name": "kit-fintech",
+      "type": "registry:item",
+      "title": "Fintech and banking kit",
+      "description": "The theme and the opendraft components that suit fintech and banking products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/stat",
+        "@opendraft/animated-number",
+        "@opendraft/table",
+        "@opendraft/date-range-picker",
+        "@opendraft/copy-button",
+        "@opendraft/stepper",
+        "@opendraft/otp-input",
+        "@opendraft/timeline",
+        "@opendraft/alert",
+        "@opendraft/radio-group",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/insight-cards",
+        "@opendraft/slider",
+        "@opendraft/quantity-stepper",
+        "@opendraft/progress",
+        "@opendraft/repeater-field",
+        "@opendraft/dropzone",
+        "@opendraft/status-indicator",
+        "@opendraft/switch",
+        "@opendraft/settings-page"
+      ]
+    },
+    {
+      "name": "kit-ecommerce",
+      "type": "registry:item",
+      "title": "E-commerce and marketplaces kit",
+      "description": "The theme and the opendraft components that suit e-commerce and marketplaces products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/switch",
+        "@opendraft/empty-state",
+        "@opendraft/skeleton",
+        "@opendraft/catalog",
+        "@opendraft/detail-page",
+        "@opendraft/checkout",
+        "@opendraft/order-confirmation",
+        "@opendraft/ticket-pass",
+        "@opendraft/accordion",
+        "@opendraft/radio-group",
+        "@opendraft/quantity-stepper",
+        "@opendraft/progress",
+        "@opendraft/stat",
+        "@opendraft/avatar",
+        "@opendraft/textarea",
+        "@opendraft/drawer",
+        "@opendraft/alert",
+        "@opendraft/separator",
+        "@opendraft/stepper",
+        "@opendraft/checkbox",
+        "@opendraft/timeline",
+        "@opendraft/copy-button",
+        "@opendraft/dropzone",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/table",
+        "@opendraft/repeater-field",
+        "@opendraft/date-range-picker",
+        "@opendraft/site-header"
+      ]
+    },
+    {
+      "name": "kit-education",
+      "type": "registry:item",
+      "title": "Education and learning kit",
+      "description": "The theme and the opendraft components that suit education and learning products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/catalog",
+        "@opendraft/detail-page",
+        "@opendraft/checkout",
+        "@opendraft/stat",
+        "@opendraft/progress",
+        "@opendraft/empty-state",
+        "@opendraft/accordion",
+        "@opendraft/animated-sidebar",
+        "@opendraft/stepper",
+        "@opendraft/code-block",
+        "@opendraft/skeleton",
+        "@opendraft/alert",
+        "@opendraft/radio-group",
+        "@opendraft/checkbox",
+        "@opendraft/textarea",
+        "@opendraft/question-card",
+        "@opendraft/dropzone",
+        "@opendraft/timeline",
+        "@opendraft/table",
+        "@opendraft/slider",
+        "@opendraft/drawer",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/date-picker",
+        "@opendraft/chat-app",
+        "@opendraft/message",
+        "@opendraft/message-bubble",
+        "@opendraft/message-scroller",
+        "@opendraft/prompt-input",
+        "@opendraft/streaming-response",
+        "@opendraft/citations",
+        "@opendraft/avatar",
+        "@opendraft/site-header"
+      ]
+    },
+    {
+      "name": "kit-energy-utilities",
+      "type": "registry:item",
+      "title": "Energy, utilities and EV charging kit",
+      "description": "The theme and the opendraft components that suit energy, utilities and ev charging products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/stat",
+        "@opendraft/status-indicator",
+        "@opendraft/alert",
+        "@opendraft/progress",
+        "@opendraft/insight-cards",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/date-range-picker",
+        "@opendraft/table",
+        "@opendraft/copy-button",
+        "@opendraft/timeline",
+        "@opendraft/stepper",
+        "@opendraft/otp-input",
+        "@opendraft/slider",
+        "@opendraft/switch",
+        "@opendraft/checkbox",
+        "@opendraft/approval-card",
+        "@opendraft/dropzone",
+        "@opendraft/radio-group",
+        "@opendraft/site-header"
+      ]
+    },
+    {
+      "name": "kit-government-civic",
+      "type": "registry:item",
+      "title": "Government and civic services kit",
+      "description": "The theme and the opendraft components that suit government and civic services products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/stepper",
+        "@opendraft/textarea",
+        "@opendraft/radio-group",
+        "@opendraft/checkbox",
+        "@opendraft/date-picker",
+        "@opendraft/repeater-field",
+        "@opendraft/dropzone",
+        "@opendraft/alert",
+        "@opendraft/timeline",
+        "@opendraft/copy-button",
+        "@opendraft/auth-screen",
+        "@opendraft/otp-input",
+        "@opendraft/table",
+        "@opendraft/approval-card",
+        "@opendraft/stat",
+        "@opendraft/drawer",
+        "@opendraft/ticket-pass",
+        "@opendraft/site-header",
+        "@opendraft/search-list",
+        "@opendraft/accordion",
+        "@opendraft/empty-state",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/date-range-picker",
+        "@opendraft/progress"
+      ]
+    },
+    {
+      "name": "kit-manufacturing",
+      "type": "registry:item",
+      "title": "Manufacturing and industrial operations kit",
+      "description": "The theme and the opendraft components that suit manufacturing and industrial operations products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/stat",
+        "@opendraft/status-indicator",
+        "@opendraft/alert",
+        "@opendraft/progress",
+        "@opendraft/animated-number",
+        "@opendraft/stepper",
+        "@opendraft/checkbox",
+        "@opendraft/quantity-stepper",
+        "@opendraft/approval-card",
+        "@opendraft/radio-group",
+        "@opendraft/textarea",
+        "@opendraft/dropzone",
+        "@opendraft/table",
+        "@opendraft/timeline",
+        "@opendraft/analytics-dashboard",
+        "@opendraft/date-range-picker",
+        "@opendraft/date-picker",
+        "@opendraft/copy-button",
+        "@opendraft/qr-code",
+        "@opendraft/command-palette",
+        "@opendraft/insight-cards",
+        "@opendraft/slider",
+        "@opendraft/switch",
+        "@opendraft/empty-state"
+      ]
+    },
+    {
+      "name": "kit-hr-people",
+      "type": "registry:item",
+      "title": "HR and people operations kit",
+      "description": "The theme and the opendraft components that suit hr and people operations products. See the use-case playbook.",
+      "registryDependencies": [
+        "@opendraft/theme",
+        "@opendraft/button",
+        "@opendraft/card",
+        "@opendraft/input",
+        "@opendraft/label",
+        "@opendraft/select",
+        "@opendraft/dialog",
+        "@opendraft/badge",
+        "@opendraft/tabs",
+        "@opendraft/field",
+        "@opendraft/page-header",
+        "@opendraft/theme-toggle",
+        "@opendraft/sonner",
+        "@opendraft/table",
+        "@opendraft/avatar",
+        "@opendraft/command-palette",
+        "@opendraft/drawer",
+        "@opendraft/copy-button",
+        "@opendraft/timeline",
+        "@opendraft/date-range-picker",
+        "@opendraft/textarea",
+        "@opendraft/approval-card",
+        "@opendraft/progress",
+        "@opendraft/stat",
+        "@opendraft/stepper",
+        "@opendraft/dropzone",
+        "@opendraft/checkbox",
+        "@opendraft/radio-group",
+        "@opendraft/alert",
+        "@opendraft/accordion",
+        "@opendraft/date-picker",
+        "@opendraft/slider",
+        "@opendraft/analytics-dashboard"
       ]
     }
   ]

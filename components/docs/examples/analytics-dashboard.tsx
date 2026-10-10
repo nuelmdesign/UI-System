@@ -4,7 +4,7 @@ import { AnalyticsDashboard } from "@/components/blocks/analytics-dashboard"
 
 export default function AnalyticsDashboardDemo() {
   return (
-    <div className="h-[680px] overflow-hidden rounded-lg border bg-background">
+    <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <AnalyticsDashboard />
     </div>
   )

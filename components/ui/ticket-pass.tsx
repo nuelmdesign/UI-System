@@ -24,6 +24,8 @@ type TicketPassProps = Omit<React.ComponentProps<"div">, "title"> & {
   status?: TicketPassStatus
   /** Render the header band dark in either theme. */
   dark?: boolean
+  /** Header band colour: "brand" uses the primary colour. */
+  tone?: "default" | "brand"
   /** Buttons or links rendered below the stub. */
   actions?: React.ReactNode
 }
@@ -41,14 +43,22 @@ const statusMap: Record<
   void: { label: "Void", variant: "destructive" },
 }
 
-const bandVariants = cva("flex flex-col gap-2 px-5 py-5 sm:px-6", {
+const bandVariants = cva("flex flex-col gap-2 border-b px-5 py-5 sm:px-6", {
   variants: {
     dark: {
-      true: "dark bg-background text-foreground",
-      false: "bg-secondary text-secondary-foreground",
+      true: "",
+      false: "",
+    },
+    tone: {
+      default: "",
+      brand: "border-transparent bg-primary text-primary-foreground",
     },
   },
-  defaultVariants: { dark: false },
+  compoundVariants: [
+    { tone: "default", dark: false, class: "bg-muted text-foreground" },
+    { tone: "default", dark: true, class: "bg-ink text-ink-foreground" },
+  ],
+  defaultVariants: { dark: false, tone: "default" },
 })
 
 /** Half-circle notch punched out of the card edge at the tear line. */
@@ -71,6 +81,7 @@ function TicketPass({
   code,
   status = "valid",
   dark = false,
+  tone = "default",
   actions,
   className,
   ...props
@@ -88,21 +99,24 @@ function TicketPass({
       )}
       {...props}
     >
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div data-slot="ticket-pass-header" className={bandVariants({ dark })}>
+      <div className="@container/fields flex min-w-0 flex-1 flex-col">
+        <div
+          data-slot="ticket-pass-header"
+          className={bandVariants({ dark, tone })}
+        >
           {eyebrow && <span className="eyebrow opacity-70">{eyebrow}</span>}
-          <h3 className="heading text-2xl leading-tight text-balance sm:text-3xl">
+          <h3 className="heading text-2xl leading-tight text-balance @lg/fields:text-3xl">
             {title}
           </h3>
         </div>
         <dl
           data-slot="ticket-pass-fields"
-          className="grid grid-cols-2 gap-x-4 gap-y-5 p-5 sm:grid-cols-3 sm:p-6"
+          className="grid grid-cols-1 gap-x-4 gap-y-5 p-5 sm:p-6 @xs/fields:grid-cols-2 @lg/fields:grid-cols-3"
         >
           {fields.map((f) => (
             <div key={f.label} className="min-w-0">
               <dt className="eyebrow text-muted-foreground">{f.label}</dt>
-              <dd className="mt-1 text-sm font-medium break-words">
+              <dd className="mt-1 text-sm font-medium text-pretty [overflow-wrap:anywhere] hyphens-auto">
                 {f.value}
               </dd>
             </div>

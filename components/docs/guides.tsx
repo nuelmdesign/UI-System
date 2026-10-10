@@ -16,6 +16,7 @@ import {
 import {
   CATEGORY_LABEL,
   CATEGORY_ORDER,
+  ENTRY_BY_SLUG,
   GUIDES,
   entriesIn,
 } from "@/components/docs/entries"
@@ -24,7 +25,10 @@ import { CodeBlock } from "@/components/agents/code-block"
 import { ThemeBuilder } from "@/components/site/theme-builder"
 import { CopyButton } from "@/components/motion/copy-button"
 import { PixelField } from "@/components/motion/pixel-field"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import useCases from "@/content/ai/use-cases.json"
 import { toast } from "sonner"
 
 export function GuidePage({ slug }: { slug: string }) {
@@ -43,7 +47,7 @@ export function GuidePage({ slug }: { slug: string }) {
       <p className="mt-3 text-pretty text-muted-foreground">
         {guide.description}
       </p>
-      <div className="mt-10 grid gap-10">
+      <div className="mt-10 grid gap-10 [&>*]:min-w-0">
         <Body />
       </div>
     </div>
@@ -600,9 +604,365 @@ function MotionGuide() {
   )
 }
 
+/* ---------------------------------- Tools ---------------------------------- */
+
+const TOOLS = [
+  {
+    name: "Claude Code",
+    file: "AGENTS.md",
+    where: "Save it as AGENTS.md, then add the line @AGENTS.md to CLAUDE.md.",
+    save: "AGENTS.md",
+  },
+  {
+    name: "Cursor",
+    file: "opendraft.mdc",
+    where:
+      "Save it as .cursor/rules/opendraft.mdc. Cursor also reads AGENTS.md.",
+    save: ".cursor/rules/opendraft.mdc",
+  },
+  {
+    name: "GitHub Copilot",
+    file: "copilot-instructions.md",
+    where: "Save it as .github/copilot-instructions.md.",
+    save: ".github/copilot-instructions.md",
+  },
+  {
+    name: "Codex, Windsurf and other AGENTS.md tools",
+    file: "AGENTS.md",
+    where: "Save it as AGENTS.md at the project root.",
+    save: "AGENTS.md",
+  },
+  {
+    name: "Lovable",
+    file: "lovable-knowledge.md",
+    where:
+      "Paste it into Project Settings, Knowledge. Lovable can't run the shadcn command, so the rules use the by-hand steps and a ready-made theme.css.",
+  },
+  {
+    name: "ChatGPT: custom GPT or project",
+    file: "chatgpt-gpt-instructions.md",
+    where:
+      "Paste it into the GPT's Instructions. ChatGPT can't run commands, so it writes the code and lists the install commands for you to run.",
+  },
+  {
+    name: "ChatGPT: custom instructions",
+    file: "chatgpt-custom-instructions.md",
+    where: "A short version that fits the custom-instructions field.",
+  },
+] as const
+
+function ToolsGuide() {
+  const base = useSiteBase()
+  return (
+    <>
+      <Prose>
+        <p>
+          opendraft is not tied to one assistant. The rules are plain markdown
+          on public URLs, and every file below is generated from the same
+          source, so they never disagree. We have tested the flow with Claude;
+          the others follow each tool&apos;s documented file format but have not
+          been tested yet. Tell us what breaks.
+        </p>
+      </Prose>
+      <section className="grid gap-4">
+        <H2>Rules files</H2>
+        <div className="grid border-t">
+          {TOOLS.map((t) => {
+            const url = `${SITE.files}/agent-rules/${t.file}`
+            const cmd = "save" in t ? `curl -o ${t.save} ${url}` : url
+            return (
+              <div key={t.name} className="grid min-w-0 gap-2 border-b py-4">
+                <span className="font-medium">{t.name}</span>
+                <p className="text-[15px] text-muted-foreground">{t.where}</p>
+                <div className="flex min-w-0 items-center gap-2">
+                  <code className="min-w-0 flex-1 overflow-x-auto bg-muted px-3 py-2 font-mono text-[13px] whitespace-nowrap">
+                    {cmd}
+                  </code>
+                  <CopyButton value={cmd} variant="outline" size="icon-sm" />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+      <section className="grid gap-4">
+        <H2>Assistants that can&apos;t open links or run commands</H2>
+        <Prose>
+          <p>
+            Use <strong>Copy with rules included</strong> on the{" "}
+            <a
+              href={`${base}docs/ai`}
+              className="text-brand underline-offset-4 hover:underline"
+            >
+              Use with AI
+            </a>{" "}
+            page. It puts the rules in the prompt itself. The assistant writes
+            the code and ends with the install commands to run in your project.
+          </p>
+          <p>
+            Without a command line, an assistant installs by hand from the
+            registry JSON and saves{" "}
+            <a
+              href={`${SITE.files}/theme.css`}
+              className="text-brand underline-offset-4 hover:underline"
+            >
+              theme.css
+            </a>{" "}
+            as the global stylesheet. The rules explain the steps.
+          </p>
+        </Prose>
+      </section>
+      <section className="grid gap-4">
+        <H2>Editors with a registry client</H2>
+        <Prose>
+          <p>
+            The shadcn command-line tool can run as an MCP server, so editors
+            that support MCP (Claude Code, Cursor, VS Code with Copilot) can
+            browse and install from any registry listed in{" "}
+            <code>components.json</code>, including this one. Run{" "}
+            <code>npx shadcn@latest mcp init --client claude</code> (or{" "}
+            <code>cursor</code>, <code>vscode</code>) in your project. See the{" "}
+            <a
+              href="https://ui.shadcn.com/docs/mcp"
+              className="text-brand underline-offset-4 hover:underline"
+            >
+              shadcn MCP docs
+            </a>
+            .
+          </p>
+          <p>
+            v0&apos;s &quot;Open in v0&quot; link does not support namespaced
+            registries or theme CSS, so it suits single components rather than a
+            whole opendraft setup.
+          </p>
+        </Prose>
+      </section>
+      <section className="grid gap-4">
+        <H2>Industry playbooks</H2>
+        <Prose>
+          <p>
+            Every rules file points assistants at the{" "}
+            <a
+              href={`${base}docs/use-cases`}
+              className="text-brand underline-offset-4 hover:underline"
+            >
+              use-case playbooks
+            </a>
+            , so a request for a logistics, healthcare or fintech product starts
+            from the components that suit it.
+          </p>
+        </Prose>
+      </section>
+    </>
+  )
+}
+
+/* -------------------------------- Use cases -------------------------------- */
+
+const FIT_BADGE = {
+  ready: { label: "Ready", variant: "success" },
+  adapt: { label: "Adapt", variant: "warning" },
+  gap: { label: "Gap", variant: "secondary" },
+} as const
+
+function UseCasesGuide() {
+  const nav = useDocsNav()
+  return (
+    <>
+      <Prose>
+        <p>{useCases.intro}</p>
+        <p>
+          Assistants read the same playbooks: the Use cases list in{" "}
+          <code>llms.txt</code> points to one page per domain, and{" "}
+          <a
+            href={`${SITE.files}/use-cases.json`}
+            className="text-brand underline-offset-4 hover:underline"
+          >
+            use-cases.json
+          </a>{" "}
+          has everything as data. Each playbook has a starter kit that installs
+          the theme and the components it recommends in one command.
+        </p>
+      </Prose>
+      <section className="grid gap-4">
+        <H2>Pick a domain</H2>
+        <Tabs defaultValue={useCases.domains[0].id} className="gap-6">
+          <TabsList className="h-auto w-full flex-wrap justify-start">
+            {useCases.domains.map((d) => (
+              <TabsTrigger key={d.id} value={d.id}>
+                {d.short}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {useCases.domains.map((d) => {
+            const kit = `npx shadcn@latest add @opendraft/kit-${d.id}`
+            return (
+              <TabsContent key={d.id} value={d.id} className="grid gap-8">
+                <div className="grid gap-3">
+                  <h3 className="heading text-2xl">{d.title}</h3>
+                  <Prose>
+                    <p>{d.summary}</p>
+                    <p>
+                      <strong>Signals:</strong> {d.signals.join(", ")}.
+                    </p>
+                  </Prose>
+                  <CodeBlock
+                    code={kit}
+                    language="bash"
+                    status="complete"
+                    copyable={false}
+                    showLineNumbers={false}
+                    wrap
+                  />
+                  <div>
+                    <CopyButton value={kit} variant="outline" size="icon-sm" />
+                  </div>
+                </div>
+                <div className="grid gap-3">
+                  <h4 className="eyebrow text-muted-foreground">Principles</h4>
+                  <ul className="grid gap-2 text-[15px] leading-7 text-muted-foreground">
+                    {d.principles.map((p) => (
+                      <li key={p} className="flex gap-3">
+                        <span
+                          aria-hidden
+                          className="mt-2.5 size-1.5 shrink-0 bg-primary"
+                        />
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="grid gap-3">
+                  <h4 className="eyebrow text-muted-foreground">
+                    What it needs, and what to use
+                  </h4>
+                  <div className="grid border-t">
+                    {d.needs.map((n) => {
+                      const fit = FIT_BADGE[n.status as keyof typeof FIT_BADGE]
+                      return (
+                        <div
+                          key={n.need}
+                          className="grid gap-2 border-b py-4 text-[15px]"
+                        >
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-medium">{n.need}</span>
+                            <Badge variant={fit.variant}>{fit.label}</Badge>
+                          </div>
+                          <p className="flex flex-wrap gap-x-3 gap-y-1">
+                            {n.use.map((slug) => (
+                              <nav.Link
+                                key={slug}
+                                href={nav.href(slug)}
+                                className="font-mono text-[13px] text-brand underline-offset-4 hover:underline"
+                              >
+                                {ENTRY_BY_SLUG[slug]?.title ?? slug}
+                              </nav.Link>
+                            ))}
+                          </p>
+                          {n.notes && (
+                            <p className="text-muted-foreground">{n.notes}</p>
+                          )}
+                          {"gap" in n && n.gap && (
+                            <p className="text-muted-foreground">
+                              <strong className="font-medium text-foreground">
+                                Missing:
+                              </strong>{" "}
+                              {n.gap}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+                {d.integrations?.length ? (
+                  <div className="grid gap-3">
+                    <h4 className="eyebrow text-muted-foreground">
+                      Libraries and services that pair well
+                    </h4>
+                    <ul className="grid gap-2 text-[15px] text-muted-foreground">
+                      {d.integrations.map((i) => (
+                        <li key={i.for}>
+                          <strong className="font-medium text-foreground">
+                            {i.for}:
+                          </strong>{" "}
+                          {i.options.join(", ")}. {i.note}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+                <div className="grid gap-3">
+                  <h4 className="eyebrow text-muted-foreground">
+                    Typical screens
+                  </h4>
+                  <ul className="grid gap-2 text-[15px] text-muted-foreground">
+                    {d.screens.map((x) => (
+                      <li key={x.name}>
+                        <strong className="font-medium text-foreground">
+                          {x.name}
+                        </strong>
+                        :{" "}
+                        {x.compose
+                          .map((c) => ENTRY_BY_SLUG[c]?.title ?? c)
+                          .join(" + ")}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </TabsContent>
+            )
+          })}
+        </Tabs>
+      </section>
+      <section className="grid gap-4">
+        <H2>Libraries we recommend alongside opendraft</H2>
+        <Prose>
+          <p>
+            Some needs are better met by an established library than by a
+            component of ours. Wrap them so they read colors and type from the
+            theme tokens, and keep opendraft components for the surrounding
+            interface.
+          </p>
+        </Prose>
+        <ul className="grid border-t">
+          {useCases.integrations.map((i) => (
+            <li key={i.for} className="grid gap-1 border-b py-3 text-[15px]">
+              <span className="font-medium">{i.for}</span>
+              <span className="font-mono text-[13px]">
+                {i.options.join(" · ")}
+              </span>
+              <span className="text-muted-foreground">{i.note}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="grid gap-4">
+        <H2>Missing across every domain</H2>
+        <Prose>
+          <p>
+            These gaps came up in more than one playbook. They are the next
+            components to build, in rough order of how often they are needed.
+          </p>
+        </Prose>
+        <ul className="grid border-t">
+          {useCases.crossDomainGaps.map((g) => (
+            <li key={g.id} className="grid gap-1 border-b py-3 text-[15px]">
+              <span className="font-medium">{g.title}</span>
+              <span className="text-muted-foreground">{g.why}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
+  )
+}
+
 const BODIES: Record<string, React.ComponentType> = {
   introduction: Introduction,
   ai: UseWithAi,
+  "use-cases": UseCasesGuide,
+  tools: ToolsGuide,
   installation: Installation,
   theming: Theming,
   motion: MotionGuide,

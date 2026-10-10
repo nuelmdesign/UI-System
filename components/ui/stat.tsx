@@ -125,24 +125,36 @@ function Stat({
   )
 }
 
+/**
+ * Grid of bare stats with hairline dividers. `columns` is the maximum: the
+ * group is a container, so it shows 2 columns when narrow and only reaches
+ * `columns` once its own width allows (3 from 36rem, 4 from 42rem).
+ */
 function StatGroup({
   className,
   columns = 4,
+  children,
   ...props
 }: React.ComponentProps<"div"> & { columns?: 2 | 3 | 4 }) {
   return (
     <div
       data-slot="stat-group"
       role="group"
-      className={cn(
-        "grid grid-cols-1 gap-px overflow-hidden rounded-lg border bg-border min-[480px]:grid-cols-2",
-        columns === 3 && "lg:grid-cols-3",
-        columns === 4 && "lg:grid-cols-4",
-        "[&>[data-slot=stat]]:rounded-none [&>[data-slot=stat]]:border-0 [&>[data-slot=stat]]:bg-card",
-        className
-      )}
+      className={cn("@container overflow-hidden rounded-lg border", className)}
       {...props}
-    />
+    >
+      {/* Each tile draws its right/bottom hairline; the negative margin hides the outermost ones, so any wrap stays correct. */}
+      <div
+        className={cn(
+          "-mr-px -mb-px grid grid-cols-1 @3xs:grid-cols-2",
+          columns === 3 && "@xl:grid-cols-3",
+          columns === 4 && "@2xl:grid-cols-4",
+          "[&>[data-slot=stat]]:rounded-none [&>[data-slot=stat]]:[border-width:0_1px_1px_0] [&>[data-slot=stat]]:bg-card"
+        )}
+      >
+        {children}
+      </div>
+    </div>
   )
 }
 

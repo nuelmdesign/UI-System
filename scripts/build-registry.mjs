@@ -4,6 +4,8 @@
 
 import { readFileSync, writeFileSync } from "node:fs"
 
+import { loadUseCases } from "./use-cases.mjs"
+
 const css = readFileSync(
   new URL("../app/globals.css", import.meta.url),
   "utf8"
@@ -931,6 +933,70 @@ const items = [
     description:
       "Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.",
   }),
+  screen("order-confirmation", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/empty-state",
+      "@opendraft/stat",
+      "@opendraft/stepper",
+      "@opendraft/ticket-pass",
+    ],
+    description:
+      "Order confirmed screen with a completed stepper, order number, stat row, one ticket pass per ticket, an order summary and download, calendar, view-tickets and continue actions.",
+  }),
+  ui("page-header", {
+    deps: ["class-variance-authority"],
+    description:
+      "Page title block with eyebrow, description, actions and breadcrumb slots, plus a container that gives every route the same width and gutters.",
+  }),
+  ui("field", {
+    reg: ["@opendraft/label"],
+    description:
+      "Form field wrapper that pairs a label, control, hint and error message and wires ids and ARIA attributes, with a responsive group and fieldset.",
+  }),
+  ui("date-picker", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/input", "@opendraft/popover"],
+    description:
+      "Single-date picker in a popover with an accessible month grid and an optional HH:MM time field (12h or 24h), using ISO string values.",
+  }),
+  ui("repeater-field", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/motion"],
+    description:
+      "Add and remove rows editor for repeatable groups, with min/max, optional move up/down, live announcements and animated rows.",
+  }),
+  ui("timeline", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/skeleton"],
+    description:
+      "Vertical event timeline with status markers that never rely on color alone, mono timestamps, a side time column on wide containers, expandable detail, collapsible long lists, and loading and empty states.",
+  }),
+  ui("alert", {
+    deps: ["class-variance-authority", "lucide-react"],
+    description:
+      "Callout with a per-variant icon, optional dismiss, an actions slot and a full-bleed banner mode for system, weather and policy notices.",
+  }),
+  ui("status-indicator", {
+    description:
+      "Shape plus word status (operational, degraded, down, maintenance) and an uptime bar of segments with an accessible summary.",
+  }),
+  ui("slider", {
+    deps: ["radix-ui"],
+    description:
+      "Single or range slider on Radix with a label row, formatted value and marks.",
+  }),
+  ui("dropzone", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/progress"],
+    description:
+      "Drag-and-drop or click-to-browse file area with size, type and count validation, camera capture and a file list with progress. No upload logic.",
+  }),
+  ui("otp-input", {
+    description:
+      "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.
@@ -949,6 +1015,30 @@ items.push({
   description: "The theme plus every opendraft component.",
   registryDependencies: items.map((i) => `@opendraft/${i.name}`),
 })
+
+// One-command kits per domain, from content/ai/use-cases.json. They install
+// the theme plus the components that playbook recommends.
+{
+  const useCases = loadUseCases(new URL("../", import.meta.url))
+  const names = new Set(items.map((i) => i.name))
+  for (const d of useCases.domains) {
+    const missing = d.kit.filter((n) => !names.has(n))
+    if (missing.length)
+      throw new Error(
+        `use-cases.json: kit for "${d.id}" names unknown items: ${missing.join(", ")}`
+      )
+    items.push({
+      name: `kit-${d.id}`,
+      type: "registry:item",
+      title: `${d.title} kit`,
+      description: `The theme and the opendraft components that suit ${d.title.toLowerCase()} products. See the use-case playbook.`,
+      registryDependencies: [
+        "@opendraft/theme",
+        ...d.kit.map((n) => `@opendraft/${n}`),
+      ],
+    })
+  }
+}
 
 const registry = {
   $schema: "https://ui.shadcn.com/schema/registry.json",

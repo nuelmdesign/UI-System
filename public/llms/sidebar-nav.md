@@ -1,6 +1,6 @@
 # Sidebar Nav
 
-Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail. Shows sample content (an ice cream shop) until you pass your own data through its props.
+Workspace switcher, primary nav and searchable chats that collapse to an aligned icon rail. Data shape: An AI-chat sidebar (chats, new chat, collapse rail). For general app navigation use `animated-sidebar`. Shows sample content (an ice cream shop) until you pass your own data through its props.
 
 Category: Components
 
@@ -32,6 +32,12 @@ export type SidebarRecent = {
   prompt?: string
 }
 
+export type SidebarWorkspaceMenuItem = {
+  label: string
+  icon?: React.ReactNode
+  onSelect?: () => void
+}
+
 export type SidebarWorkspace = { key: string; name: string; monogram: string }
 
 export type SidebarNavItem = {
@@ -42,10 +48,26 @@ export type SidebarNavItem = {
 }
 
 export type SidebarNavProps = {
-  /** Workspace shown in the switcher. Defaults to a demo workspace. */
+  /** Workspace shown in the switcher. Defaults to a neutral "Workspace". */
   workspace?: SidebarWorkspace
-  /** Primary navigation items. Defaults to demo items. */
+  /** Primary navigation items. Defaults to neutral Home / Invite users. */
   navItems?: SidebarNavItem[]
+  /** Mark shown at the left of the workspace switcher. Defaults to a neutral icon. */
+  logo?: React.ReactNode
+  /** Items in the workspace menu (between the workspace row and sign out). */
+  workspaceMenu?: SidebarWorkspaceMenuItem[]
+  /** Called from the sign-out row of the workspace menu. */
+  onSignOut?: () => void
+  signOutLabel?: string
+  newChatLabel?: string
+  chatsLabel?: string
+  searchLabel?: string
+  searchPlaceholder?: string
+  emptyLabel?: string
+  /** aria-label of the aside. */
+  ariaLabel?: string
+  collapseLabel?: string
+  expandLabel?: string
   activeTitle?: string | null
   className?: string
   /** Fill the parent's height instead of the fixed 600px demo height. */
@@ -66,12 +88,12 @@ export type SidebarNavProps = {
 ## Example
 
 ```tsx
-import { SidebarNav } from "@/components/agents/sidebar-nav"
+import { SAMPLE_RECENTS, SidebarNav } from "@/components/agents/sidebar-nav"
 
 export default function SidebarNavDemo() {
   return (
     <div className="flex h-[600px] overflow-hidden rounded-lg border bg-background">
-      <SidebarNav fill />
+      <SidebarNav fill recents={SAMPLE_RECENTS} />
       <div className="flex-1 bg-dots" />
     </div>
   )

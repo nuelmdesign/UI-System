@@ -1,6 +1,6 @@
 # Todo List
 
-Live task plan with per-item progress and a rolling completed count.
+Live task plan with per-item progress and a rolling completed count. Data shape: A read-only view of an agent's plan: items expand but can't be ticked. For a tickable checklist use `checkbox` rows with `progress`.
 
 Category: AI Agents
 

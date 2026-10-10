@@ -1,6 +1,6 @@
 # Detail Page
 
-Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist.
+Detail page with a sticky purchase panel: media, meta, key facts, tabs, tier selection with quantity, running total, checkout and waitlist. Data shape: An event-ticket purchase page (date, host, tiers, waitlist). Not a generic record or product page.
 
 Category: Blocks
 
@@ -56,8 +56,10 @@ export type DetailItem = {
   image?: string
   imageAlt?: string
   category?: string
+  /** Free-form date/time text, e.g. "Sat 14 Nov, 09:30 to 17:00". */
   date: string
-  location: string
+  /** Venue or place; shown in the meta row when provided. */
+  location?: string
   host: DetailHost
   currency?: string
   facts: DetailFact[]
@@ -71,6 +73,38 @@ export type DetailItem = {
 
 export type DetailCheckout = { tierId: string; quantity: number }
 
+export type DetailPageLabels = {
+  /** Heading of the purchase panel. */
+  reserveTitle: string
+  /** aria-label of the option radio group. */
+  chooseOption: string
+  quantity: string
+  total: string
+  checkout: string
+  save: string
+  unsave: string
+  showOptions: string
+  hideOptions: string
+  soldOut: string
+  joinWaitlist: string
+  onWaitlist: string
+  available: string
+  /** Receives the tier name. */
+  availability: (name: string) => string
+  /** Receives remaining and capacity. */
+  left: (remaining: number, capacity: number) => string
+  tabsLabel: string
+  tabAbout: string
+  tabSchedule: string
+  tabFaq: string
+  keyFacts: string
+  purchase: string
+  breadcrumb: string
+  date: string
+  location: string
+  host: string
+}
+
 export type DetailPageProps = {
   item?: DetailItem
   onCheckout?: (selection: DetailCheckout) => void
@@ -79,6 +113,10 @@ export type DetailPageProps = {
   /** Label for the back link. */
   backLabel?: string
   onBack?: () => void
+  /** Makes the breadcrumb category a button instead of plain text. */
+  onCategoryClick?: (category: string) => void
+  /** Override any fixed copy (for localisation or other domains). */
+  labels?: Partial<DetailPageLabels>
   className?: string
 }
 ```

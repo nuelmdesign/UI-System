@@ -95,6 +95,17 @@ import TicketPassExample from "./ticket-pass"
 import CheckoutExample from "./checkout"
 import CatalogExample from "./catalog"
 import DetailPageExample from "./detail-page"
+import OrderConfirmationExample from "./order-confirmation"
+import PageHeaderExample from "./page-header"
+import FieldExample from "./field"
+import DatePickerExample from "./date-picker"
+import RepeaterFieldExample from "./repeater-field"
+import TimelineExample from "./timeline"
+import AlertExample from "./alert"
+import StatusIndicatorExample from "./status-indicator"
+import SliderExample from "./slider"
+import DropzoneExample from "./dropzone"
+import OtpInputExample from "./otp-input"
 
 /** Live example for each component page, keyed by slug. */
 export const EXAMPLES: Record<string, ComponentType> = {
@@ -193,4 +204,15 @@ export const EXAMPLES: Record<string, ComponentType> = {
   checkout: CheckoutExample,
   catalog: CatalogExample,
   "detail-page": DetailPageExample,
+  "order-confirmation": OrderConfirmationExample,
+  "page-header": PageHeaderExample,
+  field: FieldExample,
+  "date-picker": DatePickerExample,
+  "repeater-field": RepeaterFieldExample,
+  timeline: TimelineExample,
+  alert: AlertExample,
+  "status-indicator": StatusIndicatorExample,
+  slider: SliderExample,
+  dropzone: DropzoneExample,
+  "otp-input": OtpInputExample,
 }

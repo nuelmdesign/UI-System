@@ -8,9 +8,20 @@ opendraft ships through a shadcn registry. Components install as source files in
 
 Requirements: React 19, Tailwind CSS v4, TypeScript, and a shadcn `components.json`. Next.js is supported but not required.
 
-If you can't run shell commands (a chat assistant, or a hosted builder), install by hand: for each item, fetch `https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/<name>.json`. Its `files[].content` is the source and `files[].path` is where to write it in the project. Then repeat for every name in its `registryDependencies`, and for theirs in turn (it is transitive). Strip the `@opendraft/` prefix; a bare name such as `utils` is an opendraft item too. Add every package in each item's `dependencies` with the project's package manager. The `theme` item has no files: it only has a `css` field, which you paste into the global stylesheet (do this first). Skip any file you've already written.
+If you can't run `npx shadcn` (a blocked network, a chat assistant, or a hosted builder such as Lovable or v0), install by hand. This is not optional: the steps below replace the CLI.
 
-Not on Next.js (Vite, Lovable, Remix, Astro): everything works the same except fonts and the `"use client"` lines. Load the three fonts with a Google Fonts `<link>` or `@fontsource` packages and set `--font-geist`, `--font-geist-mono` and `--font-newsreader` on `:root` to the family names. Ignore `"use client"`; it's harmless. Use `import "./index.css"` (or your global stylesheet) where steps below say `app/globals.css`, and add the `dark` class to `<html>` yourself.
+- For each item, fetch `https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/<name>.json`. Its `files[].content` is the source and `files[].path` is where to write it in the project. Skip any file you've already written.
+- Repeat for every name in its `registryDependencies`, and for theirs in turn (it is transitive). Strip the `@opendraft/` prefix; a bare name such as `utils` is an opendraft item too. Add every package in each item's `dependencies` with the project's package manager.
+- Some items have no files: they only list other items. The `kit-*` items (industry starter kits) are like this, so install everything in their `registryDependencies`.
+- The `theme` item's `css` field is a nested JSON object, not text you can paste. Instead save https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/theme.css as your global stylesheet: it is the same theme as one ready-made file, with the dark-mode setup and the font links included. Do this first.
+
+Not on Next.js (Vite, Lovable, Remix, Astro): everything works the same with these changes.
+
+- Use `theme.css` as your global stylesheet (it loads the fonts and sets the font variables for you). In a Next.js project the CLI installs the theme and you load fonts with `next/font` instead.
+- Item paths such as `components/ui/button.tsx` map to `src/components/ui/button.tsx` when your source folder is `src`; keep the `@/` alias pointing at `src`. In `components.json` set `"rsc": false` and point `tailwind.css` at your stylesheet.
+- In `tsconfig`, use `paths` for the `@/*` alias without `baseUrl` (newer TypeScript rejects `baseUrl`).
+- Ignore `"use client"` lines; they are harmless.
+- Add the `dark` class to `<html>` yourself. For no flash on load, put the string exported as `themeScript` from `theme-toggle` in an inline `<script>` in `index.html`; it uses the localStorage key `theme`.
 
 1. If the project has no `components.json`, run `npx shadcn@latest init`. That command fetches from ui.shadcn.com. If it fails (a blocked network), write the file by hand:
 
@@ -65,8 +76,21 @@ npx shadcn@latest add @opendraft/button @opendraft/card @opendraft/prompt-bar
 ```
 
 6. Load three fonts and expose them as CSS variables: Geist as `--font-geist`, Geist Mono as `--font-geist-mono`, Newsreader as `--font-newsreader`. In Next.js use `next/font/google` (the starter's `--font-geist-sans` is not the same variable; rename it).
-7. Dark mode is the `dark` class on `<html>`. To follow the visitor's system setting, toggle that class with a small script, or use `next-themes` with `attribute="class"`.
-8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
+7. Dark mode is the `dark` class on `<html>`. The `theme-toggle` component (`npx shadcn@latest add @opendraft/theme-toggle`) handles it: it switches system, light and dark and remembers the choice. To avoid a flash of the wrong theme on load, also run its exported `themeScript` before the page paints, and add `suppressHydrationWarning` to `<html>` because the script changes its class:
+
+```tsx
+import { themeScript } from "@/components/ui/theme-toggle"
+
+// app/layout.tsx
+;<html lang="en" suppressHydrationWarning>
+  <head>
+    <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+  </head>
+  <body>{children}</body>
+</html>
+```
+
+Without opendraft's toggle you can use `next-themes` with `attribute="class"` instead. 8. Wrap the app once so motion respects the user's "reduce motion" setting, and mount the toaster. A layout is a server component, so do this in a small client file (for example `components/providers.tsx` with `"use client"`) and wrap `{children}` with it in `app/layout.tsx`:
 
 ```tsx
 import { MotionConfig } from "motion/react"
@@ -83,9 +107,10 @@ On Next.js 16 with Cache Components (the new `create-next-app` default), a compo
 
 ### 2. Use components before writing your own
 
-- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for.
+- If the product is for a specific industry or job (security, IT and infrastructure, aviation, logistics, healthcare, fintech, ecommerce, education, energy and utilities, government and civic, manufacturing, HR and people, and so on), read the matching playbook in the Use cases list first, before choosing components. It names the components that serve each need, rates how well they fit, lists the typical screens, and gives one install command for a starter kit. Follow its domain principles (for example how to show severity, status and time). Before you rely on a component, open its page and check that its props and data shape fit what you're building: a component can be named after one domain's data (a `Gap` or `Adapt` rating in a playbook tells you where it isn't a straight fit). If no playbook matches, pick by need from the component list and apply the same care.
+- If the user asks for a whole screen (a dashboard, settings page, sign-in, CRM board, agent chat), check the Blocks list first. A block is a complete, working screen. Install it, then change the content through its props (it renders sample data when given none). Restyle it with tokens, not by rewriting it, and trim sections the user didn't ask for. Blocks fill the space they're given and lay out from their own width, so put one in a container that has a width and a height (for example a `w-full` parent with `h-screen` or a fixed height); in a shrink-to-fit parent it collapses. Give every page the same width with `PageContainer`, and head it with `PageHeader`. Build forms with `Field`, with `FieldGroup` for rows, and use `DatePicker` for single dates and `RepeaterField` for add-and-remove rows.
 - Check the component list below before building any UI. If a component fits, install and use it, even if you'd only use part of it.
-- Import from where the CLI installs them: `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
+- Import from where the CLI installs them (the page for each component shows its exact import; for example `Table` is `@/components/motion/table`): `@/components/ui/*` for core pieces, `@/components/motion/*` for motion pieces, `@/components/agents/*` for AI and data pieces.
 - Compose screens from components. Don't copy a component's internals into a page.
 - Many components render sample content when you give them no data (their pages say "sample content") (ice-cream shop names, example transactions, demo prompts). Always pass the real content through their props: rows, items, labels, options, callbacks. Check the component's page for its props. Leaving the defaults in a real screen is a bug.
 - Some components have a `fill` or `demo` prop. `demo` runs a self-playing walkthrough, so set `demo={false}` in a real screen. `fill` makes a scrolling area take its container's height instead of a fixed maximum, so give the container a height.

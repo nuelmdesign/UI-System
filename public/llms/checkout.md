@@ -1,6 +1,6 @@
 # Checkout
 
-Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code.
+Three-step checkout (details, payment, confirmation) with validation, a sticky order summary with quantity steppers and discount codes, and ticket-pass confirmation. Card details stay in the form; only the last four digits reach your code. Data shape: Booking-shaped: contact, attendee, digital or front-desk delivery, card or pay later, ticket confirmation. No shipping address.
 
 Category: Blocks
 
@@ -80,13 +80,53 @@ export type CheckoutResult = {
   orderNumber?: string
 }
 
+export type CheckoutLabels = {
+  eyebrow: string
+  title: string
+  detailsTitle: string
+  detailsDescription: string
+  paymentTitle: string
+  paymentDescription: string
+  confirmationTitle: string
+  /** Receives the contact email and the order number. */
+  confirmationDescription: (email: string, orderNumber: string) => string
+  emptyTitle: string
+  emptyDescription: string
+  continue: string
+  back: string
+  pay: string
+  reserve: string
+  done: string
+  summary: string
+  subtotal: string
+  discount: string
+  total: string
+  discountCode: string
+  discountPlaceholder: string
+  discountApply: string
+  discountRemove: string
+  /** Receives the percentage off. */
+  discountApplied: (percent: number) => string
+  /** Eyebrow of each ticket on the confirmation step. */
+  ticketEyebrow: (item: CheckoutItem) => string
+}
+
+export type CheckoutTicketField = {
+  label: string
+  value: React.ReactNode
+}
+
 export type CheckoutProps = {
-  /** Cart lines. Controlled when passed together with `onChange`. */
+  /**
+   * Cart lines. Controlled when passed together with `onChange`. When omitted,
+   * the block starts with `SAMPLE_CHECKOUT_ITEMS` (generic placeholder tickets).
+   */
   items?: CheckoutItem[]
+  /** Extra charges added to the total. Defaults to none. */
   fees?: CheckoutFee[]
   /** ISO 4217 currency code. */
   currency?: string
-  /** Valid discount codes mapped to a percentage off the subtotal. */
+  /** Valid discount codes mapped to a percentage off the subtotal. Defaults to none. */
   discountCodes?: Record<string, number>
   onChange?: (items: CheckoutItem[]) => void
   /**
@@ -103,6 +143,16 @@ export type CheckoutProps = {
   steps?: [string, string, string]
   /** Shown in the empty-cart state. */
   emptyAction?: React.ReactNode
+  /** Override any fixed copy. Merged over the defaults. */
+  labels?: Partial<CheckoutLabels>
+  /**
+   * Fields shown on each confirmation ticket. Defaults to Attendee, Quantity
+   * and Order.
+   */
+  ticketFields?: (
+    item: CheckoutItem,
+    order: { orderNumber: string; values: CheckoutValues }
+  ) => CheckoutTicketField[]
   className?: string
 }
 ```
@@ -110,12 +160,18 @@ export type CheckoutProps = {
 ## Example
 
 ```tsx
-import { Checkout } from "@/components/blocks/checkout"
+import {
+  Checkout,
+  SAMPLE_CHECKOUT_DISCOUNTS,
+  SAMPLE_CHECKOUT_FEES,
+} from "@/components/blocks/checkout"
 
 export default function CheckoutDemo() {
   return (
     <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
       <Checkout
+        fees={SAMPLE_CHECKOUT_FEES}
+        discountCodes={SAMPLE_CHECKOUT_DISCOUNTS}
         onPay={async ({ payment }) => {
           await new Promise((r) => setTimeout(r, 1200))
           if (payment.last4 === "0002")

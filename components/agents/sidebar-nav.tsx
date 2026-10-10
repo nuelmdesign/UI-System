@@ -6,11 +6,11 @@ import {
   Check,
   ChevronDown,
   House,
+  LayoutGrid,
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
   Plus,
-  Popsicle,
   Search,
   Settings,
   SquarePen,
@@ -31,9 +31,9 @@ import { cn } from "@/lib/utils"
  * ───────────────────────────────────────────────────────── */
 
 const DEFAULT_WORKSPACE = {
-  key: "creamery",
-  name: "Creamery Ops",
-  monogram: "C",
+  key: "workspace",
+  name: "Workspace",
+  monogram: "W",
 }
 
 const DEFAULT_NAV_ITEMS = [
@@ -42,7 +42,6 @@ const DEFAULT_NAV_ITEMS = [
     key: "invite",
     label: "Invite users",
     icon: <UserPlus className="size-[18px]" />,
-    count: "3/10",
   },
 ]
 
@@ -52,16 +51,28 @@ export type SidebarRecent = {
   prompt?: string
 }
 
-const DEFAULT_RECENTS: SidebarRecent[] = [
-  { id: "suppliers", label: "Supplier records" },
+/** Sample chat history for demos. Not used as a default. */
+export const SAMPLE_RECENTS: SidebarRecent[] = [
+  { id: "summary", label: "Weekly summary" },
   { id: "todos", label: "Urgent to-dos this morning" },
-  { id: "flavor", label: "Flavor page ticket" },
-  { id: "workload", label: "Workload summary" },
-  { id: "offboarding", label: "Off-board a supplier" },
-  { id: "restock", label: "Batch restock function" },
-  { id: "edits", label: "Propose flavor edits" },
-  { id: "subway", label: "Subway surfing" },
+  { id: "ticket", label: "Landing page ticket" },
+  { id: "workload", label: "Workload overview" },
+  { id: "onboarding", label: "Onboarding checklist" },
+  { id: "batch", label: "Batch update function" },
+  { id: "edits", label: "Propose copy edits" },
 ]
+
+const DEFAULT_WORKSPACE_MENU: SidebarWorkspaceMenuItem[] = [
+  { label: "New workspace", icon: <Plus className="size-4" /> },
+  { label: "Workspace settings", icon: <Settings className="size-4" /> },
+  { label: "Invite team members", icon: <UserPlus className="size-4" /> },
+]
+
+export type SidebarWorkspaceMenuItem = {
+  label: string
+  icon?: React.ReactNode
+  onSelect?: () => void
+}
 
 export type SidebarWorkspace = { key: string; name: string; monogram: string }
 
@@ -73,10 +84,26 @@ export type SidebarNavItem = {
 }
 
 export type SidebarNavProps = {
-  /** Workspace shown in the switcher. Defaults to a demo workspace. */
+  /** Workspace shown in the switcher. Defaults to a neutral "Workspace". */
   workspace?: SidebarWorkspace
-  /** Primary navigation items. Defaults to demo items. */
+  /** Primary navigation items. Defaults to neutral Home / Invite users. */
   navItems?: SidebarNavItem[]
+  /** Mark shown at the left of the workspace switcher. Defaults to a neutral icon. */
+  logo?: React.ReactNode
+  /** Items in the workspace menu (between the workspace row and sign out). */
+  workspaceMenu?: SidebarWorkspaceMenuItem[]
+  /** Called from the sign-out row of the workspace menu. */
+  onSignOut?: () => void
+  signOutLabel?: string
+  newChatLabel?: string
+  chatsLabel?: string
+  searchLabel?: string
+  searchPlaceholder?: string
+  emptyLabel?: string
+  /** aria-label of the aside. */
+  ariaLabel?: string
+  collapseLabel?: string
+  expandLabel?: string
   activeTitle?: string | null
   className?: string
   /** Fill the parent's height instead of the fixed 600px demo height. */
@@ -202,17 +229,18 @@ function RailButton({
 function WorkspaceMenu({
   position,
   workspace,
+  items,
+  onSignOut,
+  signOutLabel,
   onClose,
 }: {
   position: { top: number; left: number }
   workspace: SidebarWorkspace
+  items: SidebarWorkspaceMenuItem[]
+  onSignOut?: () => void
+  signOutLabel: string
   onClose: () => void
 }) {
-  const items = [
-    { label: "New workspace", icon: <Plus className="size-4" /> },
-    { label: "Workspace settings", icon: <Settings className="size-4" /> },
-    { label: "Invite team members", icon: <UserPlus className="size-4" /> },
-  ]
   const row =
     "relative z-10 flex w-full items-center gap-1.5 rounded-md px-2 text-left outline-none"
 
@@ -250,7 +278,10 @@ function WorkspaceMenu({
             data-menu-row
             role="menuitem"
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              item.onSelect?.()
+              onClose()
+            }}
             className={cn(row, "h-9")}
           >
             <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
@@ -266,14 +297,17 @@ function WorkspaceMenu({
           data-menu-row
           role="menuitem"
           type="button"
-          onClick={onClose}
+          onClick={() => {
+            onSignOut?.()
+            onClose()
+          }}
           className={cn(row, "h-9")}
         >
           <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
             <LogOut className="size-4" />
           </span>
           <span className="min-w-0 flex-1 truncate text-[calc(13.5px*var(--text-scale))] text-foreground">
-            Sign out
+            {signOutLabel}
           </span>
         </button>
       </GlideMenu>
@@ -293,9 +327,21 @@ function SidebarNav({
   footerLabel = "Upgrade",
   footerIcon,
   onFooterClick,
-  recents = DEFAULT_RECENTS,
+  recents = [],
   workspace = DEFAULT_WORKSPACE,
   navItems = DEFAULT_NAV_ITEMS,
+  logo,
+  workspaceMenu = DEFAULT_WORKSPACE_MENU,
+  onSignOut,
+  signOutLabel = "Sign out",
+  newChatLabel = "New chat",
+  chatsLabel = "Chats",
+  searchLabel = "Search chats",
+  searchPlaceholder = "Search chats",
+  emptyLabel = "No chats found",
+  ariaLabel = "Workspace navigation",
+  collapseLabel = "Collapse sidebar",
+  expandLabel = "Expand sidebar",
 }: SidebarNavProps) {
   const [collapsed, setCollapsed] = React.useState(false)
   const [internalNav, setInternalNav] = React.useState("chats")
@@ -367,7 +413,7 @@ function SidebarNav({
     <aside
       data-slot="sidebar-nav"
       data-collapsed={collapsed}
-      aria-label="Workspace navigation"
+      aria-label={ariaLabel}
       className={cn(
         "group/sidebar relative flex shrink-0 overflow-hidden border-r bg-background transition-[width] ease-out",
         fill ? "h-full" : "h-[600px]",
@@ -418,7 +464,7 @@ function SidebarNav({
                 "group-focus-within/sidebar:group-data-[collapsed=true]/sidebar:opacity-0 group-hover/sidebar:group-data-[collapsed=true]/sidebar:opacity-0"
               )}
             >
-              <Popsicle className="size-[18px]" />
+              {logo ?? <LayoutGrid className="size-[18px]" />}
             </span>
             <span
               className={cn(
@@ -441,6 +487,9 @@ function SidebarNav({
           {workspaceOpen && (
             <WorkspaceMenu
               workspace={workspace}
+              items={workspaceMenu}
+              onSignOut={onSignOut}
+              signOutLabel={signOutLabel}
               position={workspacePosition}
               onClose={() => setWorkspaceOpen(false)}
             />
@@ -449,7 +498,7 @@ function SidebarNav({
           <button
             type="button"
             data-slot="sidebar-nav-collapse"
-            aria-label="Collapse sidebar"
+            aria-label={collapseLabel}
             aria-hidden={collapsed}
             tabIndex={collapsed ? -1 : 0}
             onClick={collapse}
@@ -464,7 +513,7 @@ function SidebarNav({
           <button
             type="button"
             data-slot="sidebar-nav-expand"
-            aria-label="Expand sidebar"
+            aria-label={expandLabel}
             aria-hidden={!collapsed}
             tabIndex={collapsed ? 0 : -1}
             onClick={() => setCollapsed(false)}
@@ -483,7 +532,7 @@ function SidebarNav({
           <GlideGroup>
             <RailButton
               icon={<SquarePen className="size-[18px]" />}
-              label="New chat"
+              label={newChatLabel}
               onClick={() => {
                 if (activeTitle === undefined) setDemoActiveTitle(null)
                 selectNav("chats")
@@ -521,12 +570,12 @@ function SidebarNav({
               style={{ transitionDuration: `${CHAT_SEARCH_MOTION.duration}ms` }}
             >
               <ChevronDown className="size-4" />
-              <span>Chats</span>
+              <span>{chatsLabel}</span>
             </div>
 
             <button
               type="button"
-              aria-label="Search chats"
+              aria-label={searchLabel}
               aria-expanded={searchOpen}
               onClick={() => setSearchOpen(true)}
               className={cn(
@@ -564,8 +613,8 @@ function SidebarNav({
                 onKeyDown={(event) => {
                   if (event.key === "Escape") closeSearch()
                 }}
-                placeholder="Search chats"
-                aria-label="Search chat history"
+                placeholder={searchPlaceholder}
+                aria-label={searchLabel}
                 className="ml-1.5 min-w-0 flex-1 bg-transparent text-[calc(13px*var(--text-scale))] font-medium text-foreground outline-none placeholder:text-muted-foreground/70"
               />
               <button
@@ -622,7 +671,7 @@ function SidebarNav({
                   "mx-2 px-2 py-2 text-[calc(12.5px*var(--text-scale))] text-muted-foreground/70"
                 )}
               >
-                No chats found
+                {emptyLabel}
               </div>
             )}
           </GlideGroup>

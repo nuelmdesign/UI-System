@@ -70,7 +70,7 @@ export function Drawer({
               transition={{ duration: 0.25, ease: ease.out }}
               {...gate}
               className={cn(
-                "fixed inset-0 z-50 h-full w-full cursor-default bg-black/40 backdrop-blur-sm",
+                "fixed inset-0 z-50 h-full w-full cursor-default bg-foreground/40 backdrop-blur-sm",
                 backdropClassName
               )}
             />
@@ -92,7 +92,7 @@ export function Drawer({
               }
               {...gate}
               className={cn(
-                "fixed inset-y-0 z-50 flex w-80 max-w-[85vw] flex-col bg-background shadow-2xl",
+                "fixed inset-y-0 z-50 flex w-80 max-w-[85vw] flex-col bg-background shadow-md",
                 side === "right"
                   ? "right-0 border-l border-border"
                   : "left-0 border-r border-border",

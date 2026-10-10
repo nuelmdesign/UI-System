@@ -37,6 +37,8 @@ export type AnalyticsRow = {
   conversion: number
   /** Seconds. */
   duration: number
+  /** Custom number for the optional `valueColumn` (revenue, orders, ...). Used for sorting and as the default display. */
+  value?: number
 }
 
 export type AnalyticsChannel = {
@@ -59,13 +61,25 @@ export type AnalyticsRangeData = {
 
 /** Every fixed piece of text, so the screen can describe any product. */
 export type AnalyticsLabels = {
-  /** Small line above the title. */
-  eyebrow: string
+  /** Small line above the title. A string is static; a function receives the selected range. */
+  eyebrow: string | ((range: AnalyticsRange) => string)
   export: string
   channels: string
   channelsAria: string
   /** Heading and accessible name of the table. */
   table: string
+  /** aria-label of the KPI section. */
+  keyMetrics: string
+  /** aria-label of the chart section. */
+  trend: string
+  /** aria-label of the range tabs. */
+  dateRange: string
+  /** aria-label of the chart metric tabs. */
+  chartMetric: string
+  /** Chart heading for the selected metric label. */
+  overTime: (metricLabel: string) => string
+  /** Range tab text: `short` below the container breakpoint, `long` above it. */
+  ranges: Record<AnalyticsRange, { short: string; long: string }>
   /** Table column headings. The row fields stay name / visitors / conversion / duration. */
   columns: {
     name: string
@@ -75,8 +89,24 @@ export type AnalyticsLabels = {
   }
 }
 
+const RANGE_LONG: Record<AnalyticsRange, string> = {
+  "7d": "Last 7 days",
+  "30d": "Last 30 days",
+  "90d": "Last 90 days",
+}
+
 export const DEFAULT_ANALYTICS_LABELS: AnalyticsLabels = {
-  eyebrow: "Overview",
+  eyebrow: (range) => RANGE_LONG[range],
+  keyMetrics: "Key metrics",
+  trend: "Trend",
+  dateRange: "Date range",
+  chartMetric: "Chart metric",
+  overTime: (metricLabel) => `${metricLabel} over time`,
+  ranges: {
+    "7d": { short: "7d", long: "7 days" },
+    "30d": { short: "30d", long: "30 days" },
+    "90d": { short: "90d", long: "90 days" },
+  },
   export: "Export",
   channels: "Channels",
   channelsAria: "Traffic by channel",
@@ -98,9 +128,22 @@ export type AnalyticsDashboardProps = {
   onExport?: (range: AnalyticsRange) => void
   title?: string
   /** Override any fixed text, for example to relabel the table for events. */
-  labels?: Partial<Omit<AnalyticsLabels, "columns">> & {
+  labels?: Partial<Omit<AnalyticsLabels, "columns" | "ranges">> & {
     columns?: Partial<AnalyticsLabels["columns"]>
+    ranges?: Partial<
+      Record<AnalyticsRange, Partial<{ short: string; long: string }>>
+    >
   }
+  /** Fill the parent's height and scroll inside (default). Set false to size to content inside a scrolling page. */
+  fill?: boolean
+  /** Format the visitors column. Default: en-US grouped integer. */
+  formatVisitors?: (value: number, row: AnalyticsRow) => string
+  /** Format the conversion column. `value` is the raw 0-1 field. Default: percent with one decimal. */
+  formatConversion?: (value: number, row: AnalyticsRow) => string
+  /** Format the duration column (seconds). Default: m:ss. */
+  formatDuration?: (seconds: number, row: AnalyticsRow) => string
+  /** Replaces the "Avg. time" column with a custom one (money, orders, ...). Reads `row.value` unless `format` is given. */
+  valueColumn?: { label: string; format?: (row: AnalyticsRow) => string }
   className?: string
 }
 
@@ -256,15 +299,11 @@ export const SAMPLE_ANALYTICS: Record<AnalyticsRange, AnalyticsRangeData> = {
   "90d": makeRange(90, 1.1, [31.5, 22.4, 3.9, 27.1], "90d"),
 }
 
-const RANGES: { value: AnalyticsRange; label: string }[] = [
-  { value: "7d", label: "7 days" },
-  { value: "30d", label: "30 days" },
-  { value: "90d", label: "90 days" },
-]
+const RANGES: AnalyticsRange[] = ["7d", "30d", "90d"]
 
 /* ── helpers ── */
 
-type SortKey = "name" | "visitors" | "conversion" | "duration"
+type SortKey = "name" | "visitors" | "conversion" | "duration" | "value"
 type SortDir = "asc" | "desc"
 
 const TONE_BG: Record<InsightTone, string> = {
@@ -275,7 +314,7 @@ const TONE_BG: Record<InsightTone, string> = {
   success: "bg-success",
 }
 
-function formatDuration(seconds: number) {
+function defaultFormatDuration(seconds: number) {
   const m = Math.floor(seconds / 60)
   const s = Math.round(seconds % 60)
   return `${m}:${String(s).padStart(2, "0")}`
@@ -301,13 +340,24 @@ function AnalyticsDashboard({
   onRangeChange,
   onExport,
   title = "Analytics",
+  valueColumn,
   labels: labelsProp,
+  fill = true,
+  formatVisitors,
+  formatConversion,
+  formatDuration = defaultFormatDuration,
   className,
 }: AnalyticsDashboardProps) {
+  const defaults = DEFAULT_ANALYTICS_LABELS
   const labels: AnalyticsLabels = {
-    ...DEFAULT_ANALYTICS_LABELS,
+    ...defaults,
     ...labelsProp,
-    columns: { ...DEFAULT_ANALYTICS_LABELS.columns, ...labelsProp?.columns },
+    columns: { ...defaults.columns, ...labelsProp?.columns },
+    ranges: {
+      "7d": { ...defaults.ranges["7d"], ...labelsProp?.ranges?.["7d"] },
+      "30d": { ...defaults.ranges["30d"], ...labelsProp?.ranges?.["30d"] },
+      "90d": { ...defaults.ranges["90d"], ...labelsProp?.ranges?.["90d"] },
+    },
   }
   const [internalRange, setInternalRange] =
     React.useState<AnalyticsRange>(defaultRange)
@@ -338,7 +388,9 @@ function AnalyticsDashboard({
     const sorted = [...current.rows].sort((a, b) =>
       sort.key === "name"
         ? a.name.localeCompare(b.name)
-        : a[sort.key] - b[sort.key]
+        : sort.key === "value"
+          ? (a.value ?? 0) - (b.value ?? 0)
+          : a[sort.key] - b[sort.key]
     )
     return sort.dir === "asc" ? sorted : sorted.reverse()
   }, [current.rows, sort])
@@ -364,230 +416,261 @@ function AnalyticsDashboard({
     { key: "name", label: labels.columns.name },
     { key: "visitors", label: labels.columns.visitors, align: "right" },
     { key: "conversion", label: labels.columns.conversion, align: "right" },
-    { key: "duration", label: labels.columns.duration, align: "right" },
+    valueColumn
+      ? { key: "value", label: valueColumn.label, align: "right" }
+      : { key: "duration", label: labels.columns.duration, align: "right" },
   ]
+  const eyebrow =
+    typeof labels.eyebrow === "function"
+      ? labels.eyebrow(range)
+      : labels.eyebrow
 
   return (
     <div
       data-slot="analytics-dashboard"
       className={cn(
-        "flex h-full min-h-0 flex-col gap-5 overflow-auto bg-background p-4 text-foreground sm:p-6",
+        "@container/analytics w-full bg-background text-foreground",
+        fill ? "h-full min-h-0 overflow-auto" : "h-auto overflow-visible",
         className
       )}
     >
-      {/* header */}
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <div className="min-w-0">
-          <p className="eyebrow text-muted-foreground">{labels.eyebrow}</p>
-          <h2 className="heading text-2xl sm:text-3xl">{title}</h2>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Tabs value={range} onValueChange={handleRange}>
-            <TabsList aria-label="Date range" className="w-fit">
-              {RANGES.map((r) => (
-                <TabsTrigger key={r.value} value={r.value} className="px-3">
-                  <span className="sm:hidden">{r.value}</span>
-                  <span className="hidden sm:inline">{r.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-          <Button variant="outline" onClick={() => onExport?.(range)}>
-            <Download aria-hidden />
-            {labels.export}
-          </Button>
-        </div>
-      </header>
-
-      {/* KPIs */}
-      <section
-        aria-label="Key metrics"
-        className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 lg:grid-cols-4"
-      >
-        {current.metrics.map((m) => (
-          <button
-            key={m.id}
-            type="button"
-            aria-pressed={m.id === metric?.id}
-            onClick={() => setMetricId(m.id)}
-            className={cn(
-              "flex flex-col gap-3 rounded-lg border bg-card p-4 text-left transition-colors outline-none",
-              "hover:border-foreground/25 focus-visible:ring-[3px] focus-visible:ring-ring",
-              m.id === metric?.id && "border-brand"
-            )}
-          >
-            <span className="eyebrow text-muted-foreground">{m.label}</span>
-            <span className="flex flex-wrap items-end justify-between gap-2">
-              <AnimatedNumber
-                value={m.value}
-                format={m.format}
-                className="heading text-3xl"
-              />
-              <DeltaBadge delta={m.delta} />
-            </span>
-          </button>
-        ))}
-      </section>
-
-      {/* chart + breakdown */}
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <section
-          aria-label="Trend"
-          className="flex flex-col gap-3 rounded-lg border bg-card p-4"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="heading text-lg">{metric?.label} over time</h3>
-            <Tabs value={metric?.id} onValueChange={setMetricId}>
-              <TabsList aria-label="Chart metric" className="h-8 w-fit">
-                {current.metrics.map((m) => (
-                  <TabsTrigger
-                    key={m.id}
-                    value={m.id}
-                    className="px-2.5 text-xs"
-                  >
-                    {m.label}
+      <div className="flex min-w-0 flex-col gap-5 p-4 @lg/analytics:p-6">
+        {/* header */}
+        <header className="flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="eyebrow text-muted-foreground">{eyebrow}</p>
+            <h2 className="heading text-2xl @lg/analytics:text-3xl">{title}</h2>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Tabs value={range} onValueChange={handleRange}>
+              <TabsList aria-label={labels.dateRange} className="w-fit">
+                {RANGES.map((r) => (
+                  <TabsTrigger key={r} value={r} className="px-3">
+                    <span className="@lg/analytics:hidden">
+                      {labels.ranges[r].short}
+                    </span>
+                    <span className="hidden @lg/analytics:inline">
+                      {labels.ranges[r].long}
+                    </span>
                   </TabsTrigger>
                 ))}
               </TabsList>
             </Tabs>
+            <Button variant="outline" onClick={() => onExport?.(range)}>
+              <Download aria-hidden />
+              {labels.export}
+            </Button>
           </div>
-          {metric && values.length > 1 && (
-            <>
-              <InsightChart
-                lines={[
-                  { id: metric.id, values, tone: metric.tone ?? "brand" },
-                ]}
-                fill
-                grid
-                index={hover}
-                onIndexChange={setHover}
-                label={`${metric.label}, ${current.labels[0]} to ${current.labels[current.labels.length - 1]}`}
-                className="h-[220px]"
-                tooltip={(i) => [
-                  {
-                    label: metric.label,
-                    value: `${current.labels[i]} · ${formatter.format(values[i])}`,
-                    tone: metric.tone ?? "brand",
-                  },
-                ]}
-              />
-              <div className="flex justify-between font-mono text-xs text-muted-foreground tabular-nums">
-                <span>{current.labels[0]}</span>
-                <span>{current.labels[current.labels.length - 1]}</span>
-              </div>
-            </>
-          )}
-        </section>
+        </header>
 
+        {/* KPIs */}
         <section
-          aria-label={labels.channelsAria}
-          className="flex flex-col gap-4 rounded-lg border bg-card p-4"
+          aria-label={labels.keyMetrics}
+          className="grid grid-cols-1 gap-3 @md/analytics:grid-cols-2 @3xl/analytics:grid-cols-4"
         >
-          <h3 className="heading text-lg">{labels.channels}</h3>
-          <div className="flex h-2 gap-px overflow-hidden rounded-sm bg-muted">
-            {current.channels.map((c) => (
-              <span
-                key={c.id}
-                className={cn("h-full", TONE_BG[c.tone])}
-                style={{ width: `${c.share}%` }}
-              />
-            ))}
-          </div>
-          <ul className="flex flex-col gap-2.5">
-            {current.channels.map((c) => (
-              <li key={c.id} className="flex items-center gap-2 text-sm">
-                <span
-                  aria-hidden
-                  className={cn("size-2 rounded-full", TONE_BG[c.tone])}
+          {current.metrics.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              aria-pressed={m.id === metric?.id}
+              onClick={() => setMetricId(m.id)}
+              className={cn(
+                "flex min-w-0 flex-col gap-3 rounded-lg border bg-card p-4 text-left transition-colors outline-none",
+                "hover:border-foreground/25 focus-visible:ring-[3px] focus-visible:ring-ring",
+                m.id === metric?.id && "border-brand"
+              )}
+            >
+              <span className="eyebrow text-muted-foreground">{m.label}</span>
+              <span className="flex flex-wrap items-end justify-between gap-2">
+                <AnimatedNumber
+                  value={m.value}
+                  format={m.format}
+                  className="heading text-3xl"
                 />
-                <span className="min-w-0 flex-1 truncate">{c.label}</span>
-                <span className="font-mono text-xs text-muted-foreground tabular-nums">
-                  {c.share}%
-                </span>
-              </li>
-            ))}
-          </ul>
+                <DeltaBadge delta={m.delta} />
+              </span>
+            </button>
+          ))}
         </section>
-      </div>
 
-      {/* table */}
-      <section aria-label={labels.table} className="rounded-lg border bg-card">
-        <div className="border-b px-4 py-3">
-          <h3 className="heading text-lg">{labels.table}</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[480px] text-sm">
-            <thead>
-              <tr className="border-b">
-                {columns.map((c) => {
-                  const active = sort.key === c.key
-                  return (
-                    <th
-                      key={c.key}
-                      scope="col"
-                      aria-sort={
-                        active
-                          ? sort.dir === "asc"
-                            ? "ascending"
-                            : "descending"
-                          : "none"
-                      }
-                      className={cn(
-                        "px-4 py-2 font-normal",
-                        c.align === "right" && "text-right"
-                      )}
+        {/* chart + breakdown */}
+        <div className="grid min-w-0 gap-3 @3xl/analytics:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <section
+            aria-label={labels.trend}
+            className="flex min-w-0 flex-col gap-3 rounded-lg border bg-card p-4"
+          >
+            <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
+              <h3 className="min-w-0 heading text-lg">
+                {labels.overTime(metric?.label ?? "")}
+              </h3>
+              <Tabs
+                value={metric?.id}
+                onValueChange={setMetricId}
+                className="scrollbar-hide max-w-full min-w-0 overflow-x-auto"
+              >
+                <TabsList aria-label={labels.chartMetric} className="h-8 w-max">
+                  {current.metrics.map((m) => (
+                    <TabsTrigger
+                      key={m.id}
+                      value={m.id}
+                      className="shrink-0 px-2.5 text-xs"
                     >
-                      <button
-                        type="button"
-                        onClick={() => toggleSort(c.key)}
+                      {m.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
+            {metric && values.length > 1 && (
+              <>
+                <div className="min-w-0">
+                  <InsightChart
+                    lines={[
+                      { id: metric.id, values, tone: metric.tone ?? "brand" },
+                    ]}
+                    fill
+                    grid
+                    index={hover}
+                    onIndexChange={setHover}
+                    label={`${metric.label}, ${current.labels[0]} to ${current.labels[current.labels.length - 1]}`}
+                    className="h-[220px]"
+                    tooltip={(i) => [
+                      {
+                        label: metric.label,
+                        value: `${current.labels[i]} · ${formatter.format(values[i])}`,
+                        tone: metric.tone ?? "brand",
+                      },
+                    ]}
+                  />
+                </div>
+                <div className="flex justify-between font-mono text-xs text-muted-foreground tabular-nums">
+                  <span>{current.labels[0]}</span>
+                  <span>{current.labels[current.labels.length - 1]}</span>
+                </div>
+              </>
+            )}
+          </section>
+
+          <section
+            aria-label={labels.channelsAria}
+            className="flex min-w-0 flex-col gap-4 rounded-lg border bg-card p-4"
+          >
+            <h3 className="heading text-lg">{labels.channels}</h3>
+            <div className="flex h-2 w-full min-w-0 gap-px overflow-hidden rounded-sm bg-muted">
+              {current.channels.map((c) => (
+                <span
+                  key={c.id}
+                  className={cn("h-full min-w-px", TONE_BG[c.tone])}
+                  style={{ width: `${c.share}%` }}
+                />
+              ))}
+            </div>
+            <ul className="flex flex-col gap-2.5">
+              {current.channels.map((c) => (
+                <li key={c.id} className="flex items-center gap-2 text-sm">
+                  <span
+                    aria-hidden
+                    className={cn("size-2 rounded-full", TONE_BG[c.tone])}
+                  />
+                  <span className="min-w-0 flex-1 truncate">{c.label}</span>
+                  <span className="shrink-0 font-mono text-xs text-muted-foreground tabular-nums">
+                    {c.share}%
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        {/* table */}
+        <section
+          aria-label={labels.table}
+          className="rounded-lg border bg-card"
+        >
+          <div className="border-b px-4 py-3">
+            <h3 className="heading text-lg">{labels.table}</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[480px] text-sm">
+              <thead>
+                <tr className="border-b">
+                  {columns.map((c) => {
+                    const active = sort.key === c.key
+                    return (
+                      <th
+                        key={c.key}
+                        scope="col"
+                        aria-sort={
+                          active
+                            ? sort.dir === "asc"
+                              ? "ascending"
+                              : "descending"
+                            : "none"
+                        }
                         className={cn(
-                          "inline-flex items-center gap-1 eyebrow text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring",
-                          active && "text-foreground"
+                          "px-4 py-2 font-normal",
+                          c.align === "right" && "text-right"
                         )}
                       >
-                        {c.label}
-                        {active ? (
-                          sort.dir === "asc" ? (
-                            <ArrowUp aria-hidden className="size-3" />
+                        <button
+                          type="button"
+                          onClick={() => toggleSort(c.key)}
+                          className={cn(
+                            "inline-flex items-center gap-1 eyebrow text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring",
+                            active && "text-foreground"
+                          )}
+                        >
+                          {c.label}
+                          {active ? (
+                            sort.dir === "asc" ? (
+                              <ArrowUp aria-hidden className="size-3" />
+                            ) : (
+                              <ArrowDown aria-hidden className="size-3" />
+                            )
                           ) : (
-                            <ArrowDown aria-hidden className="size-3" />
-                          )
-                        ) : (
-                          <ArrowUpDown
-                            aria-hidden
-                            className="size-3 opacity-50"
-                          />
-                        )}
-                      </button>
-                    </th>
-                  )
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr
-                  key={r.id}
-                  className="border-b last:border-b-0 hover:bg-muted/50"
-                >
-                  <td className="max-w-[220px] truncate px-4 py-2.5 font-mono text-xs">
-                    {r.name}
-                  </td>
-                  <td className="px-4 py-2.5 text-right tabular-nums">
-                    {r.visitors.toLocaleString("en-US")}
-                  </td>
-                  <td className="px-4 py-2.5 text-right tabular-nums">
-                    {(r.conversion * 100).toFixed(1)}%
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-muted-foreground tabular-nums">
-                    {formatDuration(r.duration)}
-                  </td>
+                            <ArrowUpDown
+                              aria-hidden
+                              className="size-3 opacity-50"
+                            />
+                          )}
+                        </button>
+                      </th>
+                    )
+                  })}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr
+                    key={r.id}
+                    className="border-b last:border-b-0 hover:bg-muted/50"
+                  >
+                    <td className="max-w-[220px] truncate px-4 py-2.5">
+                      {r.name}
+                    </td>
+                    <td className="px-4 py-2.5 text-right tabular-nums">
+                      {formatVisitors
+                        ? formatVisitors(r.visitors, r)
+                        : r.visitors.toLocaleString("en-US")}
+                    </td>
+                    <td className="px-4 py-2.5 text-right tabular-nums">
+                      {formatConversion
+                        ? formatConversion(r.conversion, r)
+                        : `${(r.conversion * 100).toFixed(1)}%`}
+                    </td>
+                    <td className="px-4 py-2.5 text-right text-muted-foreground tabular-nums">
+                      {valueColumn
+                        ? (valueColumn.format?.(r) ??
+                          (r.value ?? 0).toLocaleString("en-US"))
+                        : formatDuration(r.duration, r)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
     </div>
   )
 }

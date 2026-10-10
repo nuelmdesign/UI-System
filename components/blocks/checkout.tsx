@@ -6,8 +6,8 @@ import {
   ArrowLeft,
   CircleCheck,
   CreditCard,
-  GraduationCap,
   ShoppingBag,
+  Ticket,
   TriangleAlert,
   X,
 } from "lucide-react"
@@ -87,13 +87,53 @@ export type CheckoutResult = {
   orderNumber?: string
 }
 
+export type CheckoutLabels = {
+  eyebrow: string
+  title: string
+  detailsTitle: string
+  detailsDescription: string
+  paymentTitle: string
+  paymentDescription: string
+  confirmationTitle: string
+  /** Receives the contact email and the order number. */
+  confirmationDescription: (email: string, orderNumber: string) => string
+  emptyTitle: string
+  emptyDescription: string
+  continue: string
+  back: string
+  pay: string
+  reserve: string
+  done: string
+  summary: string
+  subtotal: string
+  discount: string
+  total: string
+  discountCode: string
+  discountPlaceholder: string
+  discountApply: string
+  discountRemove: string
+  /** Receives the percentage off. */
+  discountApplied: (percent: number) => string
+  /** Eyebrow of each ticket on the confirmation step. */
+  ticketEyebrow: (item: CheckoutItem) => string
+}
+
+export type CheckoutTicketField = {
+  label: string
+  value: React.ReactNode
+}
+
 export type CheckoutProps = {
-  /** Cart lines. Controlled when passed together with `onChange`. */
+  /**
+   * Cart lines. Controlled when passed together with `onChange`. When omitted,
+   * the block starts with `SAMPLE_CHECKOUT_ITEMS` (generic placeholder tickets).
+   */
   items?: CheckoutItem[]
+  /** Extra charges added to the total. Defaults to none. */
   fees?: CheckoutFee[]
   /** ISO 4217 currency code. */
   currency?: string
-  /** Valid discount codes mapped to a percentage off the subtotal. */
+  /** Valid discount codes mapped to a percentage off the subtotal. Defaults to none. */
   discountCodes?: Record<string, number>
   onChange?: (items: CheckoutItem[]) => void
   /**
@@ -110,23 +150,33 @@ export type CheckoutProps = {
   steps?: [string, string, string]
   /** Shown in the empty-cart state. */
   emptyAction?: React.ReactNode
+  /** Override any fixed copy. Merged over the defaults. */
+  labels?: Partial<CheckoutLabels>
+  /**
+   * Fields shown on each confirmation ticket. Defaults to Attendee, Quantity
+   * and Order.
+   */
+  ticketFields?: (
+    item: CheckoutItem,
+    order: { orderNumber: string; values: CheckoutValues }
+  ) => CheckoutTicketField[]
   className?: string
 }
 
 export const SAMPLE_CHECKOUT_ITEMS: CheckoutItem[] = [
   {
-    id: "ws-pottery",
-    title: "Wheel throwing basics",
-    subtitle: "Sat 14 Mar, 10:00 · Studio B · Hosted by Ines Marlowe",
-    price: 85,
+    id: "standard",
+    title: "Standard ticket",
+    subtitle: "General admission",
+    price: 40,
     quantity: 1,
-    max: 6,
+    max: 8,
   },
   {
-    id: "ws-bookbinding",
-    title: "Hand bookbinding evening",
-    subtitle: "Wed 18 Mar, 18:30 · Print room · Hosted by Tomas Reyes",
-    price: 48,
+    id: "vip",
+    title: "VIP ticket",
+    subtitle: "Priority entry",
+    price: 85,
     quantity: 2,
     max: 8,
   },
@@ -134,7 +184,7 @@ export const SAMPLE_CHECKOUT_ITEMS: CheckoutItem[] = [
 
 export const SAMPLE_CHECKOUT_FEES: CheckoutFee[] = [
   { id: "service", label: "Service fee", amount: 4.5 },
-  { id: "materials", label: "Materials", amount: 12 },
+  { id: "handling", label: "Handling", amount: 2 },
 ]
 
 export const SAMPLE_CHECKOUT_DISCOUNTS: Record<string, number> = {
@@ -147,6 +197,35 @@ const DEFAULT_STEPS: [string, string, string] = [
   "Payment",
   "Confirmation",
 ]
+
+const DEFAULT_LABELS: CheckoutLabels = {
+  eyebrow: "Secure checkout",
+  title: "Complete your booking",
+  detailsTitle: "Your details",
+  detailsDescription: "We'll send your confirmation here.",
+  paymentTitle: "Payment",
+  paymentDescription: "Choose how you'd like to pay.",
+  confirmationTitle: "You're booked",
+  confirmationDescription: (email, orderNumber) =>
+    `Confirmation sent to ${email}. Order ${orderNumber}.`,
+  emptyTitle: "Your cart is empty",
+  emptyDescription: "Add an item to check out.",
+  continue: "Continue to payment",
+  back: "Back",
+  pay: "Pay",
+  reserve: "Reserve",
+  done: "Done",
+  summary: "Order summary",
+  subtotal: "Subtotal",
+  discount: "Discount",
+  total: "Total",
+  discountCode: "Discount code",
+  discountPlaceholder: "Enter code",
+  discountApply: "Apply",
+  discountRemove: "Remove",
+  discountApplied: (percent) => `${percent}% off applied`,
+  ticketEyebrow: () => "Ticket",
+}
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
@@ -201,6 +280,20 @@ function makeOrderNumber(values: CheckoutValues) {
   for (let i = 0; i < seed.length; i++)
     h = ((h << 5) + h + seed.charCodeAt(i)) >>> 0
   return `ORD-${h.toString(36).toUpperCase().padStart(7, "0").slice(0, 7)}`
+}
+
+function defaultTicketFields(
+  item: CheckoutItem,
+  order: { orderNumber: string; values: CheckoutValues }
+): CheckoutTicketField[] {
+  return [
+    {
+      label: "Attendee",
+      value: order.values.attendee.name || order.values.contact.name,
+    },
+    { label: "Quantity", value: item.quantity },
+    { label: "Order", value: order.orderNumber },
+  ]
 }
 
 type Errors = Record<string, string>
@@ -357,18 +450,24 @@ function Money({
   )
 }
 
+const NO_FEES: CheckoutFee[] = []
+const NO_CODES: Record<string, number> = {}
+
 function Checkout({
   items: itemsProp,
-  fees = SAMPLE_CHECKOUT_FEES,
+  fees = NO_FEES,
   currency = "USD",
-  discountCodes = SAMPLE_CHECKOUT_DISCOUNTS,
+  discountCodes = NO_CODES,
   onChange,
   onPay,
   onComplete,
   steps: stepLabels = DEFAULT_STEPS,
   emptyAction,
+  labels: labelsProp,
+  ticketFields,
   className,
 }: CheckoutProps) {
+  const t = { ...DEFAULT_LABELS, ...labelsProp }
   const uid = React.useId()
   const [internalItems, setInternalItems] = React.useState(
     SAMPLE_CHECKOUT_ITEMS
@@ -537,11 +636,11 @@ function Checkout({
   const summaryAside = (
     <aside
       data-slot="checkout-summary"
-      aria-label="Order summary"
+      aria-label={t.summary}
       className="flex flex-col gap-4 self-start rounded-lg border bg-card p-4 @md/checkout:p-5 @3xl/checkout:sticky @3xl/checkout:top-6"
     >
       <div className="flex items-center justify-between">
-        <h2 className="eyebrow">Order summary</h2>
+        <h2 className="eyebrow">{t.summary}</h2>
         {order && (
           <span className="font-mono text-xs">{order.orderNumber}</span>
         )}
@@ -559,7 +658,7 @@ function Checkout({
                   className="size-full object-cover"
                 />
               ) : (
-                <GraduationCap aria-hidden className="size-5" />
+                <Ticket aria-hidden className="size-5" />
               )}
             </div>
             <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -616,14 +715,14 @@ function Checkout({
 
       {!locked && (
         <div className="flex flex-col gap-1.5 border-t pt-4">
-          <Label htmlFor={`${uid}-code`}>Discount code</Label>
+          <Label htmlFor={`${uid}-code`}>{t.discountCode}</Label>
           {appliedCode ? (
             <div className="flex items-center justify-between gap-2 rounded-md border bg-surface px-3 py-1.5">
               <Badge variant="success" className="font-mono">
                 {appliedCode}
               </Badge>
               <span className="text-xs text-muted-foreground">
-                {percent}% off applied
+                {t.discountApplied(percent)}
               </span>
               <Button
                 type="button"
@@ -632,7 +731,7 @@ function Checkout({
                 onClick={() => setAppliedCode(null)}
                 aria-label={`Remove code ${appliedCode}`}
               >
-                Remove
+                {t.discountRemove}
               </Button>
             </div>
           ) : (
@@ -640,7 +739,7 @@ function Checkout({
               <Input
                 id={`${uid}-code`}
                 value={code}
-                placeholder="Enter code"
+                placeholder={t.discountPlaceholder}
                 autoComplete="off"
                 aria-invalid={!!codeError}
                 aria-describedby={codeError ? `${uid}-code-err` : undefined}
@@ -657,7 +756,7 @@ function Checkout({
                 className="font-mono uppercase"
               />
               <Button type="button" variant="outline" onClick={applyCode}>
-                Apply
+                {t.discountApply}
               </Button>
             </div>
           )}
@@ -667,7 +766,7 @@ function Checkout({
 
       <dl className="flex flex-col gap-2 border-t pt-4 text-sm">
         <div className="flex justify-between gap-2">
-          <dt className="text-muted-foreground">Subtotal</dt>
+          <dt className="text-muted-foreground">{t.subtotal}</dt>
           <dd>
             <Money value={shownSummary.subtotal} currency={currency} />
           </dd>
@@ -675,7 +774,7 @@ function Checkout({
         {shownSummary.discount > 0 && (
           <div className="flex justify-between gap-2">
             <dt className="text-muted-foreground">
-              Discount
+              {t.discount}
               {shownSummary.discountCode
                 ? ` (${shownSummary.discountCode})`
                 : ""}
@@ -694,7 +793,7 @@ function Checkout({
           </div>
         ))}
         <div className="flex items-baseline justify-between gap-2 border-t pt-3">
-          <dt className="font-medium">Total</dt>
+          <dt className="font-medium">{t.total}</dt>
           <dd>
             <Money
               value={shownSummary.total}
@@ -719,16 +818,16 @@ function Checkout({
         className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-6 @md/checkout:px-8 @md/checkout:py-8"
       >
         <div className="flex flex-col gap-1.5">
-          <span className="eyebrow">Secure checkout</span>
-          <h1 className="heading text-3xl">Complete your booking</h1>
+          <span className="eyebrow">{t.eyebrow}</span>
+          <h1 className="heading text-3xl">{t.title}</h1>
         </div>
 
         {empty ? (
           <EmptyState
             bordered
             icon={<ShoppingBag />}
-            title="Your cart is empty"
-            description="Add a workshop or course to check out."
+            title={t.emptyTitle}
+            description={t.emptyDescription}
             action={emptyAction}
           />
         ) : (
@@ -736,6 +835,7 @@ function Checkout({
             <Stepper
               steps={stepList}
               current={step}
+              complete={step === 2}
               onStepClick={(_, i) => {
                 if (step < 2) setStep(i)
               }}
@@ -759,8 +859,8 @@ function Checkout({
                       >
                         <StepHeading
                           ref={headingRef}
-                          title="Your details"
-                          description="We'll send your booking confirmation here."
+                          title={t.detailsTitle}
+                          description={t.detailsDescription}
                         />
                         <div className="grid gap-4 @md/checkout:grid-cols-2">
                           <Field
@@ -920,7 +1020,7 @@ function Checkout({
 
                         <div className="flex justify-end">
                           <Button type="submit" size="lg">
-                            Continue to payment
+                            {t.continue}
                           </Button>
                         </div>
                       </form>
@@ -934,8 +1034,8 @@ function Checkout({
                       >
                         <StepHeading
                           ref={headingRef}
-                          title="Payment"
-                          description="Choose how you'd like to pay."
+                          title={t.paymentTitle}
+                          description={t.paymentDescription}
                         />
 
                         <RadioGroup
@@ -1101,10 +1201,12 @@ function Checkout({
                             }}
                           >
                             <ArrowLeft />
-                            Back
+                            {t.back}
                           </Button>
                           <Button type="submit" size="lg" loading={loading}>
-                            {payment.method === "card" ? "Pay " : "Reserve · "}
+                            {payment.method === "card"
+                              ? `${t.pay} `
+                              : `${t.reserve} · `}
                             <Money value={total} currency={currency} />
                           </Button>
                         </div>
@@ -1120,8 +1222,11 @@ function Checkout({
                           />
                           <StepHeading
                             ref={headingRef}
-                            title="You're booked"
-                            description={`Confirmation sent to ${order.values.contact.email}. Order ${order.orderNumber}.`}
+                            title={t.confirmationTitle}
+                            description={t.confirmationDescription(
+                              order.values.contact.email,
+                              order.orderNumber
+                            )}
                           />
                         </div>
 
@@ -1129,37 +1234,15 @@ function Checkout({
                           {order.values.summary.items.map((item, i) => (
                             <TicketPass
                               key={item.id}
-                              eyebrow={`Admit ${item.quantity}`}
+                              eyebrow={t.ticketEyebrow(item)}
                               title={item.title}
                               code={`${order.orderNumber}-${String(i + 1).padStart(2, "0")}`}
                               status="valid"
                               className="max-w-none"
-                              fields={[
-                                {
-                                  label: "Attendee",
-                                  value:
-                                    order.values.attendee.name ||
-                                    order.values.contact.name,
-                                },
-                                { label: "Quantity", value: item.quantity },
-                                {
-                                  label: "Payment",
-                                  value:
-                                    order.values.payment.method === "card"
-                                      ? "Paid"
-                                      : "Due in 3 days",
-                                },
-                                ...(item.subtitle
-                                  ? [{ label: "Session", value: item.subtitle }]
-                                  : []),
-                                {
-                                  label: "Pass",
-                                  value:
-                                    order.values.delivery === "email"
-                                      ? "By email"
-                                      : "Front desk",
-                                },
-                              ]}
+                              fields={(ticketFields ?? defaultTicketFields)(
+                                item,
+                                order
+                              )}
                             />
                           ))}
                         </div>
@@ -1174,7 +1257,7 @@ function Checkout({
                               })
                             }
                           >
-                            Done
+                            {t.done}
                           </Button>
                         </div>
                       </div>

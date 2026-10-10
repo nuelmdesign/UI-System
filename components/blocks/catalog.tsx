@@ -1,7 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { Heart, Image as ImageIcon, Search, SearchX, X } from "lucide-react"
+import {
+  Heart,
+  Image as ImageIcon,
+  MapPin,
+  Search,
+  SearchX,
+  X,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -23,10 +30,12 @@ export type CatalogItem = {
   id: string
   title: string
   host: string
+  /** Venue or city, shown on cards and the featured band. */
+  location?: string
   category: string
   /** ISO date (YYYY-MM-DD). Used for sorting and the date block. */
   date: string
-  /** Price in whole currency units. 0 renders as "Free". */
+  /** Price in whole units of the catalog `currency`. 0 renders as the free label. */
   price: number
   capacity: number
   /** Places left. 0 means sold out. */
@@ -45,7 +54,49 @@ export type CatalogProps = {
   loading?: boolean
   title?: string
   eyebrow?: string
+  /** ISO 4217 code used for every price and the default price filter. */
+  currency?: string
+  /** Price filter buckets (min and max both inclusive). Defaults are computed in `currency`. */
+  priceRanges?: CatalogPriceRange[]
+  /** "cards" is a grid; "compact" is a list-style row per item. */
+  layout?: "cards" | "compact"
+  /** Override any fixed copy. */
+  labels?: Partial<CatalogLabels>
   className?: string
+}
+
+export type CatalogPriceRange = { label: string; min?: number; max?: number }
+
+export type CatalogLabels = {
+  /** Prefix before the host on the featured band. Empty string for none. */
+  hostLabel: string
+  placesLeft: string
+  placesValue: (remaining: number, capacity: number) => string
+  soldOut: string
+  sellingFast: string
+  free: string
+  all: string
+  featured: string
+  viewDetails: string
+  searchLabel: string
+  searchPlaceholder: string
+  categoryGroup: string
+  sortBy: string
+  sortRelevance: string
+  sortPriceAsc: string
+  sortPriceDesc: string
+  sortDate: string
+  price: string
+  anyPrice: string
+  hideSoldOut: string
+  hidingSoldOut: string
+  active: string
+  clear: string
+  loading: string
+  results: (shown: number, total: number) => string
+  emptyTitle: string
+  emptyDescription: string
+  clearFilters: string
 }
 
 export const SAMPLE_CATALOG_CATEGORIES = [
@@ -60,6 +111,7 @@ export const SAMPLE_CATALOG_ITEMS: CatalogItem[] = [
     id: "w1",
     title: "Typography for Interfaces",
     host: "Amara Lindqvist",
+    location: "Studio 4, Lisbon",
     category: "Design",
     date: "2026-11-04",
     price: 180,
@@ -71,6 +123,7 @@ export const SAMPLE_CATALOG_ITEMS: CatalogItem[] = [
     id: "w2",
     title: "Reliable Systems in Practice",
     host: "Jonas Whitfield",
+    location: "Online",
     category: "Engineering",
     date: "2026-11-11",
     price: 240,
@@ -150,28 +203,37 @@ export const SAMPLE_CATALOG_ITEMS: CatalogItem[] = [
 ]
 
 type SortKey = "relevance" | "price-asc" | "price-desc" | "date"
-type PriceKey = "any" | "free" | "under-100" | "100-250" | "over-250"
 
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "relevance", label: "Relevance" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
-  { value: "date", label: "Date: soonest" },
-]
-
-const PRICE_OPTIONS: { value: PriceKey; label: string }[] = [
-  { value: "any", label: "Any price" },
-  { value: "free", label: "Free" },
-  { value: "under-100", label: "Under $100" },
-  { value: "100-250", label: "$100 to $250" },
-  { value: "over-250", label: "Over $250" },
-]
-
-const money = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-})
+export const DEFAULT_CATALOG_LABELS: CatalogLabels = {
+  hostLabel: "Hosted by",
+  placesLeft: "Places left",
+  placesValue: (remaining, capacity) => `${remaining} of ${capacity}`,
+  soldOut: "Sold out",
+  sellingFast: "Selling fast",
+  free: "Free",
+  all: "All",
+  featured: "Featured",
+  viewDetails: "View details",
+  searchLabel: "Search the catalog",
+  searchPlaceholder: "Search by title, host or category",
+  categoryGroup: "Filter by category",
+  sortBy: "Sort by",
+  sortRelevance: "Relevance",
+  sortPriceAsc: "Price: low to high",
+  sortPriceDesc: "Price: high to low",
+  sortDate: "Date: soonest",
+  price: "Price",
+  anyPrice: "Any price",
+  hideSoldOut: "Hide sold out",
+  hidingSoldOut: "Hiding sold out",
+  active: "Active",
+  clear: "Clear",
+  loading: "Loading",
+  results: (shown, total) => `${shown} of ${total} results`,
+  emptyTitle: "Nothing matches",
+  emptyDescription: "Try a different search or loosen the filters.",
+  clearFilters: "Clear filters",
+}
 
 const monthFmt = new Intl.DateTimeFormat("en-US", {
   month: "short",
@@ -181,31 +243,44 @@ const dayFmt = new Intl.DateTimeFormat("en-US", {
   day: "2-digit",
   timeZone: "UTC",
 })
-const longFmt = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "UTC",
-})
 
-function formatPrice(price: number) {
-  return price <= 0 ? "Free" : money.format(price)
+function makeMoney(currency: string) {
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    })
+  } catch {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    })
+  }
 }
 
-function inPriceRange(price: number, key: PriceKey) {
-  switch (key) {
-    case "free":
-      return price <= 0
-    case "under-100":
-      return price > 0 && price < 100
-    case "100-250":
-      return price >= 100 && price <= 250
-    case "over-250":
-      return price > 250
-    default:
-      return true
-  }
+function defaultPriceRanges(
+  money: Intl.NumberFormat,
+  L: CatalogLabels
+): CatalogPriceRange[] {
+  return [
+    { label: L.free, max: 0 },
+    { label: `Under ${money.format(100)}`, min: 0.01, max: 99.99 },
+    {
+      label: `${money.format(100)} to ${money.format(250)}`,
+      min: 100,
+      max: 250,
+    },
+    { label: `Over ${money.format(250)}`, min: 250.01 },
+  ]
+}
+
+function inRange(price: number, r: CatalogPriceRange | undefined) {
+  if (!r) return true
+  if (r.min !== undefined && price < r.min) return false
+  if (r.max !== undefined && price > r.max) return false
+  return true
 }
 
 function relevance(item: CatalogItem, q: string) {
@@ -216,6 +291,7 @@ function relevance(item: CatalogItem, q: string) {
   if (t.includes(q)) score += 2
   if (item.host.toLowerCase().includes(q)) score += 1
   if (item.category.toLowerCase().includes(q)) score += 1
+  if (item.location?.toLowerCase().includes(q)) score += 1
   return score
 }
 
@@ -249,7 +325,47 @@ function Media({ item, className }: { item: CatalogItem; className?: string }) {
   )
 }
 
-function StatusBadge({ item }: { item: CatalogItem }) {
+function DateBlock({ date, className }: { date: string; className?: string }) {
+  const d = new Date(date)
+  return (
+    <time
+      dateTime={date}
+      className={cn(
+        "flex w-11 shrink-0 flex-col items-center border py-1 font-mono tabular-nums",
+        className
+      )}
+    >
+      <span className="eyebrow">{monthFmt.format(d)}</span>
+      <span className="text-base leading-tight text-foreground">
+        {dayFmt.format(d)}
+      </span>
+    </time>
+  )
+}
+
+function Location({
+  value,
+  className,
+}: {
+  value?: string
+  className?: string
+}) {
+  if (!value) return null
+  return (
+    <span className={cn("inline-flex min-w-0 items-center gap-1", className)}>
+      <MapPin aria-hidden className="size-3 shrink-0" />
+      <span className="truncate">{value}</span>
+    </span>
+  )
+}
+
+function StatusBadge({
+  item,
+  labels,
+}: {
+  item: CatalogItem
+  labels: CatalogLabels
+}) {
   const s = status(item)
   if (s === "open") return null
   return (
@@ -257,7 +373,7 @@ function StatusBadge({ item }: { item: CatalogItem }) {
       variant={s === "sold-out" ? "secondary" : "warning"}
       className="bg-background/90"
     >
-      {s === "sold-out" ? "Sold out" : "Selling fast"}
+      {s === "sold-out" ? labels.soldOut : labels.sellingFast}
     </Badge>
   )
 }
@@ -288,7 +404,18 @@ function FavouriteButton({
   )
 }
 
-function CardSkeleton() {
+function CardSkeleton({ compact }: { compact?: boolean }) {
+  if (compact)
+    return (
+      <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
+        <Skeleton className="h-12 w-11" />
+        <div className="flex flex-1 flex-col gap-2">
+          <Skeleton className="h-4 w-3/5" />
+          <Skeleton className="h-3 w-2/5" />
+        </div>
+        <Skeleton className="h-4 w-12" />
+      </div>
+    )
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border bg-card">
       <Skeleton className="aspect-[16/10] rounded-none" />
@@ -310,17 +437,35 @@ function Catalog({
   loading = false,
   title = "Workshops and courses",
   eyebrow = "Catalog",
+  currency = "USD",
+  priceRanges,
+  layout = "cards",
+  labels: labelsProp,
   className,
 }: CatalogProps) {
   const uid = React.useId()
+  const L: CatalogLabels = { ...DEFAULT_CATALOG_LABELS, ...labelsProp }
+  const money = React.useMemo(() => makeMoney(currency), [currency])
+  const formatPrice = (price: number) =>
+    price <= 0 ? L.free : money.format(price)
+  const ranges = priceRanges ?? defaultPriceRanges(money, L)
+  const compact = layout === "compact"
+
   const [query, setQuery] = React.useState("")
   const [category, setCategory] = React.useState<string | null>(null)
   const [sort, setSort] = React.useState<SortKey>("relevance")
-  const [price, setPrice] = React.useState<PriceKey>("any")
+  const [price, setPrice] = React.useState<string>("any")
   const [hideSoldOut, setHideSoldOut] = React.useState(false)
   const [favourites, setFavourites] = React.useState<Record<string, boolean>>(
     {}
   )
+
+  const sortOptions: { value: SortKey; label: string }[] = [
+    { value: "relevance", label: L.sortRelevance },
+    { value: "price-asc", label: L.sortPriceAsc },
+    { value: "price-desc", label: L.sortPriceDesc },
+    { value: "date", label: L.sortDate },
+  ]
 
   const isFav = (item: CatalogItem) => favourites[item.id] ?? !!item.favourite
   const toggleFav = (item: CatalogItem, next: boolean) => {
@@ -329,12 +474,13 @@ function Catalog({
   }
 
   const q = query.trim().toLowerCase()
+  const activeRange = price === "any" ? undefined : ranges[Number(price)]
 
-  const results = React.useMemo(() => {
+  const results = (() => {
     const list = items.filter((item) => {
       if (category && item.category !== category) return false
       if (hideSoldOut && item.remaining <= 0) return false
-      if (!inPriceRange(item.price, price)) return false
+      if (!inRange(item.price, activeRange)) return false
       if (q && relevance(item, q) === 0) return false
       return true
     })
@@ -348,7 +494,7 @@ function Catalog({
       return d || a.i - b.i
     })
     return indexed.map((x) => x.item)
-  }, [items, category, hideSoldOut, price, q, sort])
+  })()
 
   const featured = items.find((i) => i.featured) ?? null
 
@@ -365,16 +511,16 @@ function Catalog({
       label: category,
       clear: () => setCategory(null),
     })
-  if (price !== "any")
+  if (activeRange)
     activeFilters.push({
       key: "price",
-      label: PRICE_OPTIONS.find((o) => o.value === price)?.label ?? price,
+      label: activeRange.label,
       clear: () => setPrice("any"),
     })
   if (hideSoldOut)
     activeFilters.push({
       key: "avail",
-      label: "Hiding sold out",
+      label: L.hidingSoldOut,
       clear: () => setHideSoldOut(false),
     })
 
@@ -384,6 +530,10 @@ function Catalog({
     setPrice("any")
     setHideSoldOut(false)
   }
+
+  const gridClass = compact
+    ? "flex flex-col gap-2"
+    : "grid grid-cols-1 gap-4 @md/catalog:grid-cols-2 @3xl/catalog:grid-cols-3"
 
   return (
     <div
@@ -402,19 +552,22 @@ function Catalog({
               aria-live="polite"
               className="font-mono text-xs text-muted-foreground tabular-nums"
             >
-              {loading
-                ? "Loading"
-                : `${results.length} of ${items.length} results`}
+              {loading ? L.loading : L.results(results.length, items.length)}
             </p>
           </div>
         </header>
 
         {featured && (
           <section
-            aria-label="Featured"
+            aria-label={L.featured}
             className="dark overflow-hidden rounded-lg border bg-background text-foreground"
           >
-            <div className="grid @3xl/catalog:grid-cols-2">
+            <div
+              className={cn(
+                "grid",
+                (loading || featured.image) && "@3xl/catalog:grid-cols-2"
+              )}
+            >
               {loading ? (
                 <>
                   <Skeleton className="min-h-48 rounded-none" />
@@ -426,29 +579,38 @@ function Catalog({
                 </>
               ) : (
                 <>
-                  <Media
-                    item={featured}
-                    className="min-h-48 @3xl/catalog:min-h-72"
-                  />
+                  {featured.image && (
+                    <Media
+                      item={featured}
+                      className="min-h-48 @3xl/catalog:min-h-72"
+                    />
+                  )}
                   <div className="flex flex-col justify-between gap-6 p-6 @3xl/catalog:p-8">
                     <div className="flex flex-col gap-3">
                       <div className="flex items-center gap-2">
-                        <span className="eyebrow">Featured</span>
-                        <StatusBadge item={featured} />
+                        <span className="eyebrow">{L.featured}</span>
+                        <StatusBadge item={featured} labels={L} />
                       </div>
-                      <h3 className="heading text-3xl @3xl/catalog:text-4xl">
-                        {featured.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Hosted by {featured.host}
-                        <span aria-hidden> · </span>
-                        <time
-                          dateTime={featured.date}
-                          className="font-mono tabular-nums"
-                        >
-                          {longFmt.format(new Date(featured.date))}
-                        </time>
-                      </p>
+                      <div className="flex items-start gap-4">
+                        <DateBlock date={featured.date} className="w-12" />
+                        <div className="flex min-w-0 flex-1 flex-col gap-2">
+                          <h3 className="heading text-3xl @3xl/catalog:text-4xl">
+                            {featured.title}
+                          </h3>
+                          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                            <span>
+                              {L.hostLabel ? `${L.hostLabel} ` : ""}
+                              {featured.host}
+                            </span>
+                            {featured.location && (
+                              <>
+                                <span aria-hidden>·</span>
+                                <Location value={featured.location} />
+                              </>
+                            )}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div className="flex flex-wrap items-center justify-between gap-4">
                       <span className="font-mono text-2xl tabular-nums">
@@ -465,9 +627,7 @@ function Catalog({
                           disabled={featured.remaining <= 0}
                           onClick={() => onSelect?.(featured)}
                         >
-                          {featured.remaining <= 0
-                            ? "Sold out"
-                            : "View details"}
+                          {featured.remaining <= 0 ? L.soldOut : L.viewDetails}
                         </Button>
                       </div>
                     </div>
@@ -486,8 +646,8 @@ function Catalog({
             />
             <Input
               type="search"
-              aria-label="Search the catalog"
-              placeholder="Search by title, host or category"
+              aria-label={L.searchLabel}
+              placeholder={L.searchPlaceholder}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="pl-9"
@@ -496,7 +656,7 @@ function Catalog({
 
           <div
             role="group"
-            aria-label="Filter by category"
+            aria-label={L.categoryGroup}
             className="flex flex-wrap gap-2"
           >
             {[null, ...categories].map((c) => {
@@ -510,7 +670,7 @@ function Catalog({
                   aria-pressed={pressed}
                   onClick={() => setCategory(c)}
                 >
-                  {c ?? "All"}
+                  {c ?? L.all}
                 </Button>
               )
             })}
@@ -519,14 +679,14 @@ function Catalog({
           <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
             <div className="flex flex-col gap-1.5">
               <label htmlFor={`${uid}-sort`} className="eyebrow">
-                Sort by
+                {L.sortBy}
               </label>
               <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
                 <SelectTrigger id={`${uid}-sort`} className="w-48">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {SORT_OPTIONS.map((o) => (
+                  {sortOptions.map((o) => (
                     <SelectItem key={o.value} value={o.value}>
                       {o.label}
                     </SelectItem>
@@ -536,19 +696,17 @@ function Catalog({
             </div>
             <div className="flex flex-col gap-1.5">
               <label htmlFor={`${uid}-price`} className="eyebrow">
-                Price
+                {L.price}
               </label>
-              <Select
-                value={price}
-                onValueChange={(v) => setPrice(v as PriceKey)}
-              >
+              <Select value={price} onValueChange={setPrice}>
                 <SelectTrigger id={`${uid}-price`} className="w-44">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {PRICE_OPTIONS.map((o) => (
-                    <SelectItem key={o.value} value={o.value}>
-                      {o.label}
+                  <SelectItem value="any">{L.anyPrice}</SelectItem>
+                  {ranges.map((r, i) => (
+                    <SelectItem key={`${i}-${r.label}`} value={String(i)}>
+                      {r.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -561,7 +719,7 @@ function Catalog({
                 onCheckedChange={setHideSoldOut}
               />
               <label htmlFor={`${uid}-avail`} className="text-sm">
-                Hide sold out
+                {L.hideSoldOut}
               </label>
             </div>
           </div>
@@ -571,7 +729,7 @@ function Catalog({
               aria-label="Active filters"
               className="flex flex-wrap items-center gap-2 border-t pt-4"
             >
-              <span className="eyebrow">Active</span>
+              <span className="eyebrow">{L.active}</span>
               {activeFilters.map((f) => (
                 <button
                   key={f.key}
@@ -585,7 +743,7 @@ function Catalog({
                 </button>
               ))}
               <Button type="button" variant="link" size="xs" onClick={clearAll}>
-                Clear
+                {L.clear}
               </Button>
             </div>
           )}
@@ -595,10 +753,10 @@ function Catalog({
           <div
             aria-busy="true"
             aria-label="Loading results"
-            className="grid grid-cols-1 gap-4 @md/catalog:grid-cols-2 @3xl/catalog:grid-cols-3"
+            className={gridClass}
           >
             {Array.from({ length: 6 }, (_, i) => (
-              <CardSkeleton key={i} />
+              <CardSkeleton key={i} compact={compact} />
             ))}
           </div>
         ) : results.length === 0 ? (
@@ -606,64 +764,132 @@ function Catalog({
             live
             bordered
             icon={<SearchX />}
-            title="Nothing matches"
-            description="Try a different search or loosen the filters."
+            title={L.emptyTitle}
+            description={L.emptyDescription}
             action={
               <Button type="button" variant="outline" onClick={clearAll}>
-                Clear filters
+                {L.clearFilters}
               </Button>
             }
           />
         ) : (
-          <ul className="grid grid-cols-1 gap-4 @md/catalog:grid-cols-2 @3xl/catalog:grid-cols-3">
+          <ul className={gridClass}>
             {results.map((item) => {
               const s = status(item)
               const soldOut = s === "sold-out"
-              return (
-                <li
-                  key={item.id}
-                  className={cn(
-                    "group relative flex flex-col overflow-hidden rounded-lg border bg-card transition-colors focus-within:border-brand/60 hover:border-foreground/25",
-                    soldOut && "text-muted-foreground"
-                  )}
+              const select = (
+                <button
+                  type="button"
+                  onClick={() => onSelect?.(item)}
+                  className="text-left outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline"
                 >
-                  <div className="relative">
-                    <Media
-                      item={item}
-                      className={cn("aspect-[16/10]", soldOut && "opacity-70")}
-                    />
-                    <div className="absolute top-3 left-3">
-                      <StatusBadge item={item} />
+                  {item.title}
+                </button>
+              )
+              const itemClass = cn(
+                "group relative flex overflow-hidden rounded-lg border bg-card transition-colors focus-within:border-brand/60 hover:border-foreground/25",
+                !compact && "flex-col",
+                soldOut && "text-muted-foreground"
+              )
+
+              if (compact)
+                return (
+                  <li
+                    key={item.id}
+                    className={cn(itemClass, "items-center gap-3 p-3")}
+                  >
+                    <DateBlock date={item.date} />
+                    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <h3 className="text-base leading-snug font-medium text-foreground">
+                        {select}
+                      </h3>
+                      <p className="flex min-w-0 items-center gap-x-1.5 text-sm text-muted-foreground">
+                        <span className="truncate">
+                          {item.host}
+                          <span aria-hidden> · </span>
+                          {item.category}
+                        </span>
+                        {item.location && (
+                          <>
+                            <span
+                              aria-hidden
+                              className="hidden @md/catalog:inline"
+                            >
+                              ·
+                            </span>
+                            <Location
+                              value={item.location}
+                              className="hidden @md/catalog:inline-flex"
+                            />
+                          </>
+                        )}
+                      </p>
                     </div>
-                  </div>
+                    <div className="hidden w-32 shrink-0 @xl/catalog:block">
+                      <Progress
+                        size="sm"
+                        tone="auto"
+                        invert
+                        value={item.remaining}
+                        max={item.capacity}
+                        aria-label={`${L.placesLeft}: ${item.title}`}
+                        label={L.placesLeft}
+                        valueLabel={L.placesValue(
+                          item.remaining,
+                          item.capacity
+                        )}
+                      />
+                    </div>
+                    <StatusBadge item={item} labels={L} />
+                    <span className="shrink-0 font-mono text-base text-foreground tabular-nums">
+                      {formatPrice(item.price)}
+                    </span>
+                    <FavouriteButton
+                      item={item}
+                      on={isFav(item)}
+                      onToggle={(n) => toggleFav(item, n)}
+                      className="relative z-10 shrink-0"
+                    />
+                  </li>
+                )
+
+              return (
+                <li key={item.id} className={itemClass}>
+                  {item.image && (
+                    <div className="relative">
+                      <Media
+                        item={item}
+                        className={cn(
+                          "aspect-[16/10]",
+                          soldOut && "opacity-70"
+                        )}
+                      />
+                      <div className="absolute top-3 left-3">
+                        <StatusBadge item={item} labels={L} />
+                      </div>
+                    </div>
+                  )}
                   <div className="flex flex-1 flex-col gap-3 p-4">
+                    {!item.image && s !== "open" && (
+                      <div>
+                        <StatusBadge item={item} labels={L} />
+                      </div>
+                    )}
                     <div className="flex items-start gap-3">
-                      <time
-                        dateTime={item.date}
-                        className="flex w-11 shrink-0 flex-col items-center border py-1 font-mono tabular-nums"
-                      >
-                        <span className="eyebrow">
-                          {monthFmt.format(new Date(item.date))}
-                        </span>
-                        <span className="text-base leading-tight text-foreground">
-                          {dayFmt.format(new Date(item.date))}
-                        </span>
-                      </time>
+                      <DateBlock date={item.date} />
                       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                         <h3 className="text-base leading-snug font-medium text-foreground">
-                          <button
-                            type="button"
-                            onClick={() => onSelect?.(item)}
-                            className="text-left outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline"
-                          >
-                            {item.title}
-                          </button>
+                          {select}
                         </h3>
                         <p className="truncate text-sm text-muted-foreground">
                           {item.host}
                           <span aria-hidden> · </span>
                           {item.category}
                         </p>
+                        <Location
+                          value={item.location}
+                          className="text-sm text-muted-foreground"
+                        />
                       </div>
                     </div>
                     <Progress
@@ -673,9 +899,9 @@ function Catalog({
                       invert
                       value={item.remaining}
                       max={item.capacity}
-                      aria-label={`Availability for ${item.title}`}
-                      label="Places left"
-                      valueLabel={`${item.remaining} of ${item.capacity}`}
+                      aria-label={`${L.placesLeft}: ${item.title}`}
+                      label={L.placesLeft}
+                      valueLabel={L.placesValue(item.remaining, item.capacity)}
                     />
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-lg text-foreground tabular-nums">

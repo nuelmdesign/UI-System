@@ -1,6 +1,6 @@
 # Task Rows
 
-Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence.
+Task rows with progress rings, status pills and expandable details, run through a failed, retry, done sequence. Data shape: A payment-shaped animated demo (label, amount; fixed failed, retry and done states), not an interactive task list.
 
 Category: AI Agents
 
