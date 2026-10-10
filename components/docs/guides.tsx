@@ -29,6 +29,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import useCases from "@/content/ai/use-cases.json"
+import integrations from "@/content/ai/integrations.json"
 import { toast } from "sonner"
 
 export function GuidePage({ slug }: { slug: string }) {
@@ -604,6 +605,68 @@ function MotionGuide() {
   )
 }
 
+/* ------------------------------- Integrations ------------------------------ */
+
+const LICENSE_BADGE = {
+  verified: { label: "Verified", variant: "success" },
+  reported: { label: "Reported", variant: "warning" },
+  unverified: { label: "Check it", variant: "secondary" },
+} as const
+
+const TIER_ORDER = ["in-use", "ported", "recipe", "avoid"] as const
+const TIER_TITLE: Record<(typeof TIER_ORDER)[number], string> = {
+  "in-use": "Built on",
+  ported: "Ported with credit",
+  recipe: "Recommended alongside",
+  avoid: "Not bundled",
+}
+
+function IntegrationsGuide() {
+  return (
+    <>
+      <Prose>
+        <p>{integrations.intro}</p>
+      </Prose>
+      {TIER_ORDER.map((tier) => (
+        <section key={tier} className="grid gap-4">
+          <H2>{TIER_TITLE[tier]}</H2>
+          <Prose>
+            <p>{integrations.tiers[tier]}</p>
+          </Prose>
+          <ul className="grid border-t">
+            {integrations.libraries
+              .filter((l) => l.tier === tier)
+              .map((l) => {
+                const badge =
+                  LICENSE_BADGE[l.licenseStatus as keyof typeof LICENSE_BADGE]
+                return (
+                  <li
+                    key={l.id}
+                    className="grid gap-1 border-b py-3 text-[15px]"
+                  >
+                    <span className="flex flex-wrap items-center gap-2">
+                      <a
+                        href={l.url}
+                        className="font-medium text-brand underline-offset-4 hover:underline"
+                      >
+                        {l.name}
+                      </a>
+                      <span className="font-mono text-[13px] text-muted-foreground">
+                        {l.license}
+                      </span>
+                      <Badge variant={badge.variant}>{badge.label}</Badge>
+                    </span>
+                    <span className="text-muted-foreground">{l.note}</span>
+                  </li>
+                )
+              })}
+          </ul>
+        </section>
+      ))}
+    </>
+  )
+}
+
 /* ---------------------------------- Tools ---------------------------------- */
 
 const TOOLS = [
@@ -652,7 +715,7 @@ const TOOLS = [
 ] as const
 
 function ToolsGuide() {
-  const base = useSiteBase()
+  const nav = useDocsNav()
   return (
     <>
       <Prose>
@@ -690,12 +753,12 @@ function ToolsGuide() {
         <Prose>
           <p>
             Use <strong>Copy with rules included</strong> on the{" "}
-            <a
-              href={`${base}docs/ai`}
+            <nav.Link
+              href={nav.href("ai")}
               className="text-brand underline-offset-4 hover:underline"
             >
               Use with AI
-            </a>{" "}
+            </nav.Link>{" "}
             page. It puts the rules in the prompt itself. The assistant writes
             the code and ends with the install commands to run in your project.
           </p>
@@ -742,12 +805,12 @@ function ToolsGuide() {
         <Prose>
           <p>
             Every rules file points assistants at the{" "}
-            <a
-              href={`${base}docs/use-cases`}
+            <nav.Link
+              href={nav.href("use-cases")}
               className="text-brand underline-offset-4 hover:underline"
             >
               use-case playbooks
-            </a>
+            </nav.Link>
             , so a request for a logistics, healthcare or fintech product starts
             from the components that suit it.
           </p>
@@ -963,6 +1026,7 @@ const BODIES: Record<string, React.ComponentType> = {
   ai: UseWithAi,
   "use-cases": UseCasesGuide,
   tools: ToolsGuide,
+  integrations: IntegrationsGuide,
   installation: Installation,
   theming: Theming,
   motion: MotionGuide,

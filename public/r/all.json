@@ -128,7 +128,15 @@
     "@opendraft/status-indicator",
     "@opendraft/slider",
     "@opendraft/dropzone",
-    "@opendraft/otp-input"
+    "@opendraft/otp-input",
+    "@opendraft/waveform",
+    "@opendraft/live-waveform",
+    "@opendraft/bar-visualizer",
+    "@opendraft/audio-player",
+    "@opendraft/scrub-bar",
+    "@opendraft/transcript-viewer",
+    "@opendraft/mic-selector",
+    "@opendraft/voice-button"
   ],
   "type": "registry:item"
 }

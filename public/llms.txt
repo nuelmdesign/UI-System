@@ -228,6 +228,27 @@ If the product is for a specific industry or job, read its playbook before choos
 
 Machine-readable index: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/use-cases.json
 
+## Integrations
+
+Libraries opendraft is built on, has ported from, or recommends alongside it, with license status (verified, reported or unverified). Prefer the recipes; do not bundle anything marked avoid.
+
+### Recommended alongside (not installed by opendraft)
+
+- [Vercel AI Elements](https://github.com/vercel/ai-elements) (Apache-2.0, reported): A shadcn-registry set of AI chat components that overlaps our agent components. Use side by side; check its license file before copying anything.
+- [Vercel AI SDK](https://ai-sdk.dev) (Check the repository, unverified): Streaming and chat state (useChat). Pair it with our message and prompt components.
+- [assistant-ui](https://github.com/assistant-ui/assistant-ui) (MIT, reported): Chat primitives with streaming, auto-scroll and accessibility, working with the AI SDK, LangGraph or a custom backend. Render our message and tool components inside it.
+- [CopilotKit and the AG-UI protocol](https://github.com/CopilotKit/CopilotKit) (MIT, reported): An open event protocol for streaming what an agent is doing to the interface, and generative UI. An adapter that renders AG-UI events with our tool, approval and activity components is on the roadmap.
+- [AutoAnimate](https://auto-animate.formkit.com) (Check the repository, unverified): Zero-config animation for lists that add and remove items. Motion already covers this; use it for quick wins.
+- [Lenis](https://lenis.darkroom.engineering) (Check the repository, unverified): Smooth scrolling for marketing pages. Not for application screens.
+- [Rive and dotLottie](https://rive.app) (Check each runtime, unverified): Illustrated, state-driven animation for empty states, loaders and characters. The runtimes and the artwork files carry separate terms.
+
+### Not bundled (license terms)
+
+- [GSAP](https://gsap.com/community/standard-license/) (GSAP Standard License, reported): Free for commercial use including former paid plugins, but under its own license with prohibited uses, not an open-source license. Not bundled; optional in your own project after you read the terms.
+- [React Bits](https://github.com/DavidHDev/react-bits) (MIT with the Commons Clause, reported): The Commons Clause restricts selling, which conflicts with redistributing it in a registry. Inspiration only.
+
+Full list as data: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/integrations.json
+
 ## Components
 
 ### Blocks
@@ -275,6 +296,14 @@ Machine-readable index: https://raw.githubusercontent.com/nuelmdesign/UI-System/
 - [Tool Chips](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tool-chips.md): An agent run as compact tool-call rows with inline chips, then file-diff chips that preview their diff on hover. Shows sample content (an ice cream shop) until you pass your own data through its props. Install: `npx shadcn@latest add @opendraft/tool-chips`
 - [Agent Screen](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/agent-screen.md): Live agent-screen card that expands to a full-screen viewer with Teach-a-task recording. Shows sample content (an ice cream shop) until you pass your own data through its props. Install: `npx shadcn@latest add @opendraft/agent-screen`
 - [Code Panel](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/code-panel.md): Light editor panel with a line-numbered Code view and a unified Diff view with word-level highlights. Shows sample content (an ice cream shop) until you pass your own data through its props. Install: `npx shadcn@latest add @opendraft/code-panel`
+- [Waveform](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/waveform.md): Static, clickable and scrubbable waveform bars drawn from normalized data, plus a scrolling variant and an accessible scrubber. Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/waveform`
+- [Live Waveform](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/live-waveform.md): Microphone-driven canvas waveform in static or scrolling mode with a processing animation; handles denied or missing microphones. Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/live-waveform`
+- [Bar Visualizer](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/bar-visualizer.md): Volume or frequency bars that light up by agent state (connecting, listening, thinking, speaking). Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/bar-visualizer`
+- [Audio Player](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/audio-player.md): Audio provider with play and pause, previous and next, seek, speed menu, volume, playlist and error state. Takes a source or a list of tracks. Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/audio-player`
+- [Scrub Bar](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/scrub-bar.md): Seekable progress bar with time labels on a native range input, so pointer, touch and keyboard all work. Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/scrub-bar`
+- [Transcript Viewer](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/transcript-viewer.md): Time-aligned transcript that highlights the current word and seeks when a word is clicked, from plain word timings. Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/transcript-viewer`
+- [Mic Selector](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/mic-selector.md): Microphone picker in a dropdown with a mute toggle and a live level preview; handles permission denied and no devices. Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/mic-selector`
+- [Voice Button](https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/voice-button.md): Toggle or push-to-talk record button with idle, recording, processing, success and error states, a shortcut hint and a compact live waveform. Adapted from ElevenLabs UI (MIT). Install: `npx shadcn@latest add @opendraft/voice-button`
 
 ### Data & Workflows
 
@@ -357,6 +386,7 @@ Machine-readable index: https://raw.githubusercontent.com/nuelmdesign/UI-System/
 - [Use with AI](https://ui-system-virid.vercel.app/docs/ai): Give an AI assistant one link so it builds with opendraft's components and tokens.
 - [Use with other AI tools](https://ui-system-virid.vercel.app/docs/tools): Rules files and setup for Cursor, Copilot, Codex, Lovable, ChatGPT and any assistant that reads a rules file.
 - [Use cases](https://ui-system-virid.vercel.app/docs/use-cases): Playbooks that tell you, and your AI assistant, which components suit twelve kinds of product, from security and logistics to healthcare, fintech and government.
+- [Integrations](https://ui-system-virid.vercel.app/docs/integrations): The open-source libraries opendraft is built on, has ported from or recommends, with honest license status.
 - [Installation](https://ui-system-virid.vercel.app/docs/installation): Add the registry to a project and install components.
 - [Theming](https://ui-system-virid.vercel.app/docs/theming): Color, type, shape and texture tokens, in both themes.
 - [Motion](https://ui-system-virid.vercel.app/docs/motion): The shared springs, easings and durations in lib/motion.ts.
