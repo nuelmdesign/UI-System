@@ -997,6 +997,57 @@ const items = [
     description:
       "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
   }),
+  agent("waveform", {
+    deps: ["motion"],
+    reg: ["@opendraft/motion"],
+    description:
+      "Static, clickable and scrubbable waveform bars drawn from normalized data, plus a scrolling variant and an accessible scrubber. Adapted from ElevenLabs UI (MIT).",
+  }),
+  agent("live-waveform", {
+    deps: ["motion"],
+    reg: ["@opendraft/motion"],
+    description:
+      "Microphone-driven canvas waveform in static or scrolling mode with a processing animation; handles denied or missing microphones. Adapted from ElevenLabs UI (MIT).",
+  }),
+  agent("bar-visualizer", {
+    deps: ["motion"],
+    reg: ["@opendraft/motion"],
+    description:
+      "Volume or frequency bars that light up by agent state (connecting, listening, thinking, speaking). Adapted from ElevenLabs UI (MIT).",
+  }),
+  agent("audio-player", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/dropdown-menu", "@opendraft/slider"],
+    description:
+      "Audio provider with play and pause, previous and next, seek, speed menu, volume, playlist and error state. Takes a source or a list of tracks. Adapted from ElevenLabs UI (MIT).",
+  }),
+  agent("scrub-bar", {
+    deps: ["lucide-react"],
+    description:
+      "Seekable progress bar with time labels on a native range input, so pointer, touch and keyboard all work. Adapted from ElevenLabs UI (MIT).",
+  }),
+  agent("transcript-viewer", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/scrub-bar"],
+    description:
+      "Time-aligned transcript that highlights the current word and seeks when a word is clicked, from plain word timings. Adapted from ElevenLabs UI (MIT).",
+  }),
+  agent("mic-selector", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/dropdown-menu",
+      "@opendraft/live-waveform",
+    ],
+    description:
+      "Microphone picker in a dropdown with a mute toggle and a live level preview; handles permission denied and no devices. Adapted from ElevenLabs UI (MIT).",
+  }),
+  agent("voice-button", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/kbd", "@opendraft/live-waveform"],
+    description:
+      "Toggle or push-to-talk record button with idle, recording, processing, success and error states, a shortcut hint and a compact live waveform. Adapted from ElevenLabs UI (MIT).",
+  }),
 ]
 
 // Strip the motion dependency from the two pure-CSS motion components.

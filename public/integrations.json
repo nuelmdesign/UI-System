@@ -1,0 +1,222 @@
+{
+  "version": 1,
+  "intro": "What opendraft is built on, what it has ported from, and which outside libraries it recommends. License status is stated honestly: verified means checked against the installed package or the project's own license file; reported means a secondary source says so; unverified means check before you rely on it.",
+  "tiers": {
+    "in-use": "A dependency of opendraft components. Installed with them.",
+    "ported": "Source adapted into opendraft with credit under the original license.",
+    "recipe": "Not installed by opendraft. We document how to use it alongside our components.",
+    "avoid": "Not bundled or ported, because of its license terms. Optional for your own project."
+  },
+  "libraries": [
+    {
+      "id": "motion",
+      "name": "Motion",
+      "area": "motion",
+      "url": "https://motion.dev",
+      "tier": "in-use",
+      "license": "MIT",
+      "licenseStatus": "verified",
+      "note": "The animation library behind every state change: layout, springs, enter and exit."
+    },
+    {
+      "id": "radix-ui",
+      "name": "Radix UI",
+      "area": "ui",
+      "url": "https://www.radix-ui.com",
+      "tier": "in-use",
+      "license": "MIT",
+      "licenseStatus": "verified",
+      "note": "Accessible behavior for dialogs, menus, tabs, sliders and more."
+    },
+    {
+      "id": "lucide-react",
+      "name": "Lucide",
+      "area": "ui",
+      "url": "https://lucide.dev",
+      "tier": "in-use",
+      "license": "ISC",
+      "licenseStatus": "verified",
+      "note": "Icons."
+    },
+    {
+      "id": "shiki",
+      "name": "Shiki",
+      "area": "ui",
+      "url": "https://shiki.style",
+      "tier": "in-use",
+      "license": "MIT",
+      "licenseStatus": "verified",
+      "note": "Syntax highlighting in code blocks."
+    },
+    {
+      "id": "sonner",
+      "name": "Sonner",
+      "area": "ui",
+      "url": "https://sonner.emilkowal.ski",
+      "tier": "in-use",
+      "license": "MIT",
+      "licenseStatus": "verified",
+      "note": "Toasts."
+    },
+    {
+      "id": "cva",
+      "name": "class-variance-authority",
+      "area": "ui",
+      "url": "https://cva.style",
+      "tier": "in-use",
+      "license": "Apache-2.0",
+      "licenseStatus": "verified",
+      "note": "Component variants."
+    },
+    {
+      "id": "tanstack-virtual",
+      "name": "TanStack Virtual",
+      "area": "ui",
+      "url": "https://tanstack.com/virtual",
+      "tier": "in-use",
+      "license": "MIT",
+      "licenseStatus": "verified",
+      "note": "Row virtualization in Table."
+    },
+    {
+      "id": "uqr",
+      "name": "uqr",
+      "area": "ui",
+      "url": "https://github.com/unjs/uqr",
+      "tier": "in-use",
+      "license": "MIT",
+      "licenseStatus": "verified",
+      "note": "QR code generation for qr-code and ticket-pass."
+    },
+    {
+      "id": "shadcn",
+      "name": "shadcn/ui registry",
+      "area": "ui",
+      "url": "https://ui.shadcn.com",
+      "tier": "in-use",
+      "license": "MIT",
+      "licenseStatus": "reported",
+      "note": "The distribution format: components install as source through a registry."
+    },
+    {
+      "id": "elevenlabs-ui",
+      "name": "ElevenLabs UI",
+      "area": "agents",
+      "url": "https://github.com/elevenlabs/ui",
+      "tier": "ported",
+      "license": "MIT",
+      "licenseStatus": "verified",
+      "note": "Audio and voice components (waveform, audio player, mic selector and others) ported with credit and stripped of vendor SDK code. Its license file is MIT, Copyright (c) 2025 Eleven Labs Inc."
+    },
+    {
+      "id": "beui",
+      "name": "beUI",
+      "area": "ui",
+      "url": "https://github.com/starc007/ui-components",
+      "tier": "ported",
+      "license": "MIT",
+      "licenseStatus": "reported",
+      "note": "Several components, credited in each file header."
+    },
+    {
+      "id": "beautiful-ui",
+      "name": "Beautiful UI",
+      "area": "agents",
+      "url": "https://beautifului.dev",
+      "tier": "ported",
+      "license": "No license file supplied",
+      "licenseStatus": "unverified",
+      "note": "21 agent and data components, credited in each file header. Terms are being confirmed with the authors; see THIRD_PARTY_NOTICES.md."
+    },
+    {
+      "id": "ai-elements",
+      "name": "Vercel AI Elements",
+      "area": "agents",
+      "url": "https://github.com/vercel/ai-elements",
+      "tier": "recipe",
+      "license": "Apache-2.0",
+      "licenseStatus": "reported",
+      "note": "A shadcn-registry set of AI chat components that overlaps our agent components. Use side by side; check its license file before copying anything."
+    },
+    {
+      "id": "vercel-ai-sdk",
+      "name": "Vercel AI SDK",
+      "area": "agents",
+      "url": "https://ai-sdk.dev",
+      "tier": "recipe",
+      "license": "Check the repository",
+      "licenseStatus": "unverified",
+      "note": "Streaming and chat state (useChat). Pair it with our message and prompt components."
+    },
+    {
+      "id": "assistant-ui",
+      "name": "assistant-ui",
+      "area": "agents",
+      "url": "https://github.com/assistant-ui/assistant-ui",
+      "tier": "recipe",
+      "license": "MIT",
+      "licenseStatus": "reported",
+      "note": "Chat primitives with streaming, auto-scroll and accessibility, working with the AI SDK, LangGraph or a custom backend. Render our message and tool components inside it."
+    },
+    {
+      "id": "copilotkit-ag-ui",
+      "name": "CopilotKit and the AG-UI protocol",
+      "area": "agents",
+      "url": "https://github.com/CopilotKit/CopilotKit",
+      "tier": "recipe",
+      "license": "MIT",
+      "licenseStatus": "reported",
+      "note": "An open event protocol for streaming what an agent is doing to the interface, and generative UI. An adapter that renders AG-UI events with our tool, approval and activity components is on the roadmap."
+    },
+    {
+      "id": "autoanimate",
+      "name": "AutoAnimate",
+      "area": "motion",
+      "url": "https://auto-animate.formkit.com",
+      "tier": "recipe",
+      "license": "Check the repository",
+      "licenseStatus": "unverified",
+      "note": "Zero-config animation for lists that add and remove items. Motion already covers this; use it for quick wins."
+    },
+    {
+      "id": "lenis",
+      "name": "Lenis",
+      "area": "motion",
+      "url": "https://lenis.darkroom.engineering",
+      "tier": "recipe",
+      "license": "Check the repository",
+      "licenseStatus": "unverified",
+      "note": "Smooth scrolling for marketing pages. Not for application screens."
+    },
+    {
+      "id": "rive-lottie",
+      "name": "Rive and dotLottie",
+      "area": "motion",
+      "url": "https://rive.app",
+      "tier": "recipe",
+      "license": "Check each runtime",
+      "licenseStatus": "unverified",
+      "note": "Illustrated, state-driven animation for empty states, loaders and characters. The runtimes and the artwork files carry separate terms."
+    },
+    {
+      "id": "gsap",
+      "name": "GSAP",
+      "area": "motion",
+      "url": "https://gsap.com/community/standard-license/",
+      "tier": "avoid",
+      "license": "GSAP Standard License",
+      "licenseStatus": "reported",
+      "note": "Free for commercial use including former paid plugins, but under its own license with prohibited uses, not an open-source license. Not bundled; optional in your own project after you read the terms."
+    },
+    {
+      "id": "react-bits",
+      "name": "React Bits",
+      "area": "motion",
+      "url": "https://github.com/DavidHDev/react-bits",
+      "tier": "avoid",
+      "license": "MIT with the Commons Clause",
+      "licenseStatus": "reported",
+      "note": "The Commons Clause restricts selling, which conflicts with redistributing it in a registry. Inspiration only."
+    }
+  ]
+}

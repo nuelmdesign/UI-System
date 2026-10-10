@@ -1,3 +1,75 @@
+# Bar Visualizer
+
+Volume or frequency bars that light up by agent state (connecting, listening, thinking, speaking). Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/bar-visualizer
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { BarVisualizer } from "@/components/agents/bar-visualizer"
+```
+
+## Dependencies
+
+- npm: `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+/** What the voice agent is doing. Drives the highlight pattern. */
+type BarVisualizerState =
+  "connecting" | "initializing" | "listening" | "speaking" | "thinking"
+
+type MultibandVolumeOptions = {
+  /** Number of bands to produce. */
+  bands?: number
+  /** First FFT bin of the analysed slice. */
+  loPass?: number
+  /** Last FFT bin (exclusive) of the analysed slice. */
+  hiPass?: number
+  /** Minimum milliseconds between updates. */
+  updateInterval?: number
+  /** AnalyserNode FFT size (power of two). */
+  fftSize?: number
+  /** AnalyserNode smoothing, 0 to 1. */
+  smoothingTimeConstant?: number
+}
+
+type BarVisualizerProps = Omit<React.ComponentProps<"div">, "children"> & {
+  /** Agent state. Controls which bars light up. */
+  state?: BarVisualizerState
+  /** Number of bars. Ignored when `levels` is provided. */
+  barCount?: number
+  /** Per-bar levels, 0 to 1. Takes priority over `mediaStream` and `volume`. */
+  levels?: number[]
+  /** A single overall level, 0 to 1, shaped into a centred bell across the bars. */
+  volume?: number
+  /** Optional caller-owned stream to analyse. It is never stopped here. */
+  mediaStream?: MediaStream | null
+  /** Smallest bar height, as a percentage of the container. */
+  minHeight?: number
+  /** Largest bar height, as a percentage of the container. */
+  maxHeight?: number
+  /** Align bars to the vertical centre instead of the bottom. */
+  centerAlign?: boolean
+  /** Accessible name. Defaults to the current state. */
+  "aria-label"?: string
+}
+```
+
+## Example
+
+```tsx
 "use client"
 
 import * as React from "react"
@@ -106,3 +178,6 @@ export default function BarVisualizerDemo() {
     </div>
   )
 }
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/bar-visualizer. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt

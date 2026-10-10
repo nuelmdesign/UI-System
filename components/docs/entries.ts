@@ -854,6 +854,70 @@ export const ENTRIES: DocEntry[] = [
       "One-time-code entry on a single real input, with paste, a separator and complete, invalid and disabled states.",
     isNew: true,
   },
+  {
+    slug: "waveform",
+    title: "Waveform",
+    category: "Agents",
+    description:
+      "Static, clickable and scrubbable waveform bars drawn from normalized data, plus a scrolling variant and an accessible scrubber. Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
+  {
+    slug: "live-waveform",
+    title: "Live Waveform",
+    category: "Agents",
+    description:
+      "Microphone-driven canvas waveform in static or scrolling mode with a processing animation; handles denied or missing microphones. Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
+  {
+    slug: "bar-visualizer",
+    title: "Bar Visualizer",
+    category: "Agents",
+    description:
+      "Volume or frequency bars that light up by agent state (connecting, listening, thinking, speaking). Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
+  {
+    slug: "audio-player",
+    title: "Audio Player",
+    category: "Agents",
+    description:
+      "Audio provider with play and pause, previous and next, seek, speed menu, volume, playlist and error state. Takes a source or a list of tracks. Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
+  {
+    slug: "scrub-bar",
+    title: "Scrub Bar",
+    category: "Agents",
+    description:
+      "Seekable progress bar with time labels on a native range input, so pointer, touch and keyboard all work. Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
+  {
+    slug: "transcript-viewer",
+    title: "Transcript Viewer",
+    category: "Agents",
+    description:
+      "Time-aligned transcript that highlights the current word and seeks when a word is clicked, from plain word timings. Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
+  {
+    slug: "mic-selector",
+    title: "Mic Selector",
+    category: "Agents",
+    description:
+      "Microphone picker in a dropdown with a mute toggle and a live level preview; handles permission denied and no devices. Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
+  {
+    slug: "voice-button",
+    title: "Voice Button",
+    category: "Agents",
+    description:
+      "Toggle or push-to-talk record button with idle, recording, processing, success and error states, a shortcut hint and a compact live waveform. Adapted from ElevenLabs UI (MIT).",
+    isNew: true,
+  },
 ]
 
 export const ENTRY_BY_SLUG = Object.fromEntries(ENTRIES.map((e) => [e.slug, e]))

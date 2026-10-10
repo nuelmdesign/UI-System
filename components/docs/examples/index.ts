@@ -106,6 +106,14 @@ import StatusIndicatorExample from "./status-indicator"
 import SliderExample from "./slider"
 import DropzoneExample from "./dropzone"
 import OtpInputExample from "./otp-input"
+import WaveformExample from "./waveform"
+import LiveWaveformExample from "./live-waveform"
+import BarVisualizerExample from "./bar-visualizer"
+import AudioPlayerExample from "./audio-player"
+import ScrubBarExample from "./scrub-bar"
+import TranscriptViewerExample from "./transcript-viewer"
+import MicSelectorExample from "./mic-selector"
+import VoiceButtonExample from "./voice-button"
 
 /** Live example for each component page, keyed by slug. */
 export const EXAMPLES: Record<string, ComponentType> = {
@@ -215,4 +223,12 @@ export const EXAMPLES: Record<string, ComponentType> = {
   slider: SliderExample,
   dropzone: DropzoneExample,
   "otp-input": OtpInputExample,
+  waveform: WaveformExample,
+  "live-waveform": LiveWaveformExample,
+  "bar-visualizer": BarVisualizerExample,
+  "audio-player": AudioPlayerExample,
+  "scrub-bar": ScrubBarExample,
+  "transcript-viewer": TranscriptViewerExample,
+  "mic-selector": MicSelectorExample,
+  "voice-button": VoiceButtonExample,
 }

@@ -7225,6 +7225,1374 @@ Live docs: https://ui-system-virid.vercel.app/docs/code-panel. Rules for buildin
 
 ---
 
+# Waveform
+
+Static, clickable and scrubbable waveform bars drawn from normalized data, plus a scrolling variant and an accessible scrubber. Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/waveform
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Waveform, ScrollingWaveform, AudioScrubber } from "@/components/agents/waveform"
+```
+
+## Dependencies
+
+- npm: `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+/**
+ * A theme token name (`"foreground"`, `"primary"`, `"brand"`, `"muted-foreground"`...)
+ * or any CSS color. Token names are read from the CSS variables at draw time,
+ * so the canvas follows light, dark and `.dark` sections.
+ */
+type WaveformColor = string
+
+type WaveformBaseProps = Omit<React.ComponentProps<"div">, "children"> & {
+  /** Width of one bar in px. */
+  barWidth?: number
+  /** Minimum bar height in px. */
+  barHeight?: number
+  /** Gap between bars in px. */
+  barGap?: number
+  /** Bar corner radius in px. */
+  barRadius?: number
+  /** Theme token name or CSS color for the bars. */
+  barColor?: WaveformColor
+  /** Fade the left and right edges out. */
+  fadeEdges?: boolean
+  /** Width of the edge fade in px. */
+  fadeWidth?: number
+  /** Container height. Numbers are px. */
+  height?: number | string
+}
+
+type WaveformProps = WaveformBaseProps & {
+  /** Normalized bar values, 0 to 1. Resampled to fit the available width. */
+  data?: number[]
+  /** Playback position from 0 to 1. Bars before it use `playedColor`. */
+  progress?: number
+  /** Theme token name or CSS color for bars already played. */
+  playedColor?: WaveformColor
+  /** Fires when a bar is clicked. Pointer only; use `AudioScrubber` for keyboard seeking. */
+  onBarClick?: (index: number, value: number) => void
+  /** Accessible description of the audio. */
+  "aria-label"?: string
+}
+
+type ScrollingWaveformProps = WaveformBaseProps & {
+  /** Scroll speed in px per second. */
+  speed?: number
+  /** Normalized values (0 to 1) fed in from the right, looping. Omit for an ambient pattern. */
+  data?: number[]
+  /** Pause scrolling while keeping the current frame. */
+  active?: boolean
+  /** Accessible description of the audio. */
+  "aria-label"?: string
+}
+
+type AudioScrubberProps = Omit<WaveformProps, "progress" | "onBarClick"> & {
+  /** Current playback time, in the same unit as `duration`. */
+  currentTime?: number
+  /** Total length. */
+  duration?: number
+  /** Called while scrubbing and on keyboard seeks. */
+  onSeek?: (time: number) => void
+  /** Amount one arrow key press seeks. Defaults to 5% of `duration`. */
+  keyboardStep?: number
+  /** Formats the time for assistive tech. */
+  formatTime?: (time: number) => string
+  /** Show a thin playhead line. */
+  showPlayhead?: boolean
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { Pause, Play } from "lucide-react"
+
+import {
+  AudioScrubber,
+  ScrollingWaveform,
+  Waveform,
+} from "@/components/agents/waveform"
+import { Button } from "@/components/ui/button"
+
+const DURATION = 42
+
+/** A deterministic, speech-like envelope so server and client render the same bars. */
+const SAMPLES = Array.from({ length: 160 }, (_, i) => {
+  const phrase = 0.5 + 0.5 * Math.sin(i * 0.11)
+  const syllable = 0.5 + 0.5 * Math.sin(i * 0.9 + Math.sin(i * 0.31) * 2)
+  return Math.max(0.06, Math.min(1, 0.12 + phrase * 0.45 + syllable * 0.35))
+})
+
+const formatTime = (time: number) => {
+  const total = Math.floor(time)
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`
+}
+
+export default function WaveformDemo() {
+  const [time, setTime] = React.useState(12)
+  const [playing, setPlaying] = React.useState(false)
+  const [picked, setPicked] = React.useState<string | null>(null)
+
+  // A simulated playback clock keeps the demo silent and offline.
+  React.useEffect(() => {
+    if (!playing) return
+    const timer = window.setInterval(() => {
+      setTime((current) => {
+        if (current >= DURATION) {
+          setPlaying(false)
+          return DURATION
+        }
+        return Math.min(DURATION, current + 0.25)
+      })
+    }, 250)
+    return () => window.clearInterval(timer)
+  }, [playing])
+
+  return (
+    <div className="grid w-full max-w-2xl gap-10">
+      <section className="grid gap-3">
+        <p className="eyebrow text-muted-foreground">Scrubbable</p>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label={playing ? "Pause" : "Play"}
+            onClick={() => {
+              if (time >= DURATION) setTime(0)
+              setPlaying((value) => !value)
+            }}
+          >
+            {playing ? <Pause /> : <Play />}
+          </Button>
+          <AudioScrubber
+            data={SAMPLES}
+            currentTime={time}
+            duration={DURATION}
+            onSeek={setTime}
+            aria-label="Seek recording"
+            height={56}
+          />
+          <span className="w-20 shrink-0 text-right font-mono text-xs text-muted-foreground tabular-nums">
+            {formatTime(time)} / {formatTime(DURATION)}
+          </span>
+        </div>
+      </section>
+
+      <section className="grid gap-3">
+        <p className="eyebrow text-muted-foreground">Static, clickable bars</p>
+        <Waveform
+          data={SAMPLES}
+          height={96}
+          barColor="brand"
+          fadeEdges
+          aria-label="Recording overview"
+          onBarClick={(index, value) =>
+            setPicked(`Bar ${index + 1} at ${Math.round(value * 100)}%`)
+          }
+        />
+        <p className="min-h-5 text-sm text-muted-foreground" aria-live="polite">
+          {picked ?? "Click a bar to read its level."}
+        </p>
+      </section>
+
+      <section className="grid gap-3">
+        <p className="eyebrow text-muted-foreground">Scrolling</p>
+        <ScrollingWaveform
+          height={72}
+          barWidth={3}
+          barGap={2}
+          speed={30}
+          barColor="muted-foreground"
+          aria-label="Incoming audio level"
+        />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/waveform. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Live Waveform
+
+Microphone-driven canvas waveform in static or scrolling mode with a processing animation; handles denied or missing microphones. Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/live-waveform
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { LiveWaveform } from "@/components/agents/live-waveform"
+```
+
+## Dependencies
+
+- npm: `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+type LiveWaveformMode = "static" | "scrolling"
+
+type LiveWaveformProps = Omit<
+  React.ComponentProps<"div">,
+  "children" | "onError"
+> & {
+  /** Capture the microphone and draw it. When false the tracks are stopped and the bars settle to idle. */
+  active?: boolean
+  /** Show a synthetic "thinking" wave while the microphone is off. */
+  processing?: boolean
+  /** Specific input device from `enumerateDevices()`. */
+  deviceId?: string
+  /** `static` mirrors the spectrum around the centre; `scrolling` scrolls recent loudness right to left. */
+  mode?: LiveWaveformMode
+  /** Width of one bar in px. */
+  barWidth?: number
+  /** Gap between bars in px. */
+  barGap?: number
+  /** Minimum bar height in px. */
+  barHeight?: number
+  /** Bar corner radius in px. */
+  barRadius?: number
+  /**
+   * Theme token name (`"foreground"`, `"primary"`, `"brand"`, `"muted-foreground"`...)
+   * or any CSS color. Tokens are read from the CSS variables on every frame.
+   */
+  barColor?: string
+  /** Fade the left and right edges out. */
+  fadeEdges?: boolean
+  /** Width of the edge fade in px. */
+  fadeWidth?: number
+  /** Container height. Numbers are px. */
+  height?: number | string
+  /** Multiplier applied to the measured level. */
+  sensitivity?: number
+  /** AnalyserNode smoothing, 0 to 1. */
+  smoothingTimeConstant?: number
+  /** AnalyserNode FFT size (power of two). */
+  fftSize?: number
+  /** Number of samples kept in `scrolling` mode. */
+  historySize?: number
+  /** Minimum milliseconds between audio samples. */
+  updateRate?: number
+  /** Called when the microphone is unsupported, blocked or fails. */
+  onError?: (error: Error) => void
+  /** Called with the live stream once the microphone is open. */
+  onStreamReady?: (stream: MediaStream) => void
+  /** Called after the stream has been stopped. */
+  onStreamEnd?: () => void
+  /** Accessible name. Defaults to a description of the current state. */
+  "aria-label"?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { Loader2, Mic, MicOff } from "lucide-react"
+
+import {
+  LiveWaveform,
+  type LiveWaveformMode,
+} from "@/components/agents/live-waveform"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+export default function LiveWaveformDemo() {
+  const [active, setActive] = React.useState(false)
+  const [processing, setProcessing] = React.useState(false)
+  const [mode, setMode] = React.useState<LiveWaveformMode>("static")
+  const [problem, setProblem] = React.useState<string | null>(null)
+
+  function toggleMic() {
+    setProblem(null)
+    setProcessing(false)
+    setActive((value) => !value)
+  }
+
+  return (
+    <div className="grid w-full max-w-xl gap-5">
+      <div className="rounded-lg border bg-card p-4">
+        <LiveWaveform
+          active={active}
+          processing={processing}
+          mode={mode}
+          height={80}
+          barWidth={3}
+          barGap={2}
+          barColor="foreground"
+          onError={(error) => {
+            setActive(false)
+            setProblem(
+              error.name === "NotAllowedError"
+                ? "Microphone access was blocked. Allow it in your browser settings to try again."
+                : "No microphone is available in this browser."
+            )
+          }}
+        />
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <Button
+          variant={active ? "default" : "outline"}
+          size="sm"
+          onClick={toggleMic}
+        >
+          {active ? <MicOff /> : <Mic />}
+          {active ? "Stop microphone" : "Start microphone"}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={active}
+          aria-pressed={processing}
+          onClick={() => setProcessing((value) => !value)}
+        >
+          <Loader2 />
+          Processing
+        </Button>
+        <Tabs
+          value={mode}
+          onValueChange={(v) => setMode(v as LiveWaveformMode)}
+        >
+          <TabsList>
+            <TabsTrigger value="static">Static</TabsTrigger>
+            <TabsTrigger value="scrolling">Scrolling</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <p className="min-h-5 text-sm text-muted-foreground" aria-live="polite">
+        {problem ??
+          (active
+            ? "Listening. Nothing is recorded or uploaded."
+            : "Start the microphone to see your voice.")}
+      </p>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/live-waveform. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Bar Visualizer
+
+Volume or frequency bars that light up by agent state (connecting, listening, thinking, speaking). Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/bar-visualizer
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { BarVisualizer } from "@/components/agents/bar-visualizer"
+```
+
+## Dependencies
+
+- npm: `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+/** What the voice agent is doing. Drives the highlight pattern. */
+type BarVisualizerState =
+  "connecting" | "initializing" | "listening" | "speaking" | "thinking"
+
+type MultibandVolumeOptions = {
+  /** Number of bands to produce. */
+  bands?: number
+  /** First FFT bin of the analysed slice. */
+  loPass?: number
+  /** Last FFT bin (exclusive) of the analysed slice. */
+  hiPass?: number
+  /** Minimum milliseconds between updates. */
+  updateInterval?: number
+  /** AnalyserNode FFT size (power of two). */
+  fftSize?: number
+  /** AnalyserNode smoothing, 0 to 1. */
+  smoothingTimeConstant?: number
+}
+
+type BarVisualizerProps = Omit<React.ComponentProps<"div">, "children"> & {
+  /** Agent state. Controls which bars light up. */
+  state?: BarVisualizerState
+  /** Number of bars. Ignored when `levels` is provided. */
+  barCount?: number
+  /** Per-bar levels, 0 to 1. Takes priority over `mediaStream` and `volume`. */
+  levels?: number[]
+  /** A single overall level, 0 to 1, shaped into a centred bell across the bars. */
+  volume?: number
+  /** Optional caller-owned stream to analyse. It is never stopped here. */
+  mediaStream?: MediaStream | null
+  /** Smallest bar height, as a percentage of the container. */
+  minHeight?: number
+  /** Largest bar height, as a percentage of the container. */
+  maxHeight?: number
+  /** Align bars to the vertical centre instead of the bottom. */
+  centerAlign?: boolean
+  /** Accessible name. Defaults to the current state. */
+  "aria-label"?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { Mic, MicOff } from "lucide-react"
+
+import {
+  BarVisualizer,
+  type BarVisualizerState,
+} from "@/components/agents/bar-visualizer"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+const STATES: BarVisualizerState[] = [
+  "connecting",
+  "listening",
+  "thinking",
+  "speaking",
+]
+const BARS = 15
+
+export default function BarVisualizerDemo() {
+  const [state, setState] = React.useState<BarVisualizerState>("speaking")
+  const [stream, setStream] = React.useState<MediaStream | null>(null)
+  const [problem, setProblem] = React.useState<string | null>(null)
+  const [levels, setLevels] = React.useState<number[]>(() =>
+    Array.from({ length: BARS }, () => 0.2)
+  )
+  const streamRef = React.useRef<MediaStream | null>(null)
+
+  // Simulated levels while the microphone is off.
+  React.useEffect(() => {
+    if (stream) return
+    const moving = state === "speaking" || state === "listening"
+    const timer = window.setInterval(() => {
+      const t = performance.now() / 1000
+      setLevels(
+        Array.from({ length: BARS }, (_, i) =>
+          moving
+            ? Math.max(
+                0.1,
+                0.45 +
+                  Math.sin(t * 3 + i * 0.6) * 0.3 +
+                  Math.sin(t * 7.3 + i) * 0.12
+              )
+            : 0.2
+        )
+      )
+    }, 80)
+    return () => window.clearInterval(timer)
+  }, [state, stream])
+
+  const stopMic = React.useCallback(() => {
+    streamRef.current?.getTracks().forEach((track) => track.stop())
+    streamRef.current = null
+    setStream(null)
+  }, [])
+
+  React.useEffect(() => stopMic, [stopMic])
+
+  async function toggleMic() {
+    if (stream) return stopMic()
+    setProblem(null)
+    try {
+      const next = await navigator.mediaDevices.getUserMedia({ audio: true })
+      streamRef.current = next
+      setStream(next)
+      setState("listening")
+    } catch {
+      setProblem("Microphone unavailable. Showing simulated levels instead.")
+    }
+  }
+
+  return (
+    <div className="grid w-full max-w-xl gap-5">
+      <BarVisualizer
+        state={state}
+        barCount={BARS}
+        levels={stream ? undefined : levels}
+        mediaStream={stream}
+      />
+      <div className="flex flex-wrap items-center gap-3">
+        <Tabs
+          value={state}
+          onValueChange={(v) => setState(v as BarVisualizerState)}
+        >
+          <TabsList className="h-auto max-w-full flex-wrap justify-start">
+            {STATES.map((name) => (
+              <TabsTrigger key={name} value={name} className="capitalize">
+                {name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        <Button
+          variant={stream ? "default" : "outline"}
+          size="sm"
+          onClick={toggleMic}
+        >
+          {stream ? <MicOff /> : <Mic />}
+          {stream ? "Stop mic" : "Use mic"}
+        </Button>
+      </div>
+      <p className="min-h-5 text-sm text-muted-foreground" aria-live="polite">
+        {problem ?? (stream ? "Reading your microphone." : "Simulated levels.")}
+      </p>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/bar-visualizer. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Audio Player
+
+Audio provider with play and pause, previous and next, seek, speed menu, volume, playlist and error state. Takes a source or a list of tracks. Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/audio-player
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { AudioPlayer, AudioPlayerProvider, AudioPlayerButton, AudioPlayerSkip, AudioPlayerProgress, AudioPlayerTime, AudioPlayerDuration, AudioPlayerSpeed, AudioPlayerVolume, AudioPlayerPlaylist } from "@/components/agents/audio-player"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/dropdown-menu`, `@opendraft/slider`
+
+## Props and types
+
+```ts
+type AudioPlayerTrack<TData = unknown> = {
+  id: string | number
+  src: string
+  title?: string
+  subtitle?: string
+  /** Anything the host app wants to carry along with the track. */
+  data?: TData
+}
+
+type AudioPlayerApi<TData = unknown> = {
+  ref: React.RefObject<HTMLAudioElement | null>
+  tracks: AudioPlayerTrack<TData>[]
+  activeTrack: AudioPlayerTrack<TData> | null
+  /** Seconds, or undefined until metadata has loaded. */
+  duration: number | undefined
+  isPlaying: boolean
+  isBuffering: boolean
+  hasError: boolean
+  playbackRate: number
+  /** 0 to 1. */
+  volume: number
+  muted: boolean
+  hasNext: boolean
+  hasPrevious: boolean
+  isTrackActive: (id: string | number) => boolean
+  /** Resume, or switch to the given track (by object or id) and play it. */
+  play: (track?: AudioPlayerTrack<TData> | string | number) => void
+  pause: () => void
+  toggle: () => void
+  seek: (time: number) => void
+  next: () => void
+  previous: () => void
+  setPlaybackRate: (rate: number) => void
+  setVolume: (volume: number) => void
+  setMuted: (muted: boolean) => void
+}
+
+type AudioPlayerProviderProps<TData = unknown> = {
+  /** A single audio source. Ignored when `tracks` is given. */
+  src?: string
+  /** A playlist. The first track is active until another is played. */
+  tracks?: AudioPlayerTrack<TData>[]
+  /** Play the next track when one ends. Defaults to true. */
+  autoAdvance?: boolean
+  children?: React.ReactNode
+}
+
+type AudioPlayerButtonProps<TData = unknown> = Omit<
+  React.ComponentProps<typeof Button>,
+  "children"
+> & {
+  /** Play this track instead of the active one. Shows its own play state. */
+  track?: AudioPlayerTrack<TData>
+}
+
+type AudioPlayerSpeedProps = Omit<
+  React.ComponentProps<typeof Button>,
+  "children"
+> & {
+  /** Selectable rates. */
+  speeds?: readonly number[]
+}
+
+type AudioPlayerProps<TData = unknown> = Omit<
+  React.ComponentProps<"div">,
+  "children"
+> &
+  Pick<AudioPlayerProviderProps<TData>, "src" | "tracks" | "autoAdvance"> & {
+    /** Heading for a single `src`. Tracks use their own `title`. */
+    title?: string
+    /** Selectable playback rates. */
+    speeds?: readonly number[]
+    /** Show the volume control. Defaults to true. */
+    showVolume?: boolean
+    /** List the tracks under the controls when there is more than one. Defaults to true. */
+    showPlaylist?: boolean
+  }
+
+function AudioPlayer(props: AudioPlayerProps<TData>)
+
+function AudioPlayerProvider(props: AudioPlayerProviderProps<TData>)
+
+function AudioPlayerButton(props: AudioPlayerButtonProps<TData>)
+
+function AudioPlayerSkip(props: Omit<React.ComponentProps<typeof Button>, "children"> & {
+  direction: "previous" | "next"
+})
+
+function AudioPlayerProgress(props: Omit<
+  React.ComponentProps<typeof Slider>,
+  "min" | "max" | "value" | "defaultValue" | "onValueChange" | "aria-label"
+>)
+
+function AudioPlayerTime(props: React.ComponentProps<"span">)
+
+function AudioPlayerDuration(props: React.ComponentProps<"span">)
+
+function AudioPlayerVolume(props: Omit<React.ComponentProps<"div">, "children">)
+
+function AudioPlayerPlaylist(props: Omit<React.ComponentProps<"ul">, "children">)
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  AudioPlayer,
+  type AudioPlayerTrack,
+} from "@/components/agents/audio-player"
+
+const RATE = 8000
+
+/** Builds a mono 16-bit PCM WAV from a sample function and returns a blob URL. */
+function makeWavUrl(seconds: number, sample: (t: number) => number) {
+  const count = Math.floor(seconds * RATE)
+  const view = new DataView(new ArrayBuffer(44 + count * 2))
+  const text = (offset: number, value: string) => {
+    for (let i = 0; i < value.length; i++) {
+      view.setUint8(offset + i, value.charCodeAt(i))
+    }
+  }
+  text(0, "RIFF")
+  view.setUint32(4, 36 + count * 2, true)
+  text(8, "WAVEfmt ")
+  view.setUint32(16, 16, true)
+  view.setUint16(20, 1, true)
+  view.setUint16(22, 1, true)
+  view.setUint32(24, RATE, true)
+  view.setUint32(28, RATE * 2, true)
+  view.setUint16(32, 2, true)
+  view.setUint16(34, 16, true)
+  text(36, "data")
+  view.setUint32(40, count * 2, true)
+  for (let i = 0; i < count; i++) {
+    const value = Math.max(-1, Math.min(1, sample(i / RATE)))
+    view.setInt16(44 + i * 2, value * 0x7fff, true)
+  }
+  return URL.createObjectURL(new Blob([view.buffer], { type: "audio/wav" }))
+}
+
+/** A repeating melody: one note per beat with a soft attack and decay. */
+function melody(notes: number[], beat: number) {
+  return (t: number) => {
+    const index = Math.floor(t / beat)
+    const local = t - index * beat
+    const envelope = Math.min(local / 0.02, 1) * Math.exp(-local * 4)
+    const hz = notes[index % notes.length]
+    return 0.25 * envelope * Math.sin(2 * Math.PI * hz * t)
+  }
+}
+
+const SOURCES = [
+  {
+    id: "arpeggio",
+    title: "Morning arpeggio",
+    seconds: 12,
+    beat: 0.4,
+    notes: [262, 330, 392, 523],
+  },
+  {
+    id: "pulse",
+    title: "Slow pulse",
+    seconds: 16,
+    beat: 0.8,
+    notes: [196, 196, 247, 220],
+  },
+  {
+    id: "scale",
+    title: "Rising scale",
+    seconds: 9,
+    beat: 0.3,
+    notes: [262, 294, 330, 349, 392, 440, 494, 523],
+  },
+]
+
+let cached: AudioPlayerTrack[] | undefined
+
+// Built once on the client, so the server render and hydration both see no tracks first.
+function getTracks() {
+  cached ??= SOURCES.map(({ id, title, seconds, beat, notes }) => ({
+    id,
+    title,
+    subtitle: `${seconds}s`,
+    src: makeWavUrl(seconds, melody(notes, beat)),
+  }))
+  return cached
+}
+
+const subscribe = () => () => {}
+const getServerTracks = () => undefined
+
+export default function AudioPlayerDemo() {
+  const tracks = React.useSyncExternalStore(
+    subscribe,
+    getTracks,
+    getServerTracks
+  )
+
+  return (
+    <div className="w-full max-w-md">
+      <AudioPlayer tracks={tracks ?? []} />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/audio-player. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Scrub Bar
+
+Seekable progress bar with time labels on a native range input, so pointer, touch and keyboard all work. Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/scrub-bar
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { ScrubBar, ScrubBarContainer, ScrubBarTrack, ScrubBarProgress, ScrubBarThumb, ScrubBarTimeLabel } from "@/components/agents/scrub-bar"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type ScrubBarContainerProps = React.ComponentProps<"div"> & {
+  /** Total length in seconds. The bar is disabled while this is 0. */
+  duration: number
+  /** Current position in seconds. */
+  value: number
+  /** Called with the new position (seconds) while the user drags or presses a key. */
+  onScrub?: (time: number) => void
+  /** Called when a pointer drag begins. */
+  onScrubStart?: () => void
+  /** Called when a pointer drag ends. */
+  onScrubEnd?: () => void
+}
+
+type ScrubBarTrackProps = Omit<React.ComponentProps<"div">, "onChange"> & {
+  /** Accessible name of the seek control. */
+  label?: string
+  /** Keyboard and drag granularity in seconds. */
+  step?: number
+  /** Formats the spoken value of the slider. Defaults to `m:ss`. */
+  formatValueText?: (time: number) => string
+}
+
+type ScrubBarTimeLabelProps = React.ComponentProps<"span"> & {
+  /** Seconds to display. */
+  time: number
+  format?: (time: number) => string
+}
+
+type ScrubBarProps = Omit<ScrubBarContainerProps, "children"> & {
+  /** Show elapsed and remaining time under the track. Defaults to true. */
+  showTimeLabels?: boolean
+  /** Show remaining time (`-0:12`) instead of total duration on the right. */
+  showRemaining?: boolean
+  /** Accessible name of the seek control. */
+  label?: string
+  step?: number
+}
+
+function ScrubBarProgress(props: React.ComponentProps<"div">)
+
+function ScrubBarThumb(props: React.ComponentProps<"div">)
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { Pause, Play } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { ScrubBar } from "@/components/agents/scrub-bar"
+
+const DURATION = 184
+
+export default function ScrubBarDemo() {
+  const [time, setTime] = React.useState(42)
+  const [playing, setPlaying] = React.useState(false)
+  const [scrubbing, setScrubbing] = React.useState(false)
+
+  const running = playing && time < DURATION
+
+  // Simulated playback: advance a tenth of a second at a time.
+  React.useEffect(() => {
+    if (!running || scrubbing) return
+    const id = window.setInterval(() => {
+      setTime((t) => Math.min(t + 0.1, DURATION))
+    }, 100)
+    return () => window.clearInterval(id)
+  }, [running, scrubbing])
+
+  return (
+    <div className="flex w-full max-w-md items-center gap-3 rounded-lg border bg-card p-4">
+      <Button
+        size="icon"
+        aria-label={running ? "Pause" : "Play"}
+        onClick={() => {
+          if (time >= DURATION) setTime(0)
+          setPlaying(!running)
+        }}
+      >
+        {running ? <Pause /> : <Play />}
+      </Button>
+      <ScrubBar
+        duration={DURATION}
+        value={time}
+        showRemaining
+        label="Seek recording"
+        onScrub={setTime}
+        onScrubStart={() => setScrubbing(true)}
+        onScrubEnd={() => setScrubbing(false)}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/scrub-bar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Transcript Viewer
+
+Time-aligned transcript that highlights the current word and seeks when a word is clicked, from plain word timings. Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/transcript-viewer
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { TranscriptViewer, TranscriptViewerContainer, TranscriptViewerWords, TranscriptViewerWord, TranscriptViewerPlayPauseButton, TranscriptViewerScrubBar } from "@/components/agents/transcript-viewer"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/scrub-bar`
+
+## Props and types
+
+```ts
+/** One spoken word with its timing in seconds. Words must be sorted by `start`. */
+type TranscriptWord = {
+  text: string
+  start: number
+  end: number
+}
+
+type TranscriptWordStatus = "spoken" | "current" | "unspoken"
+
+type UseTranscriptViewerProps = {
+  words: TranscriptWord[]
+  onPlay?: () => void
+  onPause?: () => void
+  onTimeUpdate?: (time: number) => void
+  onEnded?: () => void
+  onDurationChange?: (duration: number) => void
+}
+
+type UseTranscriptViewerResult = {
+  words: TranscriptWord[]
+  /**
+   * Index of the word being spoken. Between words it stays on the last word
+   * that started. -1 before the first word, `words.length` once playback has
+   * passed the end of the last word.
+   */
+  currentIndex: number
+  currentWord: TranscriptWord | null
+  currentTime: number
+  /** Seconds. Taken from the audio element, or from the last word until metadata loads. */
+  duration: number
+  isPlaying: boolean
+  isScrubbing: boolean
+  play: () => void
+  pause: () => void
+  seekToTime: (time: number) => void
+  seekToWord: (word: number | TranscriptWord) => void
+  startScrubbing: () => void
+  endScrubbing: () => void
+  /** Spread onto the `<audio>` element. Carries the ref and all event handlers. */
+  audioProps: React.ComponentProps<"audio">
+}
+
+type TranscriptViewerContainerProps = Omit<
+  React.ComponentProps<"div">,
+  "children"
+> &
+  Omit<UseTranscriptViewerProps, "words"> & {
+    /** URL of the audio the words are aligned to. Any playable URL, including blob URLs. */
+    src: string
+    /** Word timings in seconds, sorted by `start`. */
+    words: TranscriptWord[]
+    children?: React.ReactNode
+  }
+
+type TranscriptViewerWordProps = Omit<
+  React.ComponentProps<"button">,
+  "children"
+> & {
+  word: TranscriptWord
+  status: TranscriptWordStatus
+  children?: React.ReactNode
+}
+
+type TranscriptViewerWordsProps = Omit<
+  React.ComponentProps<"div">,
+  "children"
+> & {
+  /** Replace how a word renders. Receives its status. */
+  renderWord?: (props: {
+    word: TranscriptWord
+    status: TranscriptWordStatus
+  }) => React.ReactNode
+  /** Class names applied to every word button. */
+  wordClassName?: string
+}
+
+type PlayPauseChildren = (state: { isPlaying: boolean }) => React.ReactNode
+
+type TranscriptViewerPlayPauseButtonProps = Omit<
+  React.ComponentProps<typeof Button>,
+  "children"
+> & {
+  /** Custom content, or a function of the playing state. Defaults to a play/pause icon. */
+  children?: React.ReactNode | PlayPauseChildren
+}
+
+type TranscriptViewerScrubBarProps = Omit<
+  React.ComponentProps<typeof ScrubBarContainer>,
+  "duration" | "value" | "onScrub" | "onScrubStart" | "onScrubEnd" | "children"
+> & {
+  /** Show elapsed and remaining time. Defaults to true. */
+  showTimeLabels?: boolean
+}
+
+type TranscriptViewerProps = Omit<TranscriptViewerContainerProps, "children">
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  TranscriptViewer,
+  type TranscriptWord,
+} from "@/components/agents/transcript-viewer"
+
+const RATE = 8000
+
+const SCRIPT =
+  "Welcome back to the weekly review. Three things shipped this week: the new onboarding flow, faster search, and a cleaner settings page. Next week we focus on reliability, so expect fewer features and more polish."
+
+/** Word timings: about 0.32s per word plus a pause after each sentence. */
+const WORDS: TranscriptWord[] = (() => {
+  let cursor = 0.3
+  return SCRIPT.split(" ").map((text) => {
+    const start = cursor
+    const end = start + 0.18 + Math.min(text.length, 9) * 0.02
+    cursor = end + (/[.:]$/.test(text) ? 0.5 : 0.1)
+    return { text, start, end }
+  })
+})()
+
+/** Builds a mono 16-bit PCM WAV with one soft tone per word and returns a blob URL. */
+function makeWavUrl(words: TranscriptWord[]) {
+  const seconds = words[words.length - 1].end + 0.4
+  const count = Math.floor(seconds * RATE)
+  const view = new DataView(new ArrayBuffer(44 + count * 2))
+  const text = (offset: number, value: string) => {
+    for (let i = 0; i < value.length; i++) {
+      view.setUint8(offset + i, value.charCodeAt(i))
+    }
+  }
+  text(0, "RIFF")
+  view.setUint32(4, 36 + count * 2, true)
+  text(8, "WAVEfmt ")
+  view.setUint32(16, 16, true)
+  view.setUint16(20, 1, true)
+  view.setUint16(22, 1, true)
+  view.setUint32(24, RATE, true)
+  view.setUint32(28, RATE * 2, true)
+  view.setUint16(32, 2, true)
+  view.setUint16(34, 16, true)
+  text(36, "data")
+  view.setUint32(40, count * 2, true)
+  let w = 0
+  for (let i = 0; i < count; i++) {
+    const t = i / RATE
+    while (w < words.length - 1 && t >= words[w].end) w++
+    const word = words[w]
+    let value = 0
+    if (t >= word.start && t < word.end) {
+      const local = t - word.start
+      const envelope =
+        Math.min(local / 0.015, 1) * Math.min((word.end - t) / 0.04, 1)
+      const hz = 180 + (w % 5) * 40
+      value = 0.18 * envelope * Math.sin(2 * Math.PI * hz * t)
+    }
+    view.setInt16(44 + i * 2, value * 0x7fff, true)
+  }
+  return URL.createObjectURL(new Blob([view.buffer], { type: "audio/wav" }))
+}
+
+let cached: string | undefined
+
+// Built once on the client; the server render and hydration both start without audio.
+function getSrc() {
+  cached ??= makeWavUrl(WORDS)
+  return cached
+}
+
+const subscribe = () => () => {}
+const getServerSrc = () => undefined
+
+export default function TranscriptViewerDemo() {
+  const src = React.useSyncExternalStore(subscribe, getSrc, getServerSrc)
+
+  return (
+    <div className="w-full max-w-xl">
+      <TranscriptViewer src={src ?? ""} words={WORDS} />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/transcript-viewer. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Mic Selector
+
+Microphone picker in a dropdown with a mute toggle and a live level preview; handles permission denied and no devices. Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/mic-selector
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { MicSelector } from "@/components/agents/mic-selector"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/dropdown-menu`, `@opendraft/live-waveform`
+
+## Props and types
+
+```ts
+type AudioDevice = {
+  deviceId: string
+  label: string
+  groupId: string
+}
+
+type AudioDevicesStatus = "loading" | "ready" | "denied" | "unsupported"
+
+type MicSelectorProps = Omit<
+  React.ComponentProps<typeof Button>,
+  "value" | "onChange" | "children"
+> & {
+  /** Selected device id (controlled). Defaults to the first device. */
+  value?: string
+  /** Called when the user picks a device. */
+  onValueChange?: (deviceId: string) => void
+  /** Muted state (controlled). */
+  muted?: boolean
+  /** Called when the user toggles mute. */
+  onMutedChange?: (muted: boolean) => void
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { MicSelector } from "@/components/agents/mic-selector"
+
+export default function MicSelectorDemo() {
+  const [deviceId, setDeviceId] = React.useState<string>()
+  const [muted, setMuted] = React.useState(false)
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <MicSelector
+        value={deviceId}
+        onValueChange={setDeviceId}
+        muted={muted}
+        onMutedChange={setMuted}
+      />
+      <p className="eyebrow text-muted-foreground">
+        {muted ? "Muted" : "Open the menu to preview your input level"}
+      </p>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/mic-selector. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Voice Button
+
+Toggle or push-to-talk record button with idle, recording, processing, success and error states, a shortcut hint and a compact live waveform. Adapted from ElevenLabs UI (MIT).
+
+Category: AI Agents
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/voice-button
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { VoiceButton } from "@/components/agents/voice-button"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/kbd`, `@opendraft/live-waveform`
+
+## Props and types
+
+```ts
+type VoiceButtonState =
+  "idle" | "recording" | "processing" | "success" | "error"
+
+type VoiceButtonProps = Omit<
+  React.ComponentProps<typeof Button>,
+  "children" | "onClick"
+> & {
+  /** Current state. Owned by the caller, who does the actual recording work. */
+  state?: VoiceButtonState
+  /** `toggle`: click to start and stop. `push-to-talk`: record while held. */
+  mode?: "toggle" | "push-to-talk"
+  /** Fires when the user asks to start recording. */
+  onRecordStart?: () => void
+  /** Fires when the user asks to stop recording. */
+  onRecordEnd?: () => void
+  /** Text label shown before the waveform. */
+  label?: React.ReactNode
+  /** Shortcut hint rendered with `Kbd`, e.g. "Space". */
+  shortcut?: string
+  /** `KeyboardEvent.code` that triggers the button globally, e.g. "Space". */
+  hotkey?: string
+  /** Icon for the `icon` size when idle. */
+  icon?: React.ReactNode
+  /** How long success and error feedback stays visible, in ms. */
+  feedbackDuration?: number
+  /** Extra classes for the waveform well. */
+  waveformClassName?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  VoiceButton,
+  type VoiceButtonState,
+} from "@/components/agents/voice-button"
+
+export default function VoiceButtonDemo() {
+  const [state, setState] = React.useState<VoiceButtonState>("idle")
+  const timers = React.useRef<number[]>([])
+
+  React.useEffect(() => {
+    const pending = timers.current
+    return () => pending.forEach((id) => window.clearTimeout(id))
+  }, [])
+
+  function stop() {
+    setState("processing")
+    timers.current.push(
+      window.setTimeout(() => setState("success"), 1200),
+      window.setTimeout(() => setState("idle"), 3000)
+    )
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <VoiceButton
+        state={state}
+        label="Dictate"
+        shortcut="Space"
+        hotkey="Space"
+        onRecordStart={() => setState("recording")}
+        onRecordEnd={stop}
+      />
+      <VoiceButton
+        state={state}
+        mode="push-to-talk"
+        label="Hold to talk"
+        onRecordStart={() => setState("recording")}
+        onRecordEnd={stop}
+      />
+      <VoiceButton
+        state={state}
+        size="icon"
+        aria-label="Record"
+        onRecordStart={() => setState("recording")}
+        onRecordEnd={stop}
+      />
+      <p className="eyebrow text-muted-foreground">State: {state}</p>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/voice-button. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
 # Filter Table
 
 Task table filtered by status chips; rows collapse in place and status pills are tinted by meaning. Data shape: Rows are task rows (task, date, status todo, progress or done, owner), not a general data table. For other data use `table`. Shows sample content (an ice cream shop) until you pass your own data through its props.
