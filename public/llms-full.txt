@@ -2820,6 +2820,418 @@ Live docs: https://ui-system-virid.vercel.app/docs/stage-board. Rules for buildi
 
 ---
 
+# Scheduler
+
+Resource scheduler for rosters, dispatch and appointments: day and week views, drag and keyboard moves, conflicts, agenda on narrow widths.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/scheduler
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Scheduler } from "@/components/blocks/scheduler"
+```
+
+## Dependencies
+
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/badge`, `@opendraft/button`
+
+## Props and types
+
+```ts
+export type SchedulerDate = string | Date
+
+export type SchedulerView = "day" | "week"
+
+export type SchedulerTone =
+  "default" | "brand" | "success" | "warning" | "destructive"
+
+/** A row: a crew member, room, vehicle, engineer, machine, on-call slot... */
+export type SchedulerResource = {
+  id: string
+  label: string
+  /** Second line under the label (role, capacity, plate number...). */
+  meta?: string
+}
+
+export type SchedulerEvent = {
+  id: string
+  resourceId: string
+  start: SchedulerDate
+  end: SchedulerDate
+  title: string
+  /** Shown as text on the bar and in the agenda, never colour alone. */
+  status?: string
+  tone?: SchedulerTone
+}
+
+export type SchedulerMove = {
+  resourceId: string
+  start: Date
+  end: Date
+}
+
+/**
+ * Fixed copy. Every string can be replaced through the `labels` prop.
+ * Placeholders in braces are filled in: {count} {title} {resource} {start} {end}.
+ */
+export type SchedulerLabels = {
+  schedule: string
+  resource: string
+  previous: string
+  next: string
+  today: string
+  view: string
+  day: string
+  week: string
+  now: string
+  conflict: string
+  /** Uses {count}. */
+  conflicts: string
+  noResources: string
+  noEvents: string
+  /** Uses {resource}. */
+  addEvent: string
+  /** Read out for draggable events. */
+  moveHint: string
+  /** Uses {title} {resource} {start} {end}. */
+  pickedUp: string
+  /** Uses {title} {resource} {start} {end}. */
+  moving: string
+  /** Uses {title} {resource} {start} {end}. */
+  dropped: string
+  cancelled: string
+}
+
+export type SchedulerProps = {
+  resources?: SchedulerResource[]
+  events?: SchedulerEvent[]
+  view?: SchedulerView
+  defaultView?: SchedulerView
+  onViewChange?: (view: SchedulerView) => void
+  /** Any instant inside the visible day or week. */
+  date?: SchedulerDate
+  defaultDate?: SchedulerDate
+  onDateChange?: (date: Date) => void
+  /** IANA zone used for day boundaries and every formatted time. Default "UTC". */
+  timeZone?: string
+  /** BCP 47 locale for formatted dates and times. */
+  locale?: string
+  /** First visible hour of each day (0-23). Default 8. */
+  startHour?: number
+  /** Last visible hour of each day, exclusive (1-24). Default 18. */
+  endHour?: number
+  /** 0 = Sunday, 1 = Monday. Default 1. */
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  /** Move and slot snapping in minutes. Default 15. */
+  snapMinutes?: number
+  /** Current time for the now-line and the Today button. Passed in, never read from the clock. */
+  now?: SchedulerDate
+  onEventClick?: (event: SchedulerEvent) => void
+  onSlotClick?: (resourceId: string, start: Date) => void
+  /** Enables drag and keyboard moves. Receives the new resource and times. */
+  onEventMove?: (id: string, move: SchedulerMove) => void
+  labels?: Partial<SchedulerLabels>
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  Scheduler,
+  type SchedulerEvent,
+  type SchedulerMove,
+  type SchedulerResource,
+  type SchedulerView,
+} from "@/components/blocks/scheduler"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+type Domain = "roster" | "clinic"
+
+const CREW: SchedulerResource[] = [
+  { id: "c1", label: "Ana Torres", meta: "Crew lead" },
+  { id: "c2", label: "Ben Okafor", meta: "Electrician" },
+  { id: "c3", label: "Chen Wei", meta: "Electrician" },
+  { id: "c4", label: "Dana Cole", meta: "Apprentice" },
+  { id: "c5", label: "Eli Brandt", meta: "Driver" },
+]
+
+const SHIFTS: SchedulerEvent[] = [
+  {
+    id: "s1",
+    resourceId: "c1",
+    start: "2026-10-12T06:00:00Z",
+    end: "2026-10-12T14:00:00Z",
+    title: "Site A",
+    status: "Confirmed",
+    tone: "brand",
+  },
+  {
+    id: "s2",
+    resourceId: "c1",
+    start: "2026-10-13T06:00:00Z",
+    end: "2026-10-13T14:00:00Z",
+    title: "Site A",
+    status: "Confirmed",
+    tone: "brand",
+  },
+  {
+    id: "s3",
+    resourceId: "c1",
+    start: "2026-10-14T10:00:00Z",
+    end: "2026-10-14T18:00:00Z",
+    title: "Site B",
+    status: "Pending",
+    tone: "warning",
+  },
+  {
+    id: "s4",
+    resourceId: "c2",
+    start: "2026-10-12T14:00:00Z",
+    end: "2026-10-12T22:00:00Z",
+    title: "Late shift",
+    status: "Confirmed",
+    tone: "brand",
+  },
+  {
+    id: "s5",
+    resourceId: "c2",
+    start: "2026-10-13T14:00:00Z",
+    end: "2026-10-13T22:00:00Z",
+    title: "Late shift",
+    status: "Confirmed",
+    tone: "brand",
+  },
+  {
+    id: "s6",
+    resourceId: "c2",
+    start: "2026-10-13T20:00:00Z",
+    end: "2026-10-14T00:00:00Z",
+    title: "Call-out",
+    status: "On call",
+    tone: "destructive",
+  },
+  {
+    id: "s7",
+    resourceId: "c3",
+    start: "2026-10-12T06:00:00Z",
+    end: "2026-10-12T14:00:00Z",
+    title: "Site A",
+    status: "Confirmed",
+    tone: "brand",
+  },
+  {
+    id: "s8",
+    resourceId: "c3",
+    start: "2026-10-15T06:00:00Z",
+    end: "2026-10-15T14:00:00Z",
+    title: "Site C",
+    status: "Confirmed",
+    tone: "success",
+  },
+  {
+    id: "s9",
+    resourceId: "c4",
+    start: "2026-10-13T06:00:00Z",
+    end: "2026-10-13T12:00:00Z",
+    title: "Training",
+    status: "Draft",
+  },
+  {
+    id: "s10",
+    resourceId: "c5",
+    start: "2026-10-14T06:00:00Z",
+    end: "2026-10-14T14:00:00Z",
+    title: "Deliveries",
+    status: "Confirmed",
+    tone: "success",
+  },
+  {
+    id: "s11",
+    resourceId: "c5",
+    start: "2026-10-16T06:00:00Z",
+    end: "2026-10-16T14:00:00Z",
+    title: "Deliveries",
+    status: "Pending",
+    tone: "warning",
+  },
+]
+
+const ROOMS: SchedulerResource[] = [
+  { id: "m1", label: "Room 1", meta: "Consultation" },
+  { id: "m2", label: "Room 2", meta: "Consultation" },
+  { id: "m3", label: "Room 3", meta: "Procedure" },
+  { id: "m4", label: "Dr. Rivera", meta: "Practitioner" },
+]
+
+// Times are New York wall-clock (UTC-4 in October).
+const APPOINTMENTS: SchedulerEvent[] = [
+  {
+    id: "a1",
+    resourceId: "m1",
+    start: "2026-10-13T09:00:00-04:00",
+    end: "2026-10-13T09:30:00-04:00",
+    title: "Check-up",
+    status: "Arrived",
+    tone: "success",
+  },
+  {
+    id: "a2",
+    resourceId: "m1",
+    start: "2026-10-13T10:00:00-04:00",
+    end: "2026-10-13T11:00:00-04:00",
+    title: "Follow-up",
+    status: "Booked",
+    tone: "brand",
+  },
+  {
+    id: "a3",
+    resourceId: "m2",
+    start: "2026-10-13T09:30:00-04:00",
+    end: "2026-10-13T10:30:00-04:00",
+    title: "New patient",
+    status: "Booked",
+    tone: "brand",
+  },
+  {
+    id: "a4",
+    resourceId: "m3",
+    start: "2026-10-13T13:00:00-04:00",
+    end: "2026-10-13T15:00:00-04:00",
+    title: "Minor procedure",
+    status: "Confirmed",
+    tone: "warning",
+  },
+  {
+    id: "a5",
+    resourceId: "m4",
+    start: "2026-10-13T09:00:00-04:00",
+    end: "2026-10-13T10:15:00-04:00",
+    title: "Rounds",
+    status: "Booked",
+  },
+  {
+    id: "a6",
+    resourceId: "m4",
+    start: "2026-10-13T10:00:00-04:00",
+    end: "2026-10-13T11:00:00-04:00",
+    title: "Consult",
+    status: "Booked",
+    tone: "brand",
+  },
+  {
+    id: "a7",
+    resourceId: "m2",
+    start: "2026-10-13T14:00:00-04:00",
+    end: "2026-10-13T14:45:00-04:00",
+    title: "Review",
+    status: "Booked",
+    tone: "brand",
+  },
+]
+
+export default function SchedulerDemo() {
+  const [domain, setDomain] = React.useState<Domain>("roster")
+  const [view, setView] = React.useState<SchedulerView>("week")
+  const [shifts, setShifts] = React.useState(SHIFTS)
+  const [appointments, setAppointments] = React.useState(APPOINTMENTS)
+  const [picked, setPicked] = React.useState("")
+
+  const apply =
+    (set: React.Dispatch<React.SetStateAction<SchedulerEvent[]>>) =>
+    (id: string, move: SchedulerMove) =>
+      set((list) => list.map((e) => (e.id === id ? { ...e, ...move } : e)))
+
+  return (
+    <div className="flex w-full min-w-0 flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <Tabs value={domain} onValueChange={(v) => setDomain(v as Domain)}>
+          <TabsList>
+            <TabsTrigger value="roster">Crew roster</TabsTrigger>
+            <TabsTrigger value="clinic">Clinic appointments</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <p
+          className="font-mono text-xs text-muted-foreground"
+          aria-live="polite"
+        >
+          {picked}
+        </p>
+      </div>
+      <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
+        {domain === "roster" ? (
+          <Scheduler
+            key="roster"
+            resources={CREW}
+            events={shifts}
+            view={view}
+            onViewChange={setView}
+            defaultDate="2026-10-13T12:00:00Z"
+            now="2026-10-13T10:20:00Z"
+            timeZone="UTC"
+            startHour={6}
+            endHour={24}
+            onEventMove={apply(setShifts)}
+            onEventClick={(e) => setPicked(`${e.title} (${e.status})`)}
+            onSlotClick={(resourceId, start) =>
+              setPicked(`New shift: ${resourceId} at ${start.toISOString()}`)
+            }
+            labels={{
+              resource: "Crew",
+              conflict: "Double-booked",
+              noEvents: "No shifts",
+            }}
+          />
+        ) : (
+          <Scheduler
+            key="clinic"
+            resources={ROOMS}
+            events={appointments}
+            defaultView="day"
+            defaultDate="2026-10-13T12:00:00-04:00"
+            now="2026-10-13T10:20:00-04:00"
+            timeZone="America/New_York"
+            startHour={8}
+            endHour={17}
+            snapMinutes={15}
+            onEventMove={apply(setAppointments)}
+            onEventClick={(e) => setPicked(`${e.title} (${e.status})`)}
+            onSlotClick={(resourceId, start) =>
+              setPicked(
+                `New appointment: ${resourceId} at ${start.toISOString()}`
+              )
+            }
+            labels={{
+              resource: "Room / practitioner",
+              conflict: "Overlap",
+              noEvents: "No appointments",
+            }}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/scheduler. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
 # CRM Pipeline
 
 Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline. Data shape: A sales board: company, USD value and 'deal' wording are fixed and there is no `labels` prop. Not a general stage board.
@@ -15007,6 +15419,1719 @@ export default function SeatMapDemo() {
 ```
 
 Live docs: https://ui-system-virid.vercel.app/docs/seat-map. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Product Card
+
+Product card and responsive grid with price, compare-at price, text badges, rating slot and an out-of-stock state.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/product-card
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { ProductCard, ProductGrid } from "@/components/ui/product-card"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/badge`, `@opendraft/button`, `@opendraft/empty-state`
+
+## Props and types
+
+```ts
+export type ProductCardLabels = {
+  /** Badge shown when `isNew` is set. */
+  new: string
+  /** Badge shown when `compareAtPrice` is higher than `price`. */
+  sale: string
+  soldOut: string
+  /** Button text; the product title is appended to the accessible name. */
+  add: string
+  /** Screen-reader text before the original price. */
+  was: string
+  /** Screen-reader text before the current price. */
+  now: string
+  /** Shown in the image area when there is no image. */
+  noImage: string
+}
+
+export type ProductBadge = {
+  label: string
+  variant?: "default" | "secondary" | "outline" | "brand" | "success"
+}
+
+export type ProductCardProps = Omit<
+  React.ComponentProps<"article">,
+  "title" | "onSelect"
+> & {
+  title: string
+  subtitle?: React.ReactNode
+  /** Plain `<img>`; works in any React app. Ignored when `renderImage` is set. */
+  image?: { src: string; alt: string; srcSet?: string; sizes?: string }
+  /** Replaces the `<img>`, e.g. to render your framework's image component. */
+  renderImage?: (props: { className: string }) => React.ReactNode
+  price: number
+  compareAtPrice?: number
+  /** ISO 4217 code used with Intl when `formatValue` is not given. */
+  currency?: string
+  locale?: string
+  /** Full control of price text. Overrides `currency` and `locale`. */
+  formatValue?: (value: number) => string
+  isNew?: boolean
+  /** Extra badges (e.g. "Low stock", "Refurbished"). Text, never color alone. */
+  badges?: ProductBadge[]
+  /** Slot under the subtitle: stars, review count, any rating UI. */
+  rating?: React.ReactNode
+  /** Extra content under the price (swatches, stock note, delivery). */
+  meta?: React.ReactNode
+  outOfStock?: boolean
+  onAdd?: () => void
+  /** Makes the whole card activatable through the title. */
+  onSelect?: () => void
+  /** Renders the title as a link instead of a button. Takes priority over `onSelect`. */
+  href?: string
+  labels?: Partial<ProductCardLabels>
+}
+
+export type ProductGridLabels = {
+  emptyTitle: string
+  emptyDescription: string
+}
+
+export type ProductGridProps = React.ComponentProps<"div"> & {
+  /** Label for the list, read by screen readers. */
+  "aria-label"?: string
+  /** Shown instead of the grid when there are no children. */
+  empty?: React.ReactNode
+  labels?: Partial<ProductGridLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { Star } from "lucide-react"
+
+import { ProductCard, ProductGrid } from "@/components/ui/product-card"
+
+function art(label: string, shade: number) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"><rect width="400" height="500" fill="hsl(220 8% ${shade}%)"/><text x="200" y="256" font-family="monospace" font-size="20" text-anchor="middle" fill="hsl(220 8% 40%)">${label}</text></svg>`
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
+function Rating({ value, count }: { value: number; count: number }) {
+  return (
+    <p className="flex items-center gap-1 text-xs text-muted-foreground">
+      <Star aria-hidden className="size-3 fill-current" />
+      <span className="font-mono">
+        <span className="sr-only">Rated </span>
+        {value.toFixed(1)}
+        <span className="sr-only"> out of 5, </span> ({count})
+      </span>
+    </p>
+  )
+}
+
+const apparel = [
+  {
+    id: 1,
+    title: "Linen overshirt",
+    subtitle: "Sand, 6 sizes",
+    price: 89,
+    was: 120,
+    isNew: false,
+    rating: [4.6, 128] as const,
+  },
+  {
+    id: 2,
+    title: "Wool crew sweater",
+    subtitle: "Charcoal",
+    price: 110,
+    isNew: true,
+    rating: [4.8, 41] as const,
+  },
+  {
+    id: 3,
+    title: "Canvas tote",
+    subtitle: "One size",
+    price: 38,
+    out: true,
+    rating: [4.2, 9] as const,
+  },
+  {
+    id: 4,
+    title: "Selvedge jeans",
+    subtitle: "Indigo, straight",
+    price: 145,
+    rating: [4.7, 76] as const,
+  },
+]
+
+const electronics = [
+  {
+    id: 1,
+    title: "Noise-cancelling headphones",
+    subtitle: "40 h battery",
+    price: 249.99,
+    was: 299.99,
+    rating: [4.5, 2310] as const,
+  },
+  {
+    id: 2,
+    title: "27-inch 4K monitor",
+    subtitle: "USB-C, 60 W",
+    price: 429,
+    isNew: true,
+    rating: [4.4, 318] as const,
+  },
+  {
+    id: 3,
+    title: "Mechanical keyboard",
+    subtitle: "Hot-swap switches",
+    price: 129,
+    out: true,
+    rating: [4.9, 87] as const,
+  },
+]
+
+export default function ProductCardDemo() {
+  const [added, setAdded] = React.useState<string | null>(null)
+
+  return (
+    <div className="flex w-full flex-col gap-10">
+      <section className="flex flex-col gap-3">
+        <h3 className="eyebrow">Apparel store</h3>
+        <ProductGrid aria-label="Apparel">
+          {apparel.map((p, i) => (
+            <ProductCard
+              key={p.id}
+              title={p.title}
+              subtitle={p.subtitle}
+              image={{
+                src: art(p.title, 90 - i * 4),
+                alt: `${p.title}, product photo`,
+              }}
+              price={p.price}
+              compareAtPrice={p.was}
+              currency="GBP"
+              locale="en-GB"
+              isNew={p.isNew}
+              outOfStock={p.out}
+              rating={<Rating value={p.rating[0]} count={p.rating[1]} />}
+              onAdd={() => setAdded(p.title)}
+              onSelect={() => setAdded(`Opened ${p.title}`)}
+            />
+          ))}
+        </ProductGrid>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h3 className="eyebrow">Electronics</h3>
+        <ProductGrid aria-label="Electronics">
+          {electronics.map((p, i) => (
+            <ProductCard
+              key={p.id}
+              title={p.title}
+              subtitle={p.subtitle}
+              image={{ src: art(p.title, 86 - i * 4), alt: p.title }}
+              price={p.price}
+              compareAtPrice={p.was}
+              currency="USD"
+              locale="en-US"
+              isNew={p.isNew}
+              outOfStock={p.out}
+              badges={i === 0 ? [{ label: "Free shipping" }] : undefined}
+              rating={<Rating value={p.rating[0]} count={p.rating[1]} />}
+              labels={{ add: "Add to cart", soldOut: "Sold out" }}
+              onAdd={() => setAdded(p.title)}
+            />
+          ))}
+        </ProductGrid>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h3 className="eyebrow">Empty</h3>
+        <ProductGrid
+          labels={{
+            emptyTitle: "No results",
+            emptyDescription: "Try fewer filters.",
+          }}
+        />
+      </section>
+
+      <p aria-live="polite" className="font-mono text-xs text-muted-foreground">
+        {added ? `Last action: ${added}` : "Press Add or a title."}
+      </p>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/product-card. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Image Gallery
+
+Main image with thumbnails, keyboard and swipe navigation and a click-to-zoom lightbox.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/image-gallery
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { ImageGallery } from "@/components/ui/image-gallery"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/dialog`
+
+## Props and types
+
+```ts
+export type GalleryImage = {
+  src: string
+  /** Required. Describe the image; use "" only for purely decorative ones. */
+  alt: string
+  /** Smaller source for the thumbnail strip. Defaults to `src`. */
+  thumb?: string
+}
+
+export type ImageGalleryLabels = {
+  previous: string
+  next: string
+  zoom: string
+  /** Lightbox title (screen readers). */
+  lightbox: string
+  lightboxDescription: string
+  /** Text for the counter, e.g. "2 / 5". */
+  counter: (current: number, total: number) => string
+  thumbnail: (current: number, total: number) => string
+  empty: string
+  toggleZoom: string
+}
+
+export type ImageGalleryProps = Omit<
+  React.ComponentProps<"div">,
+  "children" | "onChange"
+> & {
+  images: GalleryImage[]
+  /** Controlled index. */
+  index?: number
+  defaultIndex?: number
+  onIndexChange?: (index: number) => void
+  /** Aspect ratio of the main frame as a CSS value. Default "4 / 3". */
+  aspect?: string
+  /** Disable the zoom lightbox. */
+  zoomable?: boolean
+  labels?: Partial<ImageGalleryLabels>
+}
+```
+
+## Example
+
+```tsx
+import { ImageGallery, type GalleryImage } from "@/components/ui/image-gallery"
+
+function art(label: string, shade: number): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="hsl(220 8% ${shade}%)"/><text x="400" y="306" font-family="monospace" font-size="32" text-anchor="middle" fill="hsl(220 8% 40%)">${label}</text></svg>`
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
+const apparel: GalleryImage[] = ["Front", "Back", "Detail", "Worn"].map(
+  (v, i) => ({
+    src: art(`Overshirt - ${v}`, 92 - i * 5),
+    alt: `Linen overshirt, ${v.toLowerCase()} view`,
+  })
+)
+
+const property: GalleryImage[] = ["Living room", "Kitchen", "Bedroom"].map(
+  (v, i) => ({ src: art(v, 88 - i * 5), alt: `${v} of the apartment` })
+)
+
+export default function ImageGalleryDemo() {
+  return (
+    <div className="@container grid w-full grid-cols-1 gap-8 md:grid-cols-2">
+      <div className="flex flex-col gap-3">
+        <h3 className="eyebrow">Apparel product</h3>
+        <ImageGallery images={apparel} aspect="4 / 5" className="max-w-sm" />
+      </div>
+      <div className="flex flex-col gap-3">
+        <h3 className="eyebrow">Property listing</h3>
+        <ImageGallery
+          images={property}
+          labels={{
+            counter: (c, t) => `Photo ${c} of ${t}`,
+            zoom: "Open photo viewer",
+            next: "Next photo",
+            previous: "Previous photo",
+          }}
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/image-gallery. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Address Form
+
+Shipping or billing address form with per-country rules, validation and correct autocomplete tokens.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/address-form
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { AddressForm } from "@/components/ui/address-form"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/field`, `@opendraft/input`, `@opendraft/select`
+
+## Props and types
+
+```ts
+export type AddressValue = {
+  line1: string
+  line2: string
+  city: string
+  region: string
+  postal: string
+  /** Country code, matching `countries[].code`. */
+  country: string
+}
+
+export type AddressField = keyof AddressValue
+
+export type AddressCountry = { code: string; name: string }
+
+export type AddressRule = {
+  postalLabel?: string
+  regionLabel?: string
+  /** Postal code must match this (tested on the trimmed value). */
+  postalPattern?: RegExp
+  /** Shown as placeholder and in the invalid message hint, e.g. "SW1A 1AA". */
+  postalExample?: string
+  /** Default true. Set false where regions are not part of addresses. */
+  regionRequired?: boolean
+  /** Renders region as a select instead of free text. */
+  regionOptions?: { value: string; label: string }[]
+  /** Default true. */
+  postalRequired?: boolean
+}
+
+export type AddressFormLabels = {
+  line1: string
+  line2: string
+  city: string
+  region: string
+  postal: string
+  country: string
+  optional: string
+  selectCountry: string
+  selectRegion: string
+  submit: string
+  required: (field: string) => string
+  invalidPostal: (field: string, example?: string) => string
+}
+
+export type AddressErrors = Partial<Record<AddressField, string>>
+
+export type AddressFormProps = Omit<
+  React.ComponentProps<"form">,
+  "onSubmit" | "onChange" | "defaultValue"
+> & {
+  /** Controlled value. */
+  value?: AddressValue
+  defaultValue?: Partial<AddressValue>
+  onChange?: (value: AddressValue) => void
+  /** Called with a valid address. May return a promise; the button shows loading until it settles. */
+  onSubmit?: (value: AddressValue) => void | Promise<void>
+  countries?: AddressCountry[]
+  /** Per-country-code overrides merged over `DEFAULT_ADDRESS_RULE`. */
+  rules?: Record<string, AddressRule>
+  /** Prefixes autocomplete tokens: "shipping" gives "shipping address-line1". */
+  section?: "shipping" | "billing"
+  /** Replaces the default submit button. */
+  footer?: React.ReactNode
+  disabled?: boolean
+  labels?: Partial<AddressFormLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  AddressForm,
+  SAMPLE_ADDRESS_COUNTRIES,
+  SAMPLE_ADDRESS_RULES,
+  type AddressValue,
+} from "@/components/ui/address-form"
+
+export default function AddressFormDemo() {
+  const [saved, setSaved] = React.useState<AddressValue | null>(null)
+  const [billing, setBilling] = React.useState<AddressValue>({
+    line1: "",
+    line2: "",
+    city: "",
+    region: "",
+    postal: "",
+    country: "US",
+  })
+
+  return (
+    <div className="grid w-full grid-cols-1 gap-10 lg:grid-cols-2">
+      <div className="flex flex-col gap-4">
+        <h3 className="eyebrow">Shipping, United Kingdom</h3>
+        <AddressForm
+          section="shipping"
+          defaultValue={{ country: "GB" }}
+          countries={SAMPLE_ADDRESS_COUNTRIES}
+          rules={SAMPLE_ADDRESS_RULES}
+          labels={{ submit: "Deliver here" }}
+          onSubmit={(v) => setSaved(v)}
+        />
+        <p
+          aria-live="polite"
+          className="font-mono text-xs text-muted-foreground"
+        >
+          {saved
+            ? JSON.stringify(saved)
+            : "Uncontrolled. Submit to see the value."}
+        </p>
+      </div>
+      <div className="flex flex-col gap-4">
+        <h3 className="eyebrow">Billing, United States (controlled)</h3>
+        <AddressForm
+          section="billing"
+          value={billing}
+          onChange={setBilling}
+          countries={SAMPLE_ADDRESS_COUNTRIES}
+          rules={{
+            ...SAMPLE_ADDRESS_RULES,
+            US: {
+              ...SAMPLE_ADDRESS_RULES.US,
+              regionOptions: [
+                { value: "CA", label: "California" },
+                { value: "NY", label: "New York" },
+                { value: "TX", label: "Texas" },
+              ],
+            },
+          }}
+          labels={{ submit: "Save billing address", line1: "Street address" }}
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/address-form. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Video Player
+
+Accessible video player with seek, volume, speed, captions, chapters, keyboard shortcuts and an error state.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/video-player
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { VideoPlayer } from "@/components/ui/video-player"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/dropdown-menu`, `@opendraft/slider`, `@opendraft/kbd`, `@opendraft/scrub-bar`
+
+## Props and types
+
+```ts
+type VideoChapter = {
+  /** Start of the chapter, in seconds. */
+  time: number
+  label: string
+}
+
+type VideoCaptionTrack = {
+  /** URL of a WebVTT file. */
+  src: string
+  /** Shown in the captions menu, e.g. "English". */
+  label: string
+  /** BCP 47 language tag, e.g. "en". */
+  srcLang?: string
+  kind?: "captions" | "subtitles"
+  /** Show this track at first. */
+  default?: boolean
+}
+
+type VideoPlayerLabels = {
+  player: string
+  play: string
+  pause: string
+  seek: string
+  mute: string
+  unmute: string
+  volume: string
+  speed: string
+  normalSpeed: string
+  captions: string
+  captionsOff: string
+  fullscreen: string
+  exitFullscreen: string
+  shortcuts: string
+  shortcutsHint: string
+  shortcutPlay: string
+  shortcutSeek: string
+  shortcutVolume: string
+  shortcutMute: string
+  shortcutFullscreen: string
+  shortcutCaptions: string
+  chapters: string
+  error: string
+  retry: string
+  loading: string
+  playing: string
+  paused: string
+}
+
+type VideoPlayerProps = Omit<
+  React.ComponentProps<"div">,
+  "children" | "title" | "onProgress"
+> & {
+  /** URL of the video file or stream the browser can play. */
+  src: string
+  /** Image shown before playback starts. */
+  poster?: string
+  /** Heading above the video. Also names the player for assistive tech. */
+  title?: React.ReactNode
+  /** Short text under the title, e.g. a date or an owner. */
+  description?: React.ReactNode
+  /** WebVTT caption or subtitle tracks. Adds a captions control when given. */
+  tracks?: VideoCaptionTrack[]
+  /** Named positions in the video. Rendered as a list that seeks, and as ticks on the seek bar. */
+  chapters?: VideoChapter[]
+  /** Reports the position in seconds: every `progressInterval` seconds while playing, and on pause and end. Use it to save where the viewer stopped. */
+  onProgress?: (seconds: number) => void
+  /** Seconds between `onProgress` calls while playing. Defaults to 5. */
+  progressInterval?: number
+  /** Position in seconds to resume from once the video is ready. */
+  startAt?: number
+  /** Called when the video fails to load or decode. */
+  onError?: () => void
+  /** Selectable playback rates. */
+  speeds?: readonly number[]
+  /** Fixed copy. Merged over neutral English defaults. */
+  labels?: Partial<VideoPlayerLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { formatTimestamp } from "@/components/agents/scrub-bar"
+import { VideoPlayer } from "@/components/ui/video-player"
+
+// The sources below are placeholders and may 404. The player then shows its
+// error state with a retry button instead of a blank frame.
+export default function VideoPlayerDemo() {
+  const [trainingSeconds, setTrainingSeconds] = React.useState(0)
+  const [briefingSeconds, setBriefingSeconds] = React.useState(0)
+
+  return (
+    <div className="flex w-full max-w-[960px] flex-col gap-10">
+      <section className="flex flex-col gap-3">
+        <p className="eyebrow">Training video</p>
+        <VideoPlayer
+          src="https://example.com/media/forklift-safety-training.mp4"
+          poster="https://example.com/media/forklift-safety-training.jpg"
+          title="Forklift safety, module 2"
+          description="Warehouse operations onboarding"
+          tracks={[
+            { src: "/media/forklift-en.vtt", label: "English", srcLang: "en" },
+            { src: "/media/forklift-es.vtt", label: "Español", srcLang: "es" },
+          ]}
+          chapters={[
+            { time: 0, label: "Pre-shift inspection" },
+            { time: 95, label: "Load limits and stability" },
+            { time: 240, label: "Pedestrian zones" },
+            { time: 410, label: "Parking and charging" },
+          ]}
+          onProgress={setTrainingSeconds}
+        />
+        <p className="font-mono text-xs text-muted-foreground">
+          Saved position {formatTimestamp(trainingSeconds)}
+        </p>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <p className="eyebrow">Surgical briefing</p>
+        <VideoPlayer
+          src="https://example.com/media/procedure-briefing.mp4"
+          title="Laparoscopic cholecystectomy briefing"
+          description="Pre-operative team review"
+          tracks={[
+            {
+              src: "/media/briefing-en.vtt",
+              label: "English",
+              srcLang: "en",
+              default: true,
+            },
+          ]}
+          chapters={[
+            { time: 0, label: "Patient and consent" },
+            { time: 60, label: "Equipment check" },
+            { time: 150, label: "Approach and ports" },
+            { time: 330, label: "Contingencies" },
+          ]}
+          speeds={[0.75, 1, 1.5]}
+          onProgress={setBriefingSeconds}
+          labels={{
+            error:
+              "The briefing recording is unavailable. Contact the surgical coordinator.",
+          }}
+        />
+        <p className="font-mono text-xs text-muted-foreground">
+          Reviewed up to {formatTimestamp(briefingSeconds)}
+        </p>
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/video-player. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Document Viewer
+
+Shell for paged documents: page nav, zoom, download, search and sidebar slots, plus thumbnails and outline.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/document-viewer
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { DocumentViewer, DocumentThumbnails, DocumentOutline } from "@/components/ui/document-viewer"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`
+
+## Props and types
+
+```ts
+type DocumentViewerLabels = {
+  document: string
+  toolbar: string
+  previousPage: string
+  nextPage: string
+  pageNumber: string
+  /** Visible "of N" text and the spoken page status. */
+  pageOf: (page: number, pageCount: number | undefined) => string
+  zoomIn: string
+  zoomOut: string
+  resetZoom: string
+  download: string
+  thumbnails: string
+  toggleThumbnails: string
+  fallback: string
+  fallbackLink: string
+  emptyPage: string
+}
+
+type DocumentViewerProps = Omit<
+  React.ComponentProps<"div">,
+  "children" | "title"
+> & {
+  /** Name of the document, shown in the toolbar and used for the accessible name. */
+  title?: React.ReactNode
+  /**
+   * URL of a PDF. Used by the default renderer (an `<object>` with a fallback
+   * link) and as the default download link. Not needed when `renderPage` is given.
+   */
+  src?: string
+  /**
+   * Draws one page. Receives the 1-based page number and the current scale
+   * (1 = 100%). Use it to plug in pdf.js, page images, or generated pages.
+   *
+   * pdf.js through react-pdf is the recommended renderer for real PDFs: it
+   * gives text selection, search and per-page rendering, and keeps the viewer
+   * free of a PDF dependency. See the docs example for the wiring.
+   */
+  renderPage?: (pageNumber: number, scale: number) => React.ReactNode
+  /** Total pages. Required with `renderPage`; optional with `src`. */
+  pageCount?: number
+  /** Current page, 1-based. Controlled. */
+  page?: number
+  defaultPage?: number
+  onPageChange?: (page: number) => void
+  /** Current scale, 1 = 100%. Controlled. */
+  zoom?: number
+  defaultZoom?: number
+  onZoomChange?: (zoom: number) => void
+  minZoom?: number
+  maxZoom?: number
+  zoomStep?: number
+  /** Download link. Defaults to `src`. Pass `false` to hide the button. */
+  downloadHref?: string | false
+  /** File name suggested for the download. */
+  downloadName?: string
+  /** Search UI, rendered in the toolbar. Bring your own input and results. */
+  search?: React.ReactNode
+  /** Extra toolbar actions, rendered after the download button. */
+  actions?: React.ReactNode
+  /**
+   * Sidebar content, usually `DocumentThumbnails` or `DocumentOutline`. A
+   * toggle appears in the toolbar when this is given.
+   */
+  thumbnails?: React.ReactNode
+  /** Whether the sidebar starts open. Defaults to true. */
+  defaultThumbnailsOpen?: boolean
+  /** Fixed copy. Merged over neutral English defaults. */
+  labels?: Partial<DocumentViewerLabels>
+}
+
+type DocumentThumbnailsProps = Omit<
+  React.ComponentProps<"ol">,
+  "children" | "onChange"
+> & {
+  pageCount: number
+  page: number
+  onPageChange: (page: number) => void
+  /** Draws a small preview of one page. Defaults to an empty sheet with its number. */
+  renderThumbnail?: (pageNumber: number) => React.ReactNode
+  /** Builds the accessible name of each button. */
+  pageLabel?: (pageNumber: number) => string
+}
+
+type OutlineItem = {
+  id: string
+  label: React.ReactNode
+  /** Page this section starts on, shown on the right. */
+  page?: number
+  children?: OutlineItem[]
+}
+
+type DocumentOutlineProps = Omit<
+  React.ComponentProps<"nav">,
+  "children" | "onSelect"
+> & {
+  items: OutlineItem[]
+  /** Id of the current section. Marked with `aria-current`. */
+  activeId?: string
+  onSelect?: (item: OutlineItem) => void
+  /** Whether sections with children start open. Defaults to true. */
+  defaultExpanded?: boolean
+  /** Heading above the list. Pass `false` to hide. */
+  heading?: React.ReactNode | false
+  labels?: Partial<{ expand: string; collapse: string }>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { Search } from "lucide-react"
+
+import {
+  DocumentOutline,
+  DocumentThumbnails,
+  DocumentViewer,
+  type OutlineItem,
+} from "@/components/ui/document-viewer"
+
+/*
+ * Real PDFs: use pdf.js through react-pdf (recommended). Install it in your
+ * app, then plug it into `renderPage`. DocumentViewer itself has no PDF
+ * dependency.
+ *
+ *   import { Document, Page, pdfjs } from "react-pdf"
+ *   pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+ *     "pdfjs-dist/build/pdf.worker.min.mjs",
+ *     import.meta.url
+ *   ).toString()
+ *
+ *   <Document file={url} onLoadSuccess={({ numPages }) => setCount(numPages)}>
+ *     <DocumentViewer
+ *       pageCount={count}
+ *       page={page}
+ *       onPageChange={setPage}
+ *       src={url}
+ *       renderPage={(n, scale) => <Page pageNumber={n} scale={scale} />}
+ *     />
+ *   </Document>
+ *
+ * Page images work the same way: renderPage={(n) => <img src={pages[n - 1]} alt="" />}
+ */
+
+const CONTRACT_PAGES = 6
+const CONTRACT_OUTLINE: OutlineItem[] = [
+  { id: "parties", label: "Parties", page: 1 },
+  {
+    id: "terms",
+    label: "Terms",
+    page: 2,
+    children: [
+      { id: "term", label: "Term and renewal", page: 2 },
+      { id: "fees", label: "Fees", page: 3 },
+    ],
+  },
+  { id: "liability", label: "Liability", page: 5 },
+  { id: "signatures", label: "Signatures", page: 6 },
+]
+
+const HANDBOOK_OUTLINE: OutlineItem[] = [
+  { id: "welcome", label: "Welcome", page: 1 },
+  {
+    id: "time-off",
+    label: "Time off",
+    page: 4,
+    children: [
+      { id: "leave", label: "Annual leave", page: 4 },
+      { id: "sick", label: "Sick leave", page: 6 },
+    ],
+  },
+  { id: "conduct", label: "Code of conduct", page: 9 },
+]
+
+// Plain generated pages: stand-ins for pdf.js output.
+function GeneratedPage({
+  n,
+  scale,
+  name,
+}: {
+  n: number
+  scale: number
+  name: string
+}) {
+  return (
+    <div
+      className="flex flex-col gap-3 bg-background p-8"
+      style={{ width: 480 * scale, minHeight: 640 * scale }}
+    >
+      <p className="eyebrow">{name}</p>
+      <p className="heading text-2xl">Page {n}</p>
+      {Array.from({ length: 8 }, (_, i) => (
+        <div
+          key={i}
+          className="h-2 bg-muted"
+          style={{ width: `${95 - ((i * 7) % 30)}%` }}
+        />
+      ))}
+    </div>
+  )
+}
+
+export default function DocumentViewerDemo() {
+  const [contractPage, setContractPage] = React.useState(1)
+  const [handbookPage, setHandbookPage] = React.useState(1)
+
+  return (
+    <div className="flex w-full flex-col gap-10">
+      <section className="flex flex-col gap-3">
+        <p className="eyebrow">Contract review</p>
+        <div className="h-[560px] w-full overflow-hidden">
+          <DocumentViewer
+            title="Services agreement"
+            pageCount={CONTRACT_PAGES}
+            page={contractPage}
+            onPageChange={setContractPage}
+            downloadHref="https://example.com/files/services-agreement.pdf"
+            downloadName="services-agreement.pdf"
+            renderPage={(n, scale) => (
+              <GeneratedPage n={n} scale={scale} name="Services agreement" />
+            )}
+            search={
+              <label className="flex h-8 items-center gap-1.5 border bg-background px-2">
+                <Search
+                  aria-hidden
+                  className="size-3.5 text-muted-foreground"
+                />
+                <input
+                  type="search"
+                  aria-label="Search the document"
+                  placeholder="Search"
+                  className="w-28 bg-transparent text-sm outline-none"
+                />
+              </label>
+            }
+            thumbnails={
+              <>
+                <DocumentOutline
+                  items={CONTRACT_OUTLINE}
+                  onSelect={(item) => item.page && setContractPage(item.page)}
+                />
+                <DocumentThumbnails
+                  pageCount={CONTRACT_PAGES}
+                  page={contractPage}
+                  onPageChange={setContractPage}
+                />
+              </>
+            }
+          />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <p className="eyebrow">HR handbook</p>
+        <div className="h-[560px] w-full overflow-hidden">
+          {/* No renderPage: the default renderer shows the PDF natively,
+              or a fallback link when the file cannot load. */}
+          <DocumentViewer
+            title="Employee handbook"
+            src="https://example.com/files/employee-handbook.pdf"
+            pageCount={24}
+            page={handbookPage}
+            onPageChange={setHandbookPage}
+            thumbnails={
+              <DocumentOutline
+                items={HANDBOOK_OUTLINE}
+                onSelect={(item) => item.page && setHandbookPage(item.page)}
+                activeId={
+                  [
+                    ...HANDBOOK_OUTLINE.flatMap((i) => [
+                      i,
+                      ...(i.children ?? []),
+                    ]),
+                  ]
+                    .filter((i) => (i.page ?? 99) <= handbookPage)
+                    .at(-1)?.id
+                }
+              />
+            }
+            labels={{
+              fallback: "The handbook could not be displayed in this browser.",
+            }}
+          />
+        </div>
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/document-viewer. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Date Time Picker
+
+Pick a date and time in a named time zone, with DST gap and overlap handling and other-zone display.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/date-time-picker
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { DateTimePicker } from "@/components/ui/date-time-picker"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/input`, `@opendraft/popover`, `@opendraft/select`
+
+## Props and types
+
+```ts
+type Wall = { y: number; mo: number; d: number; hh: number; mm: number }
+
+type DateTimePickerLabels = {
+  placeholder: string
+  chooseDate: string
+  time: string
+  hours: string
+  minutes: string
+  am: string
+  pm: string
+  amPm: string
+  timeZone: string
+  previousMonth: string
+  nextMonth: string
+  alsoShowing: string
+  /** Placeholders: {time} (requested), {adjusted} (used), {zone}. */
+  gap: string
+  /** Placeholders: {time} (the allowed time used). */
+  clamped: string
+  /** Placeholder: {zone}. */
+  ambiguous: string
+  earlier: string
+  later: string
+}
+
+type ZoneOption = string | { value: string; label?: string }
+
+type AlsoShowZone = string | { timeZone: string; label?: string }
+
+type DateTimeChangeMeta = {
+  /** IANA zone the person was working in. */
+  timeZone: string
+  /** Wall-clock time in that zone, `YYYY-MM-DDTHH:mm`. */
+  local: string
+  /** UTC offset at that instant, `+HH:mm`. */
+  offset: string
+  /** Short zone name as Intl renders it for the locale (EDT, GMT+1, ...). */
+  abbreviation: string
+  /** Set when the requested time was moved: skipped by DST, or out of range. */
+  adjusted?: "gap" | "clamped"
+}
+
+type DateTimePickerProps = Omit<
+  React.ComponentProps<"button">,
+  "value" | "defaultValue" | "onChange" | "type"
+> & {
+  /** Instant as an ISO string with an offset (`2026-03-08T07:30:00Z`). A bare local ISO string is read in `timeZone`. */
+  value?: string
+  defaultValue?: string
+  /** Called with the UTC instant (`toISOString()`) and the zone-local detail. */
+  onChange?: (isoUtc: string, meta: DateTimeChangeMeta) => void
+  /** IANA zone the date and time are written in. Controlled when set. */
+  timeZone?: string
+  /** Initial zone when `timeZone` is not controlled. */
+  defaultTimeZone?: string
+  onTimeZoneChange?: (timeZone: string) => void
+  /** Zones offered in a selector. Omit to lock the picker to one zone. */
+  timeZones?: ZoneOption[]
+  /** Show the same instant in these other zones. */
+  alsoShow?: AlsoShowZone[]
+  /** BCP 47 locale. Also decides 12 or 24 hour unless `hourCycle` is set. */
+  locale?: string
+  hourCycle?: 12 | 24
+  /** Minute increment for the time field and arrow keys. */
+  minuteStep?: number
+  /** Earliest allowed instant (ISO with offset). */
+  min?: string
+  /** Latest allowed instant (ISO with offset). */
+  max?: string
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  /** Wall time used when a day is picked and no time is set. `HH:MM`. */
+  defaultTime?: string
+  /** Which occurrence to use when a wall time happens twice (clocks go back). */
+  overlap?: "earlier" | "later"
+  labels?: Partial<DateTimePickerLabels>
+  placeholder?: string
+  disabled?: boolean
+  invalid?: boolean
+  align?: "start" | "center" | "end"
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  DateTimePicker,
+  SAMPLE_TIME_ZONES,
+  type DateTimeChangeMeta,
+} from "@/components/ui/date-time-picker"
+import { Label } from "@/components/ui/label"
+
+export default function DateTimePickerDemo() {
+  // Domain 1: a departure time, written in the departure airport's zone.
+  const [departure, setDeparture] = React.useState<string | undefined>(
+    "2026-11-21T14:40:00Z"
+  )
+  // Domain 2: a clinic appointment, with a selectable zone and a DST-day value.
+  const [visit, setVisit] = React.useState<string | undefined>(
+    "2026-03-08T14:30:00Z"
+  )
+  const [meta, setMeta] = React.useState<DateTimeChangeMeta | null>(null)
+
+  return (
+    <div className="grid w-full max-w-3xl gap-8 sm:grid-cols-2">
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="dtp-departure">Scheduled departure</Label>
+        <DateTimePicker
+          id="dtp-departure"
+          value={departure}
+          onChange={(iso) => setDeparture(iso)}
+          timeZone="Europe/London"
+          alsoShow={[
+            { timeZone: "America/New_York", label: "Arrival city" },
+            "UTC",
+          ]}
+          locale="en-GB"
+          minuteStep={5}
+          min="2026-11-01T00:00:00Z"
+          max="2027-03-31T23:59:00Z"
+        />
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
+          value = {departure ?? "undefined"}
+        </span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="dtp-visit">Appointment</Label>
+        <DateTimePicker
+          id="dtp-visit"
+          value={visit}
+          onChange={(iso, m) => {
+            setVisit(iso)
+            setMeta(m)
+          }}
+          defaultTimeZone="America/New_York"
+          timeZones={SAMPLE_TIME_ZONES}
+          alsoShow={["Europe/Berlin"]}
+          locale="en-US"
+          minuteStep={15}
+          defaultTime="10:00"
+        />
+        <span className="font-mono text-xs text-muted-foreground tabular-nums">
+          local = {meta?.local ?? "-"} {meta?.offset ?? ""}
+        </span>
+        <span className="text-xs text-muted-foreground">
+          Try 02:30 on 8 March (skipped by DST) or 01:30 on 1 November (happens
+          twice).
+        </span>
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/date-time-picker. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Rating
+
+Star rating display and input with half steps, plus a distribution breakdown.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/rating
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Rating, RatingBreakdown, RatingInput } from "@/components/ui/rating"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type RatingSize = "sm" | "default" | "lg"
+
+type RatingLabels = {
+  /** aria-label of a display rating. {value}, {max}. */
+  summary: string
+  /** Visible suffix after the number. {max}. Use "" to hide. */
+  outOf: string
+  /** Count text, plural. {count}. */
+  count: string
+  /** Count text when the count is 1. {count}. */
+  countOne: string
+  /** aria-label of one input option. {value}, {max}. */
+  option: string
+  /** aria-label of the input group. */
+  group: string
+  /** Shown by the input when nothing is chosen. */
+  none: string
+}
+
+type RatingProps = Omit<React.ComponentProps<"div">, "children"> & {
+  /** Average or score, 0 to `max`. Fractions are drawn by clipping. */
+  value: number
+  max?: number
+  size?: RatingSize
+  /** Show the number (and "out of max"). Default true. */
+  showValue?: boolean
+  /** Decimal places for the number. Default 1. */
+  precision?: number
+  /** Number of ratings behind the value. */
+  count?: number
+  locale?: string
+  labels?: Partial<RatingLabels>
+}
+
+type RatingInputProps = Omit<
+  React.ComponentProps<"div">,
+  "defaultValue" | "onChange" | "children"
+> & {
+  value?: number
+  defaultValue?: number
+  onValueChange?: (value: number) => void
+  max?: number
+  size?: RatingSize
+  /** Allow half steps (0.5, 1, 1.5 ...). */
+  allowHalf?: boolean
+  /** Clicking the chosen value again clears it to 0. */
+  clearable?: boolean
+  disabled?: boolean
+  readOnly?: boolean
+  required?: boolean
+  /** Renders a hidden input so the value posts with a form. */
+  name?: string
+  /** Show the chosen value as text beside the stars. Default true. */
+  showValue?: boolean
+  labels?: Partial<RatingLabels>
+}
+
+type RatingBreakdownLabels = {
+  /** aria-label of the list. */
+  group: string
+  /** Row summary for assistive tech. {stars}, {count}, {percent}. */
+  row: string
+}
+
+type RatingBreakdownProps = Omit<React.ComponentProps<"ul">, "children"> & {
+  /** Counts per rating, index 0 = 1 star ... index max-1 = max stars. */
+  counts?: number[]
+  /** Makes each row a button, e.g. to filter a list. */
+  onSelectStars?: (stars: number) => void
+  /** Highlights the active filter. */
+  selectedStars?: number | null
+  locale?: string
+  labels?: Partial<RatingBreakdownLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Rating, RatingBreakdown, RatingInput } from "@/components/ui/rating"
+
+export default function RatingDemo() {
+  // Domain 1: product reviews.
+  const [filter, setFilter] = React.useState<number | null>(null)
+  // Domain 2: course feedback.
+  const [score, setScore] = React.useState(3.5)
+
+  return (
+    <div className="grid w-full max-w-3xl gap-10 sm:grid-cols-2">
+      <section className="flex flex-col gap-4">
+        <span className="eyebrow">Product reviews</span>
+        <Rating value={4.3} count={1284} size="lg" />
+        <RatingBreakdown
+          counts={[38, 52, 120, 410, 664]}
+          selectedStars={filter}
+          onSelectStars={(s) => setFilter((f) => (f === s ? null : s))}
+        />
+        <p className="font-mono text-xs text-muted-foreground">
+          filter = {filter ?? "all"}
+        </p>
+      </section>
+      <section className="flex flex-col gap-4">
+        <span className="eyebrow">Course feedback</span>
+        <RatingInput
+          aria-label="Rate this lesson"
+          value={score}
+          onValueChange={setScore}
+          allowHalf
+          clearable
+          size="lg"
+          name="lesson-rating"
+        />
+        <Rating
+          value={3.8}
+          max={5}
+          count={1}
+          size="sm"
+          labels={{ count: "{count} responses", countOne: "{count} response" }}
+        />
+        <Rating
+          value={7.4}
+          max={10}
+          precision={1}
+          showValue
+          labels={{ outOf: "of {max} clarity" }}
+        />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/rating. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Gantt
+
+Task bars on a day, week or month axis with dependency arrows, groups, today marker and critical flags.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/gantt
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Gantt } from "@/components/ui/gantt"
+```
+
+## Dependencies
+
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/badge`, `@opendraft/button`
+
+## Props and types
+
+```ts
+export type GanttDate = string | Date
+
+export type GanttZoom = "day" | "week" | "month"
+
+export type GanttTone = "default" | "brand" | "success" | "warning"
+
+export type GanttTask = {
+  id: string
+  label: string
+  start: GanttDate
+  end: GanttDate
+  /** 0-100. Leave out when progress is not tracked (then a task is never "overdue"). */
+  progress?: number
+  /** Ids of tasks that must finish before this one starts. */
+  dependsOn?: string[]
+  /** Tasks sharing a group value are listed under one collapsible header. */
+  group?: string
+  tone?: GanttTone
+}
+
+/** Fixed copy. Placeholders in braces: {value} {count} {label} {names}. */
+export type GanttLabels = {
+  chart: string
+  task: string
+  zoom: string
+  day: string
+  week: string
+  month: string
+  today: string
+  critical: string
+  overdue: string
+  complete: string
+  /** Uses {value}. */
+  progress: string
+  /** Uses {names}. */
+  dependsOn: string
+  /** Uses {label}. */
+  collapse: string
+  /** Uses {label}. */
+  expand: string
+  /** Uses {count}. */
+  tasks: string
+  noTasks: string
+}
+
+export type GanttProps = {
+  tasks?: GanttTask[]
+  zoom?: GanttZoom
+  defaultZoom?: GanttZoom
+  onZoomChange?: (zoom: GanttZoom) => void
+  /** Group values that are collapsed. */
+  collapsed?: string[]
+  defaultCollapsed?: string[]
+  onCollapsedChange?: (collapsed: string[]) => void
+  /** Current time for the today marker and overdue checks. Passed in, never read from the clock. */
+  now?: GanttDate
+  /**
+   * Task ids drawn as critical. Defaults to the chain of driving dependencies that
+   * ends at the latest finishing task.
+   */
+  criticalIds?: string[]
+  /** IANA zone for day boundaries and labels. Default "UTC". */
+  timeZone?: string
+  locale?: string
+  onTaskClick?: (task: GanttTask) => void
+  labels?: Partial<GanttLabels>
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Gantt, type GanttTask } from "@/components/ui/gantt"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+type Domain = "construction" | "launch"
+
+const CONSTRUCTION: GanttTask[] = [
+  {
+    id: "c1",
+    group: "Site",
+    label: "Survey and permits",
+    start: "2026-08-17",
+    end: "2026-09-04",
+    progress: 100,
+  },
+  {
+    id: "c2",
+    group: "Site",
+    label: "Excavation",
+    start: "2026-09-04",
+    end: "2026-09-25",
+    progress: 100,
+    dependsOn: ["c1"],
+  },
+  {
+    id: "c3",
+    group: "Structure",
+    label: "Foundations",
+    start: "2026-09-21",
+    end: "2026-10-09",
+    progress: 70,
+    dependsOn: ["c2"],
+  },
+  {
+    id: "c4",
+    group: "Structure",
+    label: "Frame",
+    start: "2026-10-09",
+    end: "2026-11-13",
+    progress: 20,
+    dependsOn: ["c3"],
+  },
+  {
+    id: "c5",
+    group: "Structure",
+    label: "Roof",
+    start: "2026-11-09",
+    end: "2026-11-27",
+    progress: 0,
+    dependsOn: ["c4"],
+  },
+  {
+    id: "c6",
+    group: "Services",
+    label: "Plumbing rough-in",
+    start: "2026-10-19",
+    end: "2026-11-06",
+    progress: 10,
+    dependsOn: ["c3"],
+    tone: "success",
+  },
+  {
+    id: "c7",
+    group: "Services",
+    label: "Electrical rough-in",
+    start: "2026-11-02",
+    end: "2026-11-20",
+    progress: 0,
+    dependsOn: ["c4", "c6"],
+    tone: "success",
+  },
+  {
+    id: "c8",
+    label: "Handover",
+    start: "2026-12-07",
+    end: "2026-12-11",
+    dependsOn: ["c5", "c7"],
+  },
+]
+
+const LAUNCH: GanttTask[] = [
+  {
+    id: "l1",
+    group: "Plan",
+    label: "Positioning brief",
+    start: "2026-09-14",
+    end: "2026-09-25",
+    progress: 100,
+  },
+  {
+    id: "l2",
+    group: "Plan",
+    label: "Pricing decision",
+    start: "2026-09-21",
+    end: "2026-10-02",
+    progress: 80,
+    dependsOn: ["l1"],
+  },
+  {
+    id: "l3",
+    group: "Build",
+    label: "Core features",
+    start: "2026-09-28",
+    end: "2026-10-30",
+    progress: 55,
+    dependsOn: ["l1"],
+  },
+  {
+    id: "l4",
+    group: "Build",
+    label: "Beta feedback fixes",
+    start: "2026-10-30",
+    end: "2026-11-13",
+    progress: 0,
+    dependsOn: ["l3"],
+  },
+  {
+    id: "l5",
+    group: "Market",
+    label: "Landing page",
+    start: "2026-10-05",
+    end: "2026-10-23",
+    progress: 40,
+    dependsOn: ["l2"],
+    tone: "success",
+  },
+  {
+    id: "l6",
+    group: "Market",
+    label: "Launch campaign",
+    start: "2026-11-02",
+    end: "2026-11-20",
+    progress: 0,
+    dependsOn: ["l5", "l4"],
+    tone: "success",
+  },
+  {
+    id: "l7",
+    label: "Public launch",
+    start: "2026-11-20",
+    end: "2026-11-23",
+    dependsOn: ["l4", "l6"],
+  },
+]
+
+export default function GanttDemo() {
+  const [domain, setDomain] = React.useState<Domain>("construction")
+  const [picked, setPicked] = React.useState("")
+
+  return (
+    <div className="flex w-full min-w-0 flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <Tabs value={domain} onValueChange={(v) => setDomain(v as Domain)}>
+          <TabsList>
+            <TabsTrigger value="construction">Construction plan</TabsTrigger>
+            <TabsTrigger value="launch">Product launch</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <p
+          className="font-mono text-xs text-muted-foreground"
+          aria-live="polite"
+        >
+          {picked}
+        </p>
+      </div>
+      <Gantt
+        key={domain}
+        className="h-[480px]"
+        tasks={domain === "construction" ? CONSTRUCTION : LAUNCH}
+        now="2026-10-13T12:00:00Z"
+        defaultZoom="week"
+        onTaskClick={(t) => setPicked(t.label)}
+        labels={
+          domain === "construction"
+            ? { task: "Work package", tasks: "{count} packages" }
+            : { task: "Deliverable", tasks: "{count} deliverables" }
+        }
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/gantt. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
