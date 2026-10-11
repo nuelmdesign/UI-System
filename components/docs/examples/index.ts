@@ -96,6 +96,15 @@ import PhotoCaptureExample from "./photo-capture"
 import StepNavExample from "./step-nav"
 import TimeSeriesChartExample from "./time-series-chart"
 import SeatMapExample from "./seat-map"
+import ProductCardExample from "./product-card"
+import ImageGalleryExample from "./image-gallery"
+import AddressFormExample from "./address-form"
+import VideoPlayerExample from "./video-player"
+import DocumentViewerExample from "./document-viewer"
+import DateTimePickerExample from "./date-time-picker"
+import RatingExample from "./rating"
+import GanttExample from "./gantt"
+import SchedulerExample from "./scheduler"
 import CrmPipelineExample from "./crm-pipeline"
 import AnalyticsDashboardExample from "./analytics-dashboard"
 import SettingsPageExample from "./settings-page"
@@ -231,6 +240,15 @@ export const EXAMPLES: Record<string, ComponentType> = {
   "step-nav": StepNavExample,
   "time-series-chart": TimeSeriesChartExample,
   "seat-map": SeatMapExample,
+  "product-card": ProductCardExample,
+  "image-gallery": ImageGalleryExample,
+  "address-form": AddressFormExample,
+  "video-player": VideoPlayerExample,
+  "document-viewer": DocumentViewerExample,
+  "date-time-picker": DateTimePickerExample,
+  rating: RatingExample,
+  gantt: GanttExample,
+  scheduler: SchedulerExample,
   "crm-pipeline": CrmPipelineExample,
   "analytics-dashboard": AnalyticsDashboardExample,
   "settings-page": SettingsPageExample,

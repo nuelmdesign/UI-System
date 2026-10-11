@@ -259,7 +259,15 @@ type Norm = GanttTask & {
 }
 
 type Row =
-  | { kind: "group"; key: string; group: string; count: number; s: number; t: number; open: boolean }
+  | {
+      kind: "group"
+      key: string
+      group: string
+      count: number
+      s: number
+      t: number
+      open: boolean
+    }
   | { kind: "task"; key: string; task: Norm }
 
 function Gantt({
@@ -377,12 +385,21 @@ function Gantt({
 
   const axis = React.useMemo(() => {
     const top: { key: string; label: string; x: number; w: number }[] = []
-    const bottom: { key: string; label: string; sub?: string; x: number; w: number }[] = []
+    const bottom: {
+      key: string
+      label: string
+      sub?: string
+      x: number
+      w: number
+    }[] = []
     for (let i = 0; i < days; i++) {
       const ms = origin + i * DAY
       const d = new Date(ms)
       const isMonthStart = d.getUTCDate() === 1
-      const topKey = zoom === "month" ? String(d.getUTCFullYear()) : `${d.getUTCFullYear()}-${d.getUTCMonth()}`
+      const topKey =
+        zoom === "month"
+          ? String(d.getUTCFullYear())
+          : `${d.getUTCFullYear()}-${d.getUTCMonth()}`
       const last = top[top.length - 1]
       if (!last || last.key !== topKey) {
         top.push({
@@ -401,7 +418,12 @@ function Gantt({
           w: ppd,
         })
       } else if (zoom === "week" && d.getUTCDay() === 1) {
-        bottom.push({ key: String(ms), label: fmt.day.format(ms), x: i * ppd, w: 7 * ppd })
+        bottom.push({
+          key: String(ms),
+          label: fmt.day.format(ms),
+          x: i * ppd,
+          w: 7 * ppd,
+        })
       } else if (zoom === "month" && isMonthStart) {
         const next = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1)
         bottom.push({
@@ -444,7 +466,8 @@ function Gantt({
         t: Math.max(...list.map((l) => l.t)),
         open,
       })
-      if (open) for (const task of list) out.push({ kind: "task", key: task.id, task })
+      if (open)
+        for (const task of list) out.push({ kind: "task", key: task.id, task })
     }
     return out
   }, [norm, collapsed])
@@ -517,7 +540,8 @@ function Gantt({
         "[data-slot='gantt-bar']"
       ) ?? []
     )
-    const next = bars[bars.indexOf(e.currentTarget) + (e.key === "ArrowDown" ? 1 : -1)]
+    const next =
+      bars[bars.indexOf(e.currentTarget) + (e.key === "ArrowDown" ? 1 : -1)]
     if (next) {
       e.preventDefault()
       next.focus()
@@ -552,7 +576,7 @@ function Gantt({
     <div
       data-slot="gantt"
       className={cn(
-        "flex min-h-0 w-full flex-col border bg-background text-foreground",
+        "flex min-h-0 w-full max-w-full min-w-0 flex-col overflow-hidden border bg-background text-foreground",
         className
       )}
     >
@@ -594,7 +618,7 @@ function Gantt({
             {/* Axis */}
             <div className="sticky top-0 z-30 flex border-b bg-background">
               <div
-                className="eyebrow sticky left-0 z-40 flex shrink-0 items-end border-r bg-background px-3 pb-1.5 text-muted-foreground"
+                className="sticky left-0 z-40 flex shrink-0 items-end border-r bg-background px-3 pb-1.5 eyebrow text-muted-foreground"
                 style={{ width: LABEL_W }}
               >
                 {labels.task}
@@ -621,7 +645,7 @@ function Gantt({
                 ))}
                 {nowX !== null && (
                   <span
-                    className="eyebrow absolute bottom-7 -translate-x-1/2 bg-brand px-1 text-brand-foreground"
+                    className="absolute bottom-7 -translate-x-1/2 bg-brand px-1 eyebrow text-brand-foreground"
                     style={{ left: nowX }}
                   >
                     {labels.today}
@@ -655,12 +679,18 @@ function Gantt({
                         className="flex min-w-0 flex-1 items-center gap-1.5 rounded-sm px-1.5 py-1 text-left text-sm font-medium outline-none focus-visible:ring-[3px] focus-visible:ring-ring"
                       >
                         {row.open ? (
-                          <ChevronDown className="size-4 shrink-0" aria-hidden />
+                          <ChevronDown
+                            className="size-4 shrink-0"
+                            aria-hidden
+                          />
                         ) : (
-                          <ChevronRight className="size-4 shrink-0" aria-hidden />
+                          <ChevronRight
+                            className="size-4 shrink-0"
+                            aria-hidden
+                          />
                         )}
                         <span className="truncate">{row.group}</span>
-                        <span className="eyebrow ml-auto shrink-0 text-muted-foreground">
+                        <span className="ml-auto shrink-0 eyebrow text-muted-foreground">
                           {fill(labels.tasks, { count: row.count })}
                         </span>
                       </button>
@@ -673,7 +703,8 @@ function Gantt({
                           left: xOf(toLocal(row.s, zone)),
                           width: Math.max(
                             4,
-                            xOf(toLocal(row.t, zone)) - xOf(toLocal(row.s, zone))
+                            xOf(toLocal(row.t, zone)) -
+                              xOf(toLocal(row.s, zone))
                           ),
                         }}
                       />
@@ -697,7 +728,9 @@ function Gantt({
                             aria-hidden
                           />
                         )}
-                        <span className="truncate text-sm">{row.task.label}</span>
+                        <span className="truncate text-sm">
+                          {row.task.label}
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5 overflow-hidden">
                         <span className="font-mono text-[11px] whitespace-nowrap text-muted-foreground">
@@ -739,7 +772,11 @@ function Gantt({
                             : undefined
                         }
                         onKeyDown={onBarKeyDown}
-                        onClick={() => onTaskClick?.(tasks.find((t) => t.id === row.task.id) ?? row.task)}
+                        onClick={() =>
+                          onTaskClick?.(
+                            tasks.find((t) => t.id === row.task.id) ?? row.task
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -774,7 +811,10 @@ function Gantt({
                       markerHeight="6"
                       orient="auto"
                     >
-                      <path d="M0 0 L8 4 L0 8 Z" className="fill-muted-foreground" />
+                      <path
+                        d="M0 0 L8 4 L0 8 Z"
+                        className="fill-muted-foreground"
+                      />
                     </marker>
                     <marker
                       id={`${markerId}-c`}
@@ -796,7 +836,9 @@ function Gantt({
                       strokeWidth={e.critical ? 1.5 : 1}
                       strokeLinejoin="round"
                       className={
-                        e.critical ? "stroke-foreground" : "stroke-muted-foreground"
+                        e.critical
+                          ? "stroke-foreground"
+                          : "stroke-muted-foreground"
                       }
                       markerEnd={`url(#${markerId}-${e.critical ? "c" : "m"})`}
                     />

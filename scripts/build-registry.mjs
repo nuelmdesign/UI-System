@@ -916,6 +916,68 @@ const items = [
     description:
       "Grid seat picker for aircraft, venues and transport with five seat states, a max selection and arrow-key navigation.",
   }),
+  ui("product-card", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/badge", "@opendraft/button", "@opendraft/empty-state"],
+    description:
+      "Product card and responsive grid with price, compare-at price, text badges, rating slot and an out-of-stock state.",
+  }),
+  ui("image-gallery", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/dialog"],
+    description:
+      "Main image with thumbnails, keyboard and swipe navigation and a click-to-zoom lightbox.",
+  }),
+  ui("address-form", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/field",
+      "@opendraft/input",
+      "@opendraft/select",
+    ],
+    description:
+      "Shipping or billing address form with per-country rules, validation and correct autocomplete tokens.",
+  }),
+  ui("video-player", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/dropdown-menu",
+      "@opendraft/slider",
+      "@opendraft/kbd",
+      "@opendraft/scrub-bar",
+    ],
+    description:
+      "Accessible video player with seek, volume, speed, captions, chapters, keyboard shortcuts and an error state.",
+  }),
+  ui("document-viewer", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button"],
+    description:
+      "Shell for paged documents: page nav, zoom, download, search and sidebar slots, plus thumbnails and outline.",
+  }),
+  ui("date-time-picker", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/input", "@opendraft/popover", "@opendraft/select"],
+    description:
+      "Pick a date and time in a named time zone, with DST gap and overlap handling and other-zone display.",
+  }),
+  ui("rating", {
+    deps: ["lucide-react"],
+    description:
+      "Star rating display and input with half steps, plus a distribution breakdown.",
+  }),
+  ui("gantt", {
+    reg: ["@opendraft/badge", "@opendraft/button"],
+    description:
+      "Task bars on a day, week or month axis with dependency arrows, groups, today marker and critical flags.",
+  }),
+  screen("scheduler", {
+    reg: ["@opendraft/badge", "@opendraft/button"],
+    description:
+      "Resource scheduler for rosters, dispatch and appointments: day and week views, drag and keyboard moves, conflicts, agenda on narrow widths.",
+  }),
   screen("analytics-dashboard", {
     deps: ["lucide-react", "motion"],
     reg: [

@@ -775,6 +775,78 @@ export const ENTRIES: DocEntry[] = [
     isNew: true,
   },
   {
+    slug: "product-card",
+    title: "Product Card",
+    category: "Components",
+    description:
+      "Product card and responsive grid with price, compare-at price, text badges, rating slot and an out-of-stock state.",
+    isNew: true,
+  },
+  {
+    slug: "image-gallery",
+    title: "Image Gallery",
+    category: "Components",
+    description:
+      "Main image with thumbnails, keyboard and swipe navigation and a click-to-zoom lightbox.",
+    isNew: true,
+  },
+  {
+    slug: "address-form",
+    title: "Address Form",
+    category: "Components",
+    description:
+      "Shipping or billing address form with per-country rules, validation and correct autocomplete tokens.",
+    isNew: true,
+  },
+  {
+    slug: "video-player",
+    title: "Video Player",
+    category: "Components",
+    description:
+      "Accessible video player with seek, volume, speed, captions, chapters, keyboard shortcuts and an error state.",
+    isNew: true,
+  },
+  {
+    slug: "document-viewer",
+    title: "Document Viewer",
+    category: "Components",
+    description:
+      "Shell for paged documents: page nav, zoom, download, search and sidebar slots, plus thumbnails and outline.",
+    isNew: true,
+  },
+  {
+    slug: "date-time-picker",
+    title: "Date Time Picker",
+    category: "Components",
+    description:
+      "Pick a date and time in a named time zone, with DST gap and overlap handling and other-zone display.",
+    isNew: true,
+  },
+  {
+    slug: "rating",
+    title: "Rating",
+    category: "Components",
+    description:
+      "Star rating display and input with half steps, plus a distribution breakdown.",
+    isNew: true,
+  },
+  {
+    slug: "gantt",
+    title: "Gantt",
+    category: "Components",
+    description:
+      "Task bars on a day, week or month axis with dependency arrows, groups, today marker and critical flags.",
+    isNew: true,
+  },
+  {
+    slug: "scheduler",
+    title: "Scheduler",
+    category: "Blocks",
+    description:
+      "Resource scheduler for rosters, dispatch and appointments: day and week views, drag and keyboard moves, conflicts, agenda on narrow widths.",
+    isNew: true,
+  },
+  {
     slug: "crm-pipeline",
     title: "CRM Pipeline",
     category: "Blocks",

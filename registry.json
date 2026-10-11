@@ -2621,6 +2621,187 @@
       ]
     },
     {
+      "name": "product-card",
+      "type": "registry:ui",
+      "title": "Product Card",
+      "description": "Product card and responsive grid with price, compare-at price, text badges, rating slot and an out-of-stock state.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge",
+        "@opendraft/button",
+        "@opendraft/empty-state"
+      ],
+      "files": [
+        {
+          "path": "components/ui/product-card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "image-gallery",
+      "type": "registry:ui",
+      "title": "Image Gallery",
+      "description": "Main image with thumbnails, keyboard and swipe navigation and a click-to-zoom lightbox.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/dialog"
+      ],
+      "files": [
+        {
+          "path": "components/ui/image-gallery.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "address-form",
+      "type": "registry:ui",
+      "title": "Address Form",
+      "description": "Shipping or billing address form with per-country rules, validation and correct autocomplete tokens.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/field",
+        "@opendraft/input",
+        "@opendraft/select"
+      ],
+      "files": [
+        {
+          "path": "components/ui/address-form.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "video-player",
+      "type": "registry:ui",
+      "title": "Video Player",
+      "description": "Accessible video player with seek, volume, speed, captions, chapters, keyboard shortcuts and an error state.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/dropdown-menu",
+        "@opendraft/slider",
+        "@opendraft/kbd",
+        "@opendraft/scrub-bar"
+      ],
+      "files": [
+        {
+          "path": "components/ui/video-player.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "document-viewer",
+      "type": "registry:ui",
+      "title": "Document Viewer",
+      "description": "Shell for paged documents: page nav, zoom, download, search and sidebar slots, plus thumbnails and outline.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/document-viewer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-time-picker",
+      "type": "registry:ui",
+      "title": "Date Time Picker",
+      "description": "Pick a date and time in a named time zone, with DST gap and overlap handling and other-zone display.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/input",
+        "@opendraft/popover",
+        "@opendraft/select"
+      ],
+      "files": [
+        {
+          "path": "components/ui/date-time-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "rating",
+      "type": "registry:ui",
+      "title": "Rating",
+      "description": "Star rating display and input with half steps, plus a distribution breakdown.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/rating.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "gantt",
+      "type": "registry:ui",
+      "title": "Gantt",
+      "description": "Task bars on a day, week or month axis with dependency arrows, groups, today marker and critical flags.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/gantt.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "scheduler",
+      "type": "registry:block",
+      "title": "Scheduler",
+      "description": "Resource scheduler for rosters, dispatch and appointments: day and week views, drag and keyboard moves, conflicts, agenda on narrow widths.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/scheduler.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/scheduler.tsx"
+        }
+      ]
+    },
+    {
       "name": "analytics-dashboard",
       "type": "registry:block",
       "title": "Analytics Dashboard",
@@ -3481,6 +3662,15 @@
         "@opendraft/step-nav",
         "@opendraft/time-series-chart",
         "@opendraft/seat-map",
+        "@opendraft/product-card",
+        "@opendraft/image-gallery",
+        "@opendraft/address-form",
+        "@opendraft/video-player",
+        "@opendraft/document-viewer",
+        "@opendraft/date-time-picker",
+        "@opendraft/rating",
+        "@opendraft/gantt",
+        "@opendraft/scheduler",
         "@opendraft/analytics-dashboard",
         "@opendraft/settings-page",
         "@opendraft/auth-screen",

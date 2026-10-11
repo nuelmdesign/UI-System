@@ -14,11 +14,7 @@ import { Button } from "@/components/ui/button"
 export type SchedulerDate = string | Date
 export type SchedulerView = "day" | "week"
 export type SchedulerTone =
-  | "default"
-  | "brand"
-  | "success"
-  | "warning"
-  | "destructive"
+  "default" | "brand" | "success" | "warning" | "destructive"
 
 /** A row: a crew member, room, vehicle, engineer, machine, on-call slot... */
 export type SchedulerResource = {
@@ -469,7 +465,10 @@ function Scheduler({
 
   const step = (dir: -1 | 1) => {
     const p = zonedParts(safeDateMs, zone)
-    const next = addDays({ y: p.y, m: p.m, d: p.d }, dir * (view === "week" ? 7 : 1))
+    const next = addDays(
+      { y: p.y, m: p.m, d: p.d },
+      dir * (view === "week" ? 7 : 1)
+    )
     setDate(zonedToUtc(next.y, next.m, next.d, 12, 0, zone))
   }
 
@@ -525,8 +524,7 @@ function Scheduler({
       return {
         resource,
         placed: placed.filter((p) => p.pieces.length > 0),
-        height:
-          ROW_PAD * 2 + lanes * LANE_H + (lanes - 1) * LANE_GAP,
+        height: ROW_PAD * 2 + lanes * LANE_H + (lanes - 1) * LANE_GAP,
       }
     })
     return { rows: built, conflicts: conflictIds }
@@ -681,7 +679,11 @@ function Scheduler({
       case "ArrowUp":
       case "ArrowDown": {
         const i = resources.findIndex((r) => r.id === a.resourceId)
-        const j = clamp(i + (e.key === "ArrowUp" ? -1 : 1), 0, resources.length - 1)
+        const j = clamp(
+          i + (e.key === "ArrowUp" ? -1 : 1),
+          0,
+          resources.length - 1
+        )
         next = { ...a, resourceId: resources[j].id }
         break
       }
@@ -780,7 +782,10 @@ function Scheduler({
             </Button>
           )}
         </div>
-        <h2 className="heading min-w-0 flex-1 truncate text-lg" aria-live="polite">
+        <h2
+          className="min-w-0 flex-1 truncate heading text-lg"
+          aria-live="polite"
+        >
           {rangeLabel}
         </h2>
         <div className="flex items-center gap-2">
@@ -837,7 +842,7 @@ function Scheduler({
           >
             {/* Time axis */}
             <div className="sticky top-0 z-30 flex border-b bg-background">
-              <div className="eyebrow sticky left-0 z-40 flex w-36 shrink-0 items-center border-r bg-background px-3 text-muted-foreground">
+              <div className="sticky left-0 z-40 flex w-36 shrink-0 items-center border-r bg-background px-3 eyebrow text-muted-foreground">
                 {labels.resource}
               </div>
               <div className="relative flex h-10 flex-1">
@@ -871,7 +876,7 @@ function Scheduler({
                     ))}
                 {nowPos !== null && (
                   <span
-                    className="eyebrow pointer-events-none absolute top-0 -translate-x-1/2 bg-brand px-1 text-brand-foreground"
+                    className="pointer-events-none absolute top-0 -translate-x-1/2 bg-brand px-1 eyebrow text-brand-foreground"
                     style={{ left: `${nowPos * 100}%` }}
                   >
                     {labels.now}
@@ -886,15 +891,18 @@ function Scheduler({
                 aria-hidden
                 className="pointer-events-none absolute inset-y-0 right-0 left-36"
               >
-                {Array.from({ length: (view === "day" ? hours : n) - 1 }, (_, i) => (
-                  <div
-                    key={i}
-                    className="absolute inset-y-0 border-l"
-                    style={{
-                      left: `${((i + 1) / (view === "day" ? hours : n)) * 100}%`,
-                    }}
-                  />
-                ))}
+                {Array.from(
+                  { length: (view === "day" ? hours : n) - 1 },
+                  (_, i) => (
+                    <div
+                      key={i}
+                      className="absolute inset-y-0 border-l"
+                      style={{
+                        left: `${((i + 1) / (view === "day" ? hours : n)) * 100}%`,
+                      }}
+                    />
+                  )
+                )}
               </div>
               {rows.map(({ resource, placed, height }) => (
                 <div
@@ -991,9 +999,10 @@ function Scheduler({
                               height: LANE_H,
                             }}
                             onPointerDown={(e) => {
-                              const track = e.currentTarget.closest<HTMLElement>(
-                                "[data-slot='scheduler-track']"
-                              )
+                              const track =
+                                e.currentTarget.closest<HTMLElement>(
+                                  "[data-slot='scheduler-track']"
+                                )
                               if (track) startDrag(e, item, track)
                             }}
                             onKeyDown={(e) => onBarKeyDown(e, item)}
@@ -1054,9 +1063,9 @@ function Scheduler({
             className="border-b"
           >
             <div className="flex items-baseline justify-between gap-2 px-4 pt-3 pb-1">
-              <h3 className="heading truncate text-base">{resource.label}</h3>
+              <h3 className="truncate heading text-base">{resource.label}</h3>
               {resource.meta && (
-                <span className="eyebrow truncate text-muted-foreground">
+                <span className="truncate eyebrow text-muted-foreground">
                   {resource.meta}
                 </span>
               )}
@@ -1075,7 +1084,9 @@ function Scheduler({
                         type="button"
                         aria-label={describe(item)}
                         onClick={() => {
-                          const original = events.find((ev) => ev.id === item.id)
+                          const original = events.find(
+                            (ev) => ev.id === item.id
+                          )
                           if (original) onEventClick?.(original)
                         }}
                         className={cn(
@@ -1086,7 +1097,8 @@ function Scheduler({
                       >
                         <span className="font-medium">{item.title}</span>
                         <span className="font-mono text-xs text-muted-foreground">
-                          {fmt.dateTime.format(item.s)} - {fmt.time.format(item.t)}
+                          {fmt.dateTime.format(item.s)} -{" "}
+                          {fmt.time.format(item.t)}
                         </span>
                         {(item.status || conflict) && (
                           <span className="flex flex-wrap items-center gap-1.5">
