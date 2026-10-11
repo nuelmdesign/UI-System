@@ -13467,6 +13467,1549 @@ Live docs: https://ui-system-virid.vercel.app/docs/description-list. Rules for b
 
 ---
 
+# Gauge
+
+SVG gauge and risk-score ring with threshold bands and a text status, for posture, vitals, utilization and energy.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/gauge
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Gauge } from "@/components/ui/gauge"
+```
+
+## Dependencies
+
+- npm: `motion`, `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/badge`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+type GaugeTone = "neutral" | "brand" | "success" | "warning" | "destructive"
+
+type GaugeThreshold = {
+  /** The band starts at this value and runs to the next threshold's `at`. */
+  at: number
+  tone: GaugeTone
+  /** Status word shown beside the number, so state never relies on color. */
+  label: string
+}
+
+type GaugeLabels = {
+  /** Screen-reader prefix for the status, e.g. "Status". */
+  status: string
+}
+
+type GaugeProps = Omit<React.ComponentProps<"div">, "children"> & {
+  value: number
+  /** Scale start. Defaults to 0. */
+  min?: number
+  /** Scale end. Defaults to 100. */
+  max?: number
+  /**
+   * Bands of the scale, in any order. The band whose `at` is the highest one
+   * not above `value` is the current status. Defaults to low / medium / high
+   * thirds-ish bands (0, 50%, 80% of the scale).
+   */
+  thresholds?: GaugeThreshold[]
+  /** `ring` is a full circle, `arc` an open 240 degree dial. */
+  variant?: "ring" | "arc"
+  size?: keyof typeof sizeClass
+  /** What the gauge measures. Also its accessible name. */
+  label: string
+  /** Small text under the status, e.g. a timestamp or a target. */
+  hint?: React.ReactNode
+  /** Unit shown next to the number, e.g. "%", "bpm", "kW". */
+  unit?: React.ReactNode
+  /** Format the number in the center and in the accessible value text. */
+  formatValue?: (value: number) => string
+  /** Replace the center content entirely. */
+  center?: React.ReactNode
+  /** Draw thin ticks where the bands change. Defaults to true. */
+  showTicks?: boolean
+  labels?: Partial<GaugeLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Gauge, type GaugeThreshold } from "@/components/ui/gauge"
+import { Slider } from "@/components/ui/slider"
+
+const riskBands: GaugeThreshold[] = [
+  { at: 0, tone: "success", label: "Low risk" },
+  { at: 40, tone: "warning", label: "Elevated" },
+  { at: 70, tone: "destructive", label: "Critical" },
+]
+
+const heartRateBands: GaugeThreshold[] = [
+  { at: 30, tone: "warning", label: "Low" },
+  { at: 60, tone: "success", label: "Normal" },
+  { at: 100, tone: "warning", label: "Elevated" },
+  { at: 140, tone: "destructive", label: "High" },
+]
+
+export default function GaugeDemo() {
+  const [risk, setRisk] = React.useState(72)
+
+  return (
+    <div className="flex w-full flex-col gap-8">
+      <section className="flex flex-col gap-3">
+        <span className="eyebrow text-muted-foreground">
+          Security posture: risk score ring
+        </span>
+        <div className="flex flex-wrap items-start gap-8">
+          <Gauge
+            label="Account risk"
+            value={risk}
+            thresholds={riskBands}
+            hint="Scored from 128 signals"
+          />
+          <div className="w-56 pt-8">
+            <Slider
+              aria-label="Risk score"
+              min={0}
+              max={100}
+              value={[risk]}
+              onValueChange={(v) => setRisk(v[0])}
+            />
+          </div>
+        </div>
+      </section>
+      <section className="flex flex-col gap-3">
+        <span className="eyebrow text-muted-foreground">
+          Vitals: arc with units
+        </span>
+        <div className="flex flex-wrap items-start gap-8">
+          <Gauge
+            variant="arc"
+            label="Heart rate"
+            value={88}
+            min={30}
+            max={180}
+            unit="bpm"
+            thresholds={heartRateBands}
+            hint="Resting, last 5 min"
+          />
+          <Gauge
+            variant="arc"
+            size="sm"
+            label="Grid load"
+            value={0.64}
+            min={0}
+            max={1}
+            unit="of capacity"
+            formatValue={(v) =>
+              new Intl.NumberFormat("en", { style: "percent" }).format(v)
+            }
+          />
+        </div>
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/gauge. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# ETA Indicator
+
+Estimated time with a range bar, confidence word and icon, and stale and past-window states.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/eta-indicator
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { EtaIndicator } from "@/components/ui/eta-indicator"
+```
+
+## Dependencies
+
+- npm: `motion`, `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/badge`, `@opendraft/motion`
+
+## Props and types
+
+```ts
+type EtaConfidenceLevel = "high" | "medium" | "low"
+
+type EtaLabels = {
+  eta: string
+  earliest: string
+  latest: string
+  confidence: string
+  high: string
+  medium: string
+  low: string
+  stale: string
+  late: string
+  unknown: string
+  /** "Updated 12 min ago" */
+  updated: (ago: string) => string
+}
+
+type DateInput = string | number | Date
+
+type EtaIndicatorProps = Omit<React.ComponentProps<"div">, "children"> & {
+  eta: DateInput
+  /** Start of the plausible window. Pair with `latest` to show the range bar. */
+  earliest?: DateInput
+  latest?: DateInput
+  /** 0 to 1. */
+  confidence?: number
+  /** `confidence` at or above these values reads as high / medium. */
+  confidenceLevels?: { high: number; medium: number }
+  /** When the estimate was last refreshed. */
+  updatedAt?: DateInput
+  /** Current time. Pass it for tests and stories; otherwise it ticks each minute. */
+  now?: DateInput
+  /** Estimates older than this are marked stale. Defaults to 15 minutes. */
+  staleAfterMs?: number
+  /** IANA zone, e.g. "Europe/Berlin". Defaults to the viewer's zone. */
+  timeZone?: string
+  locale?: string
+  /** Show the zone abbreviation next to times. Defaults to true. */
+  showTimeZone?: boolean
+  /** What is being estimated, e.g. "Delivery", "Doctor arrives". */
+  title?: React.ReactNode
+  labels?: Partial<EtaLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { EtaIndicator } from "@/components/ui/eta-indicator"
+
+const NOW = "2026-03-14T14:00:00Z"
+
+export default function EtaIndicatorDemo() {
+  return (
+    <div className="grid w-full max-w-[720px] gap-4 min-[600px]:grid-cols-2">
+      <EtaIndicator
+        title="Parcel delivery"
+        now={NOW}
+        eta="2026-03-14T15:20:00Z"
+        earliest="2026-03-14T14:50:00Z"
+        latest="2026-03-14T16:30:00Z"
+        confidence={0.82}
+        updatedAt="2026-03-14T13:56:00Z"
+        timeZone="Europe/Berlin"
+      />
+      <EtaIndicator
+        title="Clinician arrival"
+        now={NOW}
+        eta="2026-03-14T14:35:00Z"
+        earliest="2026-03-14T14:20:00Z"
+        latest="2026-03-14T15:30:00Z"
+        confidence={0.41}
+        updatedAt="2026-03-14T13:20:00Z"
+        timeZone="America/New_York"
+        labels={{ eta: "Expected on site", stale: "Out of date" }}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/eta-indicator. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Secret Input
+
+Masked input with reveal, copy and optional auto-hide, for API keys, tokens and sensitive fields.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/secret-input
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { SecretInput } from "@/components/ui/secret-input"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/input`, `@opendraft/button`
+
+## Props and types
+
+```ts
+type SecretInputLabels = {
+  show: string
+  hide: string
+  copy: string
+  copied: string
+  /** Announced when the value is hidden again automatically. */
+  autoHidden: string
+}
+
+type SecretInputProps = Omit<
+  React.ComponentProps<"input">,
+  "value" | "defaultValue" | "onChange" | "type"
+> & {
+  value?: string
+  defaultValue?: string
+  onChange?: (value: string) => void
+  /** Character used to mask the value while hidden. A custom character makes the hidden field read-only. */
+  mask?: string
+  /** Show a copy button. */
+  copyable?: boolean
+  /** Hide the value again after this many milliseconds. 0 disables. */
+  autoHideMs?: number
+  /** Fixed accessible name for the field. Never include the secret itself. */
+  "aria-label"?: string
+  labels?: Partial<SecretInputLabels>
+  /** Called after a successful copy. */
+  onCopy?: () => void
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Field } from "@/components/ui/field"
+import { SecretInput } from "@/components/ui/secret-input"
+
+export default function SecretInputDemo() {
+  const [token, setToken] = React.useState("tok_live_8f3a91c2d7b04e65")
+  return (
+    <div className="flex w-full max-w-md flex-col gap-6">
+      <Field label="Access token" hint="Hides itself after 10 seconds.">
+        {(c) => (
+          <SecretInput
+            {...c}
+            value={token}
+            onChange={setToken}
+            autoHideMs={10000}
+          />
+        )}
+      </Field>
+      <Field label="National ID number" hint="Masked with a custom character.">
+        {(c) => (
+          <SecretInput
+            {...c}
+            defaultValue="482-19-7730"
+            mask="*"
+            copyable={false}
+            labels={{ show: "Reveal number", hide: "Hide number" }}
+          />
+        )}
+      </Field>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/secret-input. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# MFA Step
+
+Multi-factor step: code entry, method switcher, resend countdown, and verifying, error and locked states.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/mfa-step
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { MfaStep } from "@/components/ui/mfa-step"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/otp-input`, `@opendraft/button`
+
+## Props and types
+
+```ts
+type MfaMethod = {
+  id: string
+  /** Short name shown in the switcher, e.g. "Authenticator app". */
+  label: string
+  /** Instruction under the title while this method is active. */
+  description?: React.ReactNode
+  /** Where a code was sent, e.g. a masked phone number. Shown with the description. */
+  destination?: string
+  /** Number of characters in the code. Defaults to 6. */
+  codeLength?: number
+  /** Accepted characters. Defaults to numeric. */
+  pattern?: "numeric" | "alphanumeric"
+  /** Whether a new code can be requested for this method. */
+  resendable?: boolean
+}
+
+type MfaVerifyResult = boolean | void
+
+type MfaStepLabels = {
+  title: string
+  codeLabel: string
+  verify: string
+  verifying: string
+  switchMethod: string
+  resend: string
+  /** Template for the countdown; `{seconds}` is replaced. */
+  resendIn: string
+  resent: string
+  invalidCode: string
+  failed: string
+  lockedTitle: string
+  lockedDescription: string
+}
+
+type MfaStepProps = Omit<
+  React.ComponentProps<"section">,
+  "onSubmit" | "title"
+> & {
+  methods?: MfaMethod[]
+  method?: string
+  defaultMethod?: string
+  onMethodChange?: (id: string) => void
+  /**
+   * Resolve to verify. Return false or throw to show an error. The code is
+   * submitted automatically once every cell is filled.
+   */
+  onVerify: (code: string, method: string) => Promise<MfaVerifyResult>
+  /** Request a new code. Restarts the countdown. */
+  onResend?: (method: string) => void | Promise<void>
+  /** Seconds before a code can be requested again. */
+  resendIn?: number
+  /** Locks the step, e.g. after too many failed attempts. */
+  locked?: boolean
+  /** Error from outside, shown instead of the local one. */
+  error?: React.ReactNode
+  labels?: Partial<MfaStepLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { MfaStep, type MfaMethod } from "@/components/ui/mfa-step"
+
+const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
+
+const BANK_METHODS: MfaMethod[] = [
+  {
+    id: "app",
+    label: "Authenticator",
+    description: "Open your authenticator app and enter the current code.",
+  },
+  {
+    id: "sms",
+    label: "SMS",
+    description: "We texted a code to",
+    destination: "•••• 4417",
+    resendable: true,
+  },
+]
+
+const CLINIC_METHODS: MfaMethod[] = [
+  {
+    id: "email",
+    label: "Email",
+    description: "Enter the 8-character code sent to",
+    destination: "j•••@example.com",
+    codeLength: 8,
+    pattern: "alphanumeric",
+    resendable: true,
+  },
+  {
+    id: "backup",
+    label: "Recovery code",
+    description: "Use one of the recovery codes you saved.",
+    codeLength: 10,
+    pattern: "alphanumeric",
+  },
+]
+
+export default function MfaStepDemo() {
+  return (
+    <div className="grid w-full gap-10 md:grid-cols-2">
+      <MfaStep
+        methods={BANK_METHODS}
+        resendIn={20}
+        onVerify={async (code) => {
+          await wait(700)
+          return code === "123456"
+        }}
+        onResend={() => wait(300)}
+        labels={{ title: "Confirm this payment" }}
+      />
+      <MfaStep
+        methods={CLINIC_METHODS}
+        resendIn={45}
+        onVerify={async () => {
+          await wait(700)
+          throw new Error("This code has expired.")
+        }}
+        onResend={() => wait(300)}
+        labels={{ title: "Open patient record", verify: "Continue" }}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/mfa-step. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Permission Matrix
+
+Roles by permissions grid with groups, select-all, indeterminate states, read-only roles and a change summary.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/permission-matrix
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { PermissionMatrix } from "@/components/ui/permission-matrix"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/checkbox`, `@opendraft/button`
+
+## Props and types
+
+```ts
+type PermissionRole = {
+  id: string
+  label: string
+  description?: string
+  /** Column can be viewed but not changed. */
+  readOnly?: boolean
+}
+
+type PermissionItem = {
+  id: string
+  label: string
+  description?: string
+}
+
+type PermissionGroup = {
+  label: string
+  items: PermissionItem[]
+}
+
+/** Map of role id to the permission ids it holds. */
+type PermissionValue = Record<string, string[]>
+
+type PermissionMatrixLabels = {
+  permission: string
+  allRoles: string
+  readOnly: string
+  /** `{permission}` and `{role}` are replaced. */
+  cell: string
+  /** `{role}` is replaced. */
+  selectRole: string
+  /** `{permission}` is replaced. */
+  selectRow: string
+  /** `{group}` and `{role}` are replaced. */
+  selectGroup: string
+  noChanges: string
+  /** `{added}` and `{removed}` are replaced. */
+  summary: string
+  /** `{more}` is replaced. */
+  moreChanges: string
+  granted: string
+  revoked: string
+  reset: string
+  empty: string
+}
+
+type PermissionMatrixProps = Omit<
+  React.ComponentProps<"div">,
+  "defaultValue" | "onChange"
+> & {
+  roles?: PermissionRole[]
+  groups?: PermissionGroup[]
+  value?: PermissionValue
+  defaultValue?: PermissionValue
+  onValueChange?: (value: PermissionValue) => void
+  /** Saved state to compare against. Defaults to the value on mount. */
+  baseline?: PermissionValue
+  /** Disable every cell. */
+  readOnly?: boolean
+  /** Show the change summary below the grid. */
+  showSummary?: boolean
+  /** Accessible name for the grid. */
+  "aria-label"?: string
+  labels?: Partial<PermissionMatrixLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import {
+  PermissionMatrix,
+  type PermissionGroup,
+  type PermissionRole,
+  type PermissionValue,
+} from "@/components/ui/permission-matrix"
+
+const FLEET_ROLES: PermissionRole[] = [
+  { id: "owner", label: "Owner", readOnly: true },
+  { id: "dispatcher", label: "Dispatcher" },
+  { id: "driver", label: "Driver" },
+  { id: "auditor", label: "Auditor" },
+]
+const FLEET_GROUPS: PermissionGroup[] = [
+  {
+    label: "Shipments",
+    items: [
+      { id: "ship.view", label: "View shipments" },
+      {
+        id: "ship.assign",
+        label: "Assign drivers",
+        description: "Dispatch only",
+      },
+      { id: "ship.cancel", label: "Cancel shipments" },
+    ],
+  },
+  {
+    label: "Vehicles",
+    items: [
+      { id: "veh.view", label: "View vehicles" },
+      { id: "veh.service", label: "Log service" },
+    ],
+  },
+]
+const FLEET_VALUE: PermissionValue = {
+  owner: ["ship.view", "ship.assign", "ship.cancel", "veh.view", "veh.service"],
+  dispatcher: ["ship.view", "ship.assign", "veh.view"],
+  driver: ["ship.view", "veh.view", "veh.service"],
+  auditor: ["ship.view", "veh.view"],
+}
+
+const HR_ROLES: PermissionRole[] = [
+  { id: "hr", label: "HR partner" },
+  { id: "manager", label: "Manager" },
+  { id: "employee", label: "Employee" },
+]
+const HR_GROUPS: PermissionGroup[] = [
+  {
+    label: "Compensation",
+    items: [
+      { id: "pay.view", label: "View salary bands" },
+      { id: "pay.edit", label: "Adjust salary" },
+    ],
+  },
+  {
+    label: "Time off",
+    items: [
+      { id: "leave.request", label: "Request leave" },
+      { id: "leave.approve", label: "Approve leave" },
+    ],
+  },
+]
+
+export default function PermissionMatrixDemo() {
+  return (
+    <div className="flex w-full flex-col gap-10">
+      <PermissionMatrix
+        aria-label="Fleet permissions"
+        roles={FLEET_ROLES}
+        groups={FLEET_GROUPS}
+        defaultValue={FLEET_VALUE}
+      />
+      <PermissionMatrix
+        aria-label="HR permissions"
+        roles={HR_ROLES}
+        groups={HR_GROUPS}
+        defaultValue={{
+          hr: ["pay.view", "pay.edit", "leave.approve"],
+          manager: ["leave.request", "leave.approve"],
+          employee: ["leave.request"],
+        }}
+        labels={{
+          permission: "Capability",
+          summary: "{added} added, {removed} removed",
+        }}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/permission-matrix. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Signature Pad
+
+Canvas signature capture with undo, clear and a typed-name alternative, for delivery, consent and sign-off.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/signature-pad
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { SignaturePad } from "@/components/ui/signature-pad"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/input`
+
+## Props and types
+
+```ts
+type SignaturePadMode = "draw" | "type"
+
+type SignaturePadLabels = {
+  /** Visible label above the pad. */
+  label: string
+  /** Placeholder shown while the pad is empty. */
+  empty: string
+  clear: string
+  undo: string
+  /** Confirm button, shown when `onSign` is set. */
+  sign: string
+  draw: string
+  type: string
+  typedLabel: string
+  typedPlaceholder: string
+  /** Accessible name of the drawing surface. */
+  canvas: string
+  /** Live announcement once a signature exists. */
+  captured: string
+  /** Live announcement after clearing. */
+  cleared: string
+}
+
+type SignaturePadResult = {
+  dataUrl: string
+  mode: SignaturePadMode
+  /** The typed name, when mode is "type". */
+  name?: string
+}
+
+type SignaturePadProps = Omit<
+  React.ComponentProps<"div">,
+  "onChange" | "children"
+> & {
+  /** Called with a PNG data URL after each stroke, undo or typed change, or null when empty. */
+  onChange?: (dataUrl: string | null) => void
+  /** Called when the person confirms with the sign button. The button is hidden when omitted. */
+  onSign?: (result: SignaturePadResult) => void
+  /** Offer a typed-name alternative for keyboard and assistive-tech users. */
+  allowTyped?: boolean
+  disabled?: boolean
+  /** Stroke width in CSS pixels. */
+  strokeWidth?: number
+  /** Height of the drawing surface in CSS pixels. */
+  height?: number
+  labels?: Partial<SignaturePadLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { SignaturePad } from "@/components/ui/signature-pad"
+
+export default function SignaturePadDemo() {
+  const [delivery, setDelivery] = React.useState<string | null>(null)
+  const [consent, setConsent] = React.useState<string | null>(null)
+
+  return (
+    <div className="grid w-full max-w-3xl gap-8 sm:grid-cols-2">
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Proof of delivery</h3>
+        <SignaturePad
+          labels={{
+            label: "Recipient signature",
+            empty: "Recipient signs here",
+            sign: "Confirm delivery",
+          }}
+          onChange={setDelivery}
+          onSign={() => {}}
+        />
+        <p className="font-mono text-xs text-muted-foreground">
+          {delivery ? "Captured" : "Waiting for signature"}
+        </p>
+      </section>
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Patient consent</h3>
+        <SignaturePad
+          allowTyped
+          labels={{
+            label: "Patient or guardian",
+            empty: "Sign to consent",
+            typedLabel: "Type the patient's full name",
+            sign: "Give consent",
+          }}
+          onChange={setConsent}
+          onSign={() => {}}
+        />
+        <p className="font-mono text-xs text-muted-foreground">
+          {consent ? "Captured" : "Waiting for consent"}
+        </p>
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/signature-pad. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Photo Capture
+
+Take or pick photos with thumbnails, remove, a max count and optional captions.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/photo-capture
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { PhotoCapture } from "@/components/ui/photo-capture"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/input`
+
+## Props and types
+
+```ts
+type CapturedPhoto = {
+  id: string
+  file: File
+  caption: string
+}
+
+type PhotoCaptureLabels = {
+  /** Visible label above the control. */
+  label: string
+  /** Button that opens the device camera. */
+  take: string
+  /** Button that opens the file picker. */
+  choose: string
+  /** Shown while there are no photos. */
+  empty: string
+  captionLabel: string
+  captionPlaceholder: string
+  /** Prefix of the remove button's accessible name, followed by the file name. */
+  remove: string
+  /** Shown when `max` is reached. */
+  limitReached: string
+  /** Live announcement after adding photos. */
+  added: string
+  /** Live announcement after removing a photo. */
+  removed: string
+}
+
+type PhotoCaptureProps = Omit<
+  React.ComponentProps<"div">,
+  "onChange" | "children"
+> & {
+  /** Maximum number of photos. Further picks are ignored and the buttons disable. */
+  max?: number
+  /** Show a caption field under each photo. */
+  captions?: boolean
+  /** Which camera to prefer on phones. */
+  facing?: "environment" | "user"
+  /** Same syntax as the input `accept` attribute. */
+  accept?: string
+  disabled?: boolean
+  /** Fires on add, remove and caption edits. `files` is the plain list; `photos` carries captions. */
+  onChange?: (files: File[], photos: CapturedPhoto[]) => void
+  labels?: Partial<PhotoCaptureLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { PhotoCapture } from "@/components/ui/photo-capture"
+
+export default function PhotoCaptureDemo() {
+  return (
+    <div className="grid w-full max-w-3xl gap-8 sm:grid-cols-2">
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Site inspection</h3>
+        <PhotoCapture
+          captions
+          max={6}
+          labels={{
+            label: "Evidence photos",
+            empty: "Add photos of the defect",
+            captionPlaceholder: "What does this show?",
+          }}
+        />
+      </section>
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Parcel condition</h3>
+        <PhotoCapture
+          max={3}
+          labels={{
+            label: "Delivery photos",
+            take: "Photo of parcel",
+            choose: "Pick from gallery",
+            empty: "No delivery photos",
+          }}
+        />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/photo-capture. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Step Navigation
+
+Non-linear lesson and step navigation with complete, current, available and locked states.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/step-nav
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { StepNav } from "@/components/ui/step-nav"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/progress`
+
+## Props and types
+
+```ts
+type StepNavStatus = "complete" | "current" | "locked" | "available"
+
+type StepNavStep = {
+  id: string
+  label: string
+  description?: string
+  /** Defaults to "current" for the `current` id and "available" otherwise. */
+  status?: StepNavStatus
+  /** Why the step is locked. Shown as text and announced. */
+  lockedReason?: string
+}
+
+type StepNavLabels = {
+  navigation: string
+  /** Template for the summary. `{done}` and `{total}` are replaced. */
+  summary: string
+  complete: string
+  current: string
+  available: string
+  locked: string
+  /** Fallback reason when a locked step has none. */
+  lockedReason: string
+}
+
+type StepNavProps = Omit<
+  React.ComponentProps<"nav">,
+  "children" | "onSelect"
+> & {
+  steps: StepNavStep[]
+  /** Id of the current step. Used for steps without an explicit status. */
+  current?: string
+  onSelect?: (step: StepNavStep, index: number) => void
+  /** `auto` is vertical in narrow containers and horizontal from 42rem up. */
+  orientation?: "auto" | "vertical" | "horizontal"
+  /** Show the "n of m" summary and bar. */
+  showProgress?: boolean
+  labels?: Partial<StepNavLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { StepNav, type StepNavStep } from "@/components/ui/step-nav"
+
+const lessons: StepNavStep[] = [
+  {
+    id: "l1",
+    label: "Lesson 1",
+    description: "Getting started",
+    status: "complete",
+  },
+  {
+    id: "l2",
+    label: "Lesson 2",
+    description: "Core ideas",
+    status: "complete",
+  },
+  { id: "l3", label: "Lesson 3", description: "Worked examples" },
+  {
+    id: "l4",
+    label: "Lesson 4",
+    description: "Final quiz",
+    status: "locked",
+    lockedReason: "Pass lesson 3 to unlock",
+  },
+]
+
+const onboarding: StepNavStep[] = [
+  {
+    id: "docs",
+    label: "Identity check",
+    description: "Upload documents",
+    status: "complete",
+  },
+  { id: "policy", label: "Policy review", description: "Read and accept" },
+  {
+    id: "equipment",
+    label: "Equipment",
+    description: "Request devices",
+    status: "locked",
+    lockedReason: "Awaiting manager approval",
+  },
+]
+
+export default function StepNavDemo() {
+  const [lesson, setLesson] = React.useState("l3")
+  const [task, setTask] = React.useState("policy")
+
+  return (
+    <div className="flex w-full max-w-3xl flex-col gap-10">
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Course lessons</h3>
+        <StepNav
+          steps={lessons}
+          current={lesson}
+          onSelect={(s) => setLesson(s.id)}
+          labels={{ navigation: "Lessons" }}
+        />
+      </section>
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Employee onboarding</h3>
+        <StepNav
+          orientation="vertical"
+          steps={onboarding}
+          current={task}
+          onSelect={(s) => setTask(s.id)}
+          labels={{
+            navigation: "Onboarding tasks",
+            summary: "{done} of {total} tasks done",
+          }}
+        />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/step-nav. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Time Series Chart
+
+Multi-series time chart with time zones, brush zoom, thresholds, gaps, keyboard stepping and a data-table fallback.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/time-series-chart
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { TimeSeriesChart } from "@/components/ui/time-series-chart"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`
+
+## Props and types
+
+```ts
+type TimeSeriesPoint = {
+  /** Timestamp: epoch milliseconds, a Date, or an ISO string. */
+  t: number | Date | string
+  /** `null` (or NaN) is a gap: the line breaks, nothing is interpolated. */
+  v: number | null
+}
+
+type TimeSeries = {
+  id: string
+  label: string
+  points: TimeSeriesPoint[]
+  /** Overrides the chart-level `unit` for this series. */
+  unit?: string
+  /** Any CSS color value or token, e.g. `var(--brand)`. Defaults by order. */
+  color?: string
+  /** SVG dash pattern, e.g. "6 3". Defaults by order so lines differ without color. */
+  dash?: string
+}
+
+type ThresholdTone = "neutral" | "warning" | "destructive" | "success" | "brand"
+
+type TimeSeriesThreshold = {
+  id: string
+  /** Visible text on the chart, e.g. "Limit 80%". Always shown. */
+  label: string
+  /** Line position, or the lower edge of a band. */
+  value: number
+  /** When set, draws a band between `value` and `to` instead of a line. */
+  to?: number
+  tone?: ThresholdTone
+}
+
+type TimeSeriesLabels = {
+  legend: string
+  resetZoom: string
+  dataTable: string
+  time: string
+  noData: string
+  /** Screen reader hint for the focusable plot. */
+  instructions: string
+  zoomed: string
+  empty: string
+  /** Builds the live readout text. */
+  readout: (time: string, parts: { label: string; value: string }[]) => string
+}
+
+type TimeSeriesChartProps = Omit<
+  React.ComponentProps<"div">,
+  "children" | "onChange"
+> & {
+  series?: TimeSeries[]
+  /** IANA time zone used for every axis, tooltip and table label. Defaults to UTC. */
+  timeZone?: string
+  /** BCP 47 locale for date and number formatting. */
+  locale?: string
+  /** Suffix for values, e.g. "%" or "MW". Ignored when `formatValue` is set. */
+  unit?: string
+  formatValue?: (value: number, series: TimeSeries) => string
+  thresholds?: TimeSeriesThreshold[]
+  /** Fixed y bounds; leave a side undefined to fit the data. */
+  yDomain?: [number | undefined, number | undefined]
+  /** Plot height in px. */
+  height?: number
+  /** Accessible name of the chart. */
+  title?: string
+  labels?: Partial<TimeSeriesLabels>
+  onZoomChange?: (range: [number, number] | null) => void
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import {
+  TimeSeriesChart,
+  type TimeSeries,
+  type TimeSeriesThreshold,
+} from "@/components/ui/time-series-chart"
+
+const START = Date.UTC(2025, 2, 10, 0, 0, 0)
+const MINUTE = 60_000
+
+function build(
+  id: string,
+  label: string,
+  count: number,
+  step: number,
+  fn: (i: number) => number,
+  gap?: [number, number]
+): TimeSeries {
+  return {
+    id,
+    label,
+    points: Array.from({ length: count }, (_, i) => ({
+      t: START + i * step,
+      v: gap && i >= gap[0] && i <= gap[1] ? null : Math.round(fn(i) * 10) / 10,
+    })),
+  }
+}
+
+const serverSeries: TimeSeries[] = [
+  build(
+    "cpu",
+    "CPU",
+    97,
+    15 * MINUTE,
+    (i) => 38 + 30 * Math.sin(i / 9) ** 2 + (i % 5)
+  ),
+  build(
+    "mem",
+    "Memory",
+    97,
+    15 * MINUTE,
+    (i) => 55 + i / 8 + 4 * Math.sin(i / 4),
+    [40, 47]
+  ),
+  build("disk", "Disk", 97, 15 * MINUTE, (i) => 24 + i / 20),
+]
+const serverThresholds: TimeSeriesThreshold[] = [
+  { id: "warn", label: "Warning 70%", value: 70, tone: "warning" },
+  { id: "crit", label: "Critical 90%", value: 90, tone: "destructive" },
+]
+
+const loadSeries: TimeSeries[] = [
+  build(
+    "grid",
+    "Grid import",
+    48,
+    60 * MINUTE,
+    (i) => 310 + 120 * Math.sin((i - 6) / 3.8)
+  ),
+  build("solar", "Solar", 48, 60 * MINUTE, (i) =>
+    Math.max(0, 260 * Math.sin((((i % 24) - 6) / 12) * Math.PI))
+  ),
+]
+const loadThresholds: TimeSeriesThreshold[] = [
+  {
+    id: "peak",
+    label: "Peak tariff band",
+    value: 380,
+    to: 450,
+    tone: "warning",
+  },
+  { id: "cap", label: "Contract cap 450 kW", value: 450, tone: "destructive" },
+]
+
+export default function TimeSeriesChartDemo() {
+  return (
+    <div className="grid w-full gap-10">
+      <section className="grid gap-3">
+        <h3 className="heading text-xl">Server metrics</h3>
+        <TimeSeriesChart
+          title="Server utilisation, 24 hours"
+          series={serverSeries}
+          thresholds={serverThresholds}
+          unit="%"
+          yDomain={[0, 100]}
+          timeZone="Europe/Berlin"
+        />
+      </section>
+      <section className="grid gap-3">
+        <h3 className="heading text-xl">Energy load</h3>
+        <TimeSeriesChart
+          title="Site power, 48 hours"
+          series={loadSeries}
+          thresholds={loadThresholds}
+          unit="kW"
+          timeZone="America/New_York"
+          formatValue={(v) => `${Math.round(v)} kW`}
+          labels={{ legend: "Sources", resetZoom: "Show full range" }}
+        />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/time-series-chart. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Seat Map
+
+Grid seat picker for aircraft, venues and transport with five seat states, a max selection and arrow-key navigation.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/seat-map
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { SeatMap } from "@/components/ui/seat-map"
+```
+
+## Dependencies
+
+- Registry (installed with it): `@opendraft/utils`
+
+## Props and types
+
+```ts
+type SeatState = "available" | "selected" | "occupied" | "blocked" | "premium"
+
+type SeatInfo = {
+  /** Defaults to "available". "selected" is derived from the selection. */
+  state?: Exclude<SeatState, "selected">
+  /** Price in the smallest display unit you pass to `formatValue`. */
+  price?: number
+  /** Free text tier name, e.g. "Exit row" or "Circle". Shown in the readout. */
+  tier?: string
+}
+
+/**
+ * Layout rows, one string per row. `s` is a seat, `.` an aisle (narrow gap),
+ * `_` an empty cell the size of a seat (a missing seat, a pillar).
+ */
+type SeatLayoutObject = {
+  rows: string[]
+  /** One label per row; defaults to A, B, C... */
+  rowLabels?: string[]
+  /** One label per grid column (aisles included, ignored for them); defaults to 1, 2, 3... counted per row. */
+  columnLabels?: string[]
+}
+
+type SeatLayout = string[] | SeatLayoutObject
+
+type SeatMapLabels = {
+  legend: string
+  front: string
+  available: string
+  selected: string
+  occupied: string
+  blocked: string
+  premium: string
+  none: string
+  total: string
+  maxReached: (max: number) => string
+  /** Row label shown to assistive tech. */
+  row: (label: string) => string
+  /** Accessible description of one seat. */
+  seat: (p: {
+    id: string
+    stateLabel: string
+    price?: string
+    tier?: string
+  }) => string
+  map: string
+}
+
+type SeatMapChange = { id: string; row: number; col: number } & SeatInfo
+
+type SeatMapProps = Omit<
+  React.ComponentProps<"div">,
+  "onChange" | "defaultValue" | "children"
+> & {
+  layout?: SeatLayout
+  /** Per-seat info by seat id (row label + column label, e.g. "12A"). */
+  seats?: Record<string, SeatInfo>
+  /** Computed alternative to `seats`; takes precedence when it returns a value. */
+  getSeat?: (id: string, row: number, col: number) => SeatInfo | undefined
+  /** Controlled selection (seat ids). */
+  value?: string[]
+  defaultValue?: string[]
+  /** Maximum selectable seats. With 1, picking another seat replaces the first. */
+  max?: number
+  onChange?: (ids: string[], seats: SeatMapChange[]) => void
+  /** Formats prices. Defaults to `Intl` with `currency` if given, else plain number. */
+  formatValue?: (value: number) => string
+  currency?: string
+  locale?: string
+  /** Hide the legend or the selection summary. */
+  showLegend?: boolean
+  showSummary?: boolean
+  readOnly?: boolean
+  labels?: Partial<SeatMapLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { SeatMap, type SeatInfo } from "@/components/ui/seat-map"
+
+const cabinRows = Array.from({ length: 10 }, (_, i) => String(i + 1))
+const cabin = {
+  rows: cabinRows.map(() => "sss.sss"),
+  rowLabels: cabinRows,
+  columnLabels: ["A", "B", "C", ".", "D", "E", "F"],
+}
+const cabinSeats: Record<string, SeatInfo> = {}
+for (const r of ["1", "2"])
+  for (const c of ["A", "B", "C", "D", "E", "F"])
+    cabinSeats[`${r}${c}`] = {
+      state: "premium",
+      price: 45,
+      tier: "Extra legroom",
+    }
+for (const id of ["3B", "3C", "4A", "6E", "6F", "7D", "9A"])
+  cabinSeats[id] = { state: "occupied" }
+for (const id of ["5A", "5F"]) cabinSeats[id] = { state: "blocked" }
+for (const r of ["3", "4", "5", "6", "7", "8", "9", "10"])
+  for (const c of ["A", "B", "C", "D", "E", "F"])
+    cabinSeats[`${r}${c}`] ??= { price: 18 }
+
+const theatre = {
+  rows: [
+    "__ssssssss__",
+    "_ssssssssss_",
+    "ssss.ss.ssss",
+    "ssss.ss.ssss",
+    "ssss.ss.ssss",
+    "ssss.ss.ssss",
+  ],
+  rowLabels: ["A", "B", "C", "D", "E", "F"],
+}
+const theatreSeats: Record<string, SeatInfo> = {}
+for (const r of ["C", "D"])
+  for (let n = 1; n <= 10; n++)
+    theatreSeats[`${r}${n}`] = { state: "premium", price: 60, tier: "Stalls" }
+for (const id of ["D4", "D5", "E2", "F9", "F10", "B6"])
+  theatreSeats[id] = { state: "occupied" }
+theatreSeats.A1 = { state: "blocked" }
+
+export default function SeatMapDemo() {
+  const [cabinPick, setCabinPick] = React.useState<string[]>(["2C"])
+  return (
+    <div className="grid w-full gap-12">
+      <section className="grid gap-3">
+        <h3 className="heading text-xl">Aircraft cabin</h3>
+        <SeatMap
+          layout={cabin}
+          seats={cabinSeats}
+          value={cabinPick}
+          onChange={setCabinPick}
+          max={3}
+          currency="EUR"
+          locale="en-GB"
+          labels={{ front: "Cockpit", premium: "Extra legroom" }}
+        />
+      </section>
+      <section className="grid gap-3">
+        <h3 className="heading text-xl">Theatre</h3>
+        <SeatMap
+          layout={theatre}
+          seats={theatreSeats}
+          max={4}
+          formatValue={(n) => `$${n.toFixed(2)}`}
+          labels={{
+            front: "Stage",
+            premium: "Best view",
+            row: (l) => `Row ${l}`,
+          }}
+        />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/seat-map. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
 # Quantity Stepper
 
 Minus, value and plus control with min, max and step, controlled or uncontrolled, with optional press-and-hold repeat.

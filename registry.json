@@ -2425,6 +2425,202 @@
       ]
     },
     {
+      "name": "gauge",
+      "type": "registry:ui",
+      "title": "Gauge",
+      "description": "SVG gauge and risk-score ring with threshold bands and a text status, for posture, vitals, utilization and energy.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/gauge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "eta-indicator",
+      "type": "registry:ui",
+      "title": "Eta Indicator",
+      "description": "Estimated time with a range bar, confidence word and icon, and stale and past-window states.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge",
+        "@opendraft/motion"
+      ],
+      "files": [
+        {
+          "path": "components/ui/eta-indicator.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "secret-input",
+      "type": "registry:ui",
+      "title": "Secret Input",
+      "description": "Masked input with reveal, copy and optional auto-hide, for API keys, tokens and sensitive fields.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/input",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/secret-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "mfa-step",
+      "type": "registry:ui",
+      "title": "Mfa Step",
+      "description": "Multi-factor step: code entry, method switcher, resend countdown, and verifying, error and locked states.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/otp-input",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/mfa-step.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "permission-matrix",
+      "type": "registry:ui",
+      "title": "Permission Matrix",
+      "description": "Roles by permissions grid with groups, select-all, indeterminate states, read-only roles and a change summary.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/checkbox",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/permission-matrix.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "signature-pad",
+      "type": "registry:ui",
+      "title": "Signature Pad",
+      "description": "Canvas signature capture with undo, clear and a typed-name alternative, for delivery, consent and sign-off.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/input"
+      ],
+      "files": [
+        {
+          "path": "components/ui/signature-pad.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "photo-capture",
+      "type": "registry:ui",
+      "title": "Photo Capture",
+      "description": "Take or pick photos with thumbnails, remove, a max count and optional captions.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/input"
+      ],
+      "files": [
+        {
+          "path": "components/ui/photo-capture.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "step-nav",
+      "type": "registry:ui",
+      "title": "Step Nav",
+      "description": "Non-linear lesson and step navigation with complete, current, available and locked states.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/progress"
+      ],
+      "files": [
+        {
+          "path": "components/ui/step-nav.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "time-series-chart",
+      "type": "registry:ui",
+      "title": "Time Series Chart",
+      "description": "Multi-series time chart with time zones, brush zoom, thresholds, gaps, keyboard stepping and a data-table fallback.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/time-series-chart.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "seat-map",
+      "type": "registry:ui",
+      "title": "Seat Map",
+      "description": "Grid seat picker for aircraft, venues and transport with five seat states, a max selection and arrow-key navigation.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/ui/seat-map.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "analytics-dashboard",
       "type": "registry:block",
       "title": "Analytics Dashboard",
@@ -3275,6 +3471,16 @@
         "@opendraft/data-table",
         "@opendraft/record-page",
         "@opendraft/stage-board",
+        "@opendraft/gauge",
+        "@opendraft/eta-indicator",
+        "@opendraft/secret-input",
+        "@opendraft/mfa-step",
+        "@opendraft/permission-matrix",
+        "@opendraft/signature-pad",
+        "@opendraft/photo-capture",
+        "@opendraft/step-nav",
+        "@opendraft/time-series-chart",
+        "@opendraft/seat-map",
         "@opendraft/analytics-dashboard",
         "@opendraft/settings-page",
         "@opendraft/auth-screen",

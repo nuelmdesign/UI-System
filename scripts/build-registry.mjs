@@ -858,6 +858,64 @@ const items = [
     description:
       "Generic kanban board: drag or keyboard moves, WIP limits, per-stage totals and a detail panel.",
   }),
+  ui("gauge", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@opendraft/badge", "@opendraft/motion"],
+    description:
+      "SVG gauge and risk-score ring with threshold bands and a text status, for posture, vitals, utilization and energy.",
+  }),
+  ui("eta-indicator", {
+    deps: ["motion", "lucide-react"],
+    reg: ["@opendraft/badge", "@opendraft/motion"],
+    description:
+      "Estimated time with a range bar, confidence word and icon, and stale and past-window states.",
+  }),
+  ui("secret-input", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/input", "@opendraft/button"],
+    description:
+      "Masked input with reveal, copy and optional auto-hide, for API keys, tokens and sensitive fields.",
+  }),
+  ui("mfa-step", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/otp-input", "@opendraft/button"],
+    description:
+      "Multi-factor step: code entry, method switcher, resend countdown, and verifying, error and locked states.",
+  }),
+  ui("permission-matrix", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/checkbox", "@opendraft/button"],
+    description:
+      "Roles by permissions grid with groups, select-all, indeterminate states, read-only roles and a change summary.",
+  }),
+  ui("signature-pad", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/input"],
+    description:
+      "Canvas signature capture with undo, clear and a typed-name alternative, for delivery, consent and sign-off.",
+  }),
+  ui("photo-capture", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button", "@opendraft/input"],
+    description:
+      "Take or pick photos with thumbnails, remove, a max count and optional captions.",
+  }),
+  ui("step-nav", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/progress"],
+    description:
+      "Non-linear lesson and step navigation with complete, current, available and locked states.",
+  }),
+  ui("time-series-chart", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button"],
+    description:
+      "Multi-series time chart with time zones, brush zoom, thresholds, gaps, keyboard stepping and a data-table fallback.",
+  }),
+  ui("seat-map", {
+    description:
+      "Grid seat picker for aircraft, venues and transport with five seat states, a max selection and arrow-key navigation.",
+  }),
   screen("analytics-dashboard", {
     deps: ["lucide-react", "motion"],
     reg: [

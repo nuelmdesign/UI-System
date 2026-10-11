@@ -695,6 +695,86 @@ export const ENTRIES: DocEntry[] = [
     isNew: true,
   },
   {
+    slug: "gauge",
+    title: "Gauge",
+    category: "Components",
+    description:
+      "SVG gauge and risk-score ring with threshold bands and a text status, for posture, vitals, utilization and energy.",
+    isNew: true,
+  },
+  {
+    slug: "eta-indicator",
+    title: "ETA Indicator",
+    category: "Components",
+    description:
+      "Estimated time with a range bar, confidence word and icon, and stale and past-window states.",
+    isNew: true,
+  },
+  {
+    slug: "secret-input",
+    title: "Secret Input",
+    category: "Components",
+    description:
+      "Masked input with reveal, copy and optional auto-hide, for API keys, tokens and sensitive fields.",
+    isNew: true,
+  },
+  {
+    slug: "mfa-step",
+    title: "MFA Step",
+    category: "Components",
+    description:
+      "Multi-factor step: code entry, method switcher, resend countdown, and verifying, error and locked states.",
+    isNew: true,
+  },
+  {
+    slug: "permission-matrix",
+    title: "Permission Matrix",
+    category: "Components",
+    description:
+      "Roles by permissions grid with groups, select-all, indeterminate states, read-only roles and a change summary.",
+    isNew: true,
+  },
+  {
+    slug: "signature-pad",
+    title: "Signature Pad",
+    category: "Components",
+    description:
+      "Canvas signature capture with undo, clear and a typed-name alternative, for delivery, consent and sign-off.",
+    isNew: true,
+  },
+  {
+    slug: "photo-capture",
+    title: "Photo Capture",
+    category: "Components",
+    description:
+      "Take or pick photos with thumbnails, remove, a max count and optional captions.",
+    isNew: true,
+  },
+  {
+    slug: "step-nav",
+    title: "Step Navigation",
+    category: "Components",
+    description:
+      "Non-linear lesson and step navigation with complete, current, available and locked states.",
+    isNew: true,
+  },
+  {
+    slug: "time-series-chart",
+    title: "Time Series Chart",
+    category: "Components",
+    description:
+      "Multi-series time chart with time zones, brush zoom, thresholds, gaps, keyboard stepping and a data-table fallback.",
+    isNew: true,
+  },
+  {
+    slug: "seat-map",
+    title: "Seat Map",
+    category: "Components",
+    description:
+      "Grid seat picker for aircraft, venues and transport with five seat states, a max selection and arrow-key navigation.",
+    isNew: true,
+  },
+  {
     slug: "crm-pipeline",
     title: "CRM Pipeline",
     category: "Blocks",
