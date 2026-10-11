@@ -177,7 +177,11 @@ function DocumentViewer({
 
   const lastPage = pageCount && pageCount > 0 ? pageCount : undefined
   const setPage = (next: number) => {
-    const target = clamp(Math.round(next), 1, lastPage ?? Number.MAX_SAFE_INTEGER)
+    const target = clamp(
+      Math.round(next),
+      1,
+      lastPage ?? Number.MAX_SAFE_INTEGER
+    )
     if (target !== page) setPageState(target)
   }
   const setZoom = (next: number) => {
@@ -253,7 +257,7 @@ function DocumentViewer({
         {title && (
           <p
             id={titleId}
-            className="min-w-0 flex-1 truncate text-sm font-medium @md/document-viewer:flex-none @md/document-viewer:max-w-[16rem]"
+            className="min-w-0 flex-1 truncate text-sm font-medium @md/document-viewer:max-w-[16rem] @md/document-viewer:flex-none"
           >
             {title}
           </p>
@@ -542,7 +546,8 @@ function DocumentOutline({
   const [toggled, setToggled] = React.useState<ReadonlySet<string>>(
     () => new Set()
   )
-  const isOpen = (id: string) => (toggled.has(id) ? !defaultExpanded : defaultExpanded)
+  const isOpen = (id: string) =>
+    toggled.has(id) ? !defaultExpanded : defaultExpanded
   const toggle = (id: string) =>
     setToggled((current) => {
       const next = new Set(current)
@@ -614,18 +619,13 @@ function DocumentOutline({
       className={cn("flex flex-col gap-2 p-2", className)}
       {...props}
     >
-      {heading !== false && <p className="eyebrow px-2">{heading}</p>}
+      {heading !== false && <p className="px-2 eyebrow">{heading}</p>}
       {renderItems(items, 0)}
     </nav>
   )
 }
 
-export {
-  DocumentViewer,
-  DocumentThumbnails,
-  DocumentOutline,
-  SAMPLE_OUTLINE,
-}
+export { DocumentViewer, DocumentThumbnails, DocumentOutline, SAMPLE_OUTLINE }
 export type {
   DocumentViewerProps,
   DocumentViewerLabels,

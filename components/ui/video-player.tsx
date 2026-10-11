@@ -432,7 +432,9 @@ function VideoPlayerInner({
                 onLoadStart={() => setBuffering(true)}
                 onLoadedMetadata={(event) => {
                   const video = event.currentTarget
-                  setDuration(Number.isFinite(video.duration) ? video.duration : 0)
+                  setDuration(
+                    Number.isFinite(video.duration) ? video.duration : 0
+                  )
                   if (startAt && !resumedRef.current) {
                     resumedRef.current = true
                     video.currentTime = startAt
@@ -481,7 +483,9 @@ function VideoPlayerInner({
                   setVolume(event.currentTarget.volume)
                   setMuted(event.currentTarget.muted)
                 }}
-                onRateChange={(event) => setRate(event.currentTarget.playbackRate)}
+                onRateChange={(event) =>
+                  setRate(event.currentTarget.playbackRate)
+                }
               >
                 {tracks.map((track) => (
                   <track
@@ -568,10 +572,7 @@ function VideoPlayerInner({
                 >
                   {playing ? <Pause aria-hidden /> : <Play aria-hidden />}
                 </Button>
-                <div
-                  className="flex items-center gap-1 px-1"
-                  aria-hidden
-                >
+                <div className="flex items-center gap-1 px-1" aria-hidden>
                   <ScrubBarTimeLabel time={time} />
                   <span className="text-xs text-muted-foreground">/</span>
                   <ScrubBarTimeLabel time={duration} />

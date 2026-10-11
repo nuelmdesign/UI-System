@@ -1,7 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { CalendarClockIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import {
+  CalendarClockIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
@@ -205,7 +209,11 @@ function parseDay(day: string) {
 function addDays(day: string, n: number) {
   const p = parseDay(day)
   const t = new Date(Date.UTC(p.y, p.mo, p.d + n))
-  return wallDay({ y: t.getUTCFullYear(), mo: t.getUTCMonth(), d: t.getUTCDate() })
+  return wallDay({
+    y: t.getUTCFullYear(),
+    mo: t.getUTCMonth(),
+    d: t.getUTCDate(),
+  })
 }
 
 function addMonths(day: string, n: number) {
@@ -267,7 +275,8 @@ const DEFAULT_LABELS: DateTimePickerLabels = {
   alsoShowing: "Same moment in",
   gap: "{time} does not exist on this date in {zone} because clocks skip forward. Moved to {adjusted}.",
   clamped: "Outside the allowed range. Set to {time}.",
-  ambiguous: "This time happens twice in {zone} because clocks go back. Which one?",
+  ambiguous:
+    "This time happens twice in {zone} because clocks go back. Which one?",
   earlier: "First",
   later: "Second",
 }
@@ -761,7 +770,8 @@ function DateTimePicker({
     }
   }, [locale, tz, cycle])
 
-  const wallText = (w: Wall) => fmt.wall.format(utcDate(w.y, w.mo, w.d, w.hh, w.mm))
+  const wallText = (w: Wall) =>
+    fmt.wall.format(utcDate(w.y, w.mo, w.d, w.hh, w.mm))
 
   function emit(t: number, adjusted?: "gap" | "clamped", message?: string) {
     const iso = new Date(t).toISOString()
@@ -994,7 +1004,9 @@ function DateTimePicker({
                 typeof entry === "string" ? entry : entry.timeZone
               )
               const label =
-                typeof entry === "string" ? cityOf(zone) : (entry.label ?? cityOf(zone))
+                typeof entry === "string"
+                  ? cityOf(zone)
+                  : (entry.label ?? cityOf(zone))
               const o = zoned(ms, zone).offset
               const text = new Intl.DateTimeFormat(locale, {
                 timeZone: zone,
