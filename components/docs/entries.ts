@@ -639,6 +639,62 @@ export const ENTRIES: DocEntry[] = [
     isNew: true,
   },
   {
+    slug: "filter-bar",
+    title: "Filter Bar",
+    category: "Components",
+    description:
+      "Search, select and multi-select filters from a config, with removable chips and clear-all.",
+    isNew: true,
+  },
+  {
+    slug: "bulk-action-bar",
+    title: "Bulk Action Bar",
+    category: "Components",
+    description:
+      "Toolbar that appears when items are selected: count, generic actions and a clear button.",
+    isNew: true,
+  },
+  {
+    slug: "checklist",
+    title: "Checklist",
+    category: "Components",
+    description:
+      "Tickable checklist with progress, optional notes and a sign-off step for inspections, onboarding or compliance.",
+    isNew: true,
+  },
+  {
+    slug: "description-list",
+    title: "Description List",
+    category: "Components",
+    description:
+      "Label and value grid for record details, with column spans, mono values and copy buttons.",
+    isNew: true,
+  },
+  {
+    slug: "data-table",
+    title: "Data Table",
+    category: "Blocks",
+    description:
+      "Generic table for any domain: search, filters, view tabs, sorting, selection with bulk actions, paging and a card layout when narrow.",
+    isNew: true,
+  },
+  {
+    slug: "record-page",
+    title: "Record Page",
+    category: "Blocks",
+    description:
+      "Generic record detail page: header, status, summary stats, details, activity timeline and related items.",
+    isNew: true,
+  },
+  {
+    slug: "stage-board",
+    title: "Stage Board",
+    category: "Blocks",
+    description:
+      "Generic kanban board with drag or keyboard moves, WIP limits, per-stage totals and a detail panel.",
+    isNew: true,
+  },
+  {
     slug: "crm-pipeline",
     title: "CRM Pipeline",
     category: "Blocks",

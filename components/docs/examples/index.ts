@@ -79,6 +79,13 @@ import FineTuneCardExample from "./fine-tune-card"
 import SidebarNavExample from "./sidebar-nav"
 import RecordsTableExample from "./records-table"
 import DiffTableExample from "./diff-table"
+import FilterBarExample from "./filter-bar"
+import BulkActionBarExample from "./bulk-action-bar"
+import ChecklistExample from "./checklist"
+import DescriptionListExample from "./description-list"
+import DataTableExample from "./data-table"
+import RecordPageExample from "./record-page"
+import StageBoardExample from "./stage-board"
 import CrmPipelineExample from "./crm-pipeline"
 import AnalyticsDashboardExample from "./analytics-dashboard"
 import SettingsPageExample from "./settings-page"
@@ -197,6 +204,13 @@ export const EXAMPLES: Record<string, ComponentType> = {
   "sidebar-nav": SidebarNavExample,
   "records-table": RecordsTableExample,
   "diff-table": DiffTableExample,
+  "filter-bar": FilterBarExample,
+  "bulk-action-bar": BulkActionBarExample,
+  checklist: ChecklistExample,
+  "description-list": DescriptionListExample,
+  "data-table": DataTableExample,
+  "record-page": RecordPageExample,
+  "stage-board": StageBoardExample,
   "crm-pipeline": CrmPipelineExample,
   "analytics-dashboard": AnalyticsDashboardExample,
   "settings-page": SettingsPageExample,

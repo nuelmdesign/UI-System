@@ -128,7 +128,7 @@ const priorityVariant = {
 export default function StageBoardDemo() {
   const [domain, setDomain] = React.useState<"support" | "hiring">("support")
   return (
-    <div className="grid gap-3">
+    <div className="grid w-full gap-3">
       <div role="group" aria-label="Sample data" className="flex gap-2">
         {(["support", "hiring"] as const).map((d) => (
           <button

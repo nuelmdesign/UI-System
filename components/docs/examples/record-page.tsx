@@ -124,7 +124,7 @@ function EmployeeView() {
 
 export default function RecordPageDemo() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex w-full flex-col gap-8">
       <div className={frame}>
         <ShipmentView />
       </div>

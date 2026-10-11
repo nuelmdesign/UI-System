@@ -1824,6 +1824,1002 @@ Docs: https://ui-system-virid.vercel.app/docs/use-cases
 
 ---
 
+# Data Table
+
+Generic table for any domain: search, filters, view tabs, sorting, selection with bulk actions, paging and a card layout when narrow.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/data-table
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { DataTable } from "@/components/blocks/data-table"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/checkbox`, `@opendraft/empty-state`, `@opendraft/input`, `@opendraft/tabs`, `@opendraft/filter-bar`, `@opendraft/bulk-action-bar`
+
+## Props and types
+
+```ts
+export type DataTableColumn<T> = {
+  /** Unique column key. Also the default field read from the row. */
+  key: string
+  header: React.ReactNode
+  /** Plain-text header used for aria and the card view. Defaults to `header` when it is a string. */
+  headerText?: string
+  /** Custom cell render. Defaults to the stringified field. */
+  cell?: (row: T) => React.ReactNode
+  /** Value used for sorting and search. Defaults to row[key]. */
+  accessor?: (row: T) => string | number | boolean | null | undefined
+  sortable?: boolean
+  align?: "left" | "center" | "right"
+  /** Use the mono font (IDs, dates, amounts). */
+  mono?: boolean
+  /** CSS width for the table column, e.g. "8rem". */
+  width?: string
+  /** Hide this column in the card view. */
+  hideInCard?: boolean
+}
+
+export type DataTableView<T> = {
+  id: string
+  label: string
+  /** Rows kept by this view. Omit for an "all" view. */
+  filter?: (row: T) => boolean
+}
+
+export type DataTableBulkAction<T> = Omit<BulkAction, "onSelect"> & {
+  onSelect: (rows: T[]) => void
+}
+
+export type DataTableLabels = {
+  search: string
+  searchPlaceholder: string
+  selectAll: string
+  selectRow: (rowName: string) => string
+  emptyTitle: string
+  emptyDescription: string
+  noResultsTitle: string
+  noResultsDescription: string
+  clearFilters: string
+  previous: string
+  next: string
+  range: (from: number, to: number, total: number) => string
+  page: (page: number, pages: number) => string
+  views: string
+  sortedAscending: string
+  sortedDescending: string
+}
+
+export type DataTableSort = { key: string; direction: "asc" | "desc" }
+
+export type DataTableProps<T> = {
+  columns?: DataTableColumn<T>[]
+  rows?: T[]
+  getRowId?: (row: T) => string
+  /** Plain-text name of a row, for checkbox labels. Defaults to the id. */
+  getRowName?: (row: T) => string
+  /** Show the search field. Default true. */
+  searchable?: boolean
+  /** Filter controls shown beside the search field. */
+  filters?: FilterConfig[]
+  /** Decide whether a row matches the filter values. Default compares row[key] to the value(s). */
+  filterRow?: (row: T, values: FilterValues) => boolean
+  /** Tabs above the table, each keeping a subset of rows. */
+  views?: DataTableView<T>[]
+  defaultView?: string
+  /** Show a checkbox column and the bulk action bar. */
+  selectable?: boolean
+  bulkActions?: DataTableBulkAction<T>[]
+  selectedIds?: string[]
+  defaultSelectedIds?: string[]
+  onSelectedIdsChange?: (ids: string[]) => void
+  defaultSort?: DataTableSort
+  /** Rows per page. Set to 0 to show every row. Default 8. */
+  pageSize?: number
+  /** Called when a row is clicked or activated with Enter. */
+  onRowOpen?: (row: T) => void
+  /** Replaces the empty state when there are no rows at all. */
+  empty?: React.ReactNode
+  labels?: Partial<DataTableLabels>
+  className?: string
+}
+
+export type SampleRow = {
+  id: string
+  name: string
+  owner: string
+  email: string
+  status: "Active" | "Pending" | "Archived"
+  updated: string
+  amount: number
+}
+
+function DataTable(props: DataTableProps<T>)
+```
+
+## Example
+
+```tsx
+"use client"
+
+import { Archive, Download } from "lucide-react"
+
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { DataTable, type DataTableColumn } from "@/components/blocks/data-table"
+
+type Shipment = {
+  id: string
+  origin: string
+  destination: string
+  mode: "Air" | "Sea" | "Road"
+  status: "In transit" | "Delayed" | "Delivered"
+  eta: string
+  weightKg: number
+}
+
+type Employee = {
+  id: string
+  name: string
+  team: string
+  location: string
+  status: "Active" | "On leave"
+  start: string
+  salary: number
+}
+
+const modes = ["Air", "Sea", "Road"] as const
+const shipStatus = ["In transit", "Delayed", "Delivered"] as const
+const cities = ["Rotterdam", "Singapore", "Chicago", "Lagos", "Santos"]
+
+const shipments: Shipment[] = Array.from({ length: 18 }, (_, i) => ({
+  id: `SHP-${4100 + i}`,
+  origin: cities[i % 5],
+  destination: cities[(i * 2 + 1) % 5],
+  mode: modes[i % 3],
+  status: shipStatus[(i * 2) % 3],
+  eta: `2026-11-${String((i % 28) + 1).padStart(2, "0")}`,
+  weightKg: 180 + ((i * 431) % 9000),
+}))
+
+const teams = ["Engineering", "Support", "Finance", "Design"]
+const employees: Employee[] = Array.from({ length: 16 }, (_, i) => ({
+  id: `EMP-${200 + i}`,
+  name: `Employee ${i + 1}`,
+  team: teams[i % 4],
+  location: ["Remote", "Berlin", "Austin"][i % 3],
+  status: i % 5 === 4 ? "On leave" : "Active",
+  start: `202${(i % 5) + 1}-0${(i % 9) + 1}-15`,
+  salary: 52000 + ((i * 7919) % 60000),
+}))
+
+const money = new Intl.NumberFormat("en", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+})
+const kg = new Intl.NumberFormat("en")
+
+const shipmentColumns: DataTableColumn<Shipment>[] = [
+  { key: "id", header: "Shipment", mono: true, sortable: true },
+  { key: "origin", header: "Origin", sortable: true },
+  { key: "destination", header: "Destination", sortable: true },
+  { key: "mode", header: "Mode" },
+  {
+    key: "status",
+    header: "Status",
+    sortable: true,
+    cell: (r) => (
+      <Badge
+        dot
+        variant={
+          r.status === "Delayed"
+            ? "warning"
+            : r.status === "Delivered"
+              ? "success"
+              : "secondary"
+        }
+      >
+        {r.status}
+      </Badge>
+    ),
+  },
+  { key: "eta", header: "ETA", mono: true, sortable: true },
+  {
+    key: "weightKg",
+    header: "Weight (kg)",
+    mono: true,
+    sortable: true,
+    align: "right",
+    cell: (r) => kg.format(r.weightKg),
+  },
+]
+
+const employeeColumns: DataTableColumn<Employee>[] = [
+  { key: "name", header: "Name", sortable: true },
+  { key: "team", header: "Team", sortable: true },
+  { key: "location", header: "Location" },
+  {
+    key: "status",
+    header: "Status",
+    cell: (r) => (
+      <Badge dot variant={r.status === "Active" ? "success" : "outline"}>
+        {r.status}
+      </Badge>
+    ),
+  },
+  { key: "start", header: "Start date", mono: true, sortable: true },
+  {
+    key: "salary",
+    header: "Salary",
+    mono: true,
+    sortable: true,
+    align: "right",
+    cell: (r) => money.format(r.salary),
+  },
+]
+
+const frame = "h-[680px] w-full overflow-hidden rounded-lg border bg-background"
+
+export default function DataTableDemo() {
+  return (
+    <Tabs defaultValue="shipments" className="w-full">
+      <TabsList>
+        <TabsTrigger value="shipments">Shipments</TabsTrigger>
+        <TabsTrigger value="employees">Employees</TabsTrigger>
+      </TabsList>
+      <TabsContent value="shipments">
+        <div className={frame}>
+          <DataTable<Shipment>
+            columns={shipmentColumns}
+            rows={shipments}
+            getRowId={(r) => r.id}
+            selectable
+            pageSize={8}
+            defaultSort={{ key: "eta", direction: "asc" }}
+            labels={{
+              searchPlaceholder: "Search shipments...",
+              emptyTitle: "No shipments",
+            }}
+            filters={[
+              {
+                key: "mode",
+                type: "multi-select",
+                label: "Mode",
+                options: modes.map((m) => ({ value: m, label: m })),
+              },
+            ]}
+            views={[
+              { id: "all", label: "All" },
+              {
+                id: "delayed",
+                label: "Delayed",
+                filter: (r) => r.status === "Delayed",
+              },
+              {
+                id: "delivered",
+                label: "Delivered",
+                filter: (r) => r.status === "Delivered",
+              },
+            ]}
+            bulkActions={[
+              {
+                id: "export",
+                label: "Export",
+                icon: <Download />,
+                onSelect: () => {},
+              },
+            ]}
+            onRowOpen={() => {}}
+          />
+        </div>
+      </TabsContent>
+      <TabsContent value="employees">
+        <div className={frame}>
+          <DataTable<Employee>
+            columns={employeeColumns}
+            rows={employees}
+            getRowId={(r) => r.id}
+            getRowName={(r) => r.name}
+            selectable
+            pageSize={6}
+            labels={{
+              searchPlaceholder: "Search people...",
+              selectRow: (n) => `Select ${n}`,
+              range: (f, t, total) => `Showing ${f} to ${t} of ${total} people`,
+            }}
+            filters={[
+              {
+                key: "team",
+                type: "select",
+                label: "Team",
+                options: teams.map((t) => ({ value: t, label: t })),
+              },
+            ]}
+            bulkActions={[
+              {
+                id: "archive",
+                label: "Archive",
+                icon: <Archive />,
+                destructive: true,
+                onSelect: () => {},
+              },
+            ]}
+          />
+        </div>
+      </TabsContent>
+    </Tabs>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/data-table. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Record Page
+
+Generic record detail page: header, status, summary stats, details, activity timeline and related items.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/record-page
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { RecordPage } from "@/components/blocks/record-page"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/page-header`, `@opendraft/stat`, `@opendraft/status-indicator`, `@opendraft/tabs`, `@opendraft/timeline`
+
+## Props and types
+
+```ts
+export type RecordStatus = {
+  label: string
+  tone?: StatusTone
+}
+
+export type RecordSummaryItem = Pick<
+  StatProps,
+  "label" | "value" | "hint" | "delta" | "icon"
+> & { id?: string }
+
+export type RecordField = {
+  id?: string
+  label: React.ReactNode
+  value: React.ReactNode
+  /** Render the value in mono (IDs, dates, amounts). */
+  mono?: boolean
+  /** Span two columns when the grid has room. */
+  wide?: boolean
+}
+
+export type RecordRelated = {
+  id: string
+  title: React.ReactNode
+  /** Secondary line, e.g. type or reference. */
+  meta?: React.ReactNode
+  status?: RecordStatus
+  href?: string
+  onSelect?: () => void
+}
+
+export type RecordTab = {
+  id: string
+  label: React.ReactNode
+  content: React.ReactNode
+}
+
+export type RecordPageLabels = {
+  details: string
+  activity: string
+  related: string
+  emptyValue: string
+  noFields: string
+  noActivity: string
+  noRelated: string
+  summary: string
+  tabs: string
+}
+
+export type RecordPageProps = {
+  title: React.ReactNode
+  subtitle?: React.ReactNode
+  /** Record identifier, shown in mono above the title. */
+  id?: string
+  status?: RecordStatus
+  /** Buttons or menus for the header. */
+  actions?: React.ReactNode
+  /** Breadcrumb or back link above the header. */
+  breadcrumb?: React.ReactNode
+  summary?: RecordSummaryItem[]
+  fields?: RecordField[]
+  activity?: TimelineItemData[]
+  related?: RecordRelated[]
+  /** Replaces the default Details and Activity tabs. */
+  tabs?: RecordTab[]
+  /** Active tab (controlled). */
+  tab?: string
+  defaultTab?: string
+  onTabChange?: (id: string) => void
+  labels?: Partial<RecordPageLabels>
+  className?: string
+}
+```
+
+## Example
+
+```tsx
+import { Button } from "@/components/ui/button"
+import { RecordPage } from "@/components/blocks/record-page"
+
+const frame = "h-[680px] w-full overflow-hidden rounded-lg border bg-background"
+
+function ShipmentView() {
+  return (
+    <RecordPage
+      id="SHP-48213"
+      title="Pallet order to Rotterdam"
+      subtitle="Dock 4 to Port of Rotterdam, 12 pallets"
+      status={{ label: "In transit", tone: "brand" }}
+      actions={
+        <>
+          <Button variant="outline">Reassign</Button>
+          <Button>Mark delivered</Button>
+        </>
+      }
+      summary={[
+        { label: "Weight", value: "4,120 kg" },
+        { label: "ETA", value: "Oct 14", hint: "On schedule" },
+        {
+          label: "Distance",
+          value: "1,240 km",
+          delta: { value: "3%", direction: "down", goodWhen: "down" },
+        },
+      ]}
+      fields={[
+        { label: "Carrier", value: "Northline Freight" },
+        { label: "Origin", value: "Dock 4, Antwerp" },
+        { label: "Destination", value: "Port of Rotterdam" },
+        { label: "Tracking", value: "TRK-90017732", mono: true },
+        { label: "Picked up", value: "2026-10-09 07:40", mono: true },
+        { label: "Customs note", value: "Cleared for export.", wide: true },
+      ]}
+      activity={[
+        {
+          time: "Oct 11, 06:10",
+          timestamp: "2026-10-11T06:10:00Z",
+          title: "Departed hub",
+          meta: "Antwerp",
+          status: "current",
+        },
+        {
+          time: "Oct 10, 18:02",
+          timestamp: "2026-10-10T18:02:00Z",
+          title: "Customs cleared",
+          status: "success",
+        },
+        {
+          time: "Oct 9, 07:40",
+          timestamp: "2026-10-09T07:40:00Z",
+          title: "Picked up",
+          status: "success",
+        },
+      ]}
+      related={[
+        {
+          id: "i1",
+          title: "Invoice 2291",
+          meta: "INV-2291",
+          status: { label: "Paid", tone: "success" },
+          onSelect: () => {},
+        },
+        {
+          id: "i2",
+          title: "Return label",
+          meta: "RTN-118",
+          status: { label: "Pending", tone: "warning" },
+          onSelect: () => {},
+        },
+      ]}
+      labels={{ related: "Linked documents" }}
+    />
+  )
+}
+
+function EmployeeView() {
+  return (
+    <RecordPage
+      id="EMP-0231"
+      title="Jordan Lee"
+      subtitle="Senior designer, Product team"
+      status={{ label: "On leave", tone: "warning" }}
+      actions={<Button variant="outline">Edit profile</Button>}
+      summary={[
+        { label: "Tenure", value: "4.2 y" },
+        { label: "Leave left", value: "11 d" },
+        { label: "Reviews", value: "8" },
+        { label: "Direct reports", value: "2" },
+      ]}
+      fields={[
+        { label: "Manager", value: "Priya Nair" },
+        { label: "Location", value: "Lisbon" },
+        { label: "Email", value: "jordan.lee@example.com", mono: true },
+        { label: "Start date", value: "2022-07-18", mono: true },
+        { label: "Cost centre", value: null },
+        { label: "Equipment", value: "Laptop, monitor" },
+      ]}
+      activity={[
+        {
+          time: "Oct 1",
+          timestamp: "2026-10-01T00:00:00Z",
+          title: "Leave started",
+          description: "Parental leave until Jan 12.",
+          status: "warning",
+        },
+        {
+          time: "Jul 15",
+          timestamp: "2026-07-15T00:00:00Z",
+          title: "Promotion approved",
+          status: "success",
+        },
+      ]}
+      related={[{ id: "p1", title: "Priya Nair", meta: "Manager", href: "#" }]}
+      labels={{
+        details: "Profile",
+        related: "People",
+        noActivity: "No history",
+      }}
+    />
+  )
+}
+
+export default function RecordPageDemo() {
+  return (
+    <div className="flex w-full flex-col gap-8">
+      <div className={frame}>
+        <ShipmentView />
+      </div>
+      <div className={frame}>
+        <EmployeeView />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/record-page. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Stage Board
+
+Generic kanban board with drag or keyboard moves, WIP limits, per-stage totals and a detail panel.
+
+Category: Blocks
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/stage-board
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { StageBoard } from "@/components/blocks/stage-board"
+```
+
+## Dependencies
+
+- npm: `lucide-react`, `motion`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/badge`, `@opendraft/dropdown-menu`, `@opendraft/select`
+
+## Props and types
+
+```ts
+export interface StageBoardStage {
+  id: string
+  label: string
+  /** Work-in-progress limit. Counts above it show an over-limit state. */
+  limit?: number
+}
+
+export interface StageBoardCardState {
+  stage: StageBoardStage
+  /** Zero-based position inside the stage. */
+  index: number
+  dragging: boolean
+  /** The stage holds more items than its limit. */
+  overLimit: boolean
+}
+
+export interface StageBoardDetailContext {
+  stage: StageBoardStage
+  stages: StageBoardStage[]
+  close: () => void
+  /** Move the open item to another stage (appended at the end). */
+  moveTo: (stageId: string) => void
+}
+
+export interface StageBoardLabels {
+  eyebrow: string
+  title: string
+  /** Summary under the title. Tokens: {count}. */
+  summary: string
+  /** Empty column text. */
+  empty: string
+  /** Empty column text while an item is being dragged over it. */
+  emptyDrop: string
+  /** Aggregate caption on each column, e.g. "Total". */
+  total: string
+  limit: string
+  atLimit: string
+  overLimit: string
+  /** Tokens: {stage}, {limit}. */
+  limitReached: string
+  openDetails: string
+  /** Menu button name. Tokens: {item}. */
+  actionsFor: string
+  moveTo: string
+  stage: string
+  close: string
+  detail: string
+  /** Keyboard hint read with every card. */
+  keyboardHint: string
+  /** Live announcement. Tokens: {item}, {stage}, {position}, {total}. */
+  moved: string
+  /** Column landmark name. Tokens: {stage}. */
+  stageRegion: string
+}
+
+export interface StageBoardProps<T> {
+  stages: StageBoardStage[]
+  items: T[]
+  getItemId: (item: T) => string
+  /** Stage id the item belongs to. Items with an unknown stage are not shown. */
+  getStage: (item: T) => string
+  /** Card content. Avoid interactive elements inside; the card is one button. */
+  renderCard?: (item: T, state: StageBoardCardState) => React.ReactNode
+  /** Plain-text name for announcements and menus. Defaults to the id. */
+  getItemLabel?: (item: T) => string
+  /**
+   * Called for every move (drag, menu, keyboard). `index` is the item's
+   * position in the destination stage after the move. The board is
+   * controlled: update `items` in response.
+   */
+  onMove?: (itemId: string, toStage: string, index: number) => void
+  /** Numeric value per item, summed into a per-stage aggregate. */
+  getValue?: (item: T) => number
+  /** Format the aggregate. Defaults to a plain locale number. */
+  formatValue?: (value: number) => string
+  /** Refuse moves into a stage that is already at its limit. Default false. */
+  enforceLimits?: boolean
+  /** Side panel content for the opened item. Omit to disable the panel. */
+  renderDetail?: (item: T, ctx: StageBoardDetailContext) => React.ReactNode
+  onOpen?: (item: T) => void
+  /** Buttons or filters shown at the right of the header. */
+  actions?: React.ReactNode
+  labels?: Partial<StageBoardLabels>
+  className?: string
+}
+
+export interface StageBoardSampleItem {
+  id: string
+  title: string
+  stage: string
+  assignee: string
+  amount: number
+}
+
+function StageBoard(props: StageBoardProps<T>)
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import {
+  StageBoard,
+  type StageBoardStage,
+} from "@/components/blocks/stage-board"
+import { Badge } from "@/components/ui/badge"
+
+type Ticket = {
+  id: string
+  subject: string
+  requester: string
+  stage: string
+  priority: "Low" | "High" | "Urgent"
+}
+
+type Candidate = {
+  id: string
+  name: string
+  role: string
+  stage: string
+  offer: number
+  email: string
+}
+
+const ticketStages: StageBoardStage[] = [
+  { id: "new", label: "New" },
+  { id: "working", label: "Working", limit: 2 },
+  { id: "waiting", label: "Waiting on customer" },
+  { id: "resolved", label: "Resolved" },
+]
+
+const tickets: Ticket[] = [
+  {
+    id: "T-1041",
+    subject: "Cannot export report",
+    requester: "Dana Whitfield",
+    stage: "new",
+    priority: "High",
+  },
+  {
+    id: "T-1042",
+    subject: "Invoice shows wrong address",
+    requester: "Ravi Menon",
+    stage: "new",
+    priority: "Low",
+  },
+  {
+    id: "T-1038",
+    subject: "Login loop on mobile",
+    requester: "Chloe Park",
+    stage: "working",
+    priority: "Urgent",
+  },
+  {
+    id: "T-1036",
+    subject: "Webhook retries failing",
+    requester: "Marcus Bell",
+    stage: "working",
+    priority: "High",
+  },
+  {
+    id: "T-1035",
+    subject: "Slow dashboard load",
+    requester: "Ines Duarte",
+    stage: "working",
+    priority: "High",
+  },
+  {
+    id: "T-1030",
+    subject: "Update billing contact",
+    requester: "Noah Kim",
+    stage: "resolved",
+    priority: "Low",
+  },
+]
+
+const hiringStages: StageBoardStage[] = [
+  { id: "applied", label: "Applied" },
+  { id: "screen", label: "Phone screen", limit: 4 },
+  { id: "onsite", label: "Onsite", limit: 3 },
+  { id: "offer", label: "Offer" },
+]
+
+const candidates: Candidate[] = [
+  {
+    id: "c1",
+    name: "Priya Shah",
+    role: "Product designer",
+    stage: "applied",
+    offer: 0,
+    email: "priya@example.com",
+  },
+  {
+    id: "c2",
+    name: "Tomas Reyes",
+    role: "Backend engineer",
+    stage: "screen",
+    offer: 0,
+    email: "tomas@example.com",
+  },
+  {
+    id: "c3",
+    name: "Hana Ito",
+    role: "Backend engineer",
+    stage: "onsite",
+    offer: 0,
+    email: "hana@example.com",
+  },
+  {
+    id: "c4",
+    name: "Leo Grant",
+    role: "Data analyst",
+    stage: "offer",
+    offer: 92000,
+    email: "leo@example.com",
+  },
+]
+
+const priorityVariant = {
+  Low: "secondary",
+  High: "warning",
+  Urgent: "destructive",
+} as const
+
+export default function StageBoardDemo() {
+  const [domain, setDomain] = React.useState<"support" | "hiring">("support")
+  return (
+    <div className="grid w-full gap-3">
+      <div role="group" aria-label="Sample data" className="flex gap-2">
+        {(["support", "hiring"] as const).map((d) => (
+          <button
+            key={d}
+            type="button"
+            aria-pressed={domain === d}
+            onClick={() => setDomain(d)}
+            className="rounded-sm border px-2.5 py-1 text-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring aria-pressed:bg-ink aria-pressed:text-ink-foreground"
+          >
+            {d === "support" ? "Support tickets" : "Hiring"}
+          </button>
+        ))}
+      </div>
+      <div className="h-[680px] w-full overflow-hidden rounded-lg border bg-background">
+        {domain === "support" ? <SupportBoard /> : <HiringBoard />}
+      </div>
+    </div>
+  )
+}
+
+function useBoard<T extends { id: string; stage: string }>(initial: T[]) {
+  const [items, setItems] = React.useState(initial)
+  function onMove(id: string, toStage: string, index: number) {
+    setItems((all) => {
+      const moving = all.find((i) => i.id === id)
+      if (!moving) return all
+      const rest = all.filter((i) => i.id !== id)
+      const dest = rest.filter((i) => i.stage === toStage)
+      const before = dest[index]
+      const next = { ...moving, stage: toStage }
+      if (!before) {
+        const last = dest[dest.length - 1]
+        const at = last ? rest.indexOf(last) + 1 : rest.length
+        return [...rest.slice(0, at), next, ...rest.slice(at)]
+      }
+      const at = rest.indexOf(before)
+      return [...rest.slice(0, at), next, ...rest.slice(at)]
+    })
+  }
+  return { items, onMove }
+}
+
+function SupportBoard() {
+  const { items, onMove } = useBoard(tickets)
+  return (
+    <StageBoard
+      stages={ticketStages}
+      items={items}
+      getItemId={(t) => t.id}
+      getStage={(t) => t.stage}
+      getItemLabel={(t) => t.subject}
+      onMove={onMove}
+      labels={{
+        eyebrow: "Support",
+        title: "Tickets",
+        summary: "{count} open or recent",
+        empty: "No tickets",
+        emptyDrop: "Drop ticket here",
+      }}
+      renderCard={(t) => (
+        <>
+          <span className="font-mono text-xs text-muted-foreground">
+            {t.id}
+          </span>
+          <span className="text-sm leading-tight font-medium">{t.subject}</span>
+          <span className="flex items-center justify-between gap-2">
+            <span className="truncate text-xs text-muted-foreground">
+              {t.requester}
+            </span>
+            <Badge variant={priorityVariant[t.priority]}>{t.priority}</Badge>
+          </span>
+        </>
+      )}
+      renderDetail={(t) => (
+        <dl className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <dt className="eyebrow text-muted-foreground">Ticket</dt>
+            <dd className="font-mono">{t.id}</dd>
+          </div>
+          <div>
+            <dt className="eyebrow text-muted-foreground">Priority</dt>
+            <dd>{t.priority}</dd>
+          </div>
+          <div className="col-span-2">
+            <dt className="eyebrow text-muted-foreground">Requester</dt>
+            <dd>{t.requester}</dd>
+          </div>
+        </dl>
+      )}
+    />
+  )
+}
+
+function HiringBoard() {
+  const { items, onMove } = useBoard(candidates)
+  const money = new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP",
+    maximumFractionDigits: 0,
+  })
+  return (
+    <StageBoard
+      stages={hiringStages}
+      items={items}
+      getItemId={(c) => c.id}
+      getStage={(c) => c.stage}
+      getItemLabel={(c) => c.name}
+      onMove={onMove}
+      enforceLimits
+      getValue={(c) => c.offer}
+      formatValue={(v) => (v ? money.format(v) : "")}
+      labels={{
+        eyebrow: "Recruiting",
+        title: "Candidates",
+        summary: "{count} in process",
+        empty: "No candidates",
+        emptyDrop: "Drop candidate here",
+        total: "Offers",
+      }}
+      renderCard={(c) => (
+        <>
+          <span className="text-sm leading-tight font-medium">{c.name}</span>
+          <span className="text-xs text-muted-foreground">{c.role}</span>
+        </>
+      )}
+      renderDetail={(c) => (
+        <dl className="grid gap-4 text-sm">
+          <div>
+            <dt className="eyebrow text-muted-foreground">Role</dt>
+            <dd>{c.role}</dd>
+          </div>
+          <div>
+            <dt className="eyebrow text-muted-foreground">Email</dt>
+            <dd className="font-mono">{c.email}</dd>
+          </div>
+        </dl>
+      )}
+    />
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/stage-board. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
 # CRM Pipeline
 
 Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline. Data shape: A sales board: company, USD value and 'deal' wording are fixed and there is no `labels` prop. Not a general stage board.
@@ -11847,6 +12843,627 @@ export default function SidebarNavDemo() {
 ```
 
 Live docs: https://ui-system-virid.vercel.app/docs/sidebar-nav. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Filter Bar
+
+Search, select and multi-select filters from a config, with removable chips and clear-all.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/filter-bar
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { FilterBar } from "@/components/ui/filter-bar"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/badge`, `@opendraft/button`, `@opendraft/checkbox`, `@opendraft/input`, `@opendraft/popover`, `@opendraft/select`
+
+## Props and types
+
+```ts
+export type FilterOption = {
+  value: string
+  label: string
+  /** Optional count shown next to the option. */
+  count?: number
+}
+
+type FilterBase = {
+  /** Key of this filter in the values object. */
+  key: string
+  label: string
+}
+
+export type TextFilter = FilterBase & {
+  type: "text"
+  placeholder?: string
+}
+
+export type SelectFilter = FilterBase & {
+  type: "select"
+  options: FilterOption[]
+}
+
+export type MultiSelectFilter = FilterBase & {
+  type: "multi-select"
+  options: FilterOption[]
+}
+
+export type FilterConfig = TextFilter | SelectFilter | MultiSelectFilter
+
+/** text and select store a string ("" = unset); multi-select stores string[]. */
+export type FilterValues = Record<string, string | string[] | undefined>
+
+export type FilterBarLabels = {
+  clearAll: string
+  /** Select placeholder suffix, e.g. "All" + label is built as `${all} ${label}`. */
+  all: string
+  /** Multi-select summary, receives the label and number selected. */
+  selected: (label: string, count: number) => string
+  /** aria-label for the group. */
+  group: string
+  /** aria-label for the remove button on an option chip. */
+  remove: (label: string) => string
+}
+
+export type FilterBarProps = Omit<
+  React.ComponentProps<"div">,
+  "defaultValue" | "onChange"
+> & {
+  filters: FilterConfig[]
+  value?: FilterValues
+  defaultValue?: FilterValues
+  onValueChange?: (value: FilterValues) => void
+  labels?: Partial<FilterBarLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { FilterBar, type FilterValues } from "@/components/ui/filter-bar"
+
+const hospital: { name: string; ward: string; priority: string }[] = [
+  { name: "Patient 1", ward: "Cardiology", priority: "Urgent" },
+  { name: "Patient 2", ward: "Oncology", priority: "Routine" },
+  { name: "Patient 3", ward: "Cardiology", priority: "Routine" },
+  { name: "Patient 4", ward: "Neurology", priority: "Urgent" },
+]
+
+export default function FilterBarDemo() {
+  const [values, setValues] = React.useState<FilterValues>({})
+  const q = String(values.q ?? "").toLowerCase()
+  const wards = (values.ward as string[] | undefined) ?? []
+  const shown = hospital.filter(
+    (r) =>
+      r.name.toLowerCase().includes(q) &&
+      (wards.length === 0 || wards.includes(r.ward)) &&
+      (!values.priority || r.priority === values.priority)
+  )
+
+  return (
+    <div className="flex w-full max-w-[720px] flex-col gap-8">
+      <div className="flex flex-col gap-3">
+        <p className="eyebrow text-muted-foreground">
+          Logistics (uncontrolled)
+        </p>
+        <FilterBar
+          filters={[
+            {
+              key: "q",
+              type: "text",
+              label: "Search",
+              placeholder: "Search shipments",
+            },
+            {
+              key: "carrier",
+              type: "select",
+              label: "Carrier",
+              options: [
+                { value: "north", label: "Northline" },
+                { value: "harbor", label: "Harbor Freight" },
+              ],
+            },
+            {
+              key: "mode",
+              type: "multi-select",
+              label: "Mode",
+              options: [
+                { value: "air", label: "Air", count: 4 },
+                { value: "sea", label: "Sea", count: 9 },
+                { value: "road", label: "Road", count: 21 },
+              ],
+            },
+          ]}
+          defaultValue={{ mode: ["air", "sea"] }}
+        />
+      </div>
+      <div className="flex flex-col gap-3">
+        <p className="eyebrow text-muted-foreground">Healthcare (controlled)</p>
+        <FilterBar
+          value={values}
+          onValueChange={setValues}
+          labels={{ clearAll: "Reset", all: "Any" }}
+          filters={[
+            {
+              key: "q",
+              type: "text",
+              label: "Search",
+              placeholder: "Search patients",
+            },
+            {
+              key: "ward",
+              type: "multi-select",
+              label: "Ward",
+              options: [
+                { value: "Cardiology", label: "Cardiology" },
+                { value: "Oncology", label: "Oncology" },
+                { value: "Neurology", label: "Neurology" },
+              ],
+            },
+            {
+              key: "priority",
+              type: "select",
+              label: "Priority",
+              options: [
+                { value: "Urgent", label: "Urgent" },
+                { value: "Routine", label: "Routine" },
+              ],
+            },
+          ]}
+        />
+        <p className="font-mono text-xs text-muted-foreground">
+          {shown.length} of {hospital.length} match
+        </p>
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/filter-bar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Bulk Action Bar
+
+Toolbar that appears when items are selected: count, generic actions and a clear button.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/bulk-action-bar
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { BulkActionBar } from "@/components/ui/bulk-action-bar"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`
+
+## Props and types
+
+```ts
+export type BulkAction = {
+  id: string
+  label: string
+  icon?: React.ReactNode
+  onSelect: () => void
+  destructive?: boolean
+  disabled?: boolean
+}
+
+export type BulkActionBarLabels = {
+  /** Summary text for the current count. */
+  selected: (count: number) => string
+  clear: string
+  /** aria-label for the toolbar. */
+  toolbar: string
+}
+
+export type BulkActionBarProps = Omit<
+  React.ComponentProps<"div">,
+  "children"
+> & {
+  /** Number of selected items. The bar renders nothing visible at 0. */
+  count: number
+  actions: BulkAction[]
+  onClear?: () => void
+  labels?: Partial<BulkActionBarLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+import { Archive, Download, Trash2, UserPlus } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { BulkActionBar } from "@/components/ui/bulk-action-bar"
+
+export default function BulkActionBarDemo() {
+  const [a, setA] = React.useState(3)
+  const [b, setB] = React.useState(2)
+
+  return (
+    <div className="flex w-full max-w-[640px] flex-col gap-8">
+      <div className="flex flex-col gap-3">
+        <p className="eyebrow text-muted-foreground">Invoices</p>
+        <div className="flex items-center gap-2">
+          <Button size="xs" variant="outline" onClick={() => setA(a + 1)}>
+            Select one more
+          </Button>
+        </div>
+        <BulkActionBar
+          count={a}
+          onClear={() => setA(0)}
+          actions={[
+            {
+              id: "export",
+              label: "Export",
+              icon: <Download />,
+              onSelect: () => {},
+            },
+            {
+              id: "archive",
+              label: "Archive",
+              icon: <Archive />,
+              onSelect: () => {},
+            },
+            {
+              id: "delete",
+              label: "Delete",
+              icon: <Trash2 />,
+              destructive: true,
+              onSelect: () => setA(0),
+            },
+          ]}
+        />
+      </div>
+      <div className="flex flex-col gap-3">
+        <p className="eyebrow text-muted-foreground">Staff, custom labels</p>
+        <Button
+          size="xs"
+          variant="outline"
+          className="w-fit"
+          onClick={() => setB(b + 1)}
+        >
+          Select one more
+        </Button>
+        <BulkActionBar
+          count={b}
+          onClear={() => setB(0)}
+          labels={{
+            selected: (n) =>
+              `${n} ${n === 1 ? "employee" : "employees"} chosen`,
+            clear: "Deselect all",
+          }}
+          actions={[
+            {
+              id: "assign",
+              label: "Assign manager",
+              icon: <UserPlus />,
+              onSelect: () => {},
+            },
+          ]}
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/bulk-action-bar. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Checklist
+
+Tickable checklist with progress, optional notes and a sign-off step for inspections, onboarding or compliance.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/checklist
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { Checklist } from "@/components/ui/checklist"
+```
+
+## Dependencies
+
+- npm: `lucide-react`
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/button`, `@opendraft/checkbox`, `@opendraft/progress`, `@opendraft/textarea`
+
+## Props and types
+
+```ts
+type ChecklistItem = {
+  id: string
+  label: React.ReactNode
+  description?: React.ReactNode
+  /** Initial state when the list is uncontrolled and `defaultValue` is not set. */
+  done?: boolean
+  /** Initial note. */
+  note?: string
+}
+
+type ChecklistLabels = {
+  /** Progress caption. */
+  progress: string
+  /** Progress value. `{done}` and `{total}` are replaced. */
+  count: string
+  addNote: string
+  editNote: string
+  notePlaceholder: string
+  noteLabel: string
+  signOff: string
+  signedOff: string
+  /** Shown beside the disabled sign-off button. */
+  incomplete: string
+  /** Screen-reader announcement when progress changes. */
+  announce: string
+  empty: string
+}
+
+type ChecklistProps = Omit<
+  React.ComponentProps<"div">,
+  "onChange" | "defaultValue"
+> & {
+  items?: ChecklistItem[]
+  /** Controlled list of completed item ids. */
+  value?: string[]
+  /** Uncontrolled initial completed ids. Falls back to each item's `done`. */
+  defaultValue?: string[]
+  onValueChange?: (value: string[]) => void
+  title?: React.ReactNode
+  description?: React.ReactNode
+  /** Show a progress bar and count. */
+  showProgress?: boolean
+  /** Allow a note on each item. */
+  notes?: boolean
+  /** Controlled notes keyed by item id. */
+  noteValues?: Record<string, string>
+  onNoteChange?: (id: string, note: string) => void
+  /** Show a sign-off footer. Enabled once every item is done. */
+  onComplete?: (result: {
+    done: string[]
+    notes: Record<string, string>
+  }) => void
+  /** Extra content above the sign-off button, e.g. a name field. */
+  signOff?: React.ReactNode
+  /** Disables sign-off even when complete (e.g. a required field is empty). */
+  signOffDisabled?: boolean
+  disabled?: boolean
+  /** Items stay visible and notes readable, but nothing can change. */
+  readOnly?: boolean
+  labels?: Partial<ChecklistLabels>
+}
+```
+
+## Example
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { Checklist, type ChecklistItem } from "@/components/ui/checklist"
+import { Input } from "@/components/ui/input"
+
+const preflight: ChecklistItem[] = [
+  {
+    id: "fuel",
+    label: "Fuel quantity",
+    description: "Check against the flight plan.",
+    done: true,
+  },
+  { id: "controls", label: "Flight controls free and correct" },
+  {
+    id: "lights",
+    label: "Exterior lights",
+    description: "Navigation, strobe and landing.",
+  },
+  { id: "docs", label: "Documents on board" },
+]
+
+const onboarding: ChecklistItem[] = [
+  { id: "contract", label: "Signed contract received", done: true },
+  {
+    id: "laptop",
+    label: "Laptop issued",
+    note: "Serial recorded in the asset log.",
+  },
+  {
+    id: "accounts",
+    label: "Accounts created",
+    description: "Email, chat and calendar.",
+  },
+  { id: "intro", label: "Intro meeting scheduled" },
+]
+
+export default function ChecklistDemo() {
+  const [name, setName] = React.useState("")
+  return (
+    <div className="grid w-full max-w-4xl gap-8 md:grid-cols-2">
+      <Checklist
+        title="Pre-flight inspection"
+        description="Walk-around before engine start."
+        items={preflight}
+        notes
+        labels={{
+          progress: "Inspection",
+          signOff: "Release aircraft",
+          signedOff: "Released",
+        }}
+        signOff={
+          <Input
+            aria-label="Inspector name"
+            placeholder="Inspector name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        }
+        signOffDisabled={!name.trim()}
+        onComplete={() => {}}
+      />
+      <Checklist
+        title="New hire onboarding"
+        description="Read-only view for the hiring manager."
+        items={onboarding}
+        notes
+        readOnly
+        labels={{ progress: "Onboarding" }}
+      />
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/checklist. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
+
+---
+
+# Description List
+
+Label and value grid for record details, with column spans, mono values and copy buttons.
+
+Category: Components
+
+## Install
+
+```bash
+npx shadcn@latest add @opendraft/description-list
+```
+
+Install `@opendraft/theme` first (once per project) so the tokens exist, and add the `@opendraft` registry to `components.json`. See https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt.
+
+## Import
+
+```tsx
+import { DescriptionList } from "@/components/ui/description-list"
+```
+
+## Dependencies
+
+- Registry (installed with it): `@opendraft/utils`, `@opendraft/copy-button`
+
+## Props and types
+
+```ts
+type DescriptionItem = {
+  label: React.ReactNode
+  value?: React.ReactNode
+  /** Columns this entry spans (clamped to the available columns). */
+  span?: number
+  /** Show a copy button. Needs `copyValue` or a string/number `value`. */
+  copyable?: boolean
+  /** Text to copy when it differs from the displayed value. */
+  copyValue?: string
+  /** Render the value in mono, for IDs, codes and dates. */
+  mono?: boolean
+}
+
+type DescriptionListLabels = {
+  /** Shown when a value is empty. */
+  empty: string
+  copy: string
+}
+
+type DescriptionListProps = Omit<React.ComponentProps<"dl">, "children"> & {
+  items?: DescriptionItem[]
+  /** Maximum columns. The list steps down as its container narrows. */
+  columns?: 1 | 2 | 3 | 4
+  /** Wrap the list in a hairline-bordered card with dividers. */
+  bordered?: boolean
+  labels?: Partial<DescriptionListLabels>
+}
+```
+
+## Example
+
+```tsx
+import {
+  DescriptionList,
+  type DescriptionItem,
+} from "@/components/ui/description-list"
+
+const shipment: DescriptionItem[] = [
+  { label: "Tracking number", value: "SHP-204518", mono: true, copyable: true },
+  { label: "Carrier", value: "Example Freight" },
+  { label: "Status", value: "In transit" },
+  { label: "Origin", value: "Rotterdam, NL" },
+  { label: "Destination", value: "Chicago, US" },
+  { label: "ETA", value: "2026-03-18", mono: true },
+  { label: "Handling notes", value: "", span: 3 },
+]
+
+const employee: DescriptionItem[] = [
+  { label: "Name", value: "Sam Example" },
+  { label: "Employee ID", value: "E-10482", mono: true, copyable: true },
+  { label: "Email", value: "sam@example.com", copyable: true },
+  { label: "Department", value: "Operations" },
+  { label: "Start date", value: "2025-09-01", mono: true },
+  { label: "Manager", value: "Jo Example" },
+]
+
+export default function DescriptionListDemo() {
+  return (
+    <div className="flex w-full max-w-3xl flex-col gap-8">
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Shipment</h3>
+        <DescriptionList
+          items={shipment}
+          bordered
+          labels={{ empty: "None recorded" }}
+        />
+      </section>
+      <section className="flex flex-col gap-3">
+        <h3 className="heading text-xl">Employee record</h3>
+        <DescriptionList items={employee} columns={2} bordered />
+      </section>
+    </div>
+  )
+}
+```
+
+Live docs: https://ui-system-virid.vercel.app/docs/description-list. Rules for building with opendraft: https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms.txt
 
 ---
 
