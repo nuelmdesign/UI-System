@@ -231,6 +231,11 @@ function fill(template: string, vars: Record<string, string>) {
   return template.replace(/\{(\w+)\}/g, (_, k: string) => vars[k] ?? "")
 }
 
+/** Today's date in a zone (reads the clock; call outside render). */
+function todayIn(tz: string) {
+  return wallDay(zoned(Date.now(), tz))
+}
+
 function subscribeNever() {
   return () => {}
 }
@@ -744,34 +749,29 @@ function DateTimePicker({
   // "Today" in the working zone; empty during SSR and hydration.
   const today = React.useSyncExternalStore(
     subscribeNever,
-    () => wallDay(zoned(Date.now(), tz)),
+    () => todayIn(tz),
     () => ""
   )
 
-  const fmt = React.useMemo(() => {
-    const base = { timeZone: tz }
-    return {
-      full: new Intl.DateTimeFormat(locale, {
-        ...base,
-        weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: cycle === 12,
-      }),
-      wall: new Intl.DateTimeFormat(locale, {
-        timeZone: "UTC",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: cycle === 12,
-      }),
-    }
-  }, [locale, tz, cycle])
+  const fullFmt = new Intl.DateTimeFormat(locale, {
+    timeZone: tz,
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: cycle === 12,
+  })
+  const wallFmt = new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: cycle === 12,
+  })
 
   const wallText = (w: Wall) =>
-    fmt.wall.format(utcDate(w.y, w.mo, w.d, w.hh, w.mm))
+    wallFmt.format(utcDate(w.y, w.mo, w.d, w.hh, w.mm))
 
   function emit(t: number, adjusted?: "gap" | "clamped", message?: string) {
     const iso = new Date(t).toISOString()
@@ -832,7 +832,7 @@ function DateTimePicker({
     z && ms !== null ? resolveWall(z, tz, false).candidates : []
 
   const abbr = ms === null ? null : zoneAbbreviation(ms, tz, locale)
-  const triggerText = ms === null ? null : `${fmt.full.format(ms)} ${abbr}`
+  const triggerText = ms === null ? null : `${fullFmt.format(ms)} ${abbr}`
 
   const zoneOptions = (timeZones ?? []).map((o) =>
     typeof o === "string"

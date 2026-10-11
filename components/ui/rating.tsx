@@ -20,7 +20,7 @@ const STAR_SIZE: Record<RatingSize, string> = {
 
 type RatingLabels = {
   /** aria-label of a display rating. {value}, {max}. */
-  valueOf: string
+  summary: string
   /** Visible suffix after the number. {max}. Use "" to hide. */
   outOf: string
   /** Count text, plural. {count}. */
@@ -36,7 +36,7 @@ type RatingLabels = {
 }
 
 const DEFAULT_LABELS: RatingLabels = {
-  valueOf: "{value} out of {max}",
+  summary: "{value} out of {max}",
   outOf: "out of {max}",
   count: "{count} ratings",
   countOne: "{count} rating",
@@ -141,7 +141,7 @@ function Rating({
     >
       <span
         role="img"
-        aria-label={fill(labels.valueOf, vars)}
+        aria-label={fill(labels.summary, vars)}
         className="inline-flex"
       >
         <Stars value={v} max={safeMax} size={size} />
