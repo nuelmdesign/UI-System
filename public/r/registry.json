@@ -954,6 +954,23 @@
       ]
     },
     {
+      "name": "code-reveal",
+      "type": "registry:component",
+      "title": "Code Reveal",
+      "description": "Code backdrop hidden until the pointer moves over it; a wandering spot on touch.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils"
+      ],
+      "files": [
+        {
+          "path": "components/motion/code-reveal.tsx",
+          "type": "registry:component",
+          "target": "components/motion/code-reveal.tsx"
+        }
+      ]
+    },
+    {
       "name": "reveal",
       "type": "registry:component",
       "title": "Reveal",
@@ -3039,6 +3056,7 @@
         "@opendraft/glide-menu",
         "@opendraft/spotlight-card",
         "@opendraft/marquee",
+        "@opendraft/code-reveal",
         "@opendraft/reveal",
         "@opendraft/magnetic",
         "@opendraft/preview-rail",

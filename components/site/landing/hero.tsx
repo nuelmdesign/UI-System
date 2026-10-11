@@ -6,6 +6,7 @@ import { ArrowRight, Blocks, Bot, FileText, Palette } from "lucide-react"
 import { LLMS_URL, SITE } from "@/lib/site"
 import { Button } from "@/components/ui/button"
 import { CopyButton } from "@/components/motion/copy-button"
+import { CodeReveal } from "@/components/motion/code-reveal"
 import { PixelField } from "@/components/motion/pixel-field"
 import { ThemeToggle } from "@/components/site/theme-toggle"
 import { LogoMark } from "@/components/site/logo-mark"
@@ -118,6 +119,38 @@ const PILLARS = [
   },
 ]
 
+const HERO_CODE = `// components.json
+{
+  "registries": {
+    "@opendraft": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/r/{name}.json"
+  }
+}
+
+npx shadcn@latest add @opendraft/theme
+npx shadcn@latest add @opendraft/button
+npx shadcn@latest add @opendraft/kit-fintech
+
+import { Button } from "@/components/ui/button"
+import { Timeline } from "@/components/ui/timeline"
+
+:root {
+  --primary: var(--blue-600);
+  --brand: var(--blue-600);
+  --control-radius: 2px;
+  --surface-radius: 4px;
+  --font-heading: "Newsreader";
+  --text-scale: 1;
+}
+
+export default function Page() {
+  return (
+    <PageContainer>
+      <PageHeader title="Orders" />
+      <Button variant="ink">New order</Button>
+    </PageContainer>
+  )
+}`
+
 export function Hero() {
   const nav = useDocsNav()
   return (
@@ -127,6 +160,7 @@ export function Hero() {
           variant="matrix"
           className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_60%_65%_at_center,transparent_70%,black_100%)] opacity-60"
         />
+        <CodeReveal code={HERO_CODE} />
         <div className="relative mx-auto flex max-w-3xl flex-col items-center px-4 pt-20 pb-16 text-center sm:px-8 sm:pt-28">
           <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 eyebrow text-muted-foreground">
             <span>React</span>
