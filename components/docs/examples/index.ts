@@ -51,6 +51,7 @@ import CopyButtonExample from "./copy-button"
 import LoaderExample from "./loader"
 import MagneticExample from "./magnetic"
 import MarqueeExample from "./marquee"
+import CodeRevealExample from "./code-reveal"
 import PixelFieldExample from "./pixel-field"
 import PreviewRailExample from "./preview-rail"
 import RevealExample from "./reveal"
@@ -168,6 +169,7 @@ export const EXAMPLES: Record<string, ComponentType> = {
   loader: LoaderExample,
   magnetic: MagneticExample,
   marquee: MarqueeExample,
+  "code-reveal": CodeRevealExample,
   "pixel-field": PixelFieldExample,
   "preview-rail": PreviewRailExample,
   reveal: RevealExample,

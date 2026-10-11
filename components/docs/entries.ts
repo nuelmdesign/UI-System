@@ -425,6 +425,14 @@ export const ENTRIES: DocEntry[] = [
     description: "Seamless scrolling row with faded edges.",
   },
   {
+    slug: "code-reveal",
+    title: "Code Reveal",
+    category: "Motion",
+    description:
+      "Code backdrop that appears under the pointer, with a slower glow trailing behind.",
+    isNew: true,
+  },
+  {
     slug: "pixel-field",
     title: "Pixel Field",
     category: "Motion",

@@ -316,6 +316,13 @@ const items = [
   },
   motionComponent("spotlight-card"),
   motionComponent("marquee"),
+  {
+    ...motionComponent("code-reveal"),
+    dependencies: [],
+    registryDependencies: ["@opendraft/utils"],
+    description:
+      "Code backdrop hidden until the pointer moves over it; a wandering spot on touch.",
+  },
   motionComponent("reveal"),
   motionComponent("magnetic"),
   {
