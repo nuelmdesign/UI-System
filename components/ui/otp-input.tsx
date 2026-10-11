@@ -123,7 +123,7 @@ function OtpInput({
               data-active={active || undefined}
               data-filled={char ? "" : undefined}
               className={cn(
-                "relative flex h-11 w-9 items-center justify-center rounded-md border border-input bg-background font-mono text-lg tabular-nums sm:w-10 dark:bg-input/20",
+                "relative flex h-11 w-8 items-center justify-center rounded-md border border-input bg-background font-mono text-lg tabular-nums sm:w-10 dark:bg-input/20",
                 "transition-[border-color,box-shadow] duration-150 ease-out",
                 active && "border-brand/60 ring-[3px] ring-ring",
                 invalid && "border-destructive",

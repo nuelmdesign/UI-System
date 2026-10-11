@@ -86,6 +86,16 @@ import DescriptionListExample from "./description-list"
 import DataTableExample from "./data-table"
 import RecordPageExample from "./record-page"
 import StageBoardExample from "./stage-board"
+import GaugeExample from "./gauge"
+import EtaIndicatorExample from "./eta-indicator"
+import SecretInputExample from "./secret-input"
+import MfaStepExample from "./mfa-step"
+import PermissionMatrixExample from "./permission-matrix"
+import SignaturePadExample from "./signature-pad"
+import PhotoCaptureExample from "./photo-capture"
+import StepNavExample from "./step-nav"
+import TimeSeriesChartExample from "./time-series-chart"
+import SeatMapExample from "./seat-map"
 import CrmPipelineExample from "./crm-pipeline"
 import AnalyticsDashboardExample from "./analytics-dashboard"
 import SettingsPageExample from "./settings-page"
@@ -211,6 +221,16 @@ export const EXAMPLES: Record<string, ComponentType> = {
   "data-table": DataTableExample,
   "record-page": RecordPageExample,
   "stage-board": StageBoardExample,
+  gauge: GaugeExample,
+  "eta-indicator": EtaIndicatorExample,
+  "secret-input": SecretInputExample,
+  "mfa-step": MfaStepExample,
+  "permission-matrix": PermissionMatrixExample,
+  "signature-pad": SignaturePadExample,
+  "photo-capture": PhotoCaptureExample,
+  "step-nav": StepNavExample,
+  "time-series-chart": TimeSeriesChartExample,
+  "seat-map": SeatMapExample,
   "crm-pipeline": CrmPipelineExample,
   "analytics-dashboard": AnalyticsDashboardExample,
   "settings-page": SettingsPageExample,

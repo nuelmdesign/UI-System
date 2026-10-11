@@ -151,7 +151,11 @@ const SAMPLE_THRESHOLDS: TimeSeriesThreshold[] = [
 /* ── time helpers ── */
 
 function toMs(t: TimeSeriesPoint["t"]): number {
-  return t instanceof Date ? t.getTime() : typeof t === "number" ? t : Date.parse(t)
+  return t instanceof Date
+    ? t.getTime()
+    : typeof t === "number"
+      ? t
+      : Date.parse(t)
 }
 
 function tzOffsetMs(ms: number, timeZone: string, locale: string) {
@@ -370,7 +374,8 @@ function TimeSeriesChart({
     MARGIN.top + (1 - (v - yLo) / (yHi - yLo || 1)) * plotH
 
   const xTicks = React.useMemo(
-    () => timeTicks(t0, t1, Math.max(2, Math.floor(plotW / 90)), timeZone, locale),
+    () =>
+      timeTicks(t0, t1, Math.max(2, Math.floor(plotW / 90)), timeZone, locale),
     [t0, t1, plotW, timeZone, locale]
   )
 
@@ -385,8 +390,11 @@ function TimeSeriesChart({
     () =>
       new Intl.DateTimeFormat(locale, {
         timeZone,
-        dateStyle: "medium",
-        timeStyle: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
         hourCycle: "h23",
         timeZoneName: "short",
       } as Intl.DateTimeFormatOptions),
@@ -401,8 +409,7 @@ function TimeSeriesChart({
     return [...set].sort((a, b) => a - b)
   }, [visible, t0, t1])
 
-  const activeCursor =
-    cursor !== null && stops.includes(cursor) ? cursor : null
+  const activeCursor = cursor !== null && stops.includes(cursor) ? cursor : null
 
   const valueAt = (s: Prepared, t: number) =>
     s.pts.find((p) => p.t === t)?.v ?? null
@@ -479,8 +486,7 @@ function TimeSeriesChart({
     const i = activeCursor === null ? -1 : stops.indexOf(activeCursor)
     let next: number | null = null
     if (e.key === "ArrowRight") next = Math.min(stops.length - 1, i + 1)
-    else if (e.key === "ArrowLeft")
-      next = i === -1 ? 0 : Math.max(0, i - 1)
+    else if (e.key === "ArrowLeft") next = i === -1 ? 0 : Math.max(0, i - 1)
     else if (e.key === "Home") next = 0
     else if (e.key === "End") next = stops.length - 1
     else if (e.key === "Escape") {
@@ -530,7 +536,10 @@ function TimeSeriesChart({
   return (
     <div
       data-slot="time-series-chart"
-      className={cn("@container/tsc flex w-full min-w-0 flex-col gap-3", className)}
+      className={cn(
+        "@container/tsc flex w-full min-w-0 flex-col gap-3",
+        className
+      )}
       {...props}
     >
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
@@ -578,12 +587,7 @@ function TimeSeriesChart({
           })}
         </div>
         {zoom && (
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={resetZoom}
-          >
+          <Button type="button" variant="outline" size="sm" onClick={resetZoom}>
             <RotateCcw aria-hidden />
             {labels.resetZoom}
           </Button>
@@ -705,9 +709,7 @@ function TimeSeriesChart({
                     <path
                       key={`${s.id}-${k}`}
                       d={seg
-                        .map(
-                          (p, j) => `${j ? "L" : "M"}${x(p.t)} ${y(p.v)}`
-                        )
+                        .map((p, j) => `${j ? "L" : "M"}${x(p.t)} ${y(p.v)}`)
                         .join("")}
                       fill="none"
                       stroke={s.color}
@@ -722,7 +724,9 @@ function TimeSeriesChart({
             </g>
 
             {thresholds.map((th) => {
-              const yy = y(th.to !== undefined ? Math.max(th.value, th.to) : th.value)
+              const yy = y(
+                th.to !== undefined ? Math.max(th.value, th.to) : th.value
+              )
               return (
                 <text
                   key={th.id}
@@ -875,7 +879,7 @@ function TimeSeriesChart({
       </div>
 
       <details data-slot="time-series-table" className="group text-sm">
-        <summary className="eyebrow cursor-pointer rounded-sm text-muted-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring">
+        <summary className="cursor-pointer rounded-sm eyebrow text-muted-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring">
           {labels.dataTable}
         </summary>
         <div className="mt-2 max-h-64 overflow-auto rounded-md border">
@@ -887,7 +891,11 @@ function TimeSeriesChart({
                   {labels.time}
                 </th>
                 {prepared.map((s) => (
-                  <th key={s.id} scope="col" className="px-2 py-1.5 font-medium">
+                  <th
+                    key={s.id}
+                    scope="col"
+                    className="px-2 py-1.5 font-medium"
+                  >
                     {s.label}
                   </th>
                 ))}
