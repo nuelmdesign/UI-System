@@ -786,6 +786,78 @@ const items = [
     description:
       "Sales pipeline with a stage board, sortable list view, search, drag or menu moves, and a deal detail panel with an activity timeline.",
   }),
+  ui("filter-bar", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/badge",
+      "@opendraft/button",
+      "@opendraft/checkbox",
+      "@opendraft/input",
+      "@opendraft/popover",
+      "@opendraft/select",
+    ],
+    description:
+      "Search, select and multi-select filters from a config, with removable chips and clear-all.",
+  }),
+  ui("bulk-action-bar", {
+    deps: ["lucide-react"],
+    reg: ["@opendraft/button"],
+    description:
+      "Toolbar that appears when items are selected: count, generic actions and a clear button.",
+  }),
+  ui("checklist", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/checkbox",
+      "@opendraft/progress",
+      "@opendraft/textarea",
+    ],
+    description:
+      "Tickable checklist with progress, optional per-item notes and a sign-off step, for any domain.",
+  }),
+  ui("description-list", {
+    reg: ["@opendraft/copy-button"],
+    description:
+      "Container-query label and value grid for record details, with spans, mono values and copy buttons.",
+  }),
+  screen("data-table", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/checkbox",
+      "@opendraft/empty-state",
+      "@opendraft/input",
+      "@opendraft/tabs",
+      "@opendraft/filter-bar",
+      "@opendraft/bulk-action-bar",
+    ],
+    description:
+      "Generic data table: search, filters, view tabs, sorting, selection with bulk actions, paging and a card layout on narrow widths.",
+  }),
+  screen("record-page", {
+    deps: ["lucide-react"],
+    reg: [
+      "@opendraft/page-header",
+      "@opendraft/stat",
+      "@opendraft/status-indicator",
+      "@opendraft/tabs",
+      "@opendraft/timeline",
+    ],
+    description:
+      "Generic record detail page: header, status, summary stats, details grid, activity timeline and related items.",
+  }),
+  screen("stage-board", {
+    deps: ["lucide-react", "motion"],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/badge",
+      "@opendraft/dropdown-menu",
+      "@opendraft/select",
+    ],
+    description:
+      "Generic kanban board: drag or keyboard moves, WIP limits, per-stage totals and a detail panel.",
+  }),
   screen("analytics-dashboard", {
     deps: ["lucide-react", "motion"],
     reg: [

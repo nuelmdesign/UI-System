@@ -2269,6 +2269,162 @@
       ]
     },
     {
+      "name": "filter-bar",
+      "type": "registry:ui",
+      "title": "Filter Bar",
+      "description": "Search, select and multi-select filters from a config, with removable chips and clear-all.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/badge",
+        "@opendraft/button",
+        "@opendraft/checkbox",
+        "@opendraft/input",
+        "@opendraft/popover",
+        "@opendraft/select"
+      ],
+      "files": [
+        {
+          "path": "components/ui/filter-bar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "bulk-action-bar",
+      "type": "registry:ui",
+      "title": "Bulk Action Bar",
+      "description": "Toolbar that appears when items are selected: count, generic actions and a clear button.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/bulk-action-bar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checklist",
+      "type": "registry:ui",
+      "title": "Checklist",
+      "description": "Tickable checklist with progress, optional per-item notes and a sign-off step, for any domain.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/checkbox",
+        "@opendraft/progress",
+        "@opendraft/textarea"
+      ],
+      "files": [
+        {
+          "path": "components/ui/checklist.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "description-list",
+      "type": "registry:ui",
+      "title": "Description List",
+      "description": "Container-query label and value grid for record details, with spans, mono values and copy buttons.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/copy-button"
+      ],
+      "files": [
+        {
+          "path": "components/ui/description-list.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:block",
+      "title": "Data Table",
+      "description": "Generic data table: search, filters, view tabs, sorting, selection with bulk actions, paging and a card layout on narrow widths.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/checkbox",
+        "@opendraft/empty-state",
+        "@opendraft/input",
+        "@opendraft/tabs",
+        "@opendraft/filter-bar",
+        "@opendraft/bulk-action-bar"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/data-table.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/data-table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "record-page",
+      "type": "registry:block",
+      "title": "Record Page",
+      "description": "Generic record detail page: header, status, summary stats, details grid, activity timeline and related items.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/page-header",
+        "@opendraft/stat",
+        "@opendraft/status-indicator",
+        "@opendraft/tabs",
+        "@opendraft/timeline"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/record-page.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/record-page.tsx"
+        }
+      ]
+    },
+    {
+      "name": "stage-board",
+      "type": "registry:block",
+      "title": "Stage Board",
+      "description": "Generic kanban board: drag or keyboard moves, WIP limits, per-stage totals and a detail panel.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/badge",
+        "@opendraft/dropdown-menu",
+        "@opendraft/select"
+      ],
+      "files": [
+        {
+          "path": "components/blocks/stage-board.tsx",
+          "type": "registry:component",
+          "target": "components/blocks/stage-board.tsx"
+        }
+      ]
+    },
+    {
       "name": "analytics-dashboard",
       "type": "registry:block",
       "title": "Analytics Dashboard",
@@ -3112,6 +3268,13 @@
         "@opendraft/records-table",
         "@opendraft/diff-table",
         "@opendraft/crm-pipeline",
+        "@opendraft/filter-bar",
+        "@opendraft/bulk-action-bar",
+        "@opendraft/checklist",
+        "@opendraft/description-list",
+        "@opendraft/data-table",
+        "@opendraft/record-page",
+        "@opendraft/stage-board",
         "@opendraft/analytics-dashboard",
         "@opendraft/settings-page",
         "@opendraft/auth-screen",
