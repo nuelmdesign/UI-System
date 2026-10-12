@@ -34,7 +34,7 @@
         "Never show severity by color alone. Pair every severity color with a text label (Critical, High, Medium, Low) and use the same scale everywhere.",
         "Show times as absolute UTC in `font-mono` with a relative hint (for example `14:02:09Z · 3 min ago`). Analysts compare timestamps across systems. `timeline` renders `time` in mono and takes an ISO `timestamp`.",
         "Make destructive or far-reaching actions (isolate a host, revoke a session, delete a key) require a confirmation that names the consequence, and show who did it and when afterward. Do not offer 'Always allow' (`tool-approval`'s optional `onAlwaysAllow`) for these.",
-        "Mask secrets by default (tokens, keys, hashes). opendraft has no masked input, so render the masked value yourself, add an explicit reveal button and a `copy-button`, and never log or echo the value.",
+        "Mask secrets by default (tokens, keys, hashes). Use `secret-input` for entering or showing a secret (masked, with reveal, copy and optional auto-hide) and never log or echo the value.",
         "Favor dense tables and a `command-palette` (Cmd/Ctrl+K) for jumping to an entity. Default these products to the dark theme (add the `dark` class), but keep both themes working.",
         "Every state change should leave an audit trail the user can see. Plan for an audit-log screen from the start. Record who and when in your backend; the UI components only display it.",
         "Show what the system knows, not what it concludes: label automated or AI verdicts as such and link the evidence. Do not state or imply that the product makes anyone compliant with a standard."
@@ -56,7 +56,10 @@
           "page-header",
           "theme-toggle",
           "sonner",
+          "data-table",
           "table",
+          "filter-bar",
+          "bulk-action-bar",
           "timeline",
           "code-block",
           "file-diff",
@@ -66,27 +69,39 @@
           "tool-approval",
           "alert",
           "settings-page",
-          "checkbox",
+          "permission-matrix",
           "switch",
           "repeater-field",
           "date-range-picker",
+          "date-time-picker",
+          "description-list",
           "command-palette",
           "stat",
+          "gauge",
           "progress",
+          "time-series-chart",
           "analytics-dashboard",
           "auth-screen",
-          "otp-input",
+          "mfa-step",
+          "secret-input",
           "agent-workspace",
-          "citations"
+          "citations",
+          "map-view"
         ]
       },
       "needs": [
         {
           "need": "Triage a stream of alerts",
           "fit": "adapt",
-          "notes": "`table` is virtualized (pass `rowHeight` and `height` or `maxHeight`), sortable, and has `selectable` with `onSelectionChange(ids)` and `getRowId`. Render severity and status as `badge` (with `dot`) in a column `cell`. Build the bulk bar yourself: when `ids.length > 0` show `Button`s (Acknowledge, Close, Assign) above the table. Filter your own data with `tabs` (status), `select` (severity) and `input` (search) and pass the filtered rows in.",
-          "gap": "`filter-table` is NOT for this: its rows are fixed task rows {task, date, status todo|progress|done, owner}. `selection-actions` is NOT a bulk bar: it is an AI text-rewrite bar over a passage. There is no four-level severity component (use `badge`: Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with the word) and no saved-filter control. On phones the table scrolls sideways; there is no card mode.",
+          "notes": "Start with the `data-table` block: `columns`, `rows`, `getRowId`, `searchable`, `filters` (a `filter-bar` config with chips and clear-all), `views` (tabs such as Open, Acknowledged, Closed), `selectable` with `bulkActions` (Acknowledge, Close, Assign receive the selected rows) and a card layout when narrow. Render severity and status as `badge` (with `dot`) in a column `cell`. For a very large live stream use the virtualized `table` (pass `rowHeight` and `height` or `maxHeight`) with `filter-bar` above and `bulk-action-bar` shown when ids are selected.",
+          "gap": "`data-table` pages its rows rather than virtualizing them, so it suits thousands of rows, not an unbounded stream. There is no four-level severity component (use `badge`: Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with the word) and no saved-filter control: store the `filter-bar` value yourself.",
           "components": [
+            {
+              "slug": "data-table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/data-table.md",
+              "install": "npx shadcn@latest add @opendraft/data-table"
+            },
             {
               "slug": "table",
               "title": "Data Table",
@@ -94,34 +109,22 @@
               "install": "npx shadcn@latest add @opendraft/table"
             },
             {
+              "slug": "filter-bar",
+              "title": "Filter Bar",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-bar.md",
+              "install": "npx shadcn@latest add @opendraft/filter-bar"
+            },
+            {
+              "slug": "bulk-action-bar",
+              "title": "Bulk Action Bar",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/bulk-action-bar.md",
+              "install": "npx shadcn@latest add @opendraft/bulk-action-bar"
+            },
+            {
               "slug": "badge",
               "title": "Badge",
               "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
               "install": "npx shadcn@latest add @opendraft/badge"
-            },
-            {
-              "slug": "tabs",
-              "title": "Tabs",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/tabs.md",
-              "install": "npx shadcn@latest add @opendraft/tabs"
-            },
-            {
-              "slug": "input",
-              "title": "Input",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md",
-              "install": "npx shadcn@latest add @opendraft/input"
-            },
-            {
-              "slug": "select",
-              "title": "Select",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md",
-              "install": "npx shadcn@latest add @opendraft/select"
-            },
-            {
-              "slug": "button",
-              "title": "Button",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/button.md",
-              "install": "npx shadcn@latest add @opendraft/button"
             }
           ]
         },
@@ -210,8 +213,8 @@
         {
           "need": "Manage users, roles and permissions",
           "fit": "adapt",
-          "notes": "`settings-page` with `sections={[\"team\"]}` gives a member list, invite (`onInvite`) and role change. For long user lists use `table` with `selectable`. A small permission matrix can be a `table` whose column `cell` renders a `checkbox` per role and permission. `repeater-field` edits rule lists such as allowed IP ranges.",
-          "gap": "`settings-page` roles are fixed to owner, admin, member and viewer. No permission-matrix component: build it from `table` + `checkbox`; it will not collapse well on phones.",
+          "notes": "`settings-page` with `sections={[\"team\"]}` gives a member list, invite (`onInvite`) and role change. Use `permission-matrix` for the custom-roles screen: `roles` by `groups` of permissions, select-all per role, row and group, read-only built-in roles and a change summary to review before saving (`onValueChange`). Long user lists belong in `data-table`. `repeater-field` edits rule lists such as allowed IP ranges.",
+          "gap": "`settings-page` roles are fixed to owner, admin, member and viewer; use `permission-matrix` for anything custom. The matrix edits grants only: who may change roles, and enforcement, come from your backend.",
           "components": [
             {
               "slug": "settings-page",
@@ -220,16 +223,16 @@
               "install": "npx shadcn@latest add @opendraft/settings-page"
             },
             {
-              "slug": "table",
-              "title": "Data Table",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
-              "install": "npx shadcn@latest add @opendraft/table"
+              "slug": "permission-matrix",
+              "title": "Permission Matrix",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/permission-matrix.md",
+              "install": "npx shadcn@latest add @opendraft/permission-matrix"
             },
             {
-              "slug": "checkbox",
-              "title": "Checkbox",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/checkbox.md",
-              "install": "npx shadcn@latest add @opendraft/checkbox"
+              "slug": "data-table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/data-table.md",
+              "install": "npx shadcn@latest add @opendraft/data-table"
             },
             {
               "slug": "select",
@@ -254,14 +257,20 @@
         {
           "need": "Search and review an audit log",
           "fit": "adapt",
-          "notes": "`table` with sortable columns, `onEndReached` plus `loading` for paging, and mono cells for IDs and times. Filters are your own `date-range-picker`, `select` and `input`. Show a change with `file-diff` (lines typed added, removed, context) and one entity's history with `timeline`.",
-          "gap": "`date-range-picker` values are calendar dates (YYYY-MM-DD) with no time of day, so narrow by time with your own fields. `diff-table` is NOT usable here: it is a fixed 3-column {id, dept, email} proposed-edit widget with keep or drop and Apply. `records-table` is NOT usable: it is an AI spreadsheet with fixed {name, tags, last, strength, website} rows. `filter-table` is task-shaped.",
+          "notes": "`data-table` with `searchable`, `filters` (actor, action, outcome as select or multi-select), sortable mono columns for IDs and times, and `onRowOpen` to show one entry in a `description-list` (actor, target, IP, request ID with `copyable`). Show a change with `file-diff` and one entity's history with `timeline`. Use `date-range-picker` for the day range and `date-time-picker` (with a named `timeZone`, UTC by default here) for exact from and to bounds.",
+          "gap": "No dedicated audit-log viewer with live tail, saved queries or export; assemble it from `data-table` and `filter-bar`, and page from your backend. `date-range-picker` itself has no time of day, which is why the exact bounds use `date-time-picker`.",
           "components": [
             {
-              "slug": "table",
+              "slug": "data-table",
               "title": "Data Table",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
-              "install": "npx shadcn@latest add @opendraft/table"
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/data-table.md",
+              "install": "npx shadcn@latest add @opendraft/data-table"
+            },
+            {
+              "slug": "filter-bar",
+              "title": "Filter Bar",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/filter-bar.md",
+              "install": "npx shadcn@latest add @opendraft/filter-bar"
             },
             {
               "slug": "date-range-picker",
@@ -270,16 +279,16 @@
               "install": "npx shadcn@latest add @opendraft/date-range-picker"
             },
             {
-              "slug": "input",
-              "title": "Input",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md",
-              "install": "npx shadcn@latest add @opendraft/input"
+              "slug": "date-time-picker",
+              "title": "Date Time Picker",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/date-time-picker.md",
+              "install": "npx shadcn@latest add @opendraft/date-time-picker"
             },
             {
-              "slug": "select",
-              "title": "Select",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/select.md",
-              "install": "npx shadcn@latest add @opendraft/select"
+              "slug": "description-list",
+              "title": "Description List",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/description-list.md",
+              "install": "npx shadcn@latest add @opendraft/description-list"
             },
             {
               "slug": "timeline",
@@ -304,8 +313,8 @@
         {
           "need": "Show security posture and compliance coverage",
           "fit": "adapt",
-          "notes": "`stat` and `StatGroup` for headline numbers, with `delta` and `goodWhen=\"down\"` for counts where fewer is better. `progress` for control coverage: for coverage where low is bad, set `invert` with `tone=\"auto\"` so a low value turns warning or destructive. `analytics-dashboard` can show findings: relabel through `labels` (including `columns`), supply `metrics`, per-metric `series`, `rows` and `channels` (share bars, usable for a severity breakdown) and set `valueColumn`. Pass `fill={false}` inside a scrolling page.",
-          "gap": "`analytics-dashboard` ranges are fixed at 7d, 30d and 90d and its table columns are fixed to name, visitors, conversion and duration (relabel or replace the last with `valueColumn`). No gauge or risk-score ring.",
+          "notes": "`stat` and `StatGroup` for headline numbers, with `delta` and `goodWhen=\"down\"` for counts where fewer is better. `gauge` shows a posture or risk score with `thresholds` bands and a text status (never color alone). `progress` for control coverage: set `invert` with `tone=\"auto\"` where a low value is bad. `time-series-chart` plots findings over time with `thresholds`, brush zoom and a data-table fallback. `analytics-dashboard` can still frame a findings overview through `labels`, `metrics`, `rows` and `channels`; pass `fill={false}` inside a scrolling page.",
+          "gap": "`analytics-dashboard` ranges are fixed at 7d, 30d and 90d and its table columns are fixed to name, visitors, conversion and duration (relabel or replace the last with `valueColumn`). Prefer `time-series-chart` when you need your own series. Do not present a score as proof of compliance with a standard.",
           "components": [
             {
               "slug": "stat",
@@ -314,10 +323,22 @@
               "install": "npx shadcn@latest add @opendraft/stat"
             },
             {
+              "slug": "gauge",
+              "title": "Gauge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/gauge.md",
+              "install": "npx shadcn@latest add @opendraft/gauge"
+            },
+            {
               "slug": "progress",
               "title": "Progress",
               "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/progress.md",
               "install": "npx shadcn@latest add @opendraft/progress"
+            },
+            {
+              "slug": "time-series-chart",
+              "title": "Time Series Chart",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/time-series-chart.md",
+              "install": "npx shadcn@latest add @opendraft/time-series-chart"
             },
             {
               "slug": "analytics-dashboard",
@@ -336,8 +357,8 @@
         {
           "need": "Sign in with SSO and MFA",
           "fit": "adapt",
-          "notes": "`auth-screen` handles email and password, remember me, forgot password and provider buttons (`providers`, `onProvider`). `onSubmit` may throw to show an error. After it succeeds, show your own second screen with `otp-input` (`length`, `pattern`, `onComplete`, `invalid`) inside a `field`, and an `alert` for lockout or error states.",
-          "gap": "`auth-screen` has no built-in MFA step, passkey or SSO-by-domain flow; the code step is a screen you build and the provider supplies the verification.",
+          "notes": "`auth-screen` handles email and password, remember me, forgot password and provider buttons (`providers`, `onProvider`); `onSubmit` may throw to show an error. After it succeeds, show `mfa-step` for the second factor: `methods` (authenticator app, SMS, security key), `onVerify` (async, returns the result), `onResend` with a countdown, and verifying, error and `locked` states. Use an `alert` for session-expired or lockout notices.",
+          "gap": "`mfa-step` collects and submits a code but the verification, rate limits and lockout come from your auth provider or backend. There is no passkey enrolment screen or SSO-by-domain flow.",
           "components": [
             {
               "slug": "auth-screen",
@@ -346,10 +367,10 @@
               "install": "npx shadcn@latest add @opendraft/auth-screen"
             },
             {
-              "slug": "otp-input",
-              "title": "OTP Input",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/otp-input.md",
-              "install": "npx shadcn@latest add @opendraft/otp-input"
+              "slug": "mfa-step",
+              "title": "MFA Step",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/mfa-step.md",
+              "install": "npx shadcn@latest add @opendraft/mfa-step"
             },
             {
               "slug": "field",
@@ -367,15 +388,21 @@
         },
         {
           "need": "Manage API keys and secrets",
-          "fit": "adapt",
-          "notes": "List keys in a `table` with created, last used and a `badge` for status. Reveal a new key once in a `dialog` with a `copy-button` and an `alert` that it will not be shown again. Revoke with a type-to-confirm `dialog`.",
-          "gap": "No masked or reveal input; use `input type=\"password\"` and your own show button.",
+          "fit": "ready",
+          "notes": "List keys in `data-table` with created, last used and a `badge` for status (never show the full secret in a row). Reveal a new key once in a `dialog` with `secret-input` (masked, reveal, `copyable`, `autoHideMs`), a `copy-button` and an `alert` that it will not be shown again. Revoke with a type-to-confirm `dialog`.",
+          "gap": null,
           "components": [
             {
-              "slug": "table",
+              "slug": "data-table",
               "title": "Data Table",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/table.md",
-              "install": "npx shadcn@latest add @opendraft/table"
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/data-table.md",
+              "install": "npx shadcn@latest add @opendraft/data-table"
+            },
+            {
+              "slug": "secret-input",
+              "title": "Secret Input",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/secret-input.md",
+              "install": "npx shadcn@latest add @opendraft/secret-input"
             },
             {
               "slug": "dialog",
@@ -388,12 +415,6 @@
               "title": "Copy Button",
               "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/copy-button.md",
               "install": "npx shadcn@latest add @opendraft/copy-button"
-            },
-            {
-              "slug": "input",
-              "title": "Input",
-              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/input.md",
-              "install": "npx shadcn@latest add @opendraft/input"
             },
             {
               "slug": "field",
@@ -468,11 +489,30 @@
           ]
         },
         {
-          "need": "Show assets or attack paths on a map or graph",
-          "fit": "gap",
-          "notes": "Nothing in opendraft draws a graph or a map. `flowchart` is a Trigger and If/Else workflow canvas with condition chips, not a network or attack-path graph.",
-          "gap": "No network graph or geographic map. Use a graph or map library (see integrations) and keep the entity list in a `table` beside it.",
-          "components": []
+          "need": "Show assets or attack paths on a map",
+          "fit": "adapt",
+          "notes": "`map-view` is a token-styled MapLibre GL map: pass `markers` (each with a text `label` and a `status`), `routes` and `areas`, and use `selectedId` with `onSelect` to sync it with a `data-table` of assets. It includes a keyboard-reachable list of the same locations, so the map is never the only view.",
+          "gap": "`map-view` is geographic only. There is no network or attack-path graph (`flowchart` is a workflow canvas). Use a graph library (see integrations) for nodes and edges and keep the entity list in `data-table` beside it.",
+          "components": [
+            {
+              "slug": "map-view",
+              "title": "Map View",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/map-view.md",
+              "install": "npx shadcn@latest add @opendraft/map-view"
+            },
+            {
+              "slug": "data-table",
+              "title": "Data Table",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/data-table.md",
+              "install": "npx shadcn@latest add @opendraft/data-table"
+            },
+            {
+              "slug": "badge",
+              "title": "Badge",
+              "page": "https://raw.githubusercontent.com/nuelmdesign/UI-System/HEAD/public/llms/badge.md",
+              "install": "npx shadcn@latest add @opendraft/badge"
+            }
+          ]
         }
       ],
       "screens": [
@@ -482,20 +522,17 @@
             "page-header",
             "alert",
             "stat",
-            "analytics-dashboard",
-            "table"
+            "gauge",
+            "time-series-chart",
+            "data-table"
           ]
         },
         {
           "name": "Alert queue",
           "compose": [
             "page-header",
-            "tabs",
-            "input",
-            "select",
-            "table",
+            "data-table",
             "badge",
-            "button",
             "command-palette"
           ]
         },
@@ -517,8 +554,8 @@
           "compose": [
             "page-header",
             "settings-page",
-            "table",
-            "checkbox",
+            "permission-matrix",
+            "data-table",
             "dialog"
           ]
         },
@@ -526,10 +563,10 @@
           "name": "Audit log",
           "compose": [
             "page-header",
-            "date-range-picker",
-            "select",
-            "input",
-            "table",
+            "data-table",
+            "filter-bar",
+            "date-time-picker",
+            "description-list",
             "file-diff"
           ]
         }
@@ -549,7 +586,7 @@
             "MapLibre GL JS",
             "deck.gl"
           ],
-          "note": "Style markers with status tokens and always give each marker a text label for assistive technology."
+          "note": "map-view is already built on MapLibre GL JS; reach for deck.gl only for very dense layers. Always give each marker a text label for assistive technology."
         },
         {
           "for": "Event volume and trend charts",
@@ -557,7 +594,7 @@
             "Recharts",
             "uPlot"
           ],
-          "note": "uPlot copes with very large series; Recharts is quicker to theme. The chart inside analytics-dashboard is fixed to its own metrics."
+          "note": "Use time-series-chart for multi-series trends with thresholds and zoom. uPlot copes with very large series; the chart inside analytics-dashboard is fixed to its own metrics."
         },
         {
           "for": "Single sign-on and MFA",
@@ -566,7 +603,7 @@
             "Auth0",
             "WorkOS"
           ],
-          "note": "Put the provider's flow behind the auth-screen block (onSubmit and onProvider) and use otp-input for codes."
+          "note": "Put the provider's flow behind the auth-screen block (onSubmit and onProvider) and use mfa-step for the second factor, wiring onVerify to the provider."
         }
       ]
     },

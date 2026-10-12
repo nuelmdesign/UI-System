@@ -29,7 +29,7 @@
         "Never show severity by color alone. Pair every severity color with a text label (Critical, High, Medium, Low) and use the same scale everywhere.",
         "Show times as absolute UTC in `font-mono` with a relative hint (for example `14:02:09Z · 3 min ago`). Analysts compare timestamps across systems. `timeline` renders `time` in mono and takes an ISO `timestamp`.",
         "Make destructive or far-reaching actions (isolate a host, revoke a session, delete a key) require a confirmation that names the consequence, and show who did it and when afterward. Do not offer 'Always allow' (`tool-approval`'s optional `onAlwaysAllow`) for these.",
-        "Mask secrets by default (tokens, keys, hashes). opendraft has no masked input, so render the masked value yourself, add an explicit reveal button and a `copy-button`, and never log or echo the value.",
+        "Mask secrets by default (tokens, keys, hashes). Use `secret-input` for entering or showing a secret (masked, with reveal, copy and optional auto-hide) and never log or echo the value.",
         "Favor dense tables and a `command-palette` (Cmd/Ctrl+K) for jumping to an entity. Default these products to the dark theme (add the `dark` class), but keep both themes working.",
         "Every state change should leave an audit trail the user can see. Plan for an audit-log screen from the start. Record who and when in your backend; the UI components only display it.",
         "Show what the system knows, not what it concludes: label automated or AI verdicts as such and link the evidence. Do not state or imply that the product makes anyone compliant with a standard."
@@ -37,10 +37,16 @@
       "needs": [
         {
           "need": "Triage a stream of alerts",
-          "use": ["table", "badge", "tabs", "input", "select", "button"],
+          "use": [
+            "data-table",
+            "table",
+            "filter-bar",
+            "bulk-action-bar",
+            "badge"
+          ],
           "status": "adapt",
-          "notes": "`table` is virtualized (pass `rowHeight` and `height` or `maxHeight`), sortable, and has `selectable` with `onSelectionChange(ids)` and `getRowId`. Render severity and status as `badge` (with `dot`) in a column `cell`. Build the bulk bar yourself: when `ids.length > 0` show `Button`s (Acknowledge, Close, Assign) above the table. Filter your own data with `tabs` (status), `select` (severity) and `input` (search) and pass the filtered rows in.",
-          "gap": "`filter-table` is NOT for this: its rows are fixed task rows {task, date, status todo|progress|done, owner}. `selection-actions` is NOT a bulk bar: it is an AI text-rewrite bar over a passage. There is no four-level severity component (use `badge`: Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with the word) and no saved-filter control. On phones the table scrolls sideways; there is no card mode."
+          "notes": "Start with the `data-table` block: `columns`, `rows`, `getRowId`, `searchable`, `filters` (a `filter-bar` config with chips and clear-all), `views` (tabs such as Open, Acknowledged, Closed), `selectable` with `bulkActions` (Acknowledge, Close, Assign receive the selected rows) and a card layout when narrow. Render severity and status as `badge` (with `dot`) in a column `cell`. For a very large live stream use the virtualized `table` (pass `rowHeight` and `height` or `maxHeight`) with `filter-bar` above and `bulk-action-bar` shown when ids are selected.",
+          "gap": "`data-table` pages its rows rather than virtualizing them, so it suits thousands of rows, not an unbounded stream. There is no four-level severity component (use `badge`: Critical to `destructive`, High and Medium to `warning`, Low to `secondary`, always with the word) and no saved-filter control: store the `filter-bar` value yourself."
         },
         {
           "need": "Investigate an incident: timeline of events and evidence",
@@ -72,59 +78,66 @@
           "need": "Manage users, roles and permissions",
           "use": [
             "settings-page",
-            "table",
-            "checkbox",
+            "permission-matrix",
+            "data-table",
             "select",
             "switch",
             "repeater-field"
           ],
           "status": "adapt",
-          "notes": "`settings-page` with `sections={[\"team\"]}` gives a member list, invite (`onInvite`) and role change. For long user lists use `table` with `selectable`. A small permission matrix can be a `table` whose column `cell` renders a `checkbox` per role and permission. `repeater-field` edits rule lists such as allowed IP ranges.",
-          "gap": "`settings-page` roles are fixed to owner, admin, member and viewer. No permission-matrix component: build it from `table` + `checkbox`; it will not collapse well on phones."
+          "notes": "`settings-page` with `sections={[\"team\"]}` gives a member list, invite (`onInvite`) and role change. Use `permission-matrix` for the custom-roles screen: `roles` by `groups` of permissions, select-all per role, row and group, read-only built-in roles and a change summary to review before saving (`onValueChange`). Long user lists belong in `data-table`. `repeater-field` edits rule lists such as allowed IP ranges.",
+          "gap": "`settings-page` roles are fixed to owner, admin, member and viewer; use `permission-matrix` for anything custom. The matrix edits grants only: who may change roles, and enforcement, come from your backend."
         },
         {
           "need": "Search and review an audit log",
           "use": [
-            "table",
+            "data-table",
+            "filter-bar",
             "date-range-picker",
-            "input",
-            "select",
+            "date-time-picker",
+            "description-list",
             "timeline",
             "file-diff",
             "command-palette"
           ],
           "status": "adapt",
-          "notes": "`table` with sortable columns, `onEndReached` plus `loading` for paging, and mono cells for IDs and times. Filters are your own `date-range-picker`, `select` and `input`. Show a change with `file-diff` (lines typed added, removed, context) and one entity's history with `timeline`.",
-          "gap": "`date-range-picker` values are calendar dates (YYYY-MM-DD) with no time of day, so narrow by time with your own fields. `diff-table` is NOT usable here: it is a fixed 3-column {id, dept, email} proposed-edit widget with keep or drop and Apply. `records-table` is NOT usable: it is an AI spreadsheet with fixed {name, tags, last, strength, website} rows. `filter-table` is task-shaped."
+          "notes": "`data-table` with `searchable`, `filters` (actor, action, outcome as select or multi-select), sortable mono columns for IDs and times, and `onRowOpen` to show one entry in a `description-list` (actor, target, IP, request ID with `copyable`). Show a change with `file-diff` and one entity's history with `timeline`. Use `date-range-picker` for the day range and `date-time-picker` (with a named `timeZone`, UTC by default here) for exact from and to bounds.",
+          "gap": "No dedicated audit-log viewer with live tail, saved queries or export; assemble it from `data-table` and `filter-bar`, and page from your backend. `date-range-picker` itself has no time of day, which is why the exact bounds use `date-time-picker`."
         },
         {
           "need": "Show security posture and compliance coverage",
-          "use": ["stat", "progress", "analytics-dashboard", "badge"],
+          "use": [
+            "stat",
+            "gauge",
+            "progress",
+            "time-series-chart",
+            "analytics-dashboard",
+            "badge"
+          ],
           "status": "adapt",
-          "notes": "`stat` and `StatGroup` for headline numbers, with `delta` and `goodWhen=\"down\"` for counts where fewer is better. `progress` for control coverage: for coverage where low is bad, set `invert` with `tone=\"auto\"` so a low value turns warning or destructive. `analytics-dashboard` can show findings: relabel through `labels` (including `columns`), supply `metrics`, per-metric `series`, `rows` and `channels` (share bars, usable for a severity breakdown) and set `valueColumn`. Pass `fill={false}` inside a scrolling page.",
-          "gap": "`analytics-dashboard` ranges are fixed at 7d, 30d and 90d and its table columns are fixed to name, visitors, conversion and duration (relabel or replace the last with `valueColumn`). No gauge or risk-score ring."
+          "notes": "`stat` and `StatGroup` for headline numbers, with `delta` and `goodWhen=\"down\"` for counts where fewer is better. `gauge` shows a posture or risk score with `thresholds` bands and a text status (never color alone). `progress` for control coverage: set `invert` with `tone=\"auto\"` where a low value is bad. `time-series-chart` plots findings over time with `thresholds`, brush zoom and a data-table fallback. `analytics-dashboard` can still frame a findings overview through `labels`, `metrics`, `rows` and `channels`; pass `fill={false}` inside a scrolling page.",
+          "gap": "`analytics-dashboard` ranges are fixed at 7d, 30d and 90d and its table columns are fixed to name, visitors, conversion and duration (relabel or replace the last with `valueColumn`). Prefer `time-series-chart` when you need your own series. Do not present a score as proof of compliance with a standard."
         },
         {
           "need": "Sign in with SSO and MFA",
-          "use": ["auth-screen", "otp-input", "field", "alert"],
+          "use": ["auth-screen", "mfa-step", "field", "alert"],
           "status": "adapt",
-          "notes": "`auth-screen` handles email and password, remember me, forgot password and provider buttons (`providers`, `onProvider`). `onSubmit` may throw to show an error. After it succeeds, show your own second screen with `otp-input` (`length`, `pattern`, `onComplete`, `invalid`) inside a `field`, and an `alert` for lockout or error states.",
-          "gap": "`auth-screen` has no built-in MFA step, passkey or SSO-by-domain flow; the code step is a screen you build and the provider supplies the verification."
+          "notes": "`auth-screen` handles email and password, remember me, forgot password and provider buttons (`providers`, `onProvider`); `onSubmit` may throw to show an error. After it succeeds, show `mfa-step` for the second factor: `methods` (authenticator app, SMS, security key), `onVerify` (async, returns the result), `onResend` with a countdown, and verifying, error and `locked` states. Use an `alert` for session-expired or lockout notices.",
+          "gap": "`mfa-step` collects and submits a code but the verification, rate limits and lockout come from your auth provider or backend. There is no passkey enrolment screen or SSO-by-domain flow."
         },
         {
           "need": "Manage API keys and secrets",
           "use": [
-            "table",
+            "data-table",
+            "secret-input",
             "dialog",
             "copy-button",
-            "input",
             "field",
             "alert",
             "badge"
           ],
-          "status": "adapt",
-          "notes": "List keys in a `table` with created, last used and a `badge` for status. Reveal a new key once in a `dialog` with a `copy-button` and an `alert` that it will not be shown again. Revoke with a type-to-confirm `dialog`.",
-          "gap": "No masked or reveal input; use `input type=\"password\"` and your own show button."
+          "status": "ready",
+          "notes": "List keys in `data-table` with created, last used and a `badge` for status (never show the full secret in a row). Reveal a new key once in a `dialog` with `secret-input` (masked, reveal, `copyable`, `autoHideMs`), a `copy-button` and an `alert` that it will not be shown again. Revoke with a type-to-confirm `dialog`."
         },
         {
           "need": "Show active incidents and degraded feeds",
@@ -144,11 +157,11 @@
           "notes": "`agent-workspace` takes your `conversations`, `messages`, `tasks` and an async `onSend` that returns the reply (thinking rows, tool steps, streamed `answer` tokens, `sources`, `followUps`). Show evidence with `citations` and gate any action behind `approval-card` or `tool-approval`."
         },
         {
-          "need": "Show assets or attack paths on a map or graph",
-          "use": [],
-          "status": "gap",
-          "notes": "Nothing in opendraft draws a graph or a map. `flowchart` is a Trigger and If/Else workflow canvas with condition chips, not a network or attack-path graph.",
-          "gap": "No network graph or geographic map. Use a graph or map library (see integrations) and keep the entity list in a `table` beside it."
+          "need": "Show assets or attack paths on a map",
+          "use": ["map-view", "data-table", "badge"],
+          "status": "adapt",
+          "notes": "`map-view` is a token-styled MapLibre GL map: pass `markers` (each with a text `label` and a `status`), `routes` and `areas`, and use `selectedId` with `onSelect` to sync it with a `data-table` of assets. It includes a keyboard-reachable list of the same locations, so the map is never the only view.",
+          "gap": "`map-view` is geographic only. There is no network or attack-path graph (`flowchart` is a workflow canvas). Use a graph library (see integrations) for nodes and edges and keep the entity list in `data-table` beside it."
         }
       ],
       "screens": [
@@ -158,22 +171,14 @@
             "page-header",
             "alert",
             "stat",
-            "analytics-dashboard",
-            "table"
+            "gauge",
+            "time-series-chart",
+            "data-table"
           ]
         },
         {
           "name": "Alert queue",
-          "compose": [
-            "page-header",
-            "tabs",
-            "input",
-            "select",
-            "table",
-            "badge",
-            "button",
-            "command-palette"
-          ]
+          "compose": ["page-header", "data-table", "badge", "command-palette"]
         },
         {
           "name": "Incident detail",
@@ -193,8 +198,8 @@
           "compose": [
             "page-header",
             "settings-page",
-            "table",
-            "checkbox",
+            "permission-matrix",
+            "data-table",
             "dialog"
           ]
         },
@@ -202,10 +207,10 @@
           "name": "Audit log",
           "compose": [
             "page-header",
-            "date-range-picker",
-            "select",
-            "input",
-            "table",
+            "data-table",
+            "filter-bar",
+            "date-time-picker",
+            "description-list",
             "file-diff"
           ]
         }
@@ -219,17 +224,17 @@
         {
           "for": "Geographic threat or asset map",
           "options": ["MapLibre GL JS", "deck.gl"],
-          "note": "Style markers with status tokens and always give each marker a text label for assistive technology."
+          "note": "map-view is already built on MapLibre GL JS; reach for deck.gl only for very dense layers. Always give each marker a text label for assistive technology."
         },
         {
           "for": "Event volume and trend charts",
           "options": ["Recharts", "uPlot"],
-          "note": "uPlot copes with very large series; Recharts is quicker to theme. The chart inside analytics-dashboard is fixed to its own metrics."
+          "note": "Use time-series-chart for multi-series trends with thresholds and zoom. uPlot copes with very large series; the chart inside analytics-dashboard is fixed to its own metrics."
         },
         {
           "for": "Single sign-on and MFA",
           "options": ["Clerk", "Auth0", "WorkOS"],
-          "note": "Put the provider's flow behind the auth-screen block (onSubmit and onProvider) and use otp-input for codes."
+          "note": "Put the provider's flow behind the auth-screen block (onSubmit and onProvider) and use mfa-step for the second factor, wiring onVerify to the provider."
         }
       ]
     },
@@ -271,9 +276,16 @@
       "needs": [
         {
           "need": "Service health overview",
-          "use": ["status-indicator", "stat", "progress", "alert", "tabs"],
+          "use": [
+            "status-indicator",
+            "stat",
+            "gauge",
+            "progress",
+            "alert",
+            "tabs"
+          ],
           "status": "ready",
-          "notes": "`StatusIndicator` (`status` operational, degraded, down, maintenance, unknown; optional `pulse`) next to each service name, and `UptimeBar` for the 90-day bars: pass `segments` (one `{status, label}` per day), `uptime` text and `name` for the accessible summary. `stat` tiles for headline numbers, `progress` for quota use, `alert` (info or warning, `banner`) for planned maintenance."
+          "notes": "`StatusIndicator` (`status` operational, degraded, down, maintenance, unknown; optional `pulse`) next to each service name, and `UptimeBar` for the 90-day bars: pass `segments` (one `{status, label}` per day), `uptime` text and `name` for the accessible summary. `stat` tiles for headline numbers, `gauge` (with `thresholds` and a text status) or `progress` for utilization and quota, `alert` (info or warning, `banner`) for planned maintenance."
         },
         {
           "need": "Public status page",
@@ -290,51 +302,53 @@
         {
           "need": "Incident management and on-call",
           "use": [
-            "table",
+            "data-table",
             "tabs",
             "badge",
             "timeline",
             "stepper",
             "alert",
-            "checkbox",
+            "checklist",
+            "scheduler",
             "avatar"
           ],
           "status": "adapt",
-          "notes": "Incident list in `table` (severity and status as `badge` cells, `tabs` for Open, Mitigated, Resolved). Incident updates in `timeline` (`status` warning, destructive, current, success; expandable `children` for notes). Lifecycle stages (Investigating, Identified, Monitoring, Resolved) in `stepper`. Runbook steps as `checkbox` rows. `todo-list` is a read-only display of an agent's task plan with no check-off, so it does not fit a human runbook.",
-          "gap": "No on-call schedule or rota view and no paging or acknowledge control; build the rota as a `table` with `avatar` and `badge`."
+          "notes": "Incident list in `data-table` (severity and status as `badge` cells, `views` for Open, Mitigated, Resolved, `filters` for service and severity). Incident updates in `timeline` (`status` warning, destructive, current, success; expandable `children` for notes). Lifecycle stages (Investigating, Identified, Monitoring, Resolved) in `stepper`. Runbook steps in `checklist` (tickable items, per-item notes, progress and a sign-off step). The on-call rota is a `scheduler` block: `resources` are people or teams, `events` are shifts, with conflict marking and keyboard moves.",
+          "gap": "No paging or acknowledge control and no escalation policy editor; those come from your paging service. `scheduler` draws the rota but overrides and swaps are your logic."
         },
         {
           "need": "Browse and search logs",
           "use": [
             "table",
+            "filter-bar",
             "code-block",
             "input",
-            "select",
             "tabs",
             "badge",
             "copy-button"
           ],
           "status": "adapt",
-          "notes": "Use the virtualized `table` with fixed `rowHeight`, mono cells, a level `badge` column, `onEndReached` and `loading` for paging, and `input`, `select` and `tabs` above it for search and level filters. `code-block` (`showLineNumbers`, `highlightLines`, `wrap`, `maxHeight`, `copyable`, `status=\"streaming\"`) shows one entry's full payload or a stack trace. `code-panel` is not suited: it is a small sample-shaped card capped at about 420px wide.",
-          "gap": "No log viewer. There is no follow or live-tail mode, so you append rows to `data` and manage scroll position yourself; no match highlighting; columns hide into a sideways scroll on phones."
+          "notes": "Use the virtualized `table` with fixed `rowHeight`, mono cells, a level `badge` column, `onEndReached` and `loading` for paging, and `filter-bar` above it for level, service and text filters (chips with clear-all). `code-block` (`showLineNumbers`, `highlightLines`, `wrap`, `maxHeight`, `copyable`, `status=\"streaming\"`) shows one entry's full payload or a stack trace. `code-panel` is not suited: it is a small sample-shaped card capped at about 420px wide.",
+          "gap": "No log viewer. There is no follow or live-tail mode, so you append rows to `data` and manage scroll position yourself; no match highlighting; columns hide into a sideways scroll on phones (use `data-table`'s card layout only for modest result sets)."
         },
         {
           "need": "Metrics dashboards",
           "use": [
             "analytics-dashboard",
+            "time-series-chart",
             "insight-cards",
             "stat",
             "date-range-picker"
           ],
           "status": "adapt",
-          "notes": "`analytics-dashboard` gives KPI cards with deltas, a per-metric trend chart, a ranked table and a share breakdown; relabel it through `labels` and feed it `data` per range. `InsightChart` is exported from the `insight-cards` file: it plots several lines (`lines` of `{id, values, tone}`), an optional dashed `threshold`, hover cursor and `tooltip`, which suits a latency or error-rate chart with an alert threshold. `date-range-picker` takes YYYY-MM-DD dates.",
-          "gap": "`analytics-dashboard` ranges are fixed at 7d, 30d and 90d and its table columns are name, visitors, conversion and duration (swap the last for `valueColumn`). `InsightChart` has no axes, zoom or legend; it needs your own wrapper (it is also driven by controlled `index` and `onIndexChange`). For real time-series work use a chart library."
+          "notes": "`time-series-chart` is the metric chart: several `series` of `{t, v}` points (null `v` leaves a gap), a named `timeZone` (UTC by default here), `thresholds` for an SLO or alert line, brush zoom (`onZoomChange`), keyboard stepping and a data-table fallback. `analytics-dashboard` still gives KPI cards with deltas and a ranked table; relabel it through `labels` and feed it `data` per range. `date-range-picker` takes YYYY-MM-DD dates.",
+          "gap": "No auto-refresh or live streaming in the chart: replace `series` as new points arrive. `analytics-dashboard` ranges are fixed at 7d, 30d and 90d and its table columns are name, visitors, conversion and duration (swap the last for `valueColumn`). For millions of points use a canvas chart library (see integrations)."
         },
         {
           "need": "Deployments and pipelines",
           "use": [
             "stepper",
-            "todo-list",
+            "checklist",
             "timeline",
             "progress",
             "badge",
@@ -342,7 +356,7 @@
             "approval-card"
           ],
           "status": "adapt",
-          "notes": "Stages in a `stepper` (use `description` for the commit, duration or environment). `todo-list` can show live step progress for a running deploy (`items` with `status` pending, in-progress, completed, cancelled, per-item `progress` and `detail`), but it is styled as an agent plan. Deploy history in `timeline`. Gate production with `approval-card`; show the change with `file-diff`. Add your own Cancel `Button`.",
+          "notes": "Stages in a `stepper` (use `description` for the commit, duration or environment). Pre-deploy and post-deploy checks in `checklist` (tickable, with a sign-off step). Deploy history in `timeline`. Gate production with `approval-card`; show the change with `file-diff`. Add your own Cancel `Button`.",
           "gap": "No pipeline or dependency graph. `flowchart` is NOT a status graph: it is an editable Trigger and If/Else workflow canvas with draggable cards and condition chips. `task-rows` is payment-shaped (label, amount, details) and does not fit."
         },
         {
@@ -350,6 +364,7 @@
           "use": [
             "field",
             "repeater-field",
+            "secret-input",
             "input",
             "copy-button",
             "switch",
@@ -357,13 +372,15 @@
             "file-diff"
           ],
           "status": "adapt",
-          "notes": "`repeater-field` (`value`, `renderRow`, `createItem`, `min`, `max`) for key and value rows, with an `input` pair per row. Show a config change before saving with `file-diff`. Use `dialog` to confirm changes to production.",
-          "gap": "No masked key-value editor. Use `input type=\"password\"` plus your own show button for values."
+          "notes": "`repeater-field` (`value`, `renderRow`, `createItem`, `min`, `max`) for key and value rows, with an `input` for the name and a `secret-input` for the value (masked, reveal, optional auto-hide). Show a config change before saving with `file-diff`. Use `dialog` to confirm changes to production.",
+          "gap": "No dedicated environment editor: no .env import, per-environment inheritance or secret rotation. Fetch reveals on demand from your backend."
         },
         {
           "need": "Inventory of servers, services or assets",
           "use": [
             "table",
+            "filter-bar",
+            "bulk-action-bar",
             "tabs",
             "badge",
             "status-indicator",
@@ -371,7 +388,7 @@
             "input"
           ],
           "status": "ready",
-          "notes": "Virtualized `table` for thousands of rows: sortable, resizable and reorderable columns, `selectable` with `onSelectionChange`, inline `editable` cells with `onCellEdit`. Show a bulk bar of `Button`s when rows are selected. Filter your own data. `records-table` is NOT a general grid: it is an AI spreadsheet with fixed {name, tags, last, strength, website} rows."
+          "notes": "Virtualized `table` for thousands of rows: sortable, resizable and reorderable columns, `selectable` with `onSelectionChange`, inline `editable` cells with `onCellEdit`. Put `filter-bar` above it and show `bulk-action-bar` (count, actions, clear) when rows are selected. For a few hundred rows the `data-table` block does all of this with paging and a card layout on phones."
         },
         {
           "need": "Command or terminal-style tools",
@@ -405,6 +422,7 @@
             "page-header",
             "alert",
             "stat",
+            "gauge",
             "status-indicator",
             "progress"
           ]
@@ -413,12 +431,12 @@
           "name": "Incident list and detail",
           "compose": [
             "page-header",
-            "table",
+            "data-table",
             "tabs",
             "badge",
             "stepper",
             "timeline",
-            "checkbox"
+            "checklist"
           ]
         },
         {
@@ -426,7 +444,7 @@
           "compose": [
             "page-header",
             "stepper",
-            "todo-list",
+            "checklist",
             "timeline",
             "file-diff",
             "approval-card"
@@ -436,8 +454,7 @@
           "name": "Logs",
           "compose": [
             "page-header",
-            "input",
-            "select",
+            "filter-bar",
             "tabs",
             "table",
             "code-block"
@@ -456,7 +473,7 @@
         {
           "for": "Metrics and time-series dashboards",
           "options": ["Recharts", "uPlot", "Apache ECharts"],
-          "note": "Wrap the chart so colors come from CSS variables, and show a table fallback for accessibility."
+          "note": "time-series-chart covers multi-series metrics with thresholds, zoom and a table fallback. For heavier dashboards wrap the library so colors come from CSS variables, and keep a table fallback for accessibility."
         },
         {
           "for": "Log search at scale",
