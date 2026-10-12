@@ -70,3 +70,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## MapLibre GL JS (BSD-3-Clause)
+
+`public/maplibre/maplibre-gl-worker.mjs` is an unmodified copy of the worker file from the `maplibre-gl` package (v6.14.0), served so the docs site's map demos can start MapLibre's web worker. Its own license header is kept in the file. License: https://github.com/maplibre/maplibre-gl-js/blob/main/LICENSE.txt

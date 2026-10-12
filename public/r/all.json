@@ -129,6 +129,8 @@
     "@opendraft/rating",
     "@opendraft/gantt",
     "@opendraft/scheduler",
+    "@opendraft/map-view",
+    "@opendraft/rich-text-editor",
     "@opendraft/analytics-dashboard",
     "@opendraft/settings-page",
     "@opendraft/auth-screen",

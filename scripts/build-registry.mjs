@@ -978,6 +978,29 @@ const items = [
     description:
       "Resource scheduler for rosters, dispatch and appointments: day and week views, drag and keyboard moves, conflicts, agenda on narrow widths.",
   }),
+  ui("map-view", {
+    deps: ["maplibre-gl", "lucide-react"],
+    reg: ["@opendraft/utils", "@opendraft/button", "@opendraft/empty-state"],
+    description:
+      "Token-styled MapLibre GL map with focusable markers, routes and areas, and a synced keyboard list, for fleets, outages, assets and stores.",
+  }),
+  ui("rich-text-editor", {
+    deps: [
+      "@tiptap/react",
+      "@tiptap/pm",
+      "@tiptap/starter-kit",
+      "@tiptap/extension-placeholder",
+      "lucide-react",
+    ],
+    reg: [
+      "@opendraft/button",
+      "@opendraft/input",
+      "@opendraft/popover",
+      "@opendraft/tooltip",
+    ],
+    description:
+      "Accessible Tiptap editor with a roving toolbar, validated links, character limit and a read-only renderer, for notes, case files and messages.",
+  }),
   screen("analytics-dashboard", {
     deps: ["lucide-react", "motion"],
     reg: [

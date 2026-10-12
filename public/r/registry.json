@@ -2802,6 +2802,54 @@
       ]
     },
     {
+      "name": "map-view",
+      "type": "registry:ui",
+      "title": "Map View",
+      "description": "Token-styled MapLibre GL map with focusable markers, routes and areas, and a synced keyboard list, for fleets, outages, assets and stores.",
+      "dependencies": [
+        "maplibre-gl",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/empty-state"
+      ],
+      "files": [
+        {
+          "path": "components/ui/map-view.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "rich-text-editor",
+      "type": "registry:ui",
+      "title": "Rich Text Editor",
+      "description": "Accessible Tiptap editor with a roving toolbar, validated links, character limit and a read-only renderer, for notes, case files and messages.",
+      "dependencies": [
+        "@tiptap/react",
+        "@tiptap/pm",
+        "@tiptap/starter-kit",
+        "@tiptap/extension-placeholder",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@opendraft/utils",
+        "@opendraft/button",
+        "@opendraft/input",
+        "@opendraft/popover",
+        "@opendraft/tooltip"
+      ],
+      "files": [
+        {
+          "path": "components/ui/rich-text-editor.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "analytics-dashboard",
       "type": "registry:block",
       "title": "Analytics Dashboard",
@@ -3671,6 +3719,8 @@
         "@opendraft/rating",
         "@opendraft/gantt",
         "@opendraft/scheduler",
+        "@opendraft/map-view",
+        "@opendraft/rich-text-editor",
         "@opendraft/analytics-dashboard",
         "@opendraft/settings-page",
         "@opendraft/auth-screen",
