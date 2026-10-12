@@ -105,6 +105,8 @@ import DateTimePickerExample from "./date-time-picker"
 import RatingExample from "./rating"
 import GanttExample from "./gantt"
 import SchedulerExample from "./scheduler"
+import MapViewExample from "./map-view"
+import RichTextEditorExample from "./rich-text-editor"
 import CrmPipelineExample from "./crm-pipeline"
 import AnalyticsDashboardExample from "./analytics-dashboard"
 import SettingsPageExample from "./settings-page"
@@ -249,6 +251,8 @@ export const EXAMPLES: Record<string, ComponentType> = {
   rating: RatingExample,
   gantt: GanttExample,
   scheduler: SchedulerExample,
+  "map-view": MapViewExample,
+  "rich-text-editor": RichTextEditorExample,
   "crm-pipeline": CrmPipelineExample,
   "analytics-dashboard": AnalyticsDashboardExample,
   "settings-page": SettingsPageExample,

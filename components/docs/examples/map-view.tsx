@@ -113,6 +113,7 @@ export default function MapViewDemo() {
       <TabsContent value="fleet">
         <div className="h-[560px] w-full overflow-hidden rounded-lg border bg-background">
           <MapView
+            workerUrl="/maplibre/maplibre-gl-worker.mjs"
             markers={FLEET}
             routes={FLEET_ROUTES}
             fitToData
@@ -129,6 +130,7 @@ export default function MapViewDemo() {
       <TabsContent value="outages">
         <div className="h-[560px] w-full overflow-hidden rounded-lg border bg-background">
           <MapView
+            workerUrl="/maplibre/maplibre-gl-worker.mjs"
             markers={OUTAGES}
             areas={OUTAGE_AREAS}
             fitToData

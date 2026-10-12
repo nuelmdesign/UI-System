@@ -847,6 +847,22 @@ export const ENTRIES: DocEntry[] = [
     isNew: true,
   },
   {
+    slug: "map-view",
+    title: "Map View",
+    category: "Components",
+    description:
+      "Token-styled MapLibre GL map with focusable markers, routes and areas, and a synced keyboard list, for fleets, outages, assets and stores.",
+    isNew: true,
+  },
+  {
+    slug: "rich-text-editor",
+    title: "Rich Text Editor",
+    category: "Components",
+    description:
+      "Accessible Tiptap editor with a roving toolbar, validated links, character limit and a read-only renderer, for notes, case files and messages.",
+    isNew: true,
+  },
+  {
     slug: "crm-pipeline",
     title: "CRM Pipeline",
     category: "Blocks",

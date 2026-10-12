@@ -468,6 +468,14 @@ type MapViewProps<T = unknown> = Omit<
    * contributors plus the provider), which MapLibre shows in its attribution
    * control. Add `attribution` for sources the style does not declare.
    */
+  /**
+   * URL of MapLibre's worker file (`maplibre-gl/dist/maplibre-gl-worker.mjs`).
+   * Bundlers such as Next/Turbopack and Vite move the library out of
+   * node_modules, so its default worker location (next to the bundled chunk)
+   * no longer exists. Copy that file to a public path (for example
+   * `/maplibre/maplibre-gl-worker.mjs`) and pass the URL here.
+   */
+  workerUrl?: string
   styleUrl?: string | StyleSpecification
   /** Extra attribution text for the corner control. */
   attribution?: string | string[]
@@ -496,6 +504,7 @@ function MapView<T = unknown>({
   routes,
   areas,
   styleUrl,
+  workerUrl,
   attribution,
   center = [0, 0],
   zoom = 2,
@@ -560,6 +569,7 @@ function MapView<T = unknown>({
     bounds,
     fitToData,
     styleUrl,
+    workerUrl,
     attribution,
     onMove,
     select,
@@ -576,6 +586,7 @@ function MapView<T = unknown>({
       bounds,
       fitToData,
       styleUrl,
+      workerUrl,
       attribution,
       onMove,
       select,
@@ -612,6 +623,7 @@ function MapView<T = unknown>({
       glRef.current = gl
       const colors = readTokens(host)
       const cur = latest.current
+      if (cur.workerUrl) gl.setWorkerUrl(cur.workerUrl)
       let map: MapLibreMap
       try {
         map = new gl.Map({
@@ -800,7 +812,7 @@ function MapView<T = unknown>({
           <div
             ref={canvasRef}
             data-slot="map-view-canvas"
-            className="absolute inset-0"
+            className="absolute! inset-0"
             hidden={failed}
           />
           {failed && (

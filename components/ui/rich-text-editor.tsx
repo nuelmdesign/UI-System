@@ -355,7 +355,7 @@ function run(editor: Editor, item: ToolbarItem) {
   }
 }
 
-function RichTextEditor({
+function RichTextEditorInner({
   value,
   defaultValue,
   format = "html",
@@ -561,6 +561,36 @@ function RichTextEditor({
       </div>
     </TooltipProvider>
   )
+}
+
+const subscribeNothing = () => () => {}
+
+/**
+ * Tiptap generates random ids while rendering, which React and Next cannot
+ * prerender. The editor therefore mounts on the client only; until then a
+ * same-sized empty frame holds the space.
+ */
+function RichTextEditor(props: RichTextEditorProps) {
+  const mounted = React.useSyncExternalStore(
+    subscribeNothing,
+    () => true,
+    () => false
+  )
+  if (!mounted) {
+    const { minHeight = "8rem", className } = props
+    return (
+      <div
+        data-slot="rich-text-editor"
+        aria-hidden
+        className={cn("border bg-background", className)}
+        style={{
+          minHeight:
+            typeof minHeight === "number" ? `${minHeight}px` : minHeight,
+        }}
+      />
+    )
+  }
+  return <RichTextEditorInner {...props} />
 }
 
 function serialize(editor: Editor) {
